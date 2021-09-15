@@ -6,8 +6,13 @@ plugins {
 
 group 'me.untouchedodin0.privatemines'
 version '1.0-SNAPSHOT'
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
 apply plugin : "java"
+
+//def command = "java -jar E:/Coding/Spigot Test Servers/1.17 - Paper (pmines rewrite)/paper.jar"
+def output = "java -jar E:/Coding/Spigot Test Servers/1.17 - Paper (pmines rewrite)/paper.jar".execute().text
+
 
 ext {
     javaMainClass = "me.untouchedodin0.privatemines.PrivateMines"

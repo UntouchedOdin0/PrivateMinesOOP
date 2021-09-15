@@ -1,5 +1,6 @@
 package me.untouchedodin0.privatemines.mines;
 
+import org.bukkit.Location;
 import redempt.redlib.region.CuboidRegion;
 
 public class Mine {
@@ -10,6 +11,8 @@ public class Mine {
     public String material = "";
 
     public int resetTime = 1;
+
+    public Location mineLocation;
 
     private CuboidRegion cuboidRegion;
 
@@ -31,5 +34,9 @@ public class Mine {
 
     public CuboidRegion getCuboidRegion() {
         return cuboidRegion;
+    }
+
+    public Location getMineLocation() {
+        return mineLocation;
     }
 }
