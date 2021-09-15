@@ -1,0 +1,11 @@
+/.gradle/
+/.idea/
+/build/
+/build/classes/
+/build/generated/
+/build/libs/
+/build/libs/PrivateMinesOOP-1.0-SNAPSHOT-all.jar
+/build/resources/
+/build/tmp/
+/devserver/
+/gradle/

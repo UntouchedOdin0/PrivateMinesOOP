@@ -1,0 +1,59 @@
+plugins {
+    id 'java'
+    id "application"
+    id 'com.github.johnrengelman.shadow' version '6.0.0'
+}
+
+group 'me.untouchedodin0.privatemines'
+version '1.0-SNAPSHOT'
+
+apply plugin : "java"
+
+ext {
+    javaMainClass = "me.untouchedodin0.privatemines.PrivateMines"
+}
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://jitpack.io' }
+    maven {
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+
+        // As of Gradle 5.1, you can limit this to only those
+        // dependencies you expect from it
+        content {
+            includeGroup 'org.bukkit'
+            includeGroup 'org.spigotmc'
+        }
+    }
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    compileOnly 'com.github.Redempt:RedLib:6.0.6'
+    compileOnly 'org.spigotmc:spigot-api:1.17-R0.1-SNAPSHOT' // The Spigot API with no shadowing. Requires the OSS repo.
+}
+
+application {
+    mainClassName = javaMainClass
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task copyJarToPlugins(type: Copy) {
+    from shadowJar // shortcut for createJar.outputs.files
+//    into "./devserver/plugins"
+    into "E:/Coding/Spigot Test Servers/1.17 - Paper (pmines rewrite)/plugins"
+}
+
+task runServer(type:Exec) {
+    doFirst {
+        println "Starting Spigot server..."
+        workingDir = file('./devserver/')
+        commandLine = ['cmd', '/C', 'start', 'start.bat']
+        // cmd /C start D:/Projects/WorkSpaces/WorldCleaner/devserver/start.bat
+    }
+}
