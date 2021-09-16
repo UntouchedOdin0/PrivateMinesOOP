@@ -4,12 +4,14 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import redempt.redlib.region.CuboidRegion;
 
+import java.util.EnumMap;
+
 public class Mine {
 
     public String name = "";
     public String type = "";
 
-    public Material material = Material.STONE;
+    public EnumMap<Material, Double> mineBlocks = new EnumMap<>(Material.class);
 
     public int resetTime = 1;
 
@@ -21,8 +23,8 @@ public class Mine {
         return name;
     }
 
-    public Material getMaterial() {
-        return material;
+    public EnumMap<Material, Double> getMineBlocks() {
+        return mineBlocks;
     }
 
     public String getType() {
