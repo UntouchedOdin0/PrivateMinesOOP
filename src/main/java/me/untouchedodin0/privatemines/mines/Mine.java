@@ -1,6 +1,7 @@
 package me.untouchedodin0.privatemines.mines;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import redempt.redlib.region.CuboidRegion;
 
 public class Mine {
@@ -8,7 +9,7 @@ public class Mine {
     public String name = "";
     public String type = "";
 
-    public String material = "";
+    public Material material = Material.STONE;
 
     public int resetTime = 1;
 
@@ -20,7 +21,7 @@ public class Mine {
         return name;
     }
 
-    public String getMaterial() {
+    public Material getMaterial() {
         return material;
     }
 

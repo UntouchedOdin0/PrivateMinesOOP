@@ -1,6 +1,7 @@
 package me.untouchedodin0.privatemines;
 
 import me.untouchedodin0.privatemines.mines.Mine;
+import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PrivateMines extends JavaPlugin {
@@ -9,7 +10,7 @@ public class PrivateMines extends JavaPlugin {
     public void onEnable() {
         Mine mine = new Mine();
         mine.name = "Mine";
-        mine.material = "Stone";
+        mine.material = Material.STONE;
         mine.resetTime = 1;
         mine.type = "Type";
         mine.mineLocation = null;
