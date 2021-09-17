@@ -10,6 +10,7 @@ public class Mine {
         mineLocation: Where the blocks are actual mine is within the world
         cuboidRegion: The mining area of the actual mine, (could this go to MineType?)
      */
+
     private MineType mineType;
     private Location mineLocation;
     private CuboidRegion cuboidRegion;
