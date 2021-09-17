@@ -11,13 +11,13 @@ public class Mine {
         cuboidRegion: The mining area of the actual mine, (could this go to MineType?)
      */
 
-    private MineType mineType;
+    private MineData mineData;
     private Location mineLocation;
     private CuboidRegion cuboidRegion;
 
-    public void setMineType(MineType mineType) { this.mineType = mineType; }
+    public void setMineData(MineData mineData) { this.mineData = mineData; }
 
-    public MineType getMineType() { return mineType; }
+    public MineData getMineType() { return mineData; }
 
     public void setMineLocation(Location mineLocation) {
         this.mineLocation = mineLocation;

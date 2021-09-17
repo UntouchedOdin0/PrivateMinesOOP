@@ -1,7 +1,7 @@
 package me.untouchedodin0.privatemines;
 
 import me.untouchedodin0.privatemines.mines.Mine;
-import me.untouchedodin0.privatemines.mines.MineType;
+import me.untouchedodin0.privatemines.mines.MineData;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,29 +21,29 @@ public class PrivateMines extends JavaPlugin {
         mineBlocks2.put(Material.GOLD_ORE, 0.5);
 
         Mine mine = new Mine();
-        MineType mineType = new MineType();
-        mineType.setName("Default");
-        mineType.setMineTier(1);
-        mineType.setResetTime(5);
-        mineType.setMaterials(mineBlocks);
-        mine.setMineType(mineType);
+        MineData mineData = new MineData();
+        mineData.setName("Default");
+        mineData.setMineTier(1);
+        mineData.setResetTime(5);
+        mineData.setMaterials(mineBlocks);
+        mine.setMineData(mineData);
 
         Mine mine2 = new Mine();
-        MineType mineType2 = new MineType();
-        mineType2.setName("Type 2");
-        mineType2.setMineTier(2);
-        mineType2.setResetTime(6);
-        mineType2.setMaterials(mineBlocks2);
-        mine2.setMineType(mineType2);
+        MineData mineData2 = new MineData();
+        mineData2.setName("Type 2");
+        mineData2.setMineTier(2);
+        mineData2.setResetTime(6);
+        mineData2.setMaterials(mineBlocks2);
+        mine2.setMineData(mineData2);
 
-        System.out.println("mineType Name: " + mineType.getName());
-        System.out.println("mineType Tier: " + mineType.getMineTier());
-        System.out.println("mineType Materials: " + mineType.getMaterials());
-        System.out.println("mineType Reset Time: " + mineType.getResetTime());
+        System.out.println("mineData Name: " + mineData.getName());
+        System.out.println("mineData Tier: " + mineData.getMineTier());
+        System.out.println("mineData Materials: " + mineData.getMaterials());
+        System.out.println("mineData Reset Time: " + mineData.getResetTime());
 
-        System.out.println("mineType2 Name: " + mineType2.getName());
-        System.out.println("mineType2 Tier: " + mineType2.getMineTier());
-        System.out.println("mineType2 Materials: " + mineType2.getMaterials());
-        System.out.println("mineType2 Reset Time: " + mineType2.getResetTime());
+        System.out.println("mineData2 Name: " + mineData2.getName());
+        System.out.println("mineData2 Tier: " + mineData2.getMineTier());
+        System.out.println("mineData2 Materials: " + mineData2.getMaterials());
+        System.out.println("mineData2 Reset Time: " + mineData2.getResetTime());
     }
 }

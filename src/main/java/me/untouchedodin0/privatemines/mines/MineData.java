@@ -4,7 +4,7 @@ import org.bukkit.Material;
 
 import java.util.EnumMap;
 
-public class MineType {
+public class MineData {
 
     /*
         name: Name of the mine type
