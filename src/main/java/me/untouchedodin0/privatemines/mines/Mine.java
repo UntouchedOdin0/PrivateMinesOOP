@@ -17,7 +17,7 @@ public class Mine {
 
     public void setMineData(MineData mineData) { this.mineData = mineData; }
 
-    public MineData getMineType() { return mineData; }
+    public MineData getMineData() { return mineData; }
 
     public void setMineLocation(Location mineLocation) {
         this.mineLocation = mineLocation;
