@@ -5,6 +5,11 @@ import redempt.redlib.region.CuboidRegion;
 
 public class Mine {
 
+    /*
+        mineType: The type of mine (of which where the blocks come from etc..)
+        mineLocation: Where the blocks are actual mine is within the world
+        cuboidRegion: The mining area of the actual mine, (could this go to MineType?)
+     */
     private MineType mineType;
     private Location mineLocation;
     private CuboidRegion cuboidRegion;

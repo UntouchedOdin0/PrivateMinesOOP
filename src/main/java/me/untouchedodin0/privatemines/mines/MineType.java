@@ -6,6 +6,13 @@ import java.util.EnumMap;
 
 public class MineType {
 
+    /*
+        name: Name of the mine type
+        mineTier: The tier of the mine (where it goes in the upgrade process)
+        resetTime: How often the mine should reset in minutes.
+        materials: A list of materials and their percentages of which goes in the mine
+     */
+
     private String name;
     private int mineTier = 1;
     private int resetTime = 1;
