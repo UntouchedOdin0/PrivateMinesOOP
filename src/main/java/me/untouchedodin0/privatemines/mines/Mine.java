@@ -1,56 +1,25 @@
 package me.untouchedodin0.privatemines.mines;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import redempt.redlib.region.CuboidRegion;
-
-import java.util.EnumMap;
 
 public class Mine {
 
-    private String name;
-
-    private EnumMap<Material, Double> mineBlocks = new EnumMap<>(Material.class);
-
-    private int mineTier = 1;
-    private int resetTime = 1;
-
+    private MineType mineType;
     private Location mineLocation;
-
     private CuboidRegion cuboidRegion;
 
-    public void setName(String mineName) {
-        this.name = mineName;
-    }
+    public void setMineType(MineType mineType) { this.mineType = mineType; }
 
-    public void setMineBlocks(EnumMap<Material, Double> mineBlocks) {
-        this.mineBlocks = mineBlocks;
-    }
-
-    public void setTier(int tier) { this.mineTier = tier; }
-
-    public void setResetTime(int time) {
-        this.resetTime = time;
-    }
-
-    public void setCuboidRegion(CuboidRegion cuboidRegion) {
-        this.cuboidRegion = cuboidRegion;
-    }
+    public MineType getMineType() { return mineType; }
 
     public void setMineLocation(Location mineLocation) {
         this.mineLocation = mineLocation;
     }
 
-
-    public String getName() {
-        return name;
+    public void setCuboidRegion(CuboidRegion cuboidRegion) {
+        this.cuboidRegion = cuboidRegion;
     }
-
-    public EnumMap<Material, Double> getMineBlocks() { return mineBlocks; }
-
-    public int getMineTier() { return mineTier; }
-
-    public int getResetTime() { return resetTime; }
 
     public Location getMineLocation() { return mineLocation; }
 
