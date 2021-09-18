@@ -2,6 +2,7 @@ mineTypes:
   Test:
     file: structure.dat
     priority: 1
+    resetTime: 5
     materials:
       STONE: 0.9
       COBBLESTONE: 0.1

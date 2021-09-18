@@ -2,7 +2,8 @@ package me.untouchedodin0.privatemines.mines;
 
 import org.bukkit.Material;
 
-import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MineData {
 
@@ -16,7 +17,7 @@ public class MineData {
     private String name;
     private int mineTier = 1;
     private int resetTime = 1;
-    private EnumMap<Material, Double> materials = new EnumMap<>(Material.class);
+    private Map<Material, Double> materials = new HashMap<>();
 
     public void setName(String name) { this.name = name; }
 
@@ -34,11 +35,9 @@ public class MineData {
         return resetTime;
     }
 
-    public void setMaterials(EnumMap<Material,Double> mineBlocks) {
+    public void setMaterials(Map<Material, Double> mineBlocks) {
         this.materials = mineBlocks;
     }
 
-    public EnumMap<Material, Double> getMaterials() {
-        return materials;
-    }
+    public Map<Material, Double> getMaterials() { return materials; }
 }
