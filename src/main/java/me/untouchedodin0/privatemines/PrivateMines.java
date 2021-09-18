@@ -5,6 +5,7 @@ import me.untouchedodin0.privatemines.mines.MineData;
 import me.untouchedodin0.privatemines.storage.MineStorage;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
+import redempt.redlib.configmanager.ConfigManager;
 
 import java.util.EnumMap;
 
@@ -13,8 +14,12 @@ public class PrivateMines extends JavaPlugin {
     EnumMap<Material, Double> mineBlocks = new EnumMap<>(Material.class);
     EnumMap<Material, Double> mineBlocks2 = new EnumMap<>(Material.class);
 
+    private ConfigManager configManager;
+
     @Override
     public void onEnable() {
+
+        configManager = new ConfigManager(this).register(this).saveDefaults().load();
 
         MineStorage mineStorage = new MineStorage();
 
@@ -52,7 +57,6 @@ public class PrivateMines extends JavaPlugin {
 
         mineStorage.addMine("staticName1", mineData);
         mineStorage.addMine("staticName2", mineData2);
-
 
         mineStorage.getMines().forEach((name, data) -> {
             System.out.println("For Each Name: " + name);
