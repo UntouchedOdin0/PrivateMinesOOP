@@ -1,6 +1,7 @@
 package me.untouchedodin0.privatemines;
 
 import me.untouchedodin0.privatemines.config.MineConfig;
+import me.untouchedodin0.privatemines.factory.MineFactory;
 import me.untouchedodin0.privatemines.mines.Mine;
 import me.untouchedodin0.privatemines.mines.MineData;
 import me.untouchedodin0.privatemines.storage.MineStorage;
@@ -35,6 +36,12 @@ public class PrivateMines extends JavaPlugin {
         MineWorldManager mineWorldManager = new MineWorldManager();
 
         MineStorage mineStorage = new MineStorage();
+        MineFactory mineFactory = new MineFactory(this, mineStorage);
+
+        System.out.println("config manager: " + configManager);
+        System.out.println("mine world manager: " + mineWorldManager);
+        System.out.println("Mine Storage: " + mineStorage);
+        System.out.println("Mine factory: " + mineFactory);
 
         mineBlocks.put(Material.STONE, 0.5);
         mineBlocks.put(Material.EMERALD_ORE, 0.5);

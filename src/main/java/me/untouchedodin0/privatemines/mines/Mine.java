@@ -3,6 +3,8 @@ package me.untouchedodin0.privatemines.mines;
 import org.bukkit.Location;
 import redempt.redlib.region.CuboidRegion;
 
+import java.util.UUID;
+
 public class Mine {
 
     /*
@@ -14,6 +16,7 @@ public class Mine {
     private MineData mineData;
     private Location mineLocation;
     private CuboidRegion cuboidRegion;
+    private UUID mineOwner;
 
     public void setMineData(MineData mineData) { this.mineData = mineData; }
 
@@ -23,11 +26,15 @@ public class Mine {
         this.mineLocation = mineLocation;
     }
 
+    public Location getMineLocation() { return mineLocation; }
+
     public void setCuboidRegion(CuboidRegion cuboidRegion) {
         this.cuboidRegion = cuboidRegion;
     }
 
-    public Location getMineLocation() { return mineLocation; }
-
     public CuboidRegion getCuboidRegion() { return cuboidRegion; }
+
+    public void setMineOwner(UUID mineOwner) { this.mineOwner = mineOwner; }
+
+    public UUID getMineOwner() { return mineOwner; }
 }
