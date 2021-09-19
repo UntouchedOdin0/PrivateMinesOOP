@@ -4,6 +4,7 @@ import me.untouchedodin0.privatemines.config.MineConfig;
 import me.untouchedodin0.privatemines.mines.Mine;
 import me.untouchedodin0.privatemines.mines.MineData;
 import me.untouchedodin0.privatemines.storage.MineStorage;
+import me.untouchedodin0.privatemines.world.MineWorldManager;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 import redempt.redlib.configmanager.ConfigManager;
@@ -19,7 +20,6 @@ public class PrivateMines extends JavaPlugin {
     EnumMap<Material, Double> mineBlocks2 = new EnumMap<>(Material.class);
 
     File configFile;
-    private ConfigManager configManager;
 
     @ConfigValue
     private Map<String, MineConfig> mineTypes = ConfigManager.map(MineConfig.class);
@@ -31,7 +31,8 @@ public class PrivateMines extends JavaPlugin {
         if (!configFile.exists()) {
             saveDefaultConfig();
         }
-        configManager = new ConfigManager(this).register(this).load();
+        ConfigManager configManager = new ConfigManager(this).register(this).load();
+        MineWorldManager mineWorldManager = new MineWorldManager();
 
         MineStorage mineStorage = new MineStorage();
 
