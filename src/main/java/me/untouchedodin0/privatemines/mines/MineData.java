@@ -1,6 +1,7 @@
 package me.untouchedodin0.privatemines.mines;
 
 import org.bukkit.Material;
+import redempt.redlib.multiblock.MultiBlockStructure;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +19,7 @@ public class MineData {
     private int mineTier = 1;
     private int resetTime = 1;
     private Map<Material, Double> materials = new HashMap<>();
+    private MultiBlockStructure multiBlockStructure;
 
     public void setName(String name) { this.name = name; }
 
@@ -35,9 +37,15 @@ public class MineData {
         return resetTime;
     }
 
-    public void setMaterials(Map<Material, Double> mineBlocks) {
-        this.materials = mineBlocks;
-    }
+    public void setMaterials(Map<Material, Double> mineBlocks) { this.materials = mineBlocks; }
 
     public Map<Material, Double> getMaterials() { return materials; }
+
+    public void setMultiBlockStructure(MultiBlockStructure multiBlockStructure) {
+        this.multiBlockStructure = multiBlockStructure;
+    }
+
+    public MultiBlockStructure getMultiBlockStructure() {
+        return multiBlockStructure;
+    }
 }
