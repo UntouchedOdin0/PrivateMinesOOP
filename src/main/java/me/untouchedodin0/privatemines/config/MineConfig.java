@@ -7,7 +7,7 @@ import redempt.redlib.configmanager.annotations.ConfigValue;
 
 import java.util.Map;
 
-@SuppressWarnings("unused")
+@SuppressWarnings("FieldMayBeFinal")
 @ConfigMappable
 public class MineConfig {
 
