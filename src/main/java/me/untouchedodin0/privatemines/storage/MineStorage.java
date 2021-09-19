@@ -7,18 +7,18 @@ import java.util.Map;
 
 public class MineStorage {
 
-    private final Map<String, MineData> mines = new HashMap<>();
+    private final Map<String, MineData> mineDataMap = new HashMap<>();
 
-    public void addMine(String string, MineData mineData) {
-        mines.putIfAbsent(string, mineData);
+    public void addMineData(String string, MineData mineData) {
+        mineDataMap.putIfAbsent(string, mineData);
     }
 
-    public void removeMine(MineData mineData) {
-        if (!mines.containsValue(mineData)) return;
-        mines.remove(mineData.getName());
+    public void removeMineData(MineData mineData) {
+        if (!mineDataMap.containsValue(mineData)) return;
+        mineDataMap.remove(mineData.getName());
     }
 
-    public Map<String, MineData> getMines() {
-        return mines;
+    public Map<String, MineData> getMineDataMap() {
+        return mineDataMap;
     }
 }

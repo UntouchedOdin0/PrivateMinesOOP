@@ -50,6 +50,15 @@ public class PrivateMines extends JavaPlugin {
             mineData.setMaterials(mineConfig.getMaterials());
             mine.setMineData(mineData);
 
+//            System.out.println("mineData Name: " + mineData.getName());
+//            System.out.println("mineData Tier: " + mineData.getMineTier());
+//            System.out.println("mineData Materials: " + mineData.getMaterials());
+//            System.out.println("mineData Reset Time: " + mineData.getResetTime());
+
+            mineStorage.addMineData(string, mineData);
+        });
+
+        mineStorage.getMineDataMap().forEach((string, mineData) -> {
             System.out.println("mineData Name: " + mineData.getName());
             System.out.println("mineData Tier: " + mineData.getMineTier());
             System.out.println("mineData Materials: " + mineData.getMaterials());
