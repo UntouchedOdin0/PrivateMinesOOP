@@ -21,7 +21,8 @@ public class MineConfig {
     private int resetTime; // reads the reset time from the section
 
     @ConfigValue
-    private Map<Material, Double> materials = ConfigManager.map(Material.class, Double.class); // reads the materials from the section
+    private Map<Material, Double> materials =
+            ConfigManager.map(Material.class, Double.class); // reads the materials from the section
 
     // A getter for getting the file name from the section
 
