@@ -2,8 +2,6 @@ package me.untouchedodin0.privatemines;
 
 import me.untouchedodin0.privatemines.config.MineConfig;
 import me.untouchedodin0.privatemines.factory.MineFactory;
-import me.untouchedodin0.privatemines.mines.Mine;
-import me.untouchedodin0.privatemines.mines.MineData;
 import me.untouchedodin0.privatemines.storage.MineStorage;
 import me.untouchedodin0.privatemines.world.MineWorldManager;
 import org.bukkit.Material;
@@ -49,6 +47,24 @@ public class PrivateMines extends JavaPlugin {
         mineBlocks2.put(Material.COBBLESTONE, 0.5);
         mineBlocks2.put(Material.GOLD_ORE, 0.5);
 
+//        mineTypes.forEach((string, mineConfig) -> {
+//            Bukkit.getLogger().info(string);
+////            Bukkit.getLogger().info(mineConfig.getFile());
+//
+//            Mine mine = new Mine();
+//            MineData mineData = new MineData();
+//            mineData.setName(string);
+//            mineData.setMineTier(mineConfig.getPriority());
+//            mineData.setResetTime(mineConfig.getResetTime());
+//            mineData.setMaterials(mineConfig.getMaterials());
+//            mine.setMineData(mineData);
+//        });
+
+
+
+
+
+        /*
         mineTypes.forEach((string, mineConfig) -> {
             Mine mine = new Mine();
             MineData mineData = new MineData();
@@ -65,6 +81,7 @@ public class PrivateMines extends JavaPlugin {
 
             mineStorage.addMineData(string, mineData);
         });
+         */
 
         mineStorage.getMineDataMap().forEach((string, mineData) -> {
             System.out.println("mineData Name: " + mineData.getName());
@@ -113,4 +130,3 @@ public class PrivateMines extends JavaPlugin {
         */
     }
 }
-
