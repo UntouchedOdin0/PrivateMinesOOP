@@ -1,6 +1,6 @@
 mineTypes:
   Test:
-    file: structure.dat
+    file: "structure.dat"
     priority: 1
     resetTime: 5
     materials:

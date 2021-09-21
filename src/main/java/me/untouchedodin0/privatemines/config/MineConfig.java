@@ -50,9 +50,10 @@ public class MineConfig {
 
         Bukkit.getLogger().info("Test postInit!");
         Bukkit.getLogger().info("Path: " + path);
+        Bukkit.getLogger().info("Name: " + name);
         Bukkit.getLogger().info("File: " + file);
 
-        this.multiBlockStructure = MultiBlockStructure.create(name, file, false, true);
+        this.multiBlockStructure = MultiBlockStructure.create(file, name, false, true);
 
         Bukkit.getLogger().info("mbs getName: " + multiBlockStructure.getName());
     }
