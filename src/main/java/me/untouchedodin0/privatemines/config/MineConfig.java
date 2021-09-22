@@ -10,8 +10,11 @@ import redempt.redlib.configmanager.annotations.ConfigPostInit;
 import redempt.redlib.configmanager.annotations.ConfigValue;
 import redempt.redlib.multiblock.MultiBlockStructure;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("FieldMayBeFinal")
 @ConfigMappable
@@ -42,18 +45,20 @@ public class MineConfig {
     }
 
     @ConfigPostInit
-    private void postInit() {
+    private void postInit() throws IOException {
         if (privateMines == null) {
             Bukkit.getLogger().info("private mines was null.");
         }
         Path path = privateMines.getDataFolder().toPath().resolve(file);
+        String contents = Files.lines(path).collect(Collectors.joining());
 
         Bukkit.getLogger().info("Test postInit!");
-        Bukkit.getLogger().info("Path: " + path);
         Bukkit.getLogger().info("Name: " + name);
+        Bukkit.getLogger().info("Path: " + path);
         Bukkit.getLogger().info("File: " + file);
+        Bukkit.getLogger().info("Contents: " + contents);
 
-        this.multiBlockStructure = MultiBlockStructure.create(file, name, false, true);
+        this.multiBlockStructure = MultiBlockStructure.create(contents, name, false, true);
 
         Bukkit.getLogger().info("mbs getName: " + multiBlockStructure.getName());
     }
@@ -70,6 +75,12 @@ public class MineConfig {
     // a getter for the private mines instance
     public PrivateMines getPrivateMines() {
         return privateMines;
+    }
+
+    // A getter for getting the section name
+
+    public String getName() {
+        return name;
     }
 
     // A getter for getting the file name from the section
