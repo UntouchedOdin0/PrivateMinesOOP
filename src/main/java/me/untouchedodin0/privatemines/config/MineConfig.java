@@ -89,6 +89,8 @@ public class MineConfig {
         Bukkit.getLogger().info("MineConfig MineData Tier: " + mineData.getMineTier());
         Bukkit.getLogger().info("MineConfig MineData Reset time: " + mineData.getResetTime());
         Bukkit.getLogger().info("MineConfig MineData Materials: " + mineData.getMaterials());
+
+        privateMines.addMineData(getName(), mineData);
     }
 
     // a getter for the private mines instance

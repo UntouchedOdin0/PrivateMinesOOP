@@ -23,6 +23,8 @@ public class PrivateMines extends JavaPlugin {
 
     File configFile;
 
+    private final Map<String, MineData> mineDataMap = new HashMap<>();
+
     @ConfigValue
     private Map<String, MineConfig> mineTypes = ConfigManager.map(MineConfig.class);
 
@@ -44,13 +46,17 @@ public class PrivateMines extends JavaPlugin {
         System.out.println("Mine Storage: " + mineStorage);
         System.out.println("Mine factory: " + mineFactory);
 
+        mineTypes.forEach((string, mineConfig) -> {
+            Bukkit.getLogger().info("Loading mine type... " + string);
+        });
+
         mineBlocks.put(Material.STONE, 0.5);
         mineBlocks.put(Material.EMERALD_ORE, 0.5);
 
         mineBlocks2.put(Material.COBBLESTONE, 0.5);
         mineBlocks2.put(Material.GOLD_ORE, 0.5);
 
-        mineStorage.getMineDataMap().forEach((string, mineData) -> {
+        mineDataMap.forEach((string, mineData) -> {
             System.out.println("mineData Name: " + mineData.getName());
             System.out.println("mineData Tier: " + mineData.getMineTier());
             System.out.println("mineData Materials: " + mineData.getMaterials());
@@ -63,7 +69,9 @@ public class PrivateMines extends JavaPlugin {
         Bukkit.getLogger().info("Disabling Private Mines...");
     }
 
-    private final Map<String, MineData> mineDataMap = new HashMap<>();
+    public void addMineData(String name, MineData mineData) {
+        mineDataMap.putIfAbsent(name, mineData);
+    }
 
     public void removeMineData(MineData mineData) {
         Bukkit.getLogger().info("Remove debug message for testing reasons!!!!");
