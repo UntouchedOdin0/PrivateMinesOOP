@@ -50,6 +50,11 @@ public class PrivateMines extends JavaPlugin {
             Bukkit.getLogger().info("Loading mine type... " + string);
         });
 
+        int loaded = mineTypes.size();
+        Bukkit.getLogger().info("Loaded a total of {loaded} mine types!"
+                .replace("{loaded}",
+                        String.valueOf(loaded)));
+
         mineBlocks.put(Material.STONE, 0.5);
         mineBlocks.put(Material.EMERALD_ORE, 0.5);
 

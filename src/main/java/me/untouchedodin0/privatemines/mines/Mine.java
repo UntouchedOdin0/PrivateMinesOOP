@@ -37,4 +37,9 @@ public class Mine {
     public void setMineOwner(UUID mineOwner) { this.mineOwner = mineOwner; }
 
     public UUID getMineOwner() { return mineOwner; }
+
+    public Mine build(Location location) {
+        mineData.getMultiBlockStructure().build(location);
+        return this;
+    }
 }
