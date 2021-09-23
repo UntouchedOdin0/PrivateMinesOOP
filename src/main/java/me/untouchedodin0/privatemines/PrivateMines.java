@@ -67,17 +67,13 @@ public class PrivateMines extends JavaPlugin {
     @Override
     public void onDisable() {
         Bukkit.getLogger().info("Disabling Private Mines...");
+        Bukkit.getLogger().info("Mine data map before: " + mineDataMap);
+        mineDataMap.clear();
+        Bukkit.getLogger().info("Mine data map after: " + mineDataMap);
     }
 
     public void addMineData(String name, MineData mineData) {
         mineDataMap.putIfAbsent(name, mineData);
-    }
-
-    public void removeMineData(MineData mineData) {
-        Bukkit.getLogger().info("Remove debug message for testing reasons!!!!");
-        if (!mineDataMap.containsValue(mineData)) return;
-        Bukkit.getLogger().info("Removing mine type: " + mineData.getName());
-        mineDataMap.remove(mineData.getName());
     }
 
     public Map<String, MineData> getMineDataMap() {
