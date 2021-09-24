@@ -83,7 +83,7 @@ public class MineConfig {
         mineData.setMineTier(getPriority());
         mineData.setResetTime(getResetTime());
         mineData.setMaterials(getMaterials());
-        mineData.setupRelativeLocations(Material.POWERED_RAIL);
+        mineData.setupRelativeLocations(Material.POWERED_RAIL, Material.CHEST);
 
         Bukkit.getLogger().info("MineConfig MineData " + mineData);
         Bukkit.getLogger().info("MineConfig MineData Name: " + mineData.getName());
@@ -93,6 +93,8 @@ public class MineConfig {
         Bukkit.getLogger().info("MineConfig MineData Materials: " + mineData.getMaterials());
         Bukkit.getLogger().info("MineConfig MineData Corner Locations: "
                 + Arrays.deepToString(mineData.getCornerLocations()));
+        Bukkit.getLogger().info("MineConfig MineData Spawn Location: "
+                + Arrays.toString(mineData.getSpawnLocation()));
 
         privateMines.addMineData(getName(), mineData);
     }
