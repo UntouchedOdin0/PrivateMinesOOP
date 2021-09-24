@@ -28,6 +28,15 @@ public class PrivateMines extends JavaPlugin {
     private final Map<String, MineData> mineDataMap = new HashMap<>();
 
     @ConfigValue
+    private Material Spawnpoint;
+
+    @ConfigValue
+    private Material MineCorner;
+
+    @ConfigValue
+    private Material SellNPC;
+
+    @ConfigValue
     private Map<String, MineConfig> mineTypes = ConfigManager.map(MineConfig.class);
 
     @Override
@@ -48,6 +57,10 @@ public class PrivateMines extends JavaPlugin {
         System.out.println("mine world manager: " + mineWorldManager);
         System.out.println("Mine Storage: " + mineStorage);
         System.out.println("Mine factory: " + mineFactory);
+
+        System.out.println("Spawnpoint Material: " + Spawnpoint.getKey());
+        System.out.println("MineCorner Material: " + MineCorner.getKey());
+        System.out.println("SellNPC Material: " + SellNPC.getKey());
 
         mineTypes.forEach((string, mineConfig) -> {
             Bukkit.getLogger().info("Loading mine type... " + string);
