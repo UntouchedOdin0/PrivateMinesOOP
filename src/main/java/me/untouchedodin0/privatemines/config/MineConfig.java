@@ -14,6 +14,7 @@ import redempt.redlib.multiblock.MultiBlockStructure;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -82,6 +83,7 @@ public class MineConfig {
         mineData.setMineTier(getPriority());
         mineData.setResetTime(getResetTime());
         mineData.setMaterials(getMaterials());
+        mineData.setupRelativeLocations(Material.POWERED_RAIL);
 
         Bukkit.getLogger().info("MineConfig MineData " + mineData);
         Bukkit.getLogger().info("MineConfig MineData Name: " + mineData.getName());
@@ -89,6 +91,8 @@ public class MineConfig {
         Bukkit.getLogger().info("MineConfig MineData Tier: " + mineData.getMineTier());
         Bukkit.getLogger().info("MineConfig MineData Reset time: " + mineData.getResetTime());
         Bukkit.getLogger().info("MineConfig MineData Materials: " + mineData.getMaterials());
+        Bukkit.getLogger().info("MineConfig MineData Corner Locations: "
+                + Arrays.deepToString(mineData.getCornerLocations()));
 
         privateMines.addMineData(getName(), mineData);
     }

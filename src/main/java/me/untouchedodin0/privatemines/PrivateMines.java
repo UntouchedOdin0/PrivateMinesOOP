@@ -5,6 +5,7 @@ import me.untouchedodin0.privatemines.factory.MineFactory;
 import me.untouchedodin0.privatemines.mines.MineData;
 import me.untouchedodin0.privatemines.storage.MineStorage;
 import me.untouchedodin0.privatemines.world.MineWorldManager;
+import me.untouchedodin0.privatemines.world.utils.MineLoopUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,6 +23,7 @@ public class PrivateMines extends JavaPlugin {
     EnumMap<Material, Double> mineBlocks2 = new EnumMap<>(Material.class);
 
     File configFile;
+    MineLoopUtil mineLoopUtil;
 
     private final Map<String, MineData> mineDataMap = new HashMap<>();
 
@@ -40,6 +42,7 @@ public class PrivateMines extends JavaPlugin {
 
         MineStorage mineStorage = new MineStorage();
         MineFactory mineFactory = new MineFactory(this, mineStorage);
+        mineLoopUtil = new MineLoopUtil();
 
         System.out.println("config manager: " + configManager);
         System.out.println("mine world manager: " + mineWorldManager);
@@ -83,5 +86,9 @@ public class PrivateMines extends JavaPlugin {
 
     public Map<String, MineData> getMineDataMap() {
         return mineDataMap;
+    }
+
+    public MineLoopUtil getMineLoopUtil() {
+        return mineLoopUtil;
     }
 }

@@ -1,5 +1,7 @@
 package me.untouchedodin0.privatemines.mines;
 
+import me.untouchedodin0.privatemines.world.utils.MineLoopUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import redempt.redlib.multiblock.MultiBlockStructure;
 
@@ -21,6 +23,7 @@ public class MineData {
     private int resetTime = 1;
     private Map<Material, Double> materials = new HashMap<>();
     private MultiBlockStructure multiBlockStructure;
+    private int[][] cornerLocations;
 
     /**
      *
@@ -98,5 +101,15 @@ public class MineData {
 
     public MultiBlockStructure getMultiBlockStructure() {
         return multiBlockStructure;
+    }
+
+    public void setupRelativeLocations(Material cornerMaterial) {
+        MineLoopUtil mineLoopUtil = new MineLoopUtil();
+        Bukkit.getLogger().info("setupRelativeLocations mineLoopUtil: " + mineLoopUtil);
+        this.cornerLocations = mineLoopUtil.findCornerLocations(multiBlockStructure, cornerMaterial);
+    }
+
+    public int[][] getCornerLocations() {
+        return cornerLocations;
     }
 }
