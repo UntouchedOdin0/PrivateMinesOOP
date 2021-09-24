@@ -23,6 +23,8 @@ public class MineFactory {
         mine.setMineOwner(player.getUniqueId());
         mine.setMineLocation(location);
         mine.setMineData(mineData);
+        mine.build();
+        mineStorage.addMine(player.getUniqueId(), mine);
         return mine;
     }
 }
