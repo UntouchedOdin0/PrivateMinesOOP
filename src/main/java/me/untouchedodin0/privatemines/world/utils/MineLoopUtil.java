@@ -8,10 +8,9 @@ public class MineLoopUtil {
     // Find the corner locations of a mine in a MultiBlockStructure
 
     /**
-     *
-     * @param multiBlockStructure   The MultiBlockStructure to search through
-     * @param cornerMaterial        The material to look for in the MultiBlockStructure
-     * @return                      The relative corner locations of a structure
+     * @param multiBlockStructure The MultiBlockStructure to search through
+     * @param cornerMaterial      The material to look for in the MultiBlockStructure
+     * @return The relative corner locations of a structure
      */
 
     public int[][] findCornerLocations(MultiBlockStructure multiBlockStructure, Material cornerMaterial) {
@@ -44,5 +43,36 @@ public class MineLoopUtil {
             }
         }
         return locations;
+    }
+
+    // Find the Spawn Point location for the mine
+
+    public int[] findSpawnLocation(MultiBlockStructure multiBlockStructure, Material spawnMaterial) {
+
+        int[] structureDimensions = multiBlockStructure.getDimensions();
+        int dimensionsX = structureDimensions[0];
+        int dimensionsY = structureDimensions[1];
+        int dimensionsZ = structureDimensions[2];
+
+         /*
+            Creating an array of 1 values to hold the location
+            Thanks to Redempt for the following example.
+
+            Example: [1, 2, 3]
+         */
+
+        int[] location = new int[1];
+
+        for (int x = 0; x < dimensionsX; x++) {
+            for (int y = 0; y < dimensionsY; y++) {
+                for (int z = 0; z < dimensionsZ; z++) {
+                    if (multiBlockStructure.getType(x, y, z) != spawnMaterial) {
+                        continue;
+                    }
+                    location = new int[]{x, y, z};
+                }
+            }
+        }
+        return location;
     }
 }
