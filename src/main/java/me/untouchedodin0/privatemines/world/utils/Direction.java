@@ -17,9 +17,21 @@ public enum Direction {
         this.zMulti = zMulti;
     }
 
+    /**
+     * Gets the direction for the next Private Mine
+     * @return Direction
+     */
+
     public Direction next() {
         return values()[(ordinal() + 1) % (values().length)];
     }
+
+    /**
+     *
+     * @param location - The start location to be added onto
+     * @param value    - The distance in blocks to add to the location
+     * @return Location
+     */
 
     public Location addTo(Location location, int value) {
         return location.clone().add(value * (double) xMulti, 0, value * (double) zMulti);
