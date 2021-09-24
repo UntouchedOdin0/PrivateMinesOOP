@@ -19,23 +19,60 @@ public class Mine {
     private CuboidRegion cuboidRegion;
     private UUID mineOwner;
 
+    /**
+     * @param mineData - The mine data to be set for the Mine
+     */
+
     public void setMineData(MineData mineData) { this.mineData = mineData; }
 
+    /**
+     *
+     * @return MineData - The mine data for the players mine
+     */
+
     public MineData getMineData() { return mineData; }
+
+    /**
+     *
+     * @param mineLocation - The location of where the mine should go
+     */
 
     public void setMineLocation(Location mineLocation) {
         this.mineLocation = mineLocation;
     }
 
+    /**
+     *
+     * @return Location - The location of where the mine is in the world
+     */
     public Location getMineLocation() { return mineLocation; }
+
+    /**
+     *
+     * @param cuboidRegion - The cuboid region for the mining region
+     */
 
     public void setCuboidRegion(CuboidRegion cuboidRegion) {
         this.cuboidRegion = cuboidRegion;
     }
 
+    /**
+     *
+     * @return CuboidRegion - The cuboid region of the mining area
+     */
+
     public CuboidRegion getCuboidRegion() { return cuboidRegion; }
 
+    /**
+     *
+     * @param mineOwner - The UUID of the new mine owner
+     */
+
     public void setMineOwner(UUID mineOwner) { this.mineOwner = mineOwner; }
+
+    /**
+     * @return UUID - The UUID of the mine owner.
+     */
 
     public UUID getMineOwner() { return mineOwner; }
 
