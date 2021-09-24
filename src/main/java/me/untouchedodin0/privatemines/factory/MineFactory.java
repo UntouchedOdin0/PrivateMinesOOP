@@ -18,6 +18,13 @@ public class MineFactory {
         this.mineStorage = mineStorage;
     }
 
+    /**
+     * @param player   - The target player to be given a mine
+     * @param location - The spigot world location where to create the mine
+     * @param mineData - The mine data such as the MultiBlockStructure and the Materials
+     * @return The newly created mine
+     */
+
     public Mine createMine(Player player, Location location, MineData mineData) {
         Mine mine = new Mine();
         mine.setMineOwner(player.getUniqueId());
