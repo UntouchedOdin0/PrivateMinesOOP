@@ -24,6 +24,7 @@ public class MineData {
     private Map<Material, Double> materials = new HashMap<>();
     private MultiBlockStructure multiBlockStructure;
     private int[][] cornerLocations;
+    private int[] spawnLocation;
 
     /**
      *
@@ -103,13 +104,19 @@ public class MineData {
         return multiBlockStructure;
     }
 
-    public void setupRelativeLocations(Material cornerMaterial) {
+    public void setupRelativeLocations(Material cornerMaterial,
+                                       Material spawnMaterial) {
         MineLoopUtil mineLoopUtil = new MineLoopUtil();
         Bukkit.getLogger().info("setupRelativeLocations mineLoopUtil: " + mineLoopUtil);
         this.cornerLocations = mineLoopUtil.findCornerLocations(multiBlockStructure, cornerMaterial);
+        this.spawnLocation = mineLoopUtil.findSpawnLocation(multiBlockStructure, spawnMaterial);
     }
 
     public int[][] getCornerLocations() {
         return cornerLocations;
+    }
+
+    public int[] getSpawnLocation() {
+        return spawnLocation;
     }
 }
