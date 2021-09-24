@@ -1,5 +1,6 @@
 package me.untouchedodin0.privatemines.mines;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import redempt.redlib.region.CuboidRegion;
 
@@ -38,8 +39,14 @@ public class Mine {
 
     public UUID getMineOwner() { return mineOwner; }
 
-    public Mine build(Location location) {
-        mineData.getMultiBlockStructure().build(location);
-        return this;
+    public void build() {
+        if (mineData == null) {
+            Bukkit.getLogger().info("Failed to build structure due to the mine data being null!");
+        }
+
+        Bukkit.getLogger().info("build method called...");
+        Bukkit.getLogger().info("MultiBlockStructure: " + mineData.getMultiBlockStructure());
+        Bukkit.getLogger().info("Location " + mineLocation);
+        mineData.getMultiBlockStructure().build(mineLocation);
     }
 }
