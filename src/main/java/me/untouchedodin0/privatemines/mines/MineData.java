@@ -15,35 +15,86 @@ public class MineData {
         materials: A list of materials and their percentages of which goes in the mine
      */
 
+
     private String name;
     private int mineTier = 1;
     private int resetTime = 1;
     private Map<Material, Double> materials = new HashMap<>();
     private MultiBlockStructure multiBlockStructure;
 
+    /**
+     *
+     * @param name - The name to set of the mine type
+     */
+
     public void setName(String name) { this.name = name; }
+
+    /**
+     *
+     * @return A string value of the name of the mine
+     */
 
     public String getName() { return name; }
 
+    /**
+     *
+     * @param mineTier - The new mine tier to be set
+     */
+
     public void setMineTier(int mineTier) { this.mineTier = mineTier; }
 
+    /**
+     *
+     * @return The tier of the mine
+     */
+
     public int getMineTier() { return mineTier; }
+
+    /**
+     *
+     * @param resetTime - The new reset delay for the mine
+     */
 
     public void setResetTime(int resetTime) {
         this.resetTime = resetTime;
     }
 
+    /**
+     *
+     * @return The reset time of the mine
+     */
+
     public int getResetTime() {
         return resetTime;
     }
 
+    /**
+     *
+     * @param mineBlocks - The map of Materials and their percentages to be set in the private mine
+     */
+
     public void setMaterials(Map<Material, Double> mineBlocks) { this.materials = mineBlocks; }
 
+    /**
+     *
+     * @return A map of Materials and their percentages
+     */
+
     public Map<Material, Double> getMaterials() { return materials; }
+
+    /**
+     *
+     * @param multiBlockStructure - The new MultiBlockStructure to be set for the MineData
+     */
 
     public void setMultiBlockStructure(MultiBlockStructure multiBlockStructure) {
         this.multiBlockStructure = multiBlockStructure;
     }
+
+    /**
+     *
+     * @return The MultiBlockStructure of the MineData
+     */
 
     public MultiBlockStructure getMultiBlockStructure() {
         return multiBlockStructure;
