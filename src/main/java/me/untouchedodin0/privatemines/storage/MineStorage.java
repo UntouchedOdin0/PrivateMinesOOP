@@ -41,4 +41,10 @@ public class MineStorage {
     public Map<UUID, Mine> getMines() {
         return mines;
     }
+
+    // This is a way to to get a players mine
+
+    public Mine getMine(UUID uuid) {
+        return mines.get(uuid);
+    }
 }
