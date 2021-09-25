@@ -2,13 +2,14 @@ plugins {
     id 'java'
     id "application"
     id 'com.github.johnrengelman.shadow' version '6.0.0'
+    id 'com.github.joschi.licenser' version '0.6.0'
 }
 
 group 'me.untouchedodin0.privatemines'
 version '1.0-SNAPSHOT'
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
-apply plugin : "java"
+apply plugin: "java"
 
 //def command = "java -jar E:/Coding/Spigot Test Servers/1.17 - Paper (pmines rewrite)/paper.jar"
 def output = "java -jar E:/Coding/Spigot Test Servers/1.17 - Paper (pmines rewrite)/paper.jar".execute().text
@@ -40,6 +41,10 @@ dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.17-R0.1-SNAPSHOT' // The Spigot API with no shadowing. Requires the OSS repo.
 }
 
+license {
+    header = project.file('LICENCE')
+}
+
 application {
     mainClassName = javaMainClass
 }
@@ -54,7 +59,7 @@ task copyJarToPlugins(type: Copy) {
     into "E:/Coding/Spigot Test Servers/1.17 - Paper (pmines rewrite)/plugins"
 }
 
-task runServer(type:Exec) {
+task runServer(type: Exec) {
     doFirst {
         println "Starting Spigot server..."
         workingDir = file('./devserver/')
@@ -62,3 +67,4 @@ task runServer(type:Exec) {
         // cmd /C start D:/Projects/WorkSpaces/WorldCleaner/devserver/start.bat
     }
 }
+
