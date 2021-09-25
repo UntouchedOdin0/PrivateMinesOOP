@@ -2,6 +2,8 @@ package me.untouchedodin0.privatemines.mines;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
 import java.util.UUID;
@@ -18,6 +20,7 @@ public class Mine {
     private Location mineLocation;
     private CuboidRegion cuboidRegion;
     private UUID mineOwner;
+    private Structure structure;
 
     /**
      * @param mineData - The mine data to be set for the Mine
@@ -76,6 +79,15 @@ public class Mine {
 
     public UUID getMineOwner() { return mineOwner; }
 
+    /**
+     *
+     * @return Structure - Gets the mine's structure.
+     */
+
+    public Structure getStructure() {
+        return structure;
+    }
+
     public void build() {
         if (mineData == null) {
             Bukkit.getLogger().info("Failed to build structure due to the mine data being null!");
@@ -85,5 +97,15 @@ public class Mine {
         Bukkit.getLogger().info("MultiBlockStructure: " + mineData.getMultiBlockStructure());
         Bukkit.getLogger().info("Location " + mineLocation);
         mineData.getMultiBlockStructure().build(mineLocation);
+    }
+
+    public void delete() {
+        if (mineData == null) {
+            Bukkit.getLogger().info("Failed to delete the mine due to mine data being null!");
+        }
+        this.structure = mineData.getMultiBlockStructure().assumeAt(getMineLocation());
+        structure.getRegion().forEachBlock(block -> {
+            block.setType(Material.AIR, false);
+        });
     }
 }
