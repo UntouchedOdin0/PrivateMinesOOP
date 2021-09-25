@@ -1,7 +1,7 @@
 # The different Materials to look for within the mine structure.
-Spawnpoint: CHEST
-MineCorner: POWERED_RAIL
-SellNPC: WHITE_WOOL
+spawnPoint: CHEST
+mineCorner: POWERED_RAIL
+sellNpc: WHITE_WOOL
 
 mineTypes:
   Test:
