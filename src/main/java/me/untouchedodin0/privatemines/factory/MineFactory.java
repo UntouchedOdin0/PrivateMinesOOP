@@ -7,6 +7,8 @@ import me.untouchedodin0.privatemines.storage.MineStorage;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class MineFactory {
 
     PrivateMines privateMines;
@@ -33,5 +35,11 @@ public class MineFactory {
         mine.build();
         mineStorage.addMine(player.getUniqueId(), mine);
         return mine;
+    }
+
+    public void deleteMine(Player player) {
+        UUID uuid = player.getUniqueId();
+        Mine mine = mineStorage.getMine(uuid);
+        mine.delete();
     }
 }
