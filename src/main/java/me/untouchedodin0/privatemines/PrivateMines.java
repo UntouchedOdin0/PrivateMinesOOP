@@ -27,15 +27,17 @@ public class PrivateMines extends JavaPlugin {
 
     private final Map<String, MineData> mineDataMap = new HashMap<>();
 
+    @ConfigValue
+    private Material spawnMaterial;
 
     @ConfigValue
-    private Material spawnPoint;
+    private String spawnPoint;
 
     @ConfigValue
-    private Material mineCorner;
+    private String mineCorner;
 
     @ConfigValue
-    private Material sellNpc;
+    private String sellNpc;
 
     @ConfigValue
     private Map<String, MineConfig> mineTypes = ConfigManager.map(MineConfig.class);
@@ -58,10 +60,6 @@ public class PrivateMines extends JavaPlugin {
         System.out.println("mine world manager: " + mineWorldManager);
         System.out.println("Mine Storage: " + mineStorage);
         System.out.println("Mine factory: " + mineFactory);
-
-        System.out.println("Spawnpoint Material: " + spawnPoint.getKey());
-        System.out.println("MineCorner Material: " + mineCorner.getKey());
-        System.out.println("SellNPC Material: " + sellNpc.getKey());
 
         mineTypes.forEach((string, mineConfig) -> {
             Bukkit.getLogger().info("Loading mine type... " + string);
@@ -104,5 +102,17 @@ public class PrivateMines extends JavaPlugin {
 
     public MineLoopUtil getMineLoopUtil() {
         return mineLoopUtil;
+    }
+
+    public String getSpawnMaterial() {
+        return spawnPoint;
+    }
+
+    public String getCornerMaterial() {
+        return mineCorner;
+    }
+
+    public String getSellNpcMaterial() {
+        return sellNpc;
     }
 }
