@@ -77,13 +77,13 @@ public class MineConfig {
         this.multiBlockStructure = MultiBlockStructure.create(contents, name, false, true);
 
         Bukkit.getLogger().info("mbs getName: " + multiBlockStructure.getName());
-        MineData mineData = new MineData();
+        MineData mineData = new MineData(privateMines);
         mineData.setName(getName());
         mineData.setMultiBlockStructure(multiBlockStructure);
         mineData.setMineTier(getPriority());
         mineData.setResetTime(getResetTime());
         mineData.setMaterials(getMaterials());
-        mineData.setupRelativeLocations(Material.POWERED_RAIL, Material.CHEST);
+        mineData.setupRelativeLocations();
 
         Bukkit.getLogger().info("MineConfig MineData " + mineData);
         Bukkit.getLogger().info("MineConfig MineData Name: " + mineData.getName());
