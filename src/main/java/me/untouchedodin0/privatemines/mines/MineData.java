@@ -1,5 +1,6 @@
 package me.untouchedodin0.privatemines.mines;
 
+import me.untouchedodin0.privatemines.PrivateMines;
 import me.untouchedodin0.privatemines.world.utils.MineLoopUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -9,6 +10,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MineData {
+
+    PrivateMines privateMines;
+
+    public MineData(PrivateMines privateMines) {
+        this.privateMines = privateMines;
+    }
 
     /*
         name: Name of the mine type
@@ -23,8 +30,8 @@ public class MineData {
     private int resetTime = 1;
     private Map<Material, Double> materials = new HashMap<>();
     private MultiBlockStructure multiBlockStructure;
-    private int[][] cornerLocations;
     private int[] spawnLocation;
+    private int[][] cornerLocations;
 
     /**
      *
@@ -104,12 +111,23 @@ public class MineData {
         return multiBlockStructure;
     }
 
-    public void setupRelativeLocations(Material cornerMaterial,
-                                       Material spawnMaterial) {
+    public void setupRelativeLocations() {
         MineLoopUtil mineLoopUtil = new MineLoopUtil();
-        Bukkit.getLogger().info("setupRelativeLocations mineLoopUtil: " + mineLoopUtil);
-        this.cornerLocations = mineLoopUtil.findCornerLocations(multiBlockStructure, cornerMaterial);
+        Material spawnMaterial = Material.valueOf(privateMines.getSpawnMaterial());
+        Material cornerMaterial = Material.valueOf(privateMines.getCornerMaterial());
+        Material sellNpcMaterial = Material.valueOf(privateMines.getSellNpcMaterial());
+
+        Bukkit.getLogger().info("mine data setupRelativeLocations: spawnMaterial: " +
+                spawnMaterial);
+
+        Bukkit.getLogger().info("mine data setupRelativeLocations: cornerMaterial: " +
+                cornerMaterial);
+
+        Bukkit.getLogger().info("mine data setupRelativeLocations: sellNpcMaterial: " +
+                sellNpcMaterial);
+
         this.spawnLocation = mineLoopUtil.findSpawnLocation(multiBlockStructure, spawnMaterial);
+        this.cornerLocations = mineLoopUtil.findCornerLocations(multiBlockStructure, cornerMaterial);
     }
 
     public int[][] getCornerLocations() {
