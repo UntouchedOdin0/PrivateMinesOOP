@@ -50,7 +50,6 @@ public class MineConfig {
     private Path path;
     private String contents;
 
-    @SuppressWarnings("unused")
     @ConfigPath
     private String name = "Default";
 
