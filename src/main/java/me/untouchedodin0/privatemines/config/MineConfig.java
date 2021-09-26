@@ -52,16 +52,16 @@ public class MineConfig {
 
     @SuppressWarnings("unused")
     @ConfigPath
-    private String name;
+    private String name = "Default";
 
     @ConfigValue
-    private String file; // reads the file
+    private String file = "structure.dat"; // reads the file
 
     @ConfigValue
-    private int priority; // reads the priority from the section
+    private int priority = 1; // reads the priority from the section
 
     @ConfigValue
-    private int resetTime; // reads the reset time from the section
+    private int resetTime = 5; // reads the reset time from the section
 
     @ConfigValue
     private Map<Material, Double> materials =
