@@ -1,6 +1,7 @@
 name: PrivateMinesOOP
 main: me.untouchedodin0.privatemines.PrivateMines
 version: 1.0
+api-version: 1.13
 
 depend:
   - RedLib
