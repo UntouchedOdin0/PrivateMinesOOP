@@ -52,9 +52,6 @@ public class PrivateMines extends JavaPlugin {
     private final Map<String, MineData> mineDataMap = new HashMap<>();
 
     @ConfigValue
-    private Material spawnMaterial;
-
-    @ConfigValue
     private String spawnPoint;
 
     @ConfigValue
