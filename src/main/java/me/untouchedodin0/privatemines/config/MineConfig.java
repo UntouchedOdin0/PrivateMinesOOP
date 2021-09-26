@@ -95,7 +95,8 @@ public class MineConfig {
                 + Arrays.deepToString(mineData.getCornerLocations()));
         Bukkit.getLogger().info("MineConfig MineData Spawn Location: "
                 + Arrays.toString(mineData.getSpawnLocation()));
-
+        Bukkit.getLogger().info("MineConfig MineData NPC Location"
+                + Arrays.toString(mineData.getNpcLocation()));
         privateMines.addMineData(getName(), mineData);
     }
 

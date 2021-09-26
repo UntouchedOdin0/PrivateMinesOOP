@@ -31,6 +31,7 @@ public class MineData {
     private Map<Material, Double> materials = new HashMap<>();
     private MultiBlockStructure multiBlockStructure;
     private int[] spawnLocation;
+    private int[] npcLocation;
     private int[][] cornerLocations;
 
     /**
@@ -127,14 +128,17 @@ public class MineData {
                 sellNpcMaterial);
 
         this.spawnLocation = mineLoopUtil.findSpawnLocation(multiBlockStructure, spawnMaterial);
+        this.npcLocation = mineLoopUtil.findNpcLocation(multiBlockStructure, sellNpcMaterial);
         this.cornerLocations = mineLoopUtil.findCornerLocations(multiBlockStructure, cornerMaterial);
-    }
-
-    public int[][] getCornerLocations() {
-        return cornerLocations;
     }
 
     public int[] getSpawnLocation() {
         return spawnLocation;
+    }
+
+    public int[] getNpcLocation() { return npcLocation; }
+
+    public int[][] getCornerLocations() {
+        return cornerLocations;
     }
 }

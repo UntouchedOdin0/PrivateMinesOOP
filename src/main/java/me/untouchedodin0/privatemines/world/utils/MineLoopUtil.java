@@ -75,4 +75,35 @@ public class MineLoopUtil {
         }
         return location;
     }
+
+    // Find the Spawn Point location for the mine
+
+    public int[] findNpcLocation(MultiBlockStructure multiBlockStructure, Material npcMaterial) {
+
+        int[] structureDimensions = multiBlockStructure.getDimensions();
+        int dimensionsX = structureDimensions[0];
+        int dimensionsY = structureDimensions[1];
+        int dimensionsZ = structureDimensions[2];
+
+         /*
+            Creating an array of 1 values to hold the location
+            Thanks to Redempt for the following example.
+
+            Example: [1, 2, 3]
+         */
+
+        int[] location = new int[1];
+
+        for (int x = 0; x < dimensionsX; x++) {
+            for (int y = 0; y < dimensionsY; y++) {
+                for (int z = 0; z < dimensionsZ; z++) {
+                    if (multiBlockStructure.getType(x, y, z) != npcMaterial) {
+                        continue;
+                    }
+                    location = new int[]{x, y, z};
+                }
+            }
+        }
+        return location;
+    }
 }
