@@ -39,10 +39,9 @@ public class MineFactory {
     MineStorage mineStorage;
     MineData defaultMineData;
 
-    public MineFactory(PrivateMines privateMines,
-                       MineStorage mineStorage) {
+    public MineFactory(PrivateMines privateMines) {
         this.privateMines = privateMines;
-        this.mineStorage = mineStorage;
+        this.mineStorage = privateMines.getMineStorage();
         this.defaultMineData = privateMines.getDefaultMineData();
     }
 
@@ -72,10 +71,10 @@ public class MineFactory {
         return mine;
     }
 
-
     public void deleteMine(Player player) {
         UUID uuid = player.getUniqueId();
         Mine mine = mineStorage.getMine(uuid);
+        mineStorage.removeMine(uuid);
         mine.delete();
     }
 
