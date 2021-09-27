@@ -1,0 +1,8 @@
+privatemine,privatemines,pmine {
+
+    give player:target {
+        hook give
+        help /pmine give <name> - Gives a private mine to a player
+        permission privatemines.give
+    }
+}

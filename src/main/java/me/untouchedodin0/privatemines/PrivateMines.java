@@ -24,6 +24,7 @@ SOFTWARE.
 
 package me.untouchedodin0.privatemines;
 
+import me.untouchedodin0.privatemines.commands.PrivateMinesCommand;
 import me.untouchedodin0.privatemines.config.MineConfig;
 import me.untouchedodin0.privatemines.factory.MineFactory;
 import me.untouchedodin0.privatemines.mines.MineData;
@@ -33,6 +34,7 @@ import me.untouchedodin0.privatemines.world.utils.MineLoopUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
+import redempt.redlib.commandmanager.CommandParser;
 import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.configmanager.annotations.ConfigValue;
 
@@ -49,6 +51,7 @@ public class PrivateMines extends JavaPlugin {
 
     File configFile;
     MineLoopUtil mineLoopUtil;
+    MineFactory mineFactory;
 
     private final Map<String, MineData> mineDataMap = new HashMap<>();
     private final TreeMap<String, MineData> mineDataTreeMap = new TreeMap<>();
@@ -76,7 +79,7 @@ public class PrivateMines extends JavaPlugin {
         MineWorldManager mineWorldManager = new MineWorldManager();
 
         MineStorage mineStorage = new MineStorage();
-        MineFactory mineFactory = new MineFactory(this, mineStorage);
+        mineFactory = new MineFactory(this, mineStorage);
         mineLoopUtil = new MineLoopUtil();
 
         getLogger().info("config manager: " + configManager);
@@ -113,6 +116,11 @@ public class PrivateMines extends JavaPlugin {
                         + mineDataTreeMap.higherEntry(entry.getKey()));
             }
         }
+
+        new CommandParser(this.getResource("command.rdcml"))
+                .parse()
+                .register("privatemines",
+                        new PrivateMinesCommand(this));
     }
 
     @Override
@@ -132,6 +140,10 @@ public class PrivateMines extends JavaPlugin {
         return mineDataMap;
     }
 
+    public MineData getDefaultMineData() {
+        return mineDataTreeMap.firstEntry().getValue();
+    }
+
     public String getSpawnMaterial() {
         return spawnPoint;
     }
@@ -146,5 +158,9 @@ public class PrivateMines extends JavaPlugin {
 
     public MineData getNextMineData(String mineData) {
         return mineDataTreeMap.higherEntry(mineData).getValue();
+    }
+
+    public MineFactory getMineFactory() {
+        return mineFactory;
     }
 }
