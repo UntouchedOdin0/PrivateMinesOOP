@@ -77,17 +77,17 @@ public class PrivateMines extends JavaPlugin {
         MineFactory mineFactory = new MineFactory(this, mineStorage);
         mineLoopUtil = new MineLoopUtil();
 
-        System.out.println("config manager: " + configManager);
-        System.out.println("mine world manager: " + mineWorldManager);
-        System.out.println("Mine Storage: " + mineStorage);
-        System.out.println("Mine factory: " + mineFactory);
+        getLogger().info("config manager: " + configManager);
+        getLogger().info("mine world manager: " + mineWorldManager);
+        getLogger().info("Mine Storage: " + mineStorage);
+        getLogger().info("Mine factory: " + mineFactory);
 
         mineTypes.forEach((string, mineConfig) -> {
-            Bukkit.getLogger().info("Loading mine type... " + string);
+            getLogger().info("Loading mine type... " + string);
         });
 
         int loaded = mineTypes.size();
-        Bukkit.getLogger().info("Loaded a total of {loaded} mine types!"
+        getLogger().info("Loaded a total of {loaded} mine types!"
                 .replace("{loaded}",
                         String.valueOf(loaded)));
 
@@ -98,19 +98,19 @@ public class PrivateMines extends JavaPlugin {
         mineBlocks2.put(Material.GOLD_ORE, 0.5);
 
         mineDataMap.forEach((string, mineData) -> {
-            System.out.println("mineData Name: " + mineData.getName());
-            System.out.println("mineData Tier: " + mineData.getMineTier());
-            System.out.println("mineData Materials: " + mineData.getMaterials());
-            System.out.println("mineData Reset Time: " + mineData.getResetTime());
+            getLogger().info("mineData Name: " + mineData.getName());
+            getLogger().info("mineData Tier: " + mineData.getMineTier());
+            getLogger().info("mineData Materials: " + mineData.getMaterials());
+            getLogger().info("mineData Reset Time: " + mineData.getResetTime());
         });
     }
 
     @Override
     public void onDisable() {
-        Bukkit.getLogger().info("Disabling Private Mines...");
-        Bukkit.getLogger().info("Mine data map before: " + mineDataMap);
+        getLogger().info("Disabling Private Mines...");
+        getLogger().info("Mine data map before: " + mineDataMap);
         mineDataMap.clear();
-        Bukkit.getLogger().info("Mine data map after: " + mineDataMap);
+        getLogger().info("Mine data map after: " + mineDataMap);
     }
 
     public void addMineData(String name, MineData mineData) {
