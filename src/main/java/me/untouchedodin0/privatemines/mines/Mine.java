@@ -50,7 +50,6 @@ public class Mine {
     private CuboidRegion cuboidRegion;
     private UUID mineOwner;
     private Structure structure;
-    private PrivateMines privateMines;
 
     /**
      * @param mineData - The mine data to be set for the Mine
@@ -142,7 +141,7 @@ public class Mine {
         if (mineData == null) {
             Bukkit.getLogger().info("Failed to build structure due to the mine data being null!");
         }
-        this.privateMines = PrivateMines.getPlugin(PrivateMines.class);
+        PrivateMines privateMines = PrivateMines.getPlugin(PrivateMines.class);
 
         Utils utils = new Utils();
         privateMines.getLogger().info("build method called...");
