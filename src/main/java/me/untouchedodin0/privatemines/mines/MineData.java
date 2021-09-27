@@ -142,13 +142,13 @@ public class MineData {
         Material cornerMaterial = Material.valueOf(privateMines.getCornerMaterial());
         Material sellNpcMaterial = Material.valueOf(privateMines.getSellNpcMaterial());
 
-        Bukkit.getLogger().info("mine data setupRelativeLocations: spawnMaterial: " +
+        privateMines.getLogger().info("mine data setupRelativeLocations: spawnMaterial: " +
                 spawnMaterial);
 
-        Bukkit.getLogger().info("mine data setupRelativeLocations: cornerMaterial: " +
+        privateMines.getLogger().info("mine data setupRelativeLocations: cornerMaterial: " +
                 cornerMaterial);
 
-        Bukkit.getLogger().info("mine data setupRelativeLocations: sellNpcMaterial: " +
+        privateMines.getLogger().info("mine data setupRelativeLocations: sellNpcMaterial: " +
                 sellNpcMaterial);
 
         this.spawnLocation = mineLoopUtil.findSpawnLocation(multiBlockStructure, spawnMaterial);
