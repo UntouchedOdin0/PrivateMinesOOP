@@ -37,18 +37,29 @@ public class MineFactory {
 
     PrivateMines privateMines;
     MineStorage mineStorage;
+    MineData defaultMineData;
 
     public MineFactory(PrivateMines privateMines,
                        MineStorage mineStorage) {
         this.privateMines = privateMines;
         this.mineStorage = mineStorage;
+        this.defaultMineData = privateMines.getDefaultMineData();
+    }
+
+    public Mine createMine(Player player, Location location) {
+        Mine mine = new Mine();
+        mine.setMineOwner(player.getUniqueId());
+        mine.setMineLocation(location);
+        mine.setMineData(defaultMineData);
+        mine.build();
+        mineStorage.addMine(player.getUniqueId(), mine);
+        return mine;
     }
 
     /**
      * @param player   - The target player to be given a mine
      * @param location - The spigot world location where to create the mine
      * @param mineData - The mine data such as the MultiBlockStructure and the Materials
-     * @return The newly created mine
      */
 
     public Mine createMine(Player player, Location location, MineData mineData) {
@@ -60,6 +71,7 @@ public class MineFactory {
         mineStorage.addMine(player.getUniqueId(), mine);
         return mine;
     }
+
 
     public void deleteMine(Player player) {
         UUID uuid = player.getUniqueId();
