@@ -33,6 +33,7 @@ import me.untouchedodin0.privatemines.world.MineWorldManager;
 import me.untouchedodin0.privatemines.world.utils.MineLoopUtil;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
+import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.commandmanager.CommandParser;
 import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.configmanager.annotations.ConfigValue;
@@ -52,6 +53,7 @@ public class PrivateMines extends JavaPlugin {
     MineLoopUtil mineLoopUtil;
     MineFactory mineFactory;
     MineStorage mineStorage;
+    BlockDataManager blockDataManager;
 
     private final Map<String, MineData> mineDataMap = new HashMap<>();
     private final TreeMap<String, MineData> mineDataTreeMap = new TreeMap<>();
@@ -81,11 +83,16 @@ public class PrivateMines extends JavaPlugin {
         mineStorage = new MineStorage();
         mineFactory = new MineFactory(this);
         mineLoopUtil = new MineLoopUtil();
+        blockDataManager = new BlockDataManager(
+                getDataFolder()
+                .toPath()
+                .resolve("mines.db"));
 
         getLogger().info("config manager: " + configManager);
         getLogger().info("mine world manager: " + mineWorldManager);
         getLogger().info("Mine Storage: " + getMineStorage());
         getLogger().info("Mine factory: " + mineFactory);
+        getLogger().info("BlockDataManager: " + blockDataManager);
 
         mineTypes.forEach((string, mineConfig) -> {
             getLogger().info("Loading mine type... " + string);
@@ -129,6 +136,8 @@ public class PrivateMines extends JavaPlugin {
         getLogger().info("Mine data map before: " + mineDataMap);
         mineDataMap.clear();
         getLogger().info("Mine data map after: " + mineDataMap);
+        getLogger().info("Saving and closing the BlockDataManager...");
+        blockDataManager.saveAndClose();
     }
 
     public void addMineData(String name, MineData mineData) {
@@ -165,4 +174,6 @@ public class PrivateMines extends JavaPlugin {
     }
 
     public MineStorage getMineStorage() { return mineStorage; }
+
+    public BlockDataManager getBlockDataManager() { return blockDataManager; }
 }
