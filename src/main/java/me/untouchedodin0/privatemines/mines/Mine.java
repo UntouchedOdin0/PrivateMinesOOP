@@ -169,6 +169,8 @@ public class Mine {
         if (mineData == null) {
             Bukkit.getLogger().info("Failed to delete the mine due to mine data being null!");
         }
+        PrivateMines privateMines = PrivateMines.getPlugin(PrivateMines.class);
+
         this.structure = mineData.getMultiBlockStructure().assumeAt(getMineLocation());
         structure.getRegion().forEachBlock(block -> block.setType(Material.AIR, false));
     }
