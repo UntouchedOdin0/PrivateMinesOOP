@@ -87,19 +87,19 @@ public class MineConfig {
         this.path = privateMines.getDataFolder().toPath().resolve(file);
         this.contents = Files.lines(path).collect(Collectors.joining());
 
-        Bukkit.getLogger().info("Test postInit!");
-        Bukkit.getLogger().info("Name: " + getName());
-        Bukkit.getLogger().info("Path: " + getPath());
-        Bukkit.getLogger().info("File: " + getFile());
-        Bukkit.getLogger().info("Priority: " + getPriority());
-        Bukkit.getLogger().info("Reset Time: " + getResetTime());
-        Bukkit.getLogger().info("Materials: " + getMaterials());
-        Bukkit.getLogger().info("MultiBlockStructure: " + getMultiBlockStructure());
-        Bukkit.getLogger().info("Contents: " + getContents());
+        privateMines.getLogger().info("Test postInit!");
+        privateMines.getLogger().info("Name: " + getName());
+        privateMines.getLogger().info("Path: " + getPath());
+        privateMines.getLogger().info("File: " + getFile());
+        privateMines.getLogger().info("Priority: " + getPriority());
+        privateMines.getLogger().info("Reset Time: " + getResetTime());
+        privateMines.getLogger().info("Materials: " + getMaterials());
+        privateMines.getLogger().info("MultiBlockStructure: " + getMultiBlockStructure());
+        privateMines.getLogger().info("Contents: " + getContents());
 
         this.multiBlockStructure = MultiBlockStructure.create(contents, name, false, true);
 
-        Bukkit.getLogger().info("mbs getName: " + multiBlockStructure.getName());
+        privateMines.getLogger().info("mbs getName: " + multiBlockStructure.getName());
         MineData mineData = new MineData(privateMines);
         mineData.setName(getName());
         mineData.setMultiBlockStructure(multiBlockStructure);
@@ -108,17 +108,17 @@ public class MineConfig {
         mineData.setMaterials(getMaterials());
         mineData.setupRelativeLocations();
 
-        Bukkit.getLogger().info("MineConfig MineData " + mineData);
-        Bukkit.getLogger().info("MineConfig MineData Name: " + mineData.getName());
-        Bukkit.getLogger().info("MineConfig MineData MBS: " + mineData.getMultiBlockStructure());
-        Bukkit.getLogger().info("MineConfig MineData Tier: " + mineData.getMineTier());
-        Bukkit.getLogger().info("MineConfig MineData Reset time: " + mineData.getResetTime());
-        Bukkit.getLogger().info("MineConfig MineData Materials: " + mineData.getMaterials());
-        Bukkit.getLogger().info("MineConfig MineData Corner Locations: "
+        privateMines.getLogger().info("MineConfig MineData " + mineData);
+        privateMines.getLogger().info("MineConfig MineData Name: " + mineData.getName());
+        privateMines.getLogger().info("MineConfig MineData MBS: " + mineData.getMultiBlockStructure());
+        privateMines.getLogger().info("MineConfig MineData Tier: " + mineData.getMineTier());
+        privateMines.getLogger().info("MineConfig MineData Reset time: " + mineData.getResetTime());
+        privateMines.getLogger().info("MineConfig MineData Materials: " + mineData.getMaterials());
+        privateMines.getLogger().info("MineConfig MineData Corner Locations: "
                 + Arrays.deepToString(mineData.getCornerLocations()));
-        Bukkit.getLogger().info("MineConfig MineData Spawn Location: "
+        privateMines.getLogger().info("MineConfig MineData Spawn Location: "
                 + Arrays.toString(mineData.getSpawnLocation()));
-        Bukkit.getLogger().info("MineConfig MineData NPC Location"
+        privateMines.getLogger().info("MineConfig MineData NPC Location"
                 + Arrays.toString(mineData.getNpcLocation()));
         privateMines.addMineData(getName(), mineData);
     }
