@@ -40,6 +40,7 @@ import java.io.File;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class PrivateMines extends JavaPlugin {
 
@@ -50,6 +51,7 @@ public class PrivateMines extends JavaPlugin {
     MineLoopUtil mineLoopUtil;
 
     private final Map<String, MineData> mineDataMap = new HashMap<>();
+    private final TreeMap<String, MineData> mineDataTreeMap = new TreeMap<>();
 
     @ConfigValue
     private String spawnPoint;
@@ -97,12 +99,20 @@ public class PrivateMines extends JavaPlugin {
         mineBlocks2.put(Material.COBBLESTONE, 0.5);
         mineBlocks2.put(Material.GOLD_ORE, 0.5);
 
-        mineDataMap.forEach((string, mineData) -> {
-            getLogger().info("mineData Name: " + mineData.getName());
-            getLogger().info("mineData Tier: " + mineData.getMineTier());
-            getLogger().info("mineData Materials: " + mineData.getMaterials());
-            getLogger().info("mineData Reset Time: " + mineData.getResetTime());
-        });
+        for (Map.Entry<String, MineData> entry : mineDataTreeMap.entrySet()) {
+            getLogger().info("Tree Map Name: " + entry.getValue().getName());
+            getLogger().info("Tree Map Tier: " + entry.getValue().getMineTier());
+            getLogger().info("Tree Map Materials: " + entry.getValue().getMaterials());
+            getLogger().info("Tree Map Reset Time: " + entry.getValue().getResetTime());
+            getLogger().info(" ");
+            if (mineDataTreeMap.lastKey().equals(entry.getKey())) {
+                getLogger().info("You've reached the last entry!");
+            } else {
+                getLogger().info("the next entry after "
+                        + entry.getValue().getName() + " is: "
+                        + mineDataTreeMap.higherEntry(entry.getKey()));
+            }
+        }
     }
 
     @Override
@@ -115,6 +125,7 @@ public class PrivateMines extends JavaPlugin {
 
     public void addMineData(String name, MineData mineData) {
         mineDataMap.putIfAbsent(name, mineData);
+        mineDataTreeMap.put(name, mineData);
     }
 
     public Map<String, MineData> getMineDataMap() {
@@ -135,5 +146,9 @@ public class PrivateMines extends JavaPlugin {
 
     public String getSellNpcMaterial() {
         return sellNpc;
+    }
+
+    public MineData getNextMineData(String mineData) {
+        return mineDataTreeMap.higherEntry(mineData).getValue();
     }
 }

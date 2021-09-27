@@ -11,3 +11,17 @@ mineTypes:
     materials:
       STONE: 0.9
       COBBLESTONE: 0.1
+  Test2:
+    file: "structure.dat"
+    priority: 2
+    resetTime: 5
+    materials:
+      STONE: 0.9
+      COBBLESTONE: 0.1
+  Test3:
+    file: "structure.dat"
+    priority: 3
+    resetTime: 5
+    materials:
+      STONE: 0.9
+      COBBLESTONE: 0.1
