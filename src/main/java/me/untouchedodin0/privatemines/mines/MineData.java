@@ -27,6 +27,7 @@ package me.untouchedodin0.privatemines.mines;
 import me.untouchedodin0.privatemines.PrivateMines;
 import me.untouchedodin0.privatemines.world.utils.MineLoopUtil;
 import org.bukkit.Material;
+import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.MultiBlockStructure;
 
 import java.util.HashMap;
@@ -52,6 +53,7 @@ public class MineData {
     private int mineTier = 1;
     private int resetTime = 1;
     private Map<Material, Double> materials = new HashMap<>();
+    private WeightedRandom<Material> weightedRandom = new WeightedRandom<>();
     private MultiBlockStructure multiBlockStructure;
     private int[] spawnLocation;
     private int[] npcLocation;
@@ -150,6 +152,8 @@ public class MineData {
         privateMines.getLogger().info("mine data setupRelativeLocations: sellNpcMaterial: " +
                 sellNpcMaterial);
 
+        materials.forEach((material, aDouble) -> weightedRandom.set(material, aDouble));
+
         this.spawnLocation = mineLoopUtil.findSpawnLocation(multiBlockStructure, spawnMaterial);
         this.npcLocation = mineLoopUtil.findNpcLocation(multiBlockStructure, sellNpcMaterial);
         this.cornerLocations = mineLoopUtil.findCornerLocations(multiBlockStructure, cornerMaterial);
@@ -172,4 +176,6 @@ public class MineData {
     public int[] getCorner2() {
         return getCornerLocations()[1];
     }
+
+    public WeightedRandom<Material> getWeightedRandom() { return weightedRandom; }
 }

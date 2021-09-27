@@ -56,6 +56,7 @@ public class MineFactory {
         mine.setMineOwner(player.getUniqueId());
         mine.setMineLocation(location);
         mine.setMineData(defaultMineData);
+        mine.setWeightedRandom(defaultMineData.getWeightedRandom());
         mine.build();
         mineStorage.addMine(player.getUniqueId(), mine);
         Block block = location.getBlock();
@@ -65,6 +66,8 @@ public class MineFactory {
         Bukkit.getLogger().info("createMine block: " + block);
         Bukkit.getLogger().info("createMine dataBlock: " + dataBlock);
         Bukkit.getLogger().info("createMine dataBlock getData: " + dataBlock.getData());
+
+        mine.reset();
         return mine;
     }
 
@@ -79,6 +82,7 @@ public class MineFactory {
         mine.setMineOwner(player.getUniqueId());
         mine.setMineLocation(location);
         mine.setMineData(mineData);
+        mine.setWeightedRandom(mineData.getWeightedRandom());
         mine.build();
         mineStorage.addMine(player.getUniqueId(), mine);
         return mine;

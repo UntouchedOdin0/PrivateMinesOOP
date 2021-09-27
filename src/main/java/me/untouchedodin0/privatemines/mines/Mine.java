@@ -32,9 +32,11 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.blockdata.DataBlock;
+import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
+import java.util.Map;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
@@ -54,6 +56,8 @@ public class Mine {
     private CuboidRegion cuboidRegion;
     private UUID mineOwner;
     private Structure structure;
+
+    private WeightedRandom<Material> weightedRandom;
 
     /**
      * @param mineData - The mine data to be set for the Mine
@@ -141,6 +145,10 @@ public class Mine {
         return structure;
     }
 
+    public void setWeightedRandom(WeightedRandom<Material> weightedRandom) {
+        this.weightedRandom = weightedRandom;
+    }
+
     public void build() {
         if (mineData == null) {
             Bukkit.getLogger().info("Failed to build structure due to the mine data being null!");
@@ -159,6 +167,9 @@ public class Mine {
         Location corner1 = utils.getRelative(structure, mineData.getCorner1());
         Location corner2 = utils.getRelative(structure, mineData.getCorner2());
 
+        CuboidRegion cuboidRegion = new CuboidRegion(corner1, corner2);
+
+        setCuboidRegion(cuboidRegion);
         spawnLocation.getBlock().setType(Material.AIR);
         npcLocation.getBlock().setType(Material.AIR);
     }
@@ -178,5 +189,11 @@ public class Mine {
         this.structure = mineData.getMultiBlockStructure().assumeAt(location);
         privateMines.getLogger().info("delete Structure: " + structure);
         structure.getRegion().forEachBlock(b -> b.setType(Material.AIR, false));
+    }
+
+    public void reset() {
+        cuboidRegion.forEachBlock(block -> {
+            block.setType(mineData.getWeightedRandom().roll(), false);
+        });
     }
 }
