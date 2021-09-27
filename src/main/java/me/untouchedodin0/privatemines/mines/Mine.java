@@ -24,6 +24,7 @@ SOFTWARE.
 
 package me.untouchedodin0.privatemines.mines;
 
+import me.untouchedodin0.privatemines.PrivateMines;
 import me.untouchedodin0.privatemines.util.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -49,6 +50,7 @@ public class Mine {
     private CuboidRegion cuboidRegion;
     private UUID mineOwner;
     private Structure structure;
+    private PrivateMines privateMines;
 
     /**
      * @param mineData - The mine data to be set for the Mine
@@ -140,11 +142,12 @@ public class Mine {
         if (mineData == null) {
             Bukkit.getLogger().info("Failed to build structure due to the mine data being null!");
         }
+        this.privateMines = PrivateMines.getPlugin(PrivateMines.class);
 
         Utils utils = new Utils();
-        Bukkit.getLogger().info("build method called...");
-        Bukkit.getLogger().info("MultiBlockStructure: " + mineData.getMultiBlockStructure());
-        Bukkit.getLogger().info("Location " + mineLocation);
+        privateMines.getLogger().info("build method called...");
+        privateMines.getLogger().info("MultiBlockStructure: " + mineData.getMultiBlockStructure());
+        privateMines.getLogger().info("Location " + mineLocation);
         mineData.getMultiBlockStructure().build(mineLocation);
         this.structure = mineData.getMultiBlockStructure().assumeAt(mineLocation);
         this.spawnLocation = utils.getRelative(structure, mineData.getSpawnLocation());
