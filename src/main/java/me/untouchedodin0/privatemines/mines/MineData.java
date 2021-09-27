@@ -26,7 +26,6 @@ package me.untouchedodin0.privatemines.mines;
 
 import me.untouchedodin0.privatemines.PrivateMines;
 import me.untouchedodin0.privatemines.world.utils.MineLoopUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import redempt.redlib.multiblock.MultiBlockStructure;
 
