@@ -132,10 +132,6 @@ public class PrivateMines extends JavaPlugin {
         return mineDataMap;
     }
 
-    public MineLoopUtil getMineLoopUtil() {
-        return mineLoopUtil;
-    }
-
     public String getSpawnMaterial() {
         return spawnPoint;
     }

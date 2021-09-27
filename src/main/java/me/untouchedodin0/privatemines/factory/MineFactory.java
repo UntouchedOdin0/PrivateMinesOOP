@@ -66,4 +66,10 @@ public class MineFactory {
         Mine mine = mineStorage.getMine(uuid);
         mine.delete();
     }
+
+    public void upgradeMine(Player player, MineData mineData) {
+        MineData nextMineData = privateMines.getNextMineData(mineData.getName());
+        Mine mine = mineStorage.getMine(player.getUniqueId());
+        mine.setMineData(nextMineData);
+    }
 }
