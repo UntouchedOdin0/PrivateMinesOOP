@@ -29,6 +29,7 @@ import me.untouchedodin0.privatemines.util.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
@@ -47,6 +48,7 @@ public class Mine {
     private Location mineLocation;
     private Location spawnLocation;
     private Location npcLocation;
+
     private CuboidRegion cuboidRegion;
     private UUID mineOwner;
     private Structure structure;
@@ -151,6 +153,16 @@ public class Mine {
         this.structure = mineData.getMultiBlockStructure().assumeAt(mineLocation);
         this.spawnLocation = utils.getRelative(structure, mineData.getSpawnLocation());
         this.npcLocation = utils.getRelative(structure, mineData.getNpcLocation());
+
+        Location corner1 = utils.getRelative(structure, mineData.getCorner1());
+        Location corner2 = utils.getRelative(structure, mineData.getCorner2());
+
+        spawnLocation.getBlock().setType(Material.AIR);
+        npcLocation.getBlock().setType(Material.AIR);
+    }
+
+    public void teleportPlayer(Player player) {
+        player.teleport(spawnLocation);
     }
 
     public void delete() {
