@@ -24,6 +24,7 @@ SOFTWARE.
 
 package me.untouchedodin0.privatemines.mines;
 
+import me.untouchedodin0.privatemines.util.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -32,6 +33,7 @@ import redempt.redlib.region.CuboidRegion;
 
 import java.util.UUID;
 
+@SuppressWarnings("unused")
 public class Mine {
 
     /*
@@ -42,6 +44,8 @@ public class Mine {
 
     private MineData mineData;
     private Location mineLocation;
+    private Location spawnLocation;
+    private Location npcLocation;
     private CuboidRegion cuboidRegion;
     private UUID mineOwner;
     private Structure structure;
@@ -72,7 +76,27 @@ public class Mine {
      *
      * @return Location - The location of where the mine is in the world
      */
+
     public Location getMineLocation() { return mineLocation; }
+
+
+    /**
+     *
+     * @return Location - The location of where the spawn location is in the world
+     */
+
+    public Location getSpawnLocation() {
+        return spawnLocation;
+    }
+
+    /**
+     *
+     * @return Location - The location of where the npc location is in the world
+     */
+
+    public Location getNpcLocation() {
+        return npcLocation;
+    }
 
     /**
      *
@@ -117,10 +141,14 @@ public class Mine {
             Bukkit.getLogger().info("Failed to build structure due to the mine data being null!");
         }
 
+        Utils utils = new Utils();
         Bukkit.getLogger().info("build method called...");
         Bukkit.getLogger().info("MultiBlockStructure: " + mineData.getMultiBlockStructure());
         Bukkit.getLogger().info("Location " + mineLocation);
         mineData.getMultiBlockStructure().build(mineLocation);
+        this.structure = mineData.getMultiBlockStructure().assumeAt(mineLocation);
+        this.spawnLocation = utils.getRelative(structure, mineData.getSpawnLocation());
+        this.npcLocation = utils.getRelative(structure, mineData.getNpcLocation());
     }
 
     public void delete() {
@@ -128,8 +156,6 @@ public class Mine {
             Bukkit.getLogger().info("Failed to delete the mine due to mine data being null!");
         }
         this.structure = mineData.getMultiBlockStructure().assumeAt(getMineLocation());
-        structure.getRegion().forEachBlock(block -> {
-            block.setType(Material.AIR, false);
-        });
+        structure.getRegion().forEachBlock(block -> block.setType(Material.AIR, false));
     }
 }
