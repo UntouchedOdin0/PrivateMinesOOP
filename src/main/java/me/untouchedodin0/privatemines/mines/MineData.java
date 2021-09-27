@@ -169,9 +169,7 @@ public class MineData {
         return cornerLocations;
     }
 
-    public int[] getCorner1() {
-        return getCornerLocations()[0];
-    }
+    public int[] getCorner1() { return getCornerLocations()[0]; }
 
     public int[] getCorner2() {
         return getCornerLocations()[1];
