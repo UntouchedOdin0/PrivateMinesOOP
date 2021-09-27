@@ -28,8 +28,12 @@ import me.untouchedodin0.privatemines.PrivateMines;
 import me.untouchedodin0.privatemines.mines.Mine;
 import me.untouchedodin0.privatemines.mines.MineData;
 import me.untouchedodin0.privatemines.storage.MineStorage;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import redempt.redlib.blockdata.BlockDataManager;
+import redempt.redlib.blockdata.DataBlock;
 
 import java.util.UUID;
 
@@ -38,11 +42,13 @@ public class MineFactory {
     PrivateMines privateMines;
     MineStorage mineStorage;
     MineData defaultMineData;
+    BlockDataManager blockDataManager;
 
-    public MineFactory(PrivateMines privateMines) {
+    public MineFactory(PrivateMines privateMines, BlockDataManager blockDataManager) {
         this.privateMines = privateMines;
         this.mineStorage = privateMines.getMineStorage();
         this.defaultMineData = privateMines.getDefaultMineData();
+        this.blockDataManager = blockDataManager;
     }
 
     public Mine createMine(Player player, Location location) {
@@ -52,6 +58,13 @@ public class MineFactory {
         mine.setMineData(defaultMineData);
         mine.build();
         mineStorage.addMine(player.getUniqueId(), mine);
+        Block block = location.getBlock();
+        DataBlock dataBlock = blockDataManager.getDataBlock(block);
+        dataBlock.set("mine", mine);
+
+        Bukkit.getLogger().info("createMine block: " + block);
+        Bukkit.getLogger().info("createMine dataBlock: " + dataBlock);
+        Bukkit.getLogger().info("createMine dataBlock getData: " + dataBlock.getData());
         return mine;
     }
 

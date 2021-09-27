@@ -80,13 +80,14 @@ public class PrivateMines extends JavaPlugin {
         ConfigManager configManager = new ConfigManager(this).register(this).load();
         MineWorldManager mineWorldManager = new MineWorldManager();
 
-        mineStorage = new MineStorage();
-        mineFactory = new MineFactory(this);
-        mineLoopUtil = new MineLoopUtil();
         blockDataManager = new BlockDataManager(
                 getDataFolder()
-                .toPath()
-                .resolve("mines.db"));
+                        .toPath()
+                        .resolve("mines.db"));
+        mineStorage = new MineStorage();
+        mineFactory = new MineFactory(this, blockDataManager);
+        mineLoopUtil = new MineLoopUtil();
+
 
         getLogger().info("config manager: " + configManager);
         getLogger().info("mine world manager: " + mineWorldManager);

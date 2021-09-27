@@ -30,6 +30,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import redempt.redlib.blockdata.BlockDataManager;
+import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
@@ -166,12 +168,15 @@ public class Mine {
     }
 
     public void delete() {
-        if (mineData == null) {
-            Bukkit.getLogger().info("Failed to delete the mine due to mine data being null!");
-        }
         PrivateMines privateMines = PrivateMines.getPlugin(PrivateMines.class);
-
-        this.structure = mineData.getMultiBlockStructure().assumeAt(getMineLocation());
-        structure.getRegion().forEachBlock(block -> block.setType(Material.AIR, false));
+        if (mineData == null) {
+            privateMines.getLogger().info("Failed to delete the mine due to mine data being null!");
+        }
+        BlockDataManager blockDataManager = privateMines.getBlockDataManager();
+        DataBlock dataBlock = blockDataManager.getDataBlock(mineLocation.getBlock());
+        Location location = dataBlock.getBlock().getLocation();
+        this.structure = mineData.getMultiBlockStructure().assumeAt(location);
+        privateMines.getLogger().info("delete Structure: " + structure);
+        structure.getRegion().forEachBlock(b -> b.setType(Material.AIR, false));
     }
 }
