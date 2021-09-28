@@ -37,6 +37,7 @@ import redempt.redlib.blockdata.DataBlock;
 
 public class MineFactory {
 
+    private final boolean debugMode;
     PrivateMines privateMines;
     MineStorage mineStorage;
     MineData defaultMineData;
@@ -47,6 +48,7 @@ public class MineFactory {
         this.mineStorage = privateMines.getMineStorage();
         this.defaultMineData = privateMines.getDefaultMineData();
         this.blockDataManager = blockDataManager;
+        this.debugMode = privateMines.isDebugMode();
     }
 
     public Mine createMine(Player player, Location location) {
@@ -60,12 +62,12 @@ public class MineFactory {
         Block block = location.getBlock();
         DataBlock dataBlock = blockDataManager.getDataBlock(block);
         dataBlock.set("mine", mine);
-
-        Bukkit.getLogger().info("createMine block: " + block);
-        Bukkit.getLogger().info("createMine dataBlock: " + dataBlock);
-        Bukkit.getLogger().info("createMine dataBlock getData: " + dataBlock.getData());
-
         mine.reset();
+        if (debugMode) {
+            Bukkit.getLogger().info("createMine block: " + block);
+            Bukkit.getLogger().info("createMine dataBlock: " + dataBlock);
+            Bukkit.getLogger().info("createMine dataBlock getData: " + dataBlock.getData());
+        }
         return mine;
     }
 
@@ -75,30 +77,35 @@ public class MineFactory {
      * @param mineData - The mine data such as the MultiBlockStructure and the Materials
      */
 
-    public Mine createMine(Player player, Location location, MineData mineData) {
+    public void createMine(Player player, Location location, MineData mineData) {
         Mine mine = new Mine();
         mine.setMineOwner(player.getUniqueId());
         mine.setMineLocation(location);
-        mine.setMineData(defaultMineData);
+        mine.setMineData(mineData);
         mine.setWeightedRandom(defaultMineData.getWeightedRandom());
         mine.build();
         mineStorage.addMine(player.getUniqueId(), mine);
         Block block = location.getBlock();
         DataBlock dataBlock = blockDataManager.getDataBlock(block);
         dataBlock.set("mine", mine);
-
-        Bukkit.getLogger().info("createMine block: " + block);
-        Bukkit.getLogger().info("createMine dataBlock: " + dataBlock);
-        Bukkit.getLogger().info("createMine dataBlock getData: " + dataBlock.getData());
         mine.reset();
-        return mine;
+        if (debugMode) {
+            Bukkit.getLogger().info("createMine block: " + block);
+            Bukkit.getLogger().info("createMine dataBlock: " + dataBlock);
+            Bukkit.getLogger().info("createMine dataBlock getData: " + dataBlock.getData());
+        }
     }
 
     public void upgradeMine(Player player, MineData mineData) {
-        MineData nextMineData = privateMines.getNextMineData(mineData.getName());
-        if (mineStorage.hasMine(player.getUniqueId())) {
-            Mine mine = mineStorage.getMine(player.getUniqueId());
-            mine.setMineData(nextMineData);
+        if (privateMines.isAtLastMineData(mineData)) {
+            Bukkit.getLogger().info("Can't upgrade anymore, at highest!");
+        } else {
+            MineData nextMineData = privateMines.getNextMineData(mineData.getName());
+            if (mineStorage.hasMine(player.getUniqueId())) {
+                Mine mine = mineStorage.getMine(player.getUniqueId());
+                mine.setMineData(nextMineData);
+                createMine(player, mine.getMineLocation(), nextMineData);
+            }
         }
     }
 }
