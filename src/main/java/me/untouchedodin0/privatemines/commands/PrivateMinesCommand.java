@@ -20,6 +20,11 @@ public class PrivateMinesCommand {
 
     @CommandHook("give")
     public void give(CommandSender commandSender, Player target) {
+        if (mineStorage.hasMine(target.getUniqueId())) {
+            commandSender.sendMessage("Target already has a mine!");
+            return;
+        }
+
         commandSender.sendMessage("Giving " + target.getName() + " a private mine!");
         Mine mine = mineFactory.createMine(target, target.getLocation());
         mine.teleportPlayer(target);
@@ -27,8 +32,24 @@ public class PrivateMinesCommand {
 
     @CommandHook("delete")
     public void delete(CommandSender commandSender, Player target) {
+        if (!mineStorage.hasMine(target.getUniqueId())) {
+            commandSender.sendMessage("Target doesn't has a mine!");
+            return;
+        }
         commandSender.sendMessage("Deleting " + target.getName() + "'s Private Mine");
         Mine mine = mineStorage.getMine(target.getUniqueId());
         mine.delete();
+    }
+
+    @CommandHook("reset")
+    public void reset(CommandSender commandSender) {
+        Player player = (Player) commandSender;
+        if (!mineStorage.hasMine(player.getUniqueId())) {
+            commandSender.sendMessage("You don't have a private mine!");
+            return;
+        }
+        Mine mine = mineStorage.getMine(player.getUniqueId());
+        player.sendMessage("Resetting your mine...");
+        mine.reset();
     }
 }

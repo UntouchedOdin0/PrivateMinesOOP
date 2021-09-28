@@ -71,4 +71,13 @@ public class MineStorage {
     public Mine getMine(UUID uuid) {
         return mines.get(uuid);
     }
+
+    /**
+     *  A simple method to see if a user has a mine or not
+     *  @return boolean if the user has a mine or not.
+     */
+
+    public boolean hasMine(UUID uuid) {
+        return mines.containsKey(uuid);
+    }
 }

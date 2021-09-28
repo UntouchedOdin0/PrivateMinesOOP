@@ -25,6 +25,7 @@ SOFTWARE.
 package me.untouchedodin0.privatemines.mines;
 
 import me.untouchedodin0.privatemines.PrivateMines;
+import me.untouchedodin0.privatemines.storage.MineStorage;
 import me.untouchedodin0.privatemines.util.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -48,6 +49,7 @@ public class Mine {
      */
 
     private MineData mineData;
+    private MineStorage mineStorage;
     private Location mineLocation;
     private Location spawnLocation;
     private Location npcLocation;
@@ -182,12 +184,18 @@ public class Mine {
         if (mineData == null) {
             privateMines.getLogger().info("Failed to delete the mine due to mine data being null!");
         }
-        BlockDataManager blockDataManager = privateMines.getBlockDataManager();
-        DataBlock dataBlock = blockDataManager.getDataBlock(mineLocation.getBlock());
-        Location location = dataBlock.getBlock().getLocation();
-        this.structure = mineData.getMultiBlockStructure().assumeAt(location);
-        privateMines.getLogger().info("delete Structure: " + structure);
-        structure.getRegion().forEachBlock(b -> b.setType(Material.AIR, false));
+        this.mineStorage = privateMines.getMineStorage();
+
+        if (mineOwner != null) {
+            mineStorage.removeMine(mineOwner);
+
+            BlockDataManager blockDataManager = privateMines.getBlockDataManager();
+            DataBlock dataBlock = blockDataManager.getDataBlock(mineLocation.getBlock());
+            Location location = dataBlock.getBlock().getLocation();
+            this.structure = mineData.getMultiBlockStructure().assumeAt(location);
+            privateMines.getLogger().info("delete Structure: " + structure);
+            structure.getRegion().forEachBlock(b -> b.setType(Material.AIR, false));
+        }
     }
 
     public void reset() {
