@@ -35,8 +35,6 @@ import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.blockdata.DataBlock;
 
-import java.util.UUID;
-
 public class MineFactory {
 
     PrivateMines privateMines;
@@ -81,23 +79,26 @@ public class MineFactory {
         Mine mine = new Mine();
         mine.setMineOwner(player.getUniqueId());
         mine.setMineLocation(location);
-        mine.setMineData(mineData);
-        mine.setWeightedRandom(mineData.getWeightedRandom());
+        mine.setMineData(defaultMineData);
+        mine.setWeightedRandom(defaultMineData.getWeightedRandom());
         mine.build();
         mineStorage.addMine(player.getUniqueId(), mine);
-        return mine;
-    }
+        Block block = location.getBlock();
+        DataBlock dataBlock = blockDataManager.getDataBlock(block);
+        dataBlock.set("mine", mine);
 
-    public void deleteMine(Player player) {
-        UUID uuid = player.getUniqueId();
-        Mine mine = mineStorage.getMine(uuid);
-        mineStorage.removeMine(uuid);
-        mine.delete();
+        Bukkit.getLogger().info("createMine block: " + block);
+        Bukkit.getLogger().info("createMine dataBlock: " + dataBlock);
+        Bukkit.getLogger().info("createMine dataBlock getData: " + dataBlock.getData());
+        mine.reset();
+        return mine;
     }
 
     public void upgradeMine(Player player, MineData mineData) {
         MineData nextMineData = privateMines.getNextMineData(mineData.getName());
-        Mine mine = mineStorage.getMine(player.getUniqueId());
-        mine.setMineData(nextMineData);
+        if (mineStorage.hasMine(player.getUniqueId())) {
+            Mine mine = mineStorage.getMine(player.getUniqueId());
+            mine.setMineData(nextMineData);
+        }
     }
 }
