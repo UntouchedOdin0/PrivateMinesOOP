@@ -1,8 +1,8 @@
-recievedMine: You've recieved a private mine!
-deletedMine: Your mine has been deleted
-teleportedToMine: You've been teleported to your mine!
-mineReset: Your mine has been reset!
-doNotOwnMine: You don't own a Private Mine!
-targetDoesNotOwnMine: Target doesn't own a Private Mine!
-targetAlreadyOwnsAMine: Target already has a mine!
-attemptingMineUpgrade: Attempting to upgrade users mine.....
+recievedMine: &aYou've recieved a private mine!
+deletedMine: &aYour mine has been deleted
+teleportedToMine: &aYou've been teleported to your mine!
+mineReset: &aYour mine has been reset!
+doNotOwnMine: &cYou don't own a Private Mine!
+targetDoesNotOwnMine: &cTarget doesn't own a Private Mine!
+targetAlreadyOwnsAMine: &eTarget already has a mine!
+attemptingMineUpgrade: &aAttempting to upgrade users mine.....

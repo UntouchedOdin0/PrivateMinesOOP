@@ -99,14 +99,28 @@ public class MineFactory {
     public void upgradeMine(Player player, MineData mineData) {
         if (privateMines.isAtLastMineData(mineData)) {
             Bukkit.getLogger().info("Can't upgrade anymore, at highest!");
+            return;
         } else {
-            MineData nextMineData = privateMines.getNextMineData(mineData.getName());
+            MineData nextMineData =
+                    privateMines.getNextMineData(mineData.getName());
             if (mineStorage.hasMine(player.getUniqueId())) {
                 Mine mine = mineStorage.getMine(player.getUniqueId());
                 mine.setMineData(nextMineData);
                 createMine(player, mine.getMineLocation(), nextMineData);
-                mine.teleportPlayer(player);
             }
         }
     }
 }
+
+//    public void upgradeMine(Player player, MineData mineData) {
+//        if (privateMines.isAtLastMineData(mineData)) return;
+//            MineData nextMineData = privateMines.getNextMineData(mineData.getName());
+//            if (mineStorage.hasMine(player.getUniqueId())) {
+//                Mine mine = mineStorage.getMine(player.getUniqueId());
+//                mine.setMineData(nextMineData);
+//                createMine(player, mine.getMineLocation(), nextMineData);
+//                mine.teleportPlayer(player);
+//            }
+//        }
+//    }
+
