@@ -40,10 +40,7 @@ import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.configmanager.annotations.ConfigValue;
 
 import java.io.File;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class PrivateMines extends JavaPlugin {
 
