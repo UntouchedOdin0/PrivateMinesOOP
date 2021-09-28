@@ -229,7 +229,6 @@ public class Mine {
         }
         setMineData(upgradeData);
         if (player != null) {
-            structure.getRegion().forEachBlock(block -> block.setType(Material.AIR));
             mineFactory.upgradeMine(player, upgradeData);
 //            mineFactory.createMine(player, getMineLocation(), upgradeData);
         }

@@ -30,10 +30,12 @@ import me.untouchedodin0.privatemines.mines.MineData;
 import me.untouchedodin0.privatemines.storage.MineStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.blockdata.DataBlock;
+import redempt.redlib.multiblock.Structure;
 
 public class MineFactory {
 
@@ -100,14 +102,15 @@ public class MineFactory {
         if (privateMines.isAtLastMineData(mineData)) {
             Bukkit.getLogger().info("Can't upgrade anymore, at highest!");
             return;
-        } else {
-            MineData nextMineData =
-                    privateMines.getNextMineData(mineData.getName());
-            if (mineStorage.hasMine(player.getUniqueId())) {
-                Mine mine = mineStorage.getMine(player.getUniqueId());
-                mine.setMineData(nextMineData);
-                createMine(player, mine.getMineLocation(), nextMineData);
-            }
+        }
+        MineData nextMineData =
+                privateMines.getNextMineData(mineData.getName());
+        if (mineStorage.hasMine(player.getUniqueId())) {
+            Mine mine = mineStorage.getMine(player.getUniqueId());
+            Structure structure = mine.getStructure();
+            structure.getRegion().forEachBlock(block -> block.setType(Material.AIR, false));
+            mine.setMineData(nextMineData);
+            createMine(player, mine.getMineLocation(), nextMineData);
         }
     }
 }
