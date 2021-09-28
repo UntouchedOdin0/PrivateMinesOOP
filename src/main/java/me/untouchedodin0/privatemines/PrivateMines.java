@@ -35,6 +35,7 @@ import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.commandmanager.CommandParser;
+import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.configmanager.annotations.ConfigValue;
 
@@ -129,6 +130,7 @@ public class PrivateMines extends JavaPlugin {
                 .parse()
                 .register("privatemines",
                         new PrivateMinesCommand(this));
+        Messages.load(this);
     }
 
     @Override

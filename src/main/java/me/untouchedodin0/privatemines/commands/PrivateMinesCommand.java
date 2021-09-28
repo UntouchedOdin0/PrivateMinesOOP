@@ -7,6 +7,7 @@ import me.untouchedodin0.privatemines.storage.MineStorage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import redempt.redlib.commandmanager.CommandHook;
+import redempt.redlib.commandmanager.Messages;
 
 public class PrivateMinesCommand {
 
@@ -21,7 +22,7 @@ public class PrivateMinesCommand {
     @CommandHook("give")
     public void give(CommandSender commandSender, Player target) {
         if (mineStorage.hasMine(target.getUniqueId())) {
-            commandSender.sendMessage("Target already has a mine!");
+            Messages.msg("targetAlreadyOwnsAMine");
             return;
         }
 
@@ -33,7 +34,7 @@ public class PrivateMinesCommand {
     @CommandHook("delete")
     public void delete(CommandSender commandSender, Player target) {
         if (!mineStorage.hasMine(target.getUniqueId())) {
-            commandSender.sendMessage("Target doesn't has a mine!");
+            Messages.msg("targetDoesNotOwnMine");
             return;
         }
         commandSender.sendMessage("Deleting " + target.getName() + "'s Private Mine");
@@ -45,10 +46,11 @@ public class PrivateMinesCommand {
     public void reset(CommandSender commandSender) {
         Player player = (Player) commandSender;
         if (!mineStorage.hasMine(player.getUniqueId())) {
-            commandSender.sendMessage("You don't have a private mine!");
+            Messages.msg("doNotOwnMine");
             return;
         }
         Mine mine = mineStorage.getMine(player.getUniqueId());
+        Messages.msg("mineReset");
         player.sendMessage("Resetting your mine...");
         mine.reset();
     }

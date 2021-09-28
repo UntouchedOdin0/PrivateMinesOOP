@@ -11,4 +11,10 @@ privatemine,privatemines,pmine {
         help /pmine delete <name> - Deletes a players private mine
         permission privatemines.delete
     }
+
+    reset {
+        hook reset
+        help /pmine reset - Resets your private mine
+        permission privatemines.reset
+    }
 }

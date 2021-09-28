@@ -1,0 +1,7 @@
+recievedMine: You've recieved a private mine!
+deletedMine: Your mine has been deleted
+teleportedToMine: You've been teleported to your mine!
+mineReset: Your mine has been reset!
+doNotOwnMine: You don't own a Private Mine!
+targetDoesNotOwnMine: Target doesn't own a Private Mine!
+targetAlreadyOwnsAMine: Target already has a mine!
