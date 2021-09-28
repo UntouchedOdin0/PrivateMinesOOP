@@ -36,7 +36,6 @@ import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
-import java.util.Map;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
@@ -168,7 +167,7 @@ public class Mine {
         Location corner2 = utils.getRelative(structure, mineData.getCorner2());
 
         CuboidRegion cuboidRegion = new CuboidRegion(corner1, corner2);
-
+        cuboidRegion.expand(1, 0, 1, 0, 1, 0);
         setCuboidRegion(cuboidRegion);
         spawnLocation.getBlock().setType(Material.AIR);
         npcLocation.getBlock().setType(Material.AIR);
