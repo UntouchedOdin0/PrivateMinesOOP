@@ -56,9 +56,11 @@ public class Mine {
 
     private CuboidRegion cuboidRegion;
     private UUID mineOwner;
+    private Utils utils;
     private Structure structure;
 
     private WeightedRandom<Material> weightedRandom;
+
 
     /**
      * @param mineData - The mine data to be set for the Mine
@@ -156,7 +158,7 @@ public class Mine {
         }
         PrivateMines privateMines = PrivateMines.getPlugin(PrivateMines.class);
 
-        Utils utils = new Utils();
+        Utils utils = new Utils(privateMines);
         privateMines.getLogger().info("build method called...");
         privateMines.getLogger().info("MultiBlockStructure: " + mineData.getMultiBlockStructure());
         privateMines.getLogger().info("Location " + mineLocation);
@@ -199,8 +201,16 @@ public class Mine {
     }
 
     public void reset() {
-        cuboidRegion.forEachBlock(block -> {
-            block.setType(mineData.getWeightedRandom().roll(), false);
-        });
+        cuboidRegion.forEachBlock(block ->
+                block.setType(mineData.getWeightedRandom().roll(), false));
+    }
+
+    public void upgrade() {
+        PrivateMines privateMines = PrivateMines.getPlugin(PrivateMines.class);
+        this.utils = new Utils(privateMines);
+        MineData upgradeData = utils.getNextMineData(this);
+        Bukkit.getLogger().info("upgradeData: " + upgradeData);
+        Bukkit.getLogger().info("upgradeData Name: " + upgradeData.getName());
+        setMineData(upgradeData);
     }
 }

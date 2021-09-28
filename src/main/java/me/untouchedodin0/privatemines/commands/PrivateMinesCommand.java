@@ -54,4 +54,15 @@ public class PrivateMinesCommand {
         player.sendMessage("Resetting your mine...");
         mine.reset();
     }
+
+    @CommandHook("upgrade")
+    public void upgrade(CommandSender commandSender, Player target) {
+        if (!mineStorage.hasMine(target.getUniqueId())) {
+            Messages.msg("targetDoesNotOwnMine");
+            return;
+        }
+        Mine mine = mineStorage.getMine(target.getUniqueId());
+        Messages.msg("attemptingMineUpgrade");
+        mine.upgrade();
+    }
 }

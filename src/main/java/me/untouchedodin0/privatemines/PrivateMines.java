@@ -172,6 +172,14 @@ public class PrivateMines extends JavaPlugin {
         return mineDataTreeMap.higherEntry(mineData).getValue();
     }
 
+    public MineData getNextMineData(MineData mineData) {
+        MineData lastValue = mineDataTreeMap.lastEntry().getValue();
+        if (mineDataTreeMap.higherEntry(mineData.getName()) == null) {
+            return lastValue;
+        }
+        return mineDataTreeMap.higherEntry(mineData.getName()).getValue();
+    }
+
     public MineFactory getMineFactory() {
         return mineFactory;
     }
