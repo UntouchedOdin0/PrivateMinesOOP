@@ -38,7 +38,6 @@ import redempt.redlib.multiblock.MultiBlockStructure;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -81,25 +80,16 @@ public class MineConfig {
     @ConfigPostInit
     private void postInit() throws IOException {
         if (privateMines == null) {
-            Bukkit.getLogger().info("private mines was null.");
+            Bukkit.getLogger().info(
+                    "Private Mines instance in the MineConfig was null " +
+                            "please make a ticket on the discord reporting this");
         }
 
         this.path = privateMines.getDataFolder().toPath().resolve(file);
         this.contents = Files.lines(path).collect(Collectors.joining());
 
-        privateMines.getLogger().info("Test postInit!");
-        privateMines.getLogger().info("Name: " + getName());
-        privateMines.getLogger().info("Path: " + getPath());
-        privateMines.getLogger().info("File: " + getFile());
-        privateMines.getLogger().info("Priority: " + getPriority());
-        privateMines.getLogger().info("Reset Time: " + getResetTime());
-        privateMines.getLogger().info("Materials: " + getMaterials());
-        privateMines.getLogger().info("MultiBlockStructure: " + getMultiBlockStructure());
-        privateMines.getLogger().info("Contents: " + getContents());
-
         this.multiBlockStructure = MultiBlockStructure.create(contents, name, false, true);
 
-        privateMines.getLogger().info("mbs getName: " + multiBlockStructure.getName());
         MineData mineData = new MineData(privateMines);
         mineData.setName(getName());
         mineData.setMultiBlockStructure(multiBlockStructure);
@@ -108,18 +98,6 @@ public class MineConfig {
         mineData.setMaterials(getMaterials());
         mineData.setupRelativeLocations();
 
-        privateMines.getLogger().info("MineConfig MineData " + mineData);
-        privateMines.getLogger().info("MineConfig MineData Name: " + mineData.getName());
-        privateMines.getLogger().info("MineConfig MineData MBS: " + mineData.getMultiBlockStructure());
-        privateMines.getLogger().info("MineConfig MineData Tier: " + mineData.getMineTier());
-        privateMines.getLogger().info("MineConfig MineData Reset time: " + mineData.getResetTime());
-        privateMines.getLogger().info("MineConfig MineData Materials: " + mineData.getMaterials());
-        privateMines.getLogger().info("MineConfig MineData Corner Locations: "
-                + Arrays.deepToString(mineData.getCornerLocations()));
-        privateMines.getLogger().info("MineConfig MineData Spawn Location: "
-                + Arrays.toString(mineData.getSpawnLocation()));
-        privateMines.getLogger().info("MineConfig MineData NPC Location"
-                + Arrays.toString(mineData.getNpcLocation()));
         privateMines.addMineData(getName(), mineData);
     }
 
