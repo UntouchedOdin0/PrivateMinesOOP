@@ -5,3 +5,4 @@ mineReset: Your mine has been reset!
 doNotOwnMine: You don't own a Private Mine!
 targetDoesNotOwnMine: Target doesn't own a Private Mine!
 targetAlreadyOwnsAMine: Target already has a mine!
+attemptingMineUpgrade: Attempting to upgrade users mine.....
