@@ -9,9 +9,11 @@ import redempt.redlib.multiblock.Structure;
 public class Utils {
 
     private final PrivateMines privateMines;
+    private final boolean debugMode;
 
     public Utils(PrivateMines privateMines) {
         this.privateMines = privateMines;
+        this.debugMode = privateMines.isDebugMode();
     }
 
     public Location getRelative(Structure structure, int[] relative) {
@@ -24,14 +26,18 @@ public class Utils {
 
     public MineData getNextMineData(Mine mine) {
         MineData mineData = mine.getMineData();
+        MineData upgradeMineData;
         boolean isAtLastMineData = privateMines.isAtLastMineData(mineData);
         if (isAtLastMineData) {
             privateMines.getLogger().info("Mine is already maxed out!");
             return mineData;
         }
-        privateMines.getLogger().info("Current mine data Name: " + mineData.getName());
-        MineData upgradeMineData = privateMines.getNextMineData(mineData);
-        privateMines.getLogger().info("Next mine data name: " + upgradeMineData.getName());
+        if (debugMode) {
+            privateMines.getLogger().info("Current mine data Name: " + mineData.getName());
+            upgradeMineData = privateMines.getNextMineData(mineData);
+            privateMines.getLogger().info("Next mine data name: " + upgradeMineData.getName());
+        }
+        upgradeMineData = privateMines.getNextMineData(mineData);
         return upgradeMineData;
     }
 }
