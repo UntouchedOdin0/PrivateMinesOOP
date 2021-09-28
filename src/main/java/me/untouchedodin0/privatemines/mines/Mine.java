@@ -25,6 +25,7 @@ SOFTWARE.
 package me.untouchedodin0.privatemines.mines;
 
 import me.untouchedodin0.privatemines.PrivateMines;
+import me.untouchedodin0.privatemines.factory.MineFactory;
 import me.untouchedodin0.privatemines.storage.MineStorage;
 import me.untouchedodin0.privatemines.util.Utils;
 import org.bukkit.Bukkit;
@@ -58,6 +59,8 @@ public class Mine {
     private Structure structure;
 
     private WeightedRandom<Material> weightedRandom;
+
+    private boolean debugMode;
 
 
     /**
@@ -159,11 +162,15 @@ public class Mine {
             Bukkit.getLogger().info("Failed to build structure due to the mine data being null!");
         }
         PrivateMines privateMines = PrivateMines.getPlugin(PrivateMines.class);
+        this.debugMode = privateMines.isDebugMode();
 
         Utils utils = new Utils(privateMines);
-        privateMines.getLogger().info("build method called...");
-        privateMines.getLogger().info("MultiBlockStructure: " + mineData.getMultiBlockStructure());
-        privateMines.getLogger().info("Location " + mineLocation);
+
+        if (debugMode) {
+            privateMines.getLogger().info("MultiBlockStructure: " + mineData.getMultiBlockStructure());
+            privateMines.getLogger().info("Location " + mineLocation);
+        }
+
         mineData.getMultiBlockStructure().build(mineLocation);
         this.structure = mineData.getMultiBlockStructure().assumeAt(mineLocation);
         this.spawnLocation = utils.getRelative(structure, mineData.getSpawnLocation());
@@ -197,7 +204,9 @@ public class Mine {
             DataBlock dataBlock = blockDataManager.getDataBlock(mineLocation.getBlock());
             Location location = dataBlock.getBlock().getLocation();
             this.structure = mineData.getMultiBlockStructure().assumeAt(location);
-            privateMines.getLogger().info("delete Structure: " + structure);
+            if (debugMode) {
+                privateMines.getLogger().info("delete Structure: " + structure);
+            }
             structure.getRegion().forEachBlock(b -> b.setType(Material.AIR, false));
         }
     }
@@ -210,9 +219,19 @@ public class Mine {
     public void upgrade() {
         PrivateMines privateMines = PrivateMines.getPlugin(PrivateMines.class);
         Utils utils = new Utils(privateMines);
+        MineFactory mineFactory = privateMines.getMineFactory();
         MineData upgradeData = utils.getNextMineData(this);
-        Bukkit.getLogger().info("upgradeData: " + upgradeData);
-        Bukkit.getLogger().info("upgradeData Name: " + upgradeData.getName());
+        Player player = Bukkit.getPlayer(mineOwner);
+
+        if (debugMode) {
+            Bukkit.getLogger().info("upgradeData: " + upgradeData);
+            Bukkit.getLogger().info("upgradeData Name: " + upgradeData.getName());
+        }
         setMineData(upgradeData);
+        if (player != null) {
+            structure.getRegion().forEachBlock(block -> block.setType(Material.AIR));
+            mineFactory.upgradeMine(player, upgradeData);
+//            mineFactory.createMine(player, getMineLocation(), upgradeData);
+        }
     }
 }
