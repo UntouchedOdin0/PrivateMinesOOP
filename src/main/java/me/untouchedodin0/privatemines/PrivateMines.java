@@ -126,12 +126,23 @@ public class PrivateMines extends JavaPlugin {
             }
         }
 
+        /*
+            Does these things in order
+
+            Sets up the private mines command
+            Loads the plugins messages
+         */
+
         new CommandParser(this.getResource("command.rdcml"))
                 .parse()
                 .register("privatemines",
                         new PrivateMinesCommand(this));
         Messages.load(this);
     }
+
+    /*
+        Disables the plugin, clears the map and saves the block data manager
+     */
 
     @Override
     public void onDisable() {
@@ -143,34 +154,66 @@ public class PrivateMines extends JavaPlugin {
         blockDataManager.saveAndClose();
     }
 
+    /*
+        Adds a MineData to the maps
+     */
+
     public void addMineData(String name, MineData mineData) {
         mineDataMap.putIfAbsent(name, mineData);
         mineDataTreeMap.put(name, mineData);
     }
 
+    /*
+        Gets a map of all the MineData types
+     */
+
     public Map<String, MineData> getMineDataMap() {
         return mineDataMap;
     }
+
+    /*
+        Gets the default mine data
+     */
 
     public MineData getDefaultMineData() {
         return mineDataTreeMap.firstEntry().getValue();
     }
 
+    /*
+        Gets the spawn material
+     */
+
     public String getSpawnMaterial() {
         return spawnPoint;
     }
+
+    /*
+        Gets the corner material
+     */
 
     public String getCornerMaterial() {
         return mineCorner;
     }
 
+    /*
+        Gets the sell npc material
+     */
+
     public String getSellNpcMaterial() {
         return sellNpc;
     }
 
+    /*
+        Gets the next MineData from the TreeMap using String
+     */
+
     public MineData getNextMineData(String mineData) {
         return mineDataTreeMap.higherEntry(mineData).getValue();
     }
+
+    /*
+        Gets the next MineData from the TreeMap using MineData
+     */
 
     public MineData getNextMineData(MineData mineData) {
         MineData lastValue = mineDataTreeMap.lastEntry().getValue();
@@ -180,11 +223,32 @@ public class PrivateMines extends JavaPlugin {
         return mineDataTreeMap.higherEntry(mineData.getName()).getValue();
     }
 
+    /*
+        Checks is the mine is currently fully maxed out
+     */
+
+    public boolean isAtLastMineData(MineData mineData) {
+        MineData lastValue = mineDataTreeMap.lastEntry().getValue();
+        return mineData.equals(lastValue);
+    }
+
+    /*
+        Gets the Mine Factory.
+     */
+
     public MineFactory getMineFactory() {
         return mineFactory;
     }
 
+    /*
+        Gets the mine storage
+     */
+
     public MineStorage getMineStorage() { return mineStorage; }
+
+    /*
+        Gets the block data manager
+     */
 
     public BlockDataManager getBlockDataManager() { return blockDataManager; }
 }

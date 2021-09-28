@@ -8,7 +8,7 @@ import redempt.redlib.multiblock.Structure;
 
 public class Utils {
 
-    private PrivateMines privateMines;
+    private final PrivateMines privateMines;
 
     public Utils(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -24,6 +24,11 @@ public class Utils {
 
     public MineData getNextMineData(Mine mine) {
         MineData mineData = mine.getMineData();
+        boolean isAtLastMineData = privateMines.isAtLastMineData(mineData);
+        if (isAtLastMineData) {
+            privateMines.getLogger().info("Mine is already maxed out!");
+            return mineData;
+        }
         privateMines.getLogger().info("Current mine data Name: " + mineData.getName());
         MineData upgradeMineData = privateMines.getNextMineData(mineData);
         privateMines.getLogger().info("Next mine data name: " + upgradeMineData.getName());
