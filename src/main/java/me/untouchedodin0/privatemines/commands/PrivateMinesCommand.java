@@ -55,6 +55,17 @@ public class PrivateMinesCommand {
         mine.reset();
     }
 
+    @CommandHook("teleport")
+    public void teleport(CommandSender commandSender) {
+        Player player = (Player) commandSender;
+        if (!mineStorage.hasMine(player.getUniqueId())) {
+            Messages.msg("doNotOwnMine");
+            return;
+        }
+        Mine mine = mineStorage.getMine(player.getUniqueId());
+        player.teleport(mine.getSpawnLocation());
+    }
+
     @CommandHook("upgrade")
     public void upgrade(CommandSender commandSender, Player target) {
         if (!mineStorage.hasMine(target.getUniqueId())) {
