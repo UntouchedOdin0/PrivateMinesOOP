@@ -49,14 +49,12 @@ public class Mine {
      */
 
     private MineData mineData;
-    private MineStorage mineStorage;
     private Location mineLocation;
     private Location spawnLocation;
     private Location npcLocation;
 
     private CuboidRegion cuboidRegion;
     private UUID mineOwner;
-    private Utils utils;
     private Structure structure;
 
     private WeightedRandom<Material> weightedRandom;
@@ -152,6 +150,10 @@ public class Mine {
         this.weightedRandom = weightedRandom;
     }
 
+    public WeightedRandom<Material> getWeightedRandom() {
+        return weightedRandom;
+    }
+
     public void build() {
         if (mineData == null) {
             Bukkit.getLogger().info("Failed to build structure due to the mine data being null!");
@@ -173,8 +175,8 @@ public class Mine {
         CuboidRegion cuboidRegion = new CuboidRegion(corner1, corner2);
         cuboidRegion.expand(1, 0, 1, 0, 1, 0);
         setCuboidRegion(cuboidRegion);
-        spawnLocation.getBlock().setType(Material.AIR);
-        npcLocation.getBlock().setType(Material.AIR);
+        spawnLocation.getBlock().setType(Material.AIR, false);
+        npcLocation.getBlock().setType(Material.AIR, false);
     }
 
     public void teleportPlayer(Player player) {
@@ -186,7 +188,7 @@ public class Mine {
         if (mineData == null) {
             privateMines.getLogger().info("Failed to delete the mine due to mine data being null!");
         }
-        this.mineStorage = privateMines.getMineStorage();
+        MineStorage mineStorage = privateMines.getMineStorage();
 
         if (mineOwner != null) {
             mineStorage.removeMine(mineOwner);
@@ -207,7 +209,7 @@ public class Mine {
 
     public void upgrade() {
         PrivateMines privateMines = PrivateMines.getPlugin(PrivateMines.class);
-        this.utils = new Utils(privateMines);
+        Utils utils = new Utils(privateMines);
         MineData upgradeData = utils.getNextMineData(this);
         Bukkit.getLogger().info("upgradeData: " + upgradeData);
         Bukkit.getLogger().info("upgradeData Name: " + upgradeData.getName());
