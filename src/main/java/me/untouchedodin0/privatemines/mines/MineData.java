@@ -142,18 +142,7 @@ public class MineData {
         Material spawnMaterial = Material.valueOf(privateMines.getSpawnMaterial());
         Material cornerMaterial = Material.valueOf(privateMines.getCornerMaterial());
         Material sellNpcMaterial = Material.valueOf(privateMines.getSellNpcMaterial());
-
-        privateMines.getLogger().info("mine data setupRelativeLocations: spawnMaterial: " +
-                spawnMaterial);
-
-        privateMines.getLogger().info("mine data setupRelativeLocations: cornerMaterial: " +
-                cornerMaterial);
-
-        privateMines.getLogger().info("mine data setupRelativeLocations: sellNpcMaterial: " +
-                sellNpcMaterial);
-
         materials.forEach((material, aDouble) -> weightedRandom.set(material, aDouble));
-
         this.spawnLocation = mineLoopUtil.findSpawnLocation(multiBlockStructure, spawnMaterial);
         this.npcLocation = mineLoopUtil.findNpcLocation(multiBlockStructure, sellNpcMaterial);
         this.cornerLocations = mineLoopUtil.findCornerLocations(multiBlockStructure, cornerMaterial);
