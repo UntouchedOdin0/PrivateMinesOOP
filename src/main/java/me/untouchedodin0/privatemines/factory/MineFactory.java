@@ -105,6 +105,7 @@ public class MineFactory {
                 Mine mine = mineStorage.getMine(player.getUniqueId());
                 mine.setMineData(nextMineData);
                 createMine(player, mine.getMineLocation(), nextMineData);
+                mine.teleportPlayer(player);
             }
         }
     }
