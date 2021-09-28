@@ -2,6 +2,7 @@
 spawnPoint: "CHEST"
 mineCorner: "POWERED_RAIL"
 sellNpc: "WHITE_WOOL"
+debugMode: false
 
 mineTypes:
   Test:
@@ -12,14 +13,14 @@ mineTypes:
       STONE: 0.9
       COBBLESTONE: 0.1
   Test2:
-    file: "structure.dat"
+    file: "structure2.dat"
     priority: 2
     resetTime: 5
     materials:
       STONE: 0.9
       COBBLESTONE: 0.1
   Test3:
-    file: "structure.dat"
+    file: "structure3.dat"
     priority: 3
     resetTime: 5
     materials:

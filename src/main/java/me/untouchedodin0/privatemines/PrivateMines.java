@@ -66,6 +66,9 @@ public class PrivateMines extends JavaPlugin {
     private String sellNpc;
 
     @ConfigValue
+    private boolean debugMode = false;
+
+    @ConfigValue
     private Map<String, MineConfig> mineTypes = ConfigManager.map(MineConfig.class);
 
     @Override
@@ -86,13 +89,6 @@ public class PrivateMines extends JavaPlugin {
         mineFactory = new MineFactory(this, blockDataManager);
         mineLoopUtil = new MineLoopUtil();
 
-
-        getLogger().info("config manager: " + configManager);
-        getLogger().info("mine world manager: " + mineWorldManager);
-        getLogger().info("Mine Storage: " + getMineStorage());
-        getLogger().info("Mine factory: " + mineFactory);
-        getLogger().info("BlockDataManager: " + blockDataManager);
-
         mineTypes.forEach((string, mineConfig) -> {
             getLogger().info("Loading mine type... " + string);
         });
@@ -108,20 +104,22 @@ public class PrivateMines extends JavaPlugin {
         mineBlocks2.put(Material.COBBLESTONE, 0.5);
         mineBlocks2.put(Material.GOLD_ORE, 0.5);
 
-        for (Map.Entry<String, MineData> entry : mineDataTreeMap.entrySet()) {
-            getLogger().info("Tree Map Name: " + entry.getValue().getName());
-            getLogger().info("Tree Map Tier: " + entry.getValue().getMineTier());
-            getLogger().info("Tree Map Materials: " + entry.getValue().getMaterials());
-            getLogger().info("Tree Map Reset Time: " + entry.getValue().getResetTime());
-            getLogger().info(" ");
-            if (mineDataTreeMap.lastKey().equals(entry.getKey())) {
-                getLogger().info("You've reached the last entry!");
-            } else {
-                getLogger().info("the next entry after "
-                        + entry.getValue().getName() + " is: "
-                        + mineDataTreeMap.higherEntry(entry.getKey()));
-            }
-        }
+//        if (debugMode) {
+//            for (Map.Entry<String, MineData> entry : mineDataTreeMap.entrySet()) {
+//                getLogger().info("Tree Map Name: " + entry.getValue().getName());
+//                getLogger().info("Tree Map Tier: " + entry.getValue().getMineTier());
+//                getLogger().info("Tree Map Materials: " + entry.getValue().getMaterials());
+//                getLogger().info("Tree Map Reset Time: " + entry.getValue().getResetTime());
+//                getLogger().info(" ");
+//                if (mineDataTreeMap.lastKey().equals(entry.getKey())) {
+//                    getLogger().info("You've reached the last entry!");
+//                } else {
+//                    getLogger().info("the next entry after "
+//                            + entry.getValue().getName() + " is: "
+//                            + mineDataTreeMap.higherEntry(entry.getKey()));
+//                }
+//            }
+//        }
 
         /*
             Does these things in order
@@ -208,6 +206,7 @@ public class PrivateMines extends JavaPlugin {
         return mineDataTreeMap.higherEntry(mineData).getValue();
     }
 
+
     /*
         Gets the next MineData from the TreeMap using MineData
      */
@@ -248,4 +247,6 @@ public class PrivateMines extends JavaPlugin {
      */
 
     public BlockDataManager getBlockDataManager() { return blockDataManager; }
+
+    public boolean isDebugMode() { return debugMode; }
 }
