@@ -4,6 +4,7 @@ import me.untouchedodin0.privatemines.PrivateMines;
 import me.untouchedodin0.privatemines.factory.MineFactory;
 import me.untouchedodin0.privatemines.mines.Mine;
 import me.untouchedodin0.privatemines.storage.MineStorage;
+import me.untouchedodin0.privatemines.world.MineWorldManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,10 +15,12 @@ public class PrivateMinesCommand {
 
     private final MineFactory mineFactory;
     private final MineStorage mineStorage;
+    private final MineWorldManager mineWorldManager;
 
     public PrivateMinesCommand(PrivateMines privateMine) {
         this.mineFactory = privateMine.getMineFactory();
         this.mineStorage = privateMine.getMineStorage();
+        this.mineWorldManager = privateMine.getMineWorldManager();
     }
 
     @CommandHook("give")
@@ -27,7 +30,7 @@ public class PrivateMinesCommand {
             return;
         }
         commandSender.sendMessage(ChatColor.GREEN + "Giving " + target.getName() + " a private mine!");
-        Mine mine = mineFactory.createMine(target, target.getLocation());
+        Mine mine = mineFactory.createMine(target, mineWorldManager.getNextFreeLocation());
         mine.teleportPlayer(target);
     }
 

@@ -52,6 +52,7 @@ public class PrivateMines extends JavaPlugin {
     MineFactory mineFactory;
     MineStorage mineStorage;
     BlockDataManager blockDataManager;
+    MineWorldManager mineWorldManager;
 
     private final Map<String, MineData> mineDataMap = new HashMap<>();
     private final TreeMap<String, MineData> mineDataTreeMap = new TreeMap<>();
@@ -79,7 +80,7 @@ public class PrivateMines extends JavaPlugin {
             saveDefaultConfig();
         }
         ConfigManager configManager = new ConfigManager(this).register(this).load();
-        MineWorldManager mineWorldManager = new MineWorldManager();
+        mineWorldManager = new MineWorldManager();
 
         blockDataManager = new BlockDataManager(
                 getDataFolder()
@@ -234,6 +235,8 @@ public class PrivateMines extends JavaPlugin {
         Gets the mine storage
      */
 
+    public MineWorldManager getMineWorldManager() { return mineWorldManager; }
+
     public MineStorage getMineStorage() { return mineStorage; }
 
     /*
@@ -241,6 +244,10 @@ public class PrivateMines extends JavaPlugin {
      */
 
     public BlockDataManager getBlockDataManager() { return blockDataManager; }
+
+    /*
+        A check to see if the user had debugMode enabled or not
+     */
 
     public boolean isDebugMode() { return debugMode; }
 }
