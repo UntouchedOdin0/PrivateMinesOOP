@@ -79,7 +79,7 @@ public class MineFactory {
      * @param mineData - The mine data such as the MultiBlockStructure and the Materials
      */
 
-    public void createMine(Player player, Location location, MineData mineData) {
+    public Mine createMine(Player player, Location location, MineData mineData) {
         Mine mine = new Mine();
         mine.setMineOwner(player.getUniqueId());
         mine.setMineLocation(location);
@@ -96,6 +96,7 @@ public class MineFactory {
             Bukkit.getLogger().info("createMine dataBlock: " + dataBlock);
             Bukkit.getLogger().info("createMine dataBlock getData: " + dataBlock.getData());
         }
+        return mine;
     }
 }
 
