@@ -235,6 +235,12 @@ public class Mine {
             Bukkit.getLogger().info("upgradeData: " + upgradeData);
             Bukkit.getLogger().info("upgradeData Name: " + upgradeData.getName());
         }
+
+        if (privateMines.isAtLastMineData(mineData)) {
+            Bukkit.getLogger().info("Can't upgrade anymore, at highest!");
+            return;
+        }
+
         setMineData(upgradeData);
         if (player != null) {
             Structure structure = getStructure();
