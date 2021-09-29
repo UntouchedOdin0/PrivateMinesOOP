@@ -57,6 +57,9 @@ public class MineStorage {
         mines.remove(uuid);
     }
 
+    public void replaceMine(UUID uuid, Mine mine) {
+        mines.replace(uuid, getMine(uuid), mine);
+    }
     /**
      *
      * @return A map of all the mines with the owners UUID's.

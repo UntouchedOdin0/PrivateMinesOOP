@@ -228,6 +228,7 @@ public class Mine {
         PrivateMines privateMines = PrivateMines.getPlugin(PrivateMines.class);
         Utils utils = new Utils(privateMines);
         MineFactory mineFactory = privateMines.getMineFactory();
+        MineStorage mineStorage = privateMines.getMineStorage();
         MineData upgradeData = utils.getNextMineData(this);
         Player player = Bukkit.getPlayer(mineOwner);
 
@@ -245,7 +246,9 @@ public class Mine {
         if (player != null) {
             Structure structure = getStructure();
             structure.getRegion().forEachBlock(block -> block.setType(Material.AIR, false));
-            mineFactory.createMine(player, getMineLocation(), upgradeData);
+            Mine mine = mineFactory.createMine(player, getMineLocation(), upgradeData);
+            mine.teleportPlayer(player);
+            mineStorage.replaceMine(player.getUniqueId(), mine);
         }
     }
 }
