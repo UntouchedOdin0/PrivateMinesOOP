@@ -211,10 +211,18 @@ public class Mine {
         }
     }
 
+    // Nice l
     public void reset() {
         cuboidRegion.forEachBlock(block ->
                 block.setType(mineData.getWeightedRandom().roll(), false));
     }
+
+    /*
+        This system upgrades the private mines onto the next MineData and
+        replaces the structure at the location
+
+        PLEASE DO NOT TOUCH, IT WORKS!
+     */
 
     public void upgrade() {
         PrivateMines privateMines = PrivateMines.getPlugin(PrivateMines.class);
