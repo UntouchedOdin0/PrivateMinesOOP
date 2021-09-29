@@ -57,9 +57,16 @@ public class MineStorage {
         mines.remove(uuid);
     }
 
+    /**
+     *
+     * @param uuid - The UUID of the player who's mine we'll be deleting from storage
+     * @param mine  - The new mine of which will replace the old mine
+     */
+
     public void replaceMine(UUID uuid, Mine mine) {
         mines.replace(uuid, getMine(uuid), mine);
     }
+
     /**
      *
      * @return A map of all the mines with the owners UUID's.
