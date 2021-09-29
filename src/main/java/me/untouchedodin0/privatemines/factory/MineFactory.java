@@ -42,12 +42,14 @@ public class MineFactory {
     private final boolean debugMode;
     PrivateMines privateMines;
     MineStorage mineStorage;
+    MineFactory mineFactory;
     MineData defaultMineData;
     BlockDataManager blockDataManager;
 
     public MineFactory(PrivateMines privateMines, BlockDataManager blockDataManager) {
         this.privateMines = privateMines;
         this.mineStorage = privateMines.getMineStorage();
+        this.mineFactory = privateMines.getMineFactory();
         this.defaultMineData = privateMines.getDefaultMineData();
         this.blockDataManager = blockDataManager;
         this.debugMode = privateMines.isDebugMode();
@@ -103,17 +105,28 @@ public class MineFactory {
             Bukkit.getLogger().info("Can't upgrade anymore, at highest!");
             return;
         }
-        MineData nextMineData =
-                privateMines.getNextMineData(mineData.getName());
+
         if (mineStorage.hasMine(player.getUniqueId())) {
             Mine mine = mineStorage.getMine(player.getUniqueId());
             Structure structure = mine.getStructure();
             structure.getRegion().forEachBlock(block -> block.setType(Material.AIR, false));
-            mine.setMineData(nextMineData);
-            createMine(player, mine.getMineLocation(), nextMineData);
-            mine.teleportPlayer(player);
+            mine.upgrade();
+//            structure.getRegion().forEachBlock(block -> block.setType(Material.AIR, false));
+//            mine.setMineData(nextMineData);
+//            createMine(player, mine.getMineLocation(), nextMineData);
         }
     }
 }
 
+//    public void upgradeMine(Player player, MineData mineData) {
+//        if (privateMines.isAtLastMineData(mineData)) return;
+//            MineData nextMineData = privateMines.getNextMineData(mineData.getName());
+//            if (mineStorage.hasMine(player.getUniqueId())) {
+//                Mine mine = mineStorage.getMine(player.getUniqueId());
+//                mine.setMineData(nextMineData);
+//                createMine(player, mine.getMineLocation(), nextMineData);
+//                mine.teleportPlayer(player);
+//            }
+//        }
+//    }
 

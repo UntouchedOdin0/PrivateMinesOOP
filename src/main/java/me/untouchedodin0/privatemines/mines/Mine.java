@@ -229,8 +229,9 @@ public class Mine {
         }
         setMineData(upgradeData);
         if (player != null) {
-            mineFactory.upgradeMine(player, upgradeData);
-//            mineFactory.createMine(player, getMineLocation(), upgradeData);
+            Structure structure = getStructure();
+            structure.getRegion().forEachBlock(block -> block.setType(Material.AIR, false));
+            mineFactory.createMine(player, getMineLocation(), upgradeData);
         }
     }
 }
