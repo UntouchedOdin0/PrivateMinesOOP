@@ -4,6 +4,7 @@ import me.untouchedodin0.privatemines.PrivateMines;
 import me.untouchedodin0.privatemines.factory.MineFactory;
 import me.untouchedodin0.privatemines.mines.Mine;
 import me.untouchedodin0.privatemines.storage.MineStorage;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import redempt.redlib.commandmanager.CommandHook;
@@ -25,8 +26,7 @@ public class PrivateMinesCommand {
             Messages.msg("targetAlreadyOwnsAMine");
             return;
         }
-
-        commandSender.sendMessage("Giving " + target.getName() + " a private mine!");
+        commandSender.sendMessage(ChatColor.GREEN + "Giving " + target.getName() + " a private mine!");
         Mine mine = mineFactory.createMine(target, target.getLocation());
         mine.teleportPlayer(target);
     }
@@ -37,7 +37,7 @@ public class PrivateMinesCommand {
             Messages.msg("targetDoesNotOwnMine");
             return;
         }
-        commandSender.sendMessage("Deleting " + target.getName() + "'s Private Mine");
+        commandSender.sendMessage(ChatColor.YELLOW + "Deleting " + target.getName() + "'s Private Mine");
         Mine mine = mineStorage.getMine(target.getUniqueId());
         mine.delete();
     }
@@ -51,7 +51,6 @@ public class PrivateMinesCommand {
         }
         Mine mine = mineStorage.getMine(player.getUniqueId());
         Messages.msg("mineReset");
-        player.sendMessage("Resetting your mine...");
         mine.reset();
     }
 
