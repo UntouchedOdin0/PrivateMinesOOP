@@ -29,6 +29,7 @@ import me.untouchedodin0.privatemines.config.MineConfig;
 import me.untouchedodin0.privatemines.factory.MineFactory;
 import me.untouchedodin0.privatemines.mines.MineData;
 import me.untouchedodin0.privatemines.storage.MineStorage;
+import me.untouchedodin0.privatemines.util.Utils;
 import me.untouchedodin0.privatemines.world.MineWorldManager;
 import me.untouchedodin0.privatemines.world.utils.MineLoopUtil;
 import org.bukkit.Material;
@@ -40,7 +41,10 @@ import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.configmanager.annotations.ConfigValue;
 
 import java.io.File;
-import java.util.*;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class PrivateMines extends JavaPlugin {
 
@@ -53,6 +57,7 @@ public class PrivateMines extends JavaPlugin {
     MineWorldManager mineWorldManager;
     MineStorage mineStorage;
     BlockDataManager blockDataManager;
+    Utils utils;
 
     private final Map<String, MineData> mineDataMap = new HashMap<>();
     private final TreeMap<String, MineData> mineDataTreeMap = new TreeMap<>();
@@ -85,10 +90,12 @@ public class PrivateMines extends JavaPlugin {
                 getDataFolder()
                         .toPath()
                         .resolve("mines.db"));
+
         mineStorage = new MineStorage();
         mineFactory = new MineFactory(this, blockDataManager);
         mineWorldManager = new MineWorldManager();
         mineLoopUtil = new MineLoopUtil();
+        utils = new Utils(this);
 
         mineTypes.forEach((string, mineConfig) -> {
             getLogger().info("Loading mine type... " + string);
@@ -254,4 +261,6 @@ public class PrivateMines extends JavaPlugin {
     public MineWorldManager getMineWorldManager() {
         return mineWorldManager;
     }
+
+    public Utils getUtils() { return utils; }
 }
