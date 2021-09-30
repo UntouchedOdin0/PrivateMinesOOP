@@ -28,6 +28,7 @@ import me.untouchedodin0.privatemines.PrivateMines;
 import me.untouchedodin0.privatemines.mines.Mine;
 import me.untouchedodin0.privatemines.mines.MineData;
 import me.untouchedodin0.privatemines.storage.MineStorage;
+import me.untouchedodin0.privatemines.util.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -39,6 +40,7 @@ public class MineFactory {
 
     private final boolean debugMode;
     PrivateMines privateMines;
+    Utils utils;
     MineStorage mineStorage;
     MineFactory mineFactory;
     MineData defaultMineData;
@@ -46,6 +48,7 @@ public class MineFactory {
 
     public MineFactory(PrivateMines privateMines, BlockDataManager blockDataManager) {
         this.privateMines = privateMines;
+        this.utils = privateMines.getUtils();
         this.mineStorage = privateMines.getMineStorage();
         this.mineFactory = privateMines.getMineFactory();
         this.defaultMineData = privateMines.getDefaultMineData();
@@ -54,7 +57,7 @@ public class MineFactory {
     }
 
     public Mine createMine(Player player, Location location) {
-        Mine mine = new Mine();
+        Mine mine = new Mine(privateMines, utils);
         mine.setMineOwner(player.getUniqueId());
         mine.setMineLocation(location);
         mine.setMineData(defaultMineData);
@@ -64,6 +67,7 @@ public class MineFactory {
         Block block = location.getBlock();
         DataBlock dataBlock = blockDataManager.getDataBlock(block);
         dataBlock.set("mine", mine);
+        blockDataManager.save();
         mine.reset();
         if (debugMode) {
             Bukkit.getLogger().info("createMine block: " + block);
@@ -80,7 +84,7 @@ public class MineFactory {
      */
 
     public Mine createMine(Player player, Location location, MineData mineData) {
-        Mine mine = new Mine();
+        Mine mine = new Mine(privateMines, utils);
         mine.setMineOwner(player.getUniqueId());
         mine.setMineLocation(location);
         mine.setMineData(mineData);
@@ -90,6 +94,7 @@ public class MineFactory {
         Block block = location.getBlock();
         DataBlock dataBlock = blockDataManager.getDataBlock(block);
         dataBlock.set("mine", mine);
+        blockDataManager.save();
         mine.reset();
         if (debugMode) {
             Bukkit.getLogger().info("createMine block: " + block);
