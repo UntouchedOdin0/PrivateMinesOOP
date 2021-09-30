@@ -24,6 +24,7 @@ SOFTWARE.
 
 package me.untouchedodin0.privatemines.mines;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.untouchedodin0.privatemines.PrivateMines;
 import me.untouchedodin0.privatemines.world.utils.MineLoopUtil;
 import org.bukkit.Material;
@@ -59,6 +60,10 @@ public class MineData {
     private int[] spawnLocation;
     private int[] npcLocation;
     private int[][] cornerLocations;
+
+    private Material spawnMaterial;
+    private Material sellNpcMaterial;
+    private Material cornerMaterial;
 
     /**
      *
@@ -156,9 +161,16 @@ public class MineData {
 
     public void setupRelativeLocations() {
         MineLoopUtil mineLoopUtil = new MineLoopUtil();
-        Material spawnMaterial = Material.valueOf(privateMines.getSpawnMaterial());
-        Material cornerMaterial = Material.valueOf(privateMines.getCornerMaterial());
-        Material sellNpcMaterial = Material.valueOf(privateMines.getSellNpcMaterial());
+        if (XMaterial.matchXMaterial(privateMines.getSpawnMaterial()).isPresent()) {
+            spawnMaterial = XMaterial.matchXMaterial(privateMines.getSpawnMaterial()).get().parseMaterial();
+        }
+        if (XMaterial.matchXMaterial(privateMines.getSellNpcMaterial()).isPresent()) {
+            sellNpcMaterial = XMaterial.matchXMaterial(privateMines.getSellNpcMaterial()).get().parseMaterial();
+        }
+        if (XMaterial.matchXMaterial(privateMines.getCornerMaterial()).isPresent()) {
+            cornerMaterial = XMaterial.matchXMaterial(privateMines.getCornerMaterial()).get().parseMaterial();
+        }
+
         materials.forEach((material, aDouble) -> weightedRandom.set(material, aDouble));
         this.spawnLocation = mineLoopUtil.findSpawnLocation(multiBlockStructure, spawnMaterial);
         this.npcLocation = mineLoopUtil.findNpcLocation(multiBlockStructure, sellNpcMaterial);
