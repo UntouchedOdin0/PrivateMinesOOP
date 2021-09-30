@@ -41,7 +41,7 @@ import java.nio.file.Path;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("FieldMayBeFinal")
+@SuppressWarnings({"FieldMayBeFinal", "unused"})
 @ConfigMappable
 public class MineConfig {
 
@@ -60,6 +60,9 @@ public class MineConfig {
 
     @ConfigValue
     private int resetTime = 5; // reads the reset time from the section
+
+    @ConfigValue
+    private double resetPercentage = 50.00; // reads the reset percentage from the section
 
     @ConfigValue
     private Map<Material, Double> materials =
@@ -95,6 +98,7 @@ public class MineConfig {
         mineData.setMultiBlockStructure(multiBlockStructure);
         mineData.setMineTier(getPriority());
         mineData.setResetTime(getResetTime());
+        mineData.setResetPercentage(getResetPercentage());
         mineData.setMaterials(getMaterials());
         mineData.setupRelativeLocations();
 
@@ -107,6 +111,7 @@ public class MineConfig {
     }
 
     // A getter for the path
+
     public Path getPath() { return path; }
 
     // A getter for the contents
@@ -132,6 +137,8 @@ public class MineConfig {
     // A getter for getting the reset time from the section
 
     public int getResetTime() { return resetTime; }
+
+    public double getResetPercentage() { return resetPercentage; }
 
     // A getter for getting the materials from the secion
 
