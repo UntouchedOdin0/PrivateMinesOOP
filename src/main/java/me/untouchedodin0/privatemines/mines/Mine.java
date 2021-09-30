@@ -34,6 +34,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.blockdata.DataBlock;
+import redempt.redlib.misc.Task;
 import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
@@ -49,6 +50,8 @@ public class Mine {
         cuboidRegion: The mining area of the actual mine, (could this go to MineType?)
      */
 
+    private final PrivateMines privateMines;
+    private final Utils utils;
     private MineData mineData;
     private Location mineLocation;
     private Location spawnLocation;
@@ -57,11 +60,17 @@ public class Mine {
     private CuboidRegion cuboidRegion;
     private UUID mineOwner;
     private Structure structure;
+    private Task task;
 
     private WeightedRandom<Material> weightedRandom;
 
     private boolean debugMode;
+    private boolean isAutoResetting;
 
+    public Mine(PrivateMines privateMines, Utils utils) {
+        this.privateMines = privateMines;
+        this.utils = utils;
+    }
 
     /**
      * @param mineData - The mine data to be set for the Mine
@@ -157,6 +166,14 @@ public class Mine {
         return weightedRandom;
     }
 
+    public void setAutoResetting(boolean isAutoResetting) {
+        this.isAutoResetting = isAutoResetting;
+    }
+
+    public boolean isAutoResetting() {
+        return isAutoResetting;
+    }
+
     public void build() {
         if (mineData == null) {
             Bukkit.getLogger().info("Failed to build structure due to the mine data being null!");
@@ -187,6 +204,9 @@ public class Mine {
     }
 
     public void teleportPlayer(Player player) {
+        if (!isAutoResetting) {
+            this.isAutoResetting = true;
+        }
         player.teleport(spawnLocation);
     }
 
@@ -215,6 +235,22 @@ public class Mine {
     public void reset() {
         cuboidRegion.forEachBlock(block ->
                 block.setType(mineData.getWeightedRandom().roll(), false));
+    }
+
+    public void autoReset() {
+        this.task = Task.syncRepeating(privateMines, () -> {
+            double blocksPercentageLeft = utils.getPercentageLeft(this);
+            if (blocksPercentageLeft <= blocksPercentageLeft) {
+                reset();
+            }
+        }, 0L, 20L);
+
+        this.task = Task.syncRepeating(privateMines,
+                this::reset, 0L, 20L);
+    }
+
+    public void cancelAutoReset() {
+        if (task.isCurrentlyRunning()) { task.cancel(); }
     }
 
     /*

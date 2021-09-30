@@ -4,7 +4,9 @@ import me.untouchedodin0.privatemines.PrivateMines;
 import me.untouchedodin0.privatemines.mines.Mine;
 import me.untouchedodin0.privatemines.mines.MineData;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import redempt.redlib.multiblock.Structure;
+import redempt.redlib.region.CuboidRegion;
 
 public class Utils {
 
@@ -39,5 +41,12 @@ public class Utils {
         }
         upgradeMineData = privateMines.getNextMineData(mineData);
         return upgradeMineData;
+    }
+
+    public double getPercentageLeft(Mine mine) {
+        CuboidRegion cuboidRegion = mine.getCuboidRegion();
+        int totalBlocks = cuboidRegion.getBlockVolume();
+        long airBlocks = cuboidRegion.stream().filter(Block::isEmpty).count();
+        return (double) airBlocks * 100 / totalBlocks;
     }
 }
