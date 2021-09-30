@@ -52,6 +52,7 @@ public class MineData {
     private String name;
     private int mineTier = 1;
     private int resetTime = 1;
+    private double resetPercentage;
     private Map<Material, Double> materials = new HashMap<>();
     private WeightedRandom<Material> weightedRandom = new WeightedRandom<>();
     private MultiBlockStructure multiBlockStructure;
@@ -104,6 +105,22 @@ public class MineData {
     public int getResetTime() {
         return resetTime;
     }
+
+    /**
+     *
+     * @param resetPercentage - The new reset percentage for the mine
+     */
+
+    public void setResetPercentage(double resetPercentage) {
+        this.resetPercentage = resetPercentage;
+    }
+
+    /**
+     *
+     * @return The reset percentage for the mine
+     */
+
+    public double getResetPercentage() { return resetPercentage; }
 
     /**
      *
