@@ -67,6 +67,7 @@ public class MineFactory {
         Block block = location.getBlock();
         DataBlock dataBlock = blockDataManager.getDataBlock(block);
         dataBlock.set("mine", mine);
+        dataBlock.set("mineData", defaultMineData);
         blockDataManager.save();
         mine.reset();
         if (debugMode) {
@@ -94,6 +95,8 @@ public class MineFactory {
         Block block = location.getBlock();
         DataBlock dataBlock = blockDataManager.getDataBlock(block);
         dataBlock.set("mine", mine);
+        dataBlock.set("mineData", mineData);
+        dataBlock.set("owner", player.getUniqueId());
         blockDataManager.save();
         mine.reset();
         if (debugMode) {

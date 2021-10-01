@@ -27,6 +27,7 @@ package me.untouchedodin0.privatemines;
 import me.untouchedodin0.privatemines.commands.PrivateMinesCommand;
 import me.untouchedodin0.privatemines.config.MineConfig;
 import me.untouchedodin0.privatemines.factory.MineFactory;
+import me.untouchedodin0.privatemines.mines.Mine;
 import me.untouchedodin0.privatemines.mines.MineData;
 import me.untouchedodin0.privatemines.storage.MineStorage;
 import me.untouchedodin0.privatemines.util.Utils;
@@ -41,16 +42,14 @@ import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.configmanager.annotations.ConfigValue;
 
 import java.io.File;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class PrivateMines extends JavaPlugin {
 
+    private final Map<String, MineData> mineDataMap = new HashMap<>();
+    private final TreeMap<String, MineData> mineDataTreeMap = new TreeMap<>();
     EnumMap<Material, Double> mineBlocks = new EnumMap<>(Material.class);
     EnumMap<Material, Double> mineBlocks2 = new EnumMap<>(Material.class);
-
     File configFile;
     MineLoopUtil mineLoopUtil;
     MineFactory mineFactory;
@@ -58,10 +57,6 @@ public class PrivateMines extends JavaPlugin {
     MineStorage mineStorage;
     BlockDataManager blockDataManager;
     Utils utils;
-
-    private final Map<String, MineData> mineDataMap = new HashMap<>();
-    private final TreeMap<String, MineData> mineDataTreeMap = new TreeMap<>();
-
     @ConfigValue
     private String spawnPoint;
 
@@ -111,6 +106,14 @@ public class PrivateMines extends JavaPlugin {
 
         mineBlocks2.put(Material.COBBLESTONE, 0.5);
         mineBlocks2.put(Material.GOLD_ORE, 0.5);
+
+        blockDataManager.getAll().forEach(dataBlock -> {
+            Mine mine = new Mine(this, utils);
+            MineData mineData = mineDataMap.get(dataBlock.getString("mineData"));
+            UUID uuid = UUID.fromString(dataBlock.getString("owner"));
+            mine.setMineOwner(uuid);
+            mine.setMineData(mineData);
+        });
 
 //        if (debugMode) {
 //            for (Map.Entry<String, MineData> entry : mineDataTreeMap.entrySet()) {
@@ -248,19 +251,27 @@ public class PrivateMines extends JavaPlugin {
         Gets the mine storage
      */
 
-    public MineStorage getMineStorage() { return mineStorage; }
+    public MineStorage getMineStorage() {
+        return mineStorage;
+    }
 
     /*
         Gets the block data manager
      */
 
-    public BlockDataManager getBlockDataManager() { return blockDataManager; }
+    public BlockDataManager getBlockDataManager() {
+        return blockDataManager;
+    }
 
-    public boolean isDebugMode() { return debugMode; }
+    public boolean isDebugMode() {
+        return debugMode;
+    }
 
     public MineWorldManager getMineWorldManager() {
         return mineWorldManager;
     }
 
-    public Utils getUtils() { return utils; }
+    public Utils getUtils() {
+        return utils;
+    }
 }
