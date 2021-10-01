@@ -24,6 +24,7 @@ SOFTWARE.
 
 package me.untouchedodin0.privatemines.mines;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.untouchedodin0.privatemines.PrivateMines;
 import me.untouchedodin0.privatemines.factory.MineFactory;
 import me.untouchedodin0.privatemines.storage.MineStorage;
@@ -66,6 +67,9 @@ public class Mine {
 
     private boolean debugMode;
     private boolean isAutoResetting;
+
+    private final Material airMaterial = XMaterial.AIR.parseMaterial();
+
 
     public Mine(PrivateMines privateMines, Utils utils) {
         this.privateMines = privateMines;
@@ -199,8 +203,10 @@ public class Mine {
         CuboidRegion cuboidRegion = new CuboidRegion(corner1, corner2);
         cuboidRegion.expand(1, 0, 1, 0, 1, 0);
         setCuboidRegion(cuboidRegion);
-        spawnLocation.getBlock().setType(Material.AIR, false);
-        npcLocation.getBlock().setType(Material.AIR, false);
+        if (airMaterial != null) {
+            spawnLocation.getBlock().setType(airMaterial, false);
+            npcLocation.getBlock().setType(airMaterial, false);
+        }
     }
 
     public void teleportPlayer(Player player) {
@@ -227,7 +233,9 @@ public class Mine {
             if (debugMode) {
                 privateMines.getLogger().info("delete Structure: " + structure);
             }
-            structure.getRegion().forEachBlock(b -> b.setType(Material.AIR, false));
+            if (airMaterial != null) {
+                structure.getRegion().forEachBlock(b -> b.setType(airMaterial, false));
+            }
         }
     }
 
@@ -281,7 +289,9 @@ public class Mine {
         setMineData(upgradeData);
         if (player != null) {
             Structure structure = getStructure();
-            structure.getRegion().forEachBlock(block -> block.setType(Material.AIR, false));
+            if (airMaterial != null) {
+                structure.getRegion().forEachBlock(block -> block.setType(airMaterial, false));
+            }
             Mine mine = mineFactory.createMine(player, getMineLocation(), upgradeData);
             mine.teleportPlayer(player);
             mineStorage.replaceMine(player.getUniqueId(), mine);
