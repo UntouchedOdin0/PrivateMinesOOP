@@ -1,6 +1,7 @@
 recievedMine: &aYou've recieved a private mine!
 deletedMine: &aYour mine has been deleted
 teleportedToMine: &aYou've been teleported to your mine!
+teleportedToTargetsMine: &aYou've been teleported to the target's mine!
 mineReset: &aYour mine has been reset!
 doNotOwnMine: &cYou don't own a Private Mine!
 targetDoesNotOwnMine: &cTarget doesn't own a Private Mine!

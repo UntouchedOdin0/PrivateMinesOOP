@@ -24,6 +24,12 @@ privatemine,privatemines,pmine {
         permission privatemines.teleport
     }
 
+    teleport player:target {
+        hook teleportOther
+        help /pmine teleport <name> - Teleport to another users mine
+        permission privatemines.teleport.other
+    }
+
     upgrade player:target {
         hook upgrade
         help /pmine upgrade <name> - Upgrade a users private mine
