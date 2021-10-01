@@ -53,23 +53,18 @@ public class Mine {
 
     private final PrivateMines privateMines;
     private final Utils utils;
+    private final Material airMaterial = XMaterial.AIR.parseMaterial();
     private MineData mineData;
     private Location mineLocation;
     private Location spawnLocation;
     private Location npcLocation;
-
     private CuboidRegion cuboidRegion;
     private UUID mineOwner;
     private Structure structure;
     private Task task;
-
     private WeightedRandom<Material> weightedRandom;
-
     private boolean debugMode;
     private boolean isAutoResetting;
-
-    private final Material airMaterial = XMaterial.AIR.parseMaterial();
-
 
     public Mine(PrivateMines privateMines, Utils utils) {
         this.privateMines = privateMines;
@@ -77,20 +72,30 @@ public class Mine {
     }
 
     /**
-     * @param mineData - The mine data to be set for the Mine
-     */
-
-    public void setMineData(MineData mineData) { this.mineData = mineData; }
-
-    /**
-     *
      * @return MineData - The mine data for the players mine
      */
 
-    public MineData getMineData() { return mineData; }
+    public MineData getMineData() {
+        return mineData;
+    }
 
     /**
-     *
+     * @param mineData - The mine data to be set for the Mine
+     */
+
+    public void setMineData(MineData mineData) {
+        this.mineData = mineData;
+    }
+
+    /**
+     * @return Location - The location of where the mine is in the world
+     */
+
+    public Location getMineLocation() {
+        return mineLocation;
+    }
+
+    /**
      * @param mineLocation - The location of where the mine should go
      */
 
@@ -99,15 +104,6 @@ public class Mine {
     }
 
     /**
-     *
-     * @return Location - The location of where the mine is in the world
-     */
-
-    public Location getMineLocation() { return mineLocation; }
-
-
-    /**
-     *
      * @return Location - The location of where the spawn location is in the world
      */
 
@@ -116,7 +112,6 @@ public class Mine {
     }
 
     /**
-     *
      * @return Location - The location of where the npc location is in the world
      */
 
@@ -125,7 +120,14 @@ public class Mine {
     }
 
     /**
-     *
+     * @return CuboidRegion - The cuboid region of the mining area
+     */
+
+    public CuboidRegion getCuboidRegion() {
+        return cuboidRegion;
+    }
+
+    /**
      * @param cuboidRegion - The cuboid region for the mining region
      */
 
@@ -134,27 +136,22 @@ public class Mine {
     }
 
     /**
-     *
-     * @return CuboidRegion - The cuboid region of the mining area
-     */
-
-    public CuboidRegion getCuboidRegion() { return cuboidRegion; }
-
-    /**
-     *
-     * @param mineOwner - The UUID of the new mine owner
-     */
-
-    public void setMineOwner(UUID mineOwner) { this.mineOwner = mineOwner; }
-
-    /**
      * @return UUID - The UUID of the mine owner.
      */
 
-    public UUID getMineOwner() { return mineOwner; }
+    public UUID getMineOwner() {
+        return mineOwner;
+    }
 
     /**
-     *
+     * @param mineOwner - The UUID of the new mine owner
+     */
+
+    public void setMineOwner(UUID mineOwner) {
+        this.mineOwner = mineOwner;
+    }
+
+    /**
      * @return Structure - Gets the mine's structure.
      */
 
@@ -162,20 +159,20 @@ public class Mine {
         return structure;
     }
 
-    public void setWeightedRandom(WeightedRandom<Material> weightedRandom) {
-        this.weightedRandom = weightedRandom;
-    }
-
     public WeightedRandom<Material> getWeightedRandom() {
         return weightedRandom;
     }
 
-    public void setAutoResetting(boolean isAutoResetting) {
-        this.isAutoResetting = isAutoResetting;
+    public void setWeightedRandom(WeightedRandom<Material> weightedRandom) {
+        this.weightedRandom = weightedRandom;
     }
 
     public boolean isAutoResetting() {
         return isAutoResetting;
+    }
+
+    public void setAutoResetting(boolean isAutoResetting) {
+        this.isAutoResetting = isAutoResetting;
     }
 
     public void build() {
@@ -241,8 +238,12 @@ public class Mine {
 
     // Nice l
     public void reset() {
-        cuboidRegion.forEachBlock(block ->
-                block.setType(mineData.getWeightedRandom().roll(), false));
+        cuboidRegion.forEachBlock(block -> {
+            Material material = XMaterial.matchXMaterial(mineData.getWeightedRandom().roll()).parseMaterial();
+            if (material != null) {
+                block.setType(material);
+            }
+        });
     }
 
     public void autoReset() {
@@ -258,7 +259,9 @@ public class Mine {
     }
 
     public void cancelAutoReset() {
-        if (task.isCurrentlyRunning()) { task.cancel(); }
+        if (task.isCurrentlyRunning()) {
+            task.cancel();
+        }
     }
 
     /*

@@ -171,7 +171,7 @@ public class MineData {
             cornerMaterial = XMaterial.matchXMaterial(privateMines.getCornerMaterial()).get().parseMaterial();
         }
 
-        materials.forEach((material, aDouble) -> weightedRandom.set(material, aDouble));
+        materials.forEach((material, aDouble) -> weightedRandom.set(XMaterial.matchXMaterial(material).parseMaterial(), aDouble));
         this.spawnLocation = mineLoopUtil.findSpawnLocation(multiBlockStructure, spawnMaterial);
         this.npcLocation = mineLoopUtil.findNpcLocation(multiBlockStructure, sellNpcMaterial);
         this.cornerLocations = mineLoopUtil.findCornerLocations(multiBlockStructure, cornerMaterial);
