@@ -48,6 +48,8 @@ public class PrivateMines extends JavaPlugin {
 
     private final Map<String, MineData> mineDataMap = new HashMap<>();
     private final TreeMap<String, MineData> mineDataTreeMap = new TreeMap<>();
+    private static PrivateMines privateMines;
+
     EnumMap<Material, Double> mineBlocks = new EnumMap<>(Material.class);
     EnumMap<Material, Double> mineBlocks2 = new EnumMap<>(Material.class);
     File configFile;
@@ -57,6 +59,7 @@ public class PrivateMines extends JavaPlugin {
     MineStorage mineStorage;
     BlockDataManager blockDataManager;
     Utils utils;
+
     @ConfigValue
     private String spawnPoint;
 
@@ -74,7 +77,7 @@ public class PrivateMines extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
+        privateMines = this;
         configFile = new File(getDataFolder(), "config.yml");
         if (!configFile.exists()) {
             saveDefaultConfig();
@@ -158,6 +161,10 @@ public class PrivateMines extends JavaPlugin {
         getLogger().info("Mine data map after: " + mineDataMap);
         getLogger().info("Saving and closing the BlockDataManager...");
         blockDataManager.saveAndClose();
+    }
+
+    public static PrivateMines getPrivateMines() {
+        return privateMines;
     }
 
     /*
