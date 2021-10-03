@@ -33,6 +33,7 @@ import me.untouchedodin0.privatemines.storage.MineStorage;
 import me.untouchedodin0.privatemines.util.Utils;
 import me.untouchedodin0.privatemines.world.MineWorldManager;
 import me.untouchedodin0.privatemines.world.utils.MineLoopUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 import redempt.redlib.blockdata.BlockDataManager;
@@ -111,11 +112,15 @@ public class PrivateMines extends JavaPlugin {
         mineBlocks2.put(Material.GOLD_ORE, 0.5);
 
         blockDataManager.getAll().forEach(dataBlock -> {
-            Mine mine = new Mine(this, utils);
-            MineData mineData = mineDataMap.get(dataBlock.getString("mineData"));
-            UUID uuid = UUID.fromString(dataBlock.getString("owner"));
-            mine.setMineOwner(uuid);
-            mine.setMineData(mineData);
+//            Mine mine = new Mine(this, utils);
+//            MineData mineData = mineDataMap.get(dataBlock.getString("mineData"));
+//            UUID uuid = UUID.fromString(dataBlock.getString("owner"));
+//            mine.setMineOwner(uuid);
+//            mine.setMineData(mineData);
+            Bukkit.getLogger().info("DataBlock: " + dataBlock);
+            Bukkit.getLogger().info("DataBlock Mine: " + dataBlock.get("mine"));
+            Bukkit.getLogger().info("DataBlock MineData: " + dataBlock.get("mineData"));
+            Bukkit.getLogger().info("DataBlock Owner: " + dataBlock.get("owner"));
         });
 
 //        if (debugMode) {
