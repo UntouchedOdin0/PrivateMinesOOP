@@ -26,13 +26,14 @@ package me.untouchedodin0.privatemines;
 
 import me.untouchedodin0.privatemines.commands.PrivateMinesCommand;
 import me.untouchedodin0.privatemines.config.MineConfig;
+import me.untouchedodin0.privatemines.config.StorageConfig;
 import me.untouchedodin0.privatemines.factory.MineFactory;
 import me.untouchedodin0.privatemines.mines.MineData;
 import me.untouchedodin0.privatemines.storage.MineStorage;
+import me.untouchedodin0.privatemines.util.Metrics;
 import me.untouchedodin0.privatemines.util.Utils;
 import me.untouchedodin0.privatemines.world.MineWorldManager;
 import me.untouchedodin0.privatemines.world.utils.MineLoopUtil;
-import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -43,10 +44,8 @@ import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.configmanager.annotations.ConfigValue;
 
 import java.io.File;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.io.IOException;
+import java.util.*;
 
 public class PrivateMines extends JavaPlugin {
 
@@ -57,12 +56,15 @@ public class PrivateMines extends JavaPlugin {
     EnumMap<Material, Double> mineBlocks = new EnumMap<>(Material.class);
     EnumMap<Material, Double> mineBlocks2 = new EnumMap<>(Material.class);
     File configFile;
+    File minesFile;
+
     MineLoopUtil mineLoopUtil;
     MineFactory mineFactory;
     MineWorldManager mineWorldManager;
     MineStorage mineStorage;
     BlockDataManager blockDataManager;
     Utils utils;
+    ConfigManager minesConfig;
 
     @ConfigValue
     private String spawnPoint;
@@ -79,14 +81,34 @@ public class PrivateMines extends JavaPlugin {
     @ConfigValue
     private Map<String, MineConfig> mineTypes = ConfigManager.map(MineConfig.class);
 
+    @ConfigValue
+    private Map<String, StorageConfig> mines = ConfigManager.map(StorageConfig.class);
+
     @Override
     public void onEnable() {
         privateMines = this;
         configFile = new File(getDataFolder(), "config.yml");
+        minesFile = new File(getDataFolder(), "mines.yml");
+
         if (!configFile.exists()) {
             saveDefaultConfig();
         }
+        if (!minesFile.exists()) {
+            boolean createdFile = false;
+            try {
+                createdFile = minesFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (createdFile) {
+                Bukkit.getLogger().info("Created the mines.yml file!");
+            }
+        }
+
         ConfigManager configManager = new ConfigManager(this).register(this).load();
+        this.minesConfig = new ConfigManager(minesFile).register(this).load();
+        Bukkit.getLogger().info("minesFile: " + minesFile);
+        Bukkit.getLogger().info("minesConfig: " + minesConfig);
 
         blockDataManager = new BlockDataManager(
                 getDataFolder()
@@ -127,19 +149,23 @@ public class PrivateMines extends JavaPlugin {
             Bukkit.getLogger().info("DataBlock Owner: " + dataBlock.get("owner"));
         });
 
-//        if (debugMode) {
-//            for (Map.Entry<String, MineData> entry : mineDataTreeMap.entrySet()) {
-//                getLogger().info("Tree Map Name: " + entry.getValue().getName());
-//                getLogger().info("Tree Map Tier: " + entry.getValue().getMineTier());
-//                getLogger().info("Tree Map Materials: " + entry.getValue().getMaterials());
-//                getLogger().info("Tree Map Reset Time: " + entry.getValue().getResetTime());
-//                getLogger().info(" ");
-//                if (mineDataTreeMap.lastKey().equals(entry.getKey())) {
-//                    getLogger().info("You've reached the last entry!");
-//                } else {
-//                    getLogger().info("the next entry after "
-//                            + entry.getValue().getName() + " is: "
-//                            + mineDataTreeMap.higherEntry(entry.getKey()));
+        // Loads the mines back after each reboot (fixes vanishing mines)
+
+        mines.forEach((string, storageConfig) -> {
+            Bukkit.getLogger().info("Loading mine " + string + " back!");
+        });
+
+//        if (!minesConfig.configExists()) {
+//            return;
+//        } else {
+//            if (minesConfig.getConfig().getConfigurationSection("mines") == null) {
+//                getLogger().info("No mines to load!");
+//            } else {
+//                for (String mine : Objects.requireNonNull(minesConfig
+//                        .getConfig()
+//                        .getConfigurationSection("mines"))
+//                        .getKeys(true)) {
+//                    Bukkit.getLogger().info("config mines for loop : " + mine);
 //                }
 //            }
 //        }
@@ -298,5 +324,9 @@ public class PrivateMines extends JavaPlugin {
 
     public Utils getUtils() {
         return utils;
+    }
+
+    public ConfigManager getMinesConfig() {
+        return minesConfig;
     }
 }
