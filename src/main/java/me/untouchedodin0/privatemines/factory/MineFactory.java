@@ -57,6 +57,9 @@ public class MineFactory {
     }
 
     public Mine createMine(Player player, Location location) {
+        if (defaultMineData == null) {
+            privateMines.getLogger().warning("Failed to create mine due to defaultMineData being null");
+        }
         Mine mine = new Mine(privateMines, utils);
         mine.setMineOwner(player.getUniqueId());
         mine.setMineLocation(location);
@@ -71,9 +74,9 @@ public class MineFactory {
         blockDataManager.save();
         mine.reset();
         if (debugMode) {
-            Bukkit.getLogger().info("createMine block: " + block);
-            Bukkit.getLogger().info("createMine dataBlock: " + dataBlock);
-            Bukkit.getLogger().info("createMine dataBlock getData: " + dataBlock.getData());
+            privateMines.getLogger().info("createMine block: " + block);
+            privateMines.getLogger().info("createMine dataBlock: " + dataBlock);
+            privateMines.getLogger().info("createMine dataBlock getData: " + dataBlock.getData());
         }
         return mine;
     }
@@ -85,26 +88,31 @@ public class MineFactory {
      */
 
     public Mine createMine(Player player, Location location, MineData mineData) {
-        Mine mine = new Mine(privateMines, utils);
-        mine.setMineOwner(player.getUniqueId());
-        mine.setMineLocation(location);
-        mine.setMineData(mineData);
-        mine.setWeightedRandom(defaultMineData.getWeightedRandom());
-        mine.build();
-        mineStorage.addMine(player.getUniqueId(), mine);
-        Block block = location.getBlock();
-        DataBlock dataBlock = blockDataManager.getDataBlock(block);
-        dataBlock.set("mine", mine);
-        dataBlock.set("mineData", mineData);
-        dataBlock.set("owner", player.getUniqueId());
-        blockDataManager.save();
-        mine.reset();
-        if (debugMode) {
-            Bukkit.getLogger().info("createMine block: " + block);
-            Bukkit.getLogger().info("createMine dataBlock: " + dataBlock);
-            Bukkit.getLogger().info("createMine dataBlock getData: " + dataBlock.getData());
+        if (mineData == null) {
+            privateMines.getLogger().warning("Failed to create mine due to defaultMineData being null");
+        } else {
+            Mine mine = new Mine(privateMines, utils);
+            mine.setMineOwner(player.getUniqueId());
+            mine.setMineLocation(location);
+            mine.setMineData(mineData);
+            mine.setWeightedRandom(mineData.getWeightedRandom());
+            mine.build();
+            mineStorage.addMine(player.getUniqueId(), mine);
+            Block block = location.getBlock();
+            DataBlock dataBlock = blockDataManager.getDataBlock(block);
+            dataBlock.set("mine", mine);
+            dataBlock.set("mineData", mineData);
+            dataBlock.set("owner", player.getUniqueId());
+            blockDataManager.save();
+            mine.reset();
+            if (debugMode) {
+                privateMines.getLogger().info("createMine block: " + block);
+                privateMines.getLogger().info("createMine dataBlock: " + dataBlock);
+                privateMines.getLogger().info("createMine dataBlock getData: " + dataBlock.getData());
+            }
+            return mine;
         }
-        return mine;
+        return null;
     }
 }
 

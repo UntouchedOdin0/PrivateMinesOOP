@@ -194,6 +194,14 @@ public class PrivateMines extends JavaPlugin {
      */
 
     public MineData getDefaultMineData() {
+        if (mineDataTreeMap.isEmpty()) {
+            Bukkit.getLogger().info("No default mine data was found!");
+            Bukkit.getLogger().info("Create a mine type in the mineTypes");
+            Bukkit.getLogger().info("section of the config.yml");
+            Bukkit.getLogger().info("Please ask in the discord server" +
+                    " if you need help");
+            return null;
+        }
         return mineDataTreeMap.firstEntry().getValue();
     }
 
