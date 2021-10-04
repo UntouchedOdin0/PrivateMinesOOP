@@ -14,7 +14,6 @@ apply plugin: "java"
 //def command = "java -jar E:/Coding/Spigot Test Servers/1.17 - Paper (pmines rewrite)/paper.jar"
 def output = "java -jar E:/Coding/Spigot Test Servers/1.17 - Paper (pmines rewrite)/paper.jar".execute().text
 
-
 ext {
     javaMainClass = "me.untouchedodin0.privatemines.PrivateMines"
 }
@@ -40,6 +39,7 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     compileOnly 'com.github.Redempt:RedLib:6.0.6'
     compileOnly 'org.spigotmc:spigot-api:1.17-R0.1-SNAPSHOT' // The Spigot API with no shadowing. Requires the OSS repo.
+    compileOnly 'org.bstats:bstats-bukkit:2.2.1'
     implementation 'com.github.CryptoMorin:XSeries:v8.4.0'
 }
 
@@ -53,6 +53,10 @@ application {
 
 test {
     useJUnitPlatform()
+}
+
+shadowJar {
+    relocate 'org.bstats', 'me.untouchedodin0.privatemines'
 }
 
 task copyJarToPlugins(type: Copy) {

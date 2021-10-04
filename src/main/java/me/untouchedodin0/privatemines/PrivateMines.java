@@ -27,12 +27,12 @@ package me.untouchedodin0.privatemines;
 import me.untouchedodin0.privatemines.commands.PrivateMinesCommand;
 import me.untouchedodin0.privatemines.config.MineConfig;
 import me.untouchedodin0.privatemines.factory.MineFactory;
-import me.untouchedodin0.privatemines.mines.Mine;
 import me.untouchedodin0.privatemines.mines.MineData;
 import me.untouchedodin0.privatemines.storage.MineStorage;
 import me.untouchedodin0.privatemines.util.Utils;
 import me.untouchedodin0.privatemines.world.MineWorldManager;
 import me.untouchedodin0.privatemines.world.utils.MineLoopUtil;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -43,7 +43,10 @@ import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.configmanager.annotations.ConfigValue;
 
 import java.io.File;
-import java.util.*;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class PrivateMines extends JavaPlugin {
 
@@ -95,6 +98,7 @@ public class PrivateMines extends JavaPlugin {
         mineWorldManager = new MineWorldManager();
         mineLoopUtil = new MineLoopUtil();
         utils = new Utils(this);
+        int pluginId = 11413;
 
         mineTypes.forEach((string, mineConfig) -> {
             getLogger().info("Loading mine type... " + string);
@@ -152,6 +156,7 @@ public class PrivateMines extends JavaPlugin {
                 .register("privatemines",
                         new PrivateMinesCommand(this));
         Messages.load(this);
+        Metrics metrics = new Metrics(this, pluginId);
     }
 
     /*
