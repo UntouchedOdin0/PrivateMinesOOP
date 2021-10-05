@@ -58,6 +58,8 @@ public class Mine {
     private Location mineLocation;
     private Location spawnLocation;
     private Location npcLocation;
+    private Location corner1;
+    private Location corner2;
     private CuboidRegion cuboidRegion;
     private UUID mineOwner;
     private Structure structure;
@@ -117,6 +119,22 @@ public class Mine {
 
     public Location getNpcLocation() {
         return npcLocation;
+    }
+
+    /**
+     * @return Location - The corner 1 location
+     */
+
+    public Location getCorner1() {
+        return corner1;
+    }
+
+    /**
+     * @return Location - The corner 2 location
+     */
+
+    public Location getCorner2() {
+        return corner2;
     }
 
     /**
@@ -194,8 +212,8 @@ public class Mine {
         this.spawnLocation = utils.getRelative(structure, mineData.getSpawnLocation());
         this.npcLocation = utils.getRelative(structure, mineData.getNpcLocation());
 
-        Location corner1 = utils.getRelative(structure, mineData.getCorner1());
-        Location corner2 = utils.getRelative(structure, mineData.getCorner2());
+        this.corner1 = utils.getRelative(structure, mineData.getCorner1());
+        this.corner2 = utils.getRelative(structure, mineData.getCorner2());
 
         CuboidRegion cuboidRegion = new CuboidRegion(corner1, corner2);
         cuboidRegion.expand(1, 0, 1, 0, 1, 0);

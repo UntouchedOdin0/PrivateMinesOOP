@@ -27,6 +27,7 @@ package me.untouchedodin0.privatemines;
 import me.untouchedodin0.privatemines.commands.PrivateMinesCommand;
 import me.untouchedodin0.privatemines.config.MineConfig;
 import me.untouchedodin0.privatemines.factory.MineFactory;
+import me.untouchedodin0.privatemines.mines.Mine;
 import me.untouchedodin0.privatemines.mines.MineData;
 import me.untouchedodin0.privatemines.storage.MineStorage;
 import me.untouchedodin0.privatemines.util.Metrics;
@@ -34,6 +35,7 @@ import me.untouchedodin0.privatemines.util.Utils;
 import me.untouchedodin0.privatemines.world.MineWorldManager;
 import me.untouchedodin0.privatemines.world.utils.MineLoopUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 import redempt.redlib.blockdata.BlockDataManager;
@@ -41,13 +43,12 @@ import redempt.redlib.commandmanager.CommandParser;
 import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.configmanager.annotations.ConfigValue;
+import redempt.redlib.misc.LocationUtils;
+import redempt.redlib.region.CuboidRegion;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class PrivateMines extends JavaPlugin {
 
@@ -85,6 +86,10 @@ public class PrivateMines extends JavaPlugin {
 
 //    @ConfigValue
 //    private Map<String, StorageConfig> mines = ConfigManager.map(StorageConfig.class);
+
+    Location location;
+    Location corner1;
+    Location corner2;
 
     @Override
     public void onEnable() {
@@ -144,16 +149,35 @@ public class PrivateMines extends JavaPlugin {
         mineBlocks2.put(Material.COBBLESTONE, 0.5);
         mineBlocks2.put(Material.GOLD_ORE, 0.5);
 
+        Bukkit.getLogger().info("mines BEFORE: " + mineStorage.getMines());
         blockDataManager.getAll().forEach(dataBlock -> {
 //            Mine mine = new Mine(this, utils);
 //            MineData mineData = mineDataMap.get(dataBlock.getString("mineData"));
 //            UUID uuid = UUID.fromString(dataBlock.getString("owner"));
 //            mine.setMineOwner(uuid);
 //            mine.setMineData(mineData);
-            Bukkit.getLogger().info("DataBlock: " + dataBlock);
-            Bukkit.getLogger().info("DataBlock Owner: " + dataBlock.get("owner"));
-            Bukkit.getLogger().info("DataBlock mine type name: " + dataBlock.get("name"));
-            Bukkit.getLogger().info("DataBlock mine location: " + dataBlock.get("location"));
+            getLogger().info("DataBlock: " + dataBlock);
+            getLogger().info("DataBlock Owner: " + dataBlock.get("owner"));
+            getLogger().info("DataBlock mine type name: " + dataBlock.get("type"));
+            getLogger().info("DataBlock mine location: " + dataBlock.get("location"));
+
+            UUID playerUUID = UUID.fromString(dataBlock.getString("owner"));
+            String typeName = String.valueOf(dataBlock.getString("type"));
+
+            Mine mine = new Mine(this, utils);
+            MineData mineData = getMineDataMap().get(typeName);
+            mine.setMineOwner(playerUUID);
+            mine.setMineData(mineData);
+            mine.setMineLocation(location);
+
+            mineStorage.addMine(playerUUID, mine);
+
+            getLogger().info("playerUUID: " + playerUUID);
+            getLogger().info("typeName: " + typeName);
+            getLogger().info("mine: " + mine);
+            getLogger().info("mineData: " + mineData);
+
+            Bukkit.getLogger().info("mines AFTER: " + mineStorage.getMines());
         });
 
         // Loads the mines back after each reboot (fixes vanishing mines)

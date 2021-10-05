@@ -75,19 +75,23 @@ public class MineFactory {
         mineStorage.addMine(player.getUniqueId(), mine);
         DataBlock dataBlock = blockDataManager.getDataBlock(block);
         dataBlock.set("owner", String.valueOf(userUUID));
-        dataBlock.set("name", defaultMineData.getName());
-        dataBlock.set("location", LocationUtils.toString(location));
         dataBlock.set("type", defaultMineData.getName());
+        dataBlock.set("location", LocationUtils.toString(location));
+
+//        dataBlock.set("name", defaultMineData.getName());
+//        dataBlock.set("corner1", mine.getCorner1());
+//        dataBlock.set("corner2", mine.getCorner2());
+
         blockDataManager.save();
         DataBlock testingDataBlock = blockDataManager.getExisting(block);
         if (testingDataBlock != null) {
             String owner = testingDataBlock.getString("owner");
-            String name = testingDataBlock.getString("name");
+            String type = testingDataBlock.getString("type");
             String locationString = testingDataBlock.getString("location");
 
             Bukkit.getLogger().info("owner: " + owner);
-            Bukkit.getLogger().info("name: " + name);
             Bukkit.getLogger().info("location: " + locationString);
+            Bukkit.getLogger().info("type: " + type);
         }
 
 //        String mines = "mines.";
