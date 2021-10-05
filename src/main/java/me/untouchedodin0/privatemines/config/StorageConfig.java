@@ -19,19 +19,19 @@ public class StorageConfig {
     private String type;
 
     @ConfigValue
-    private Location location;
+    private String location;
 
     @ConfigValue
-    private Location spawnLocation;
+    private String spawnLocation;
 
     @ConfigValue
-    private Location npcLocation;
+    private String npcLocation;
 
     @ConfigValue
-    private Location corner1;
+    private String corner1;
 
     @ConfigValue
-    private Location corner2;
+    private String corner2;
 
     @ConfigValue
     private UUID mineOwner;
@@ -46,23 +46,23 @@ public class StorageConfig {
         return type;
     }
 
-    public Location getLocation() {
+    public String getLocation() {
         return location;
     }
 
-    public Location getSpawnLocation() {
+    public String getSpawnLocation() {
         return spawnLocation;
     }
 
-    public Location getNpcLocation() {
+    public String getNpcLocation() {
         return npcLocation;
     }
 
-    public Location getCorner1() {
+    public String getCorner1() {
         return corner1;
     }
 
-    public Location getCorner2() {
+    public String getCorner2() {
         return corner2;
     }
 

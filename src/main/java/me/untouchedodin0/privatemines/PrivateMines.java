@@ -26,7 +26,6 @@ package me.untouchedodin0.privatemines;
 
 import me.untouchedodin0.privatemines.commands.PrivateMinesCommand;
 import me.untouchedodin0.privatemines.config.MineConfig;
-import me.untouchedodin0.privatemines.config.StorageConfig;
 import me.untouchedodin0.privatemines.factory.MineFactory;
 import me.untouchedodin0.privatemines.mines.MineData;
 import me.untouchedodin0.privatemines.storage.MineStorage;
@@ -45,7 +44,10 @@ import redempt.redlib.configmanager.annotations.ConfigValue;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class PrivateMines extends JavaPlugin {
 
@@ -81,8 +83,8 @@ public class PrivateMines extends JavaPlugin {
     @ConfigValue
     private Map<String, MineConfig> mineTypes = ConfigManager.map(MineConfig.class);
 
-    @ConfigValue
-    private Map<String, StorageConfig> mines = ConfigManager.map(StorageConfig.class);
+//    @ConfigValue
+//    private Map<String, StorageConfig> mines = ConfigManager.map(StorageConfig.class);
 
     @Override
     public void onEnable() {
@@ -131,6 +133,11 @@ public class PrivateMines extends JavaPlugin {
                 .replace("{loaded}",
                         String.valueOf(loaded)));
 
+//        mines.forEach((string, storageConfig) -> {
+//            Bukkit.getLogger().info("Loading mine " + string +
+//                    " from storage config " + storageConfig);
+//        });
+
         mineBlocks.put(Material.STONE, 0.5);
         mineBlocks.put(Material.EMERALD_ORE, 0.5);
 
@@ -144,16 +151,16 @@ public class PrivateMines extends JavaPlugin {
 //            mine.setMineOwner(uuid);
 //            mine.setMineData(mineData);
             Bukkit.getLogger().info("DataBlock: " + dataBlock);
-            Bukkit.getLogger().info("DataBlock Mine: " + dataBlock.get("mine"));
-            Bukkit.getLogger().info("DataBlock MineData: " + dataBlock.get("mineData"));
             Bukkit.getLogger().info("DataBlock Owner: " + dataBlock.get("owner"));
+            Bukkit.getLogger().info("DataBlock mine type name: " + dataBlock.get("name"));
+            Bukkit.getLogger().info("DataBlock mine location: " + dataBlock.get("location"));
         });
 
         // Loads the mines back after each reboot (fixes vanishing mines)
 
-        mines.forEach((string, storageConfig) -> {
-            Bukkit.getLogger().info("Loading mine " + string + " back!");
-        });
+//        mines.forEach((string, storageConfig) -> {
+//            Bukkit.getLogger().info("Loading mine " + string + " back!");
+//        });
 
 //        if (!minesConfig.configExists()) {
 //            return;
@@ -196,6 +203,9 @@ public class PrivateMines extends JavaPlugin {
         mineDataMap.clear();
         getLogger().info("Mine data map after: " + mineDataMap);
         getLogger().info("Saving and closing the BlockDataManager...");
+        blockDataManager.getAll().forEach(dataBlock -> {
+            Bukkit.getLogger().info("Saving data block: " + dataBlock);
+        });
         blockDataManager.saveAndClose();
     }
 

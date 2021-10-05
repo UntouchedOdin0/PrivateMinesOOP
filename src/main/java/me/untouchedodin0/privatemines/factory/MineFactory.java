@@ -36,6 +36,7 @@ import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.configmanager.ConfigManager;
+import redempt.redlib.misc.LocationUtils;
 
 public class MineFactory {
 
@@ -63,6 +64,7 @@ public class MineFactory {
         if (defaultMineData == null) {
             privateMines.getLogger().warning("Failed to create mine due to defaultMineData being null");
         }
+        Block block = location.getBlock();
         String userUUID = player.getUniqueId().toString();
         Mine mine = new Mine(privateMines, utils);
         mine.setMineOwner(player.getUniqueId());
@@ -71,25 +73,36 @@ public class MineFactory {
         mine.setWeightedRandom(defaultMineData.getWeightedRandom());
         mine.build();
         mineStorage.addMine(player.getUniqueId(), mine);
+        DataBlock dataBlock = blockDataManager.getDataBlock(block);
+        dataBlock.set("owner", String.valueOf(userUUID));
+        dataBlock.set("name", defaultMineData.getName());
+        dataBlock.set("location", LocationUtils.toString(location));
+        dataBlock.set("type", defaultMineData.getName());
+        blockDataManager.save();
+        DataBlock testingDataBlock = blockDataManager.getExisting(block);
+        if (testingDataBlock != null) {
+            String owner = testingDataBlock.getString("owner");
+            String name = testingDataBlock.getString("name");
+            String locationString = testingDataBlock.getString("location");
 
-        String mines = "mines.";
-        String mineType = mine.getMineData().getName();
-        minesConfig.getConfig().set(mines + userUUID + ".type", mineType);
-        minesConfig.getConfig().set(mines + userUUID + ".location", location);
-        minesConfig.getConfig().set(mines + userUUID + ".spawnLocation", mine.getSpawnLocation());
-        minesConfig.getConfig().set(mines + userUUID + ".npcLocation", mine.getNpcLocation());
-        minesConfig.getConfig().set(mines + userUUID + ".corner1", mine.getCuboidRegion().getStart());
-        minesConfig.getConfig().set(mines + userUUID + ".corner2", mine.getCuboidRegion().getEnd());
-        minesConfig.getConfig().set(mines + userUUID + ".mineOwner", mine.getMineOwner().toString());
-        minesConfig.getConfig().set(mines + userUUID + ".weightedRandom", mine.getWeightedRandom().toString());
-        minesConfig.getConfig().set(mines + userUUID + ".isAutoResetting", mine.isAutoResetting());
-        minesConfig.save();
+            Bukkit.getLogger().info("owner: " + owner);
+            Bukkit.getLogger().info("name: " + name);
+            Bukkit.getLogger().info("location: " + locationString);
+        }
 
-//        Block block = location.getBlock();
-//        DataBlock dataBlock = blockDataManager.getDataBlock(block);
-//        dataBlock.set("mine", mine);
-//        dataBlock.set("mineData", mine.getMineData().getName());
-//        blockDataManager.save();
+//        String mines = "mines.";
+//        String mineType = mine.getMineData().getName();
+//        minesConfig.getConfig().set(mines + userUUID + ".type", mineType);
+//        minesConfig.getConfig().set(mines + userUUID + ".location", location);
+//        minesConfig.getConfig().set(mines + userUUID + ".spawnLocation", mine.getSpawnLocation());
+//        minesConfig.getConfig().set(mines + userUUID + ".npcLocation", mine.getNpcLocation());
+//        minesConfig.getConfig().set(mines + userUUID + ".corner1", mine.getCuboidRegion().getStart());
+//        minesConfig.getConfig().set(mines + userUUID + ".corner2", mine.getCuboidRegion().getEnd());
+//        minesConfig.getConfig().set(mines + userUUID + ".mineOwner", mine.getMineOwner().toString());
+//        minesConfig.getConfig().set(mines + userUUID + ".weightedRandom", mine.getWeightedRandom().toString());
+//        minesConfig.getConfig().set(mines + userUUID + ".isAutoResetting", mine.isAutoResetting());
+//        minesConfig.save();
+
         mine.reset();
 //        if (debugMode) {
 //            privateMines.getLogger().info("createMine block: " + block);
