@@ -35,7 +35,6 @@ import me.untouchedodin0.privatemines.util.Utils;
 import me.untouchedodin0.privatemines.world.MineWorldManager;
 import me.untouchedodin0.privatemines.world.utils.MineLoopUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 import redempt.redlib.blockdata.BlockDataManager;
@@ -44,7 +43,6 @@ import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.configmanager.annotations.ConfigValue;
 import redempt.redlib.misc.LocationUtils;
-import redempt.redlib.region.CuboidRegion;
 
 import java.io.File;
 import java.io.IOException;
@@ -86,10 +84,6 @@ public class PrivateMines extends JavaPlugin {
 
 //    @ConfigValue
 //    private Map<String, StorageConfig> mines = ConfigManager.map(StorageConfig.class);
-
-    Location location;
-    Location corner1;
-    Location corner2;
 
     @Override
     public void onEnable() {

@@ -79,6 +79,8 @@ public class MineFactory {
         dataBlock.set("location", LocationUtils.toString(location));
         dataBlock.set("spawnLocation", LocationUtils.toString(mine.getSpawnLocation()));
         dataBlock.set("npcLocation", LocationUtils.toString(mine.getNpcLocation()));
+        dataBlock.set("corner1", LocationUtils.toString(mine.getCorner1()));
+        dataBlock.set("corner2", LocationUtils.toString(mine.getCorner2()));
 
 //        dataBlock.set("name", defaultMineData.getName());
 //        dataBlock.set("corner1", mine.getCorner1());
