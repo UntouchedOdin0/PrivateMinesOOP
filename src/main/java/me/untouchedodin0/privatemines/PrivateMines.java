@@ -44,6 +44,7 @@ import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.configmanager.annotations.ConfigValue;
 import redempt.redlib.misc.LocationUtils;
+import redempt.redlib.region.CuboidRegion;
 
 import java.io.File;
 import java.io.IOException;
@@ -85,6 +86,10 @@ public class PrivateMines extends JavaPlugin {
 
 //    @ConfigValue
 //    private Map<String, StorageConfig> mines = ConfigManager.map(StorageConfig.class);
+
+    Location location;
+    Location corner1;
+    Location corner2;
 
     @Override
     public void onEnable() {
@@ -158,21 +163,27 @@ public class PrivateMines extends JavaPlugin {
 
             UUID playerUUID = UUID.fromString(dataBlock.getString("owner"));
             String typeName = String.valueOf(dataBlock.getString("type"));
-            Location location = LocationUtils.fromString(dataBlock.getString("location"));
+            String locationName = String.valueOf(dataBlock.getString("location"));
+            String spawnLocationName = String.valueOf(dataBlock.getString("spawnLocation"));
+            String npcLocationName = String.valueOf(dataBlock.getString("npcLocation"));
 
             Mine mine = new Mine(this, utils);
             MineData mineData = getMineDataMap().get(typeName);
             mine.setMineOwner(playerUUID);
             mine.setMineData(mineData);
-            mine.setMineLocation(location);
+            mine.setMineLocation(LocationUtils.fromString(locationName));
+            mine.setSpawnLocation(LocationUtils.fromString(spawnLocationName));
+            mine.setNpcLocation(LocationUtils.fromString(npcLocationName));
 
             mineStorage.addMine(playerUUID, mine);
 
-            getLogger().info("typeName: " + typeName);
             getLogger().info("playerUUID: " + playerUUID);
-            getLogger().info("mineData: " + mineData);
-            getLogger().info("location: " + location);
+            getLogger().info("typeName: " + typeName);
             getLogger().info("mine: " + mine);
+            getLogger().info("mineData: " + mineData);
+            getLogger().info("mineLocation: " + mine.getMineLocation());
+            getLogger().info("spawnLocation: " + mine.getSpawnLocation());
+            getLogger().info("npcLocation: " + mine.getNpcLocation());
 
             Bukkit.getLogger().info("mines AFTER: " + mineStorage.getMines());
         });

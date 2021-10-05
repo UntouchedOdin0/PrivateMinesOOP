@@ -77,20 +77,26 @@ public class MineFactory {
         dataBlock.set("owner", String.valueOf(userUUID));
         dataBlock.set("type", defaultMineData.getName());
         dataBlock.set("location", LocationUtils.toString(location));
+        dataBlock.set("spawnLocation", LocationUtils.toString(mine.getSpawnLocation()));
+        dataBlock.set("npcLocation", LocationUtils.toString(mine.getNpcLocation()));
 
 //        dataBlock.set("name", defaultMineData.getName());
 //        dataBlock.set("corner1", mine.getCorner1());
 //        dataBlock.set("corner2", mine.getCorner2());
 
         blockDataManager.save();
-        DataBlock testingDataBlock = blockDataManager.getExisting(block);
-        if (testingDataBlock != null) {
-            String owner = testingDataBlock.getString("owner");
-            String type = testingDataBlock.getString("type");
-            String locationString = testingDataBlock.getString("location");
+        DataBlock mineDataBlock = blockDataManager.getExisting(block);
+        if (mineDataBlock != null) {
+            String owner = mineDataBlock.getString("owner");
+            String type = mineDataBlock.getString("type");
+            String locationString = mineDataBlock.getString("location");
+            String spawnLocationString = mineDataBlock.getString("spawnLocation");
+            String npcLocationString = mineDataBlock.getString("npcLocation");
 
             Bukkit.getLogger().info("owner: " + owner);
             Bukkit.getLogger().info("location: " + locationString);
+            Bukkit.getLogger().info("spawnLocation: " + spawnLocationString);
+            Bukkit.getLogger().info("npcLocation: " + npcLocationString);
             Bukkit.getLogger().info("type: " + type);
         }
 

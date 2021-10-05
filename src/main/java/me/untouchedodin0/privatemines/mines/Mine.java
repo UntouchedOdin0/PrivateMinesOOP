@@ -114,11 +114,27 @@ public class Mine {
     }
 
     /**
+     * @param spawnLocation - The location where the player should spawn
+     */
+
+    public void setSpawnLocation(Location spawnLocation) {
+        this.spawnLocation = mineLocation;
+    }
+
+    /**
      * @return Location - The location of where the npc location is in the world
      */
 
     public Location getNpcLocation() {
         return npcLocation;
+    }
+
+    /**
+     * @param npcLocation - The location of where the npc should go
+     */
+
+    public void setNpcLocation(Location npcLocation) {
+        this.npcLocation = npcLocation;
     }
 
     /**
