@@ -35,6 +35,7 @@ import me.untouchedodin0.privatemines.util.Utils;
 import me.untouchedodin0.privatemines.world.MineWorldManager;
 import me.untouchedodin0.privatemines.world.utils.MineLoopUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 import redempt.redlib.blockdata.BlockDataManager;
@@ -154,6 +155,8 @@ public class PrivateMines extends JavaPlugin {
             getLogger().info("DataBlock Owner: " + dataBlock.get("owner"));
             getLogger().info("DataBlock mine type name: " + dataBlock.get("type"));
             getLogger().info("DataBlock mine location: " + dataBlock.get("location"));
+            getLogger().info("DataBlock spawnLocation location: " + dataBlock.get("spawnLocation"));
+            getLogger().info("DataBlock npcLocation location: " + dataBlock.get("npcLocation"));
 
             UUID playerUUID = UUID.fromString(dataBlock.getString("owner"));
             String typeName = String.valueOf(dataBlock.getString("type"));
@@ -161,13 +164,17 @@ public class PrivateMines extends JavaPlugin {
             String spawnLocationName = String.valueOf(dataBlock.getString("spawnLocation"));
             String npcLocationName = String.valueOf(dataBlock.getString("npcLocation"));
 
+            Location location = LocationUtils.fromString(locationName);
+            Location spawnLocation = LocationUtils.fromString(spawnLocationName);
+            Location npcLocation = LocationUtils.fromString(npcLocationName);
+
             Mine mine = new Mine(this, utils);
             MineData mineData = getMineDataMap().get(typeName);
             mine.setMineOwner(playerUUID);
             mine.setMineData(mineData);
-            mine.setMineLocation(LocationUtils.fromString(locationName));
-            mine.setSpawnLocation(LocationUtils.fromString(spawnLocationName));
-            mine.setNpcLocation(LocationUtils.fromString(npcLocationName));
+            mine.setMineLocation(location);
+            mine.setSpawnLocation(spawnLocation);
+            mine.setNpcLocation(npcLocation);
 
             mineStorage.addMine(playerUUID, mine);
 
@@ -175,9 +182,9 @@ public class PrivateMines extends JavaPlugin {
             getLogger().info("typeName: " + typeName);
             getLogger().info("mine: " + mine);
             getLogger().info("mineData: " + mineData);
-            getLogger().info("mineLocation: " + mine.getMineLocation());
-            getLogger().info("spawnLocation: " + mine.getSpawnLocation());
-            getLogger().info("npcLocation: " + mine.getNpcLocation());
+            getLogger().info("mineLocation: " + location);
+            getLogger().info("spawnLocation: " + spawnLocation);
+            getLogger().info("npcLocation: " + npcLocation);
 
             Bukkit.getLogger().info("mines AFTER: " + mineStorage.getMines());
         });
