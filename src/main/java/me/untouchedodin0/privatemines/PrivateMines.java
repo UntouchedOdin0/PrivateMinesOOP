@@ -44,6 +44,7 @@ import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.configmanager.annotations.ConfigValue;
 import redempt.redlib.misc.LocationUtils;
+import redempt.redlib.region.CuboidRegion;
 
 import java.io.File;
 import java.io.IOException;
@@ -157,16 +158,25 @@ public class PrivateMines extends JavaPlugin {
             getLogger().info("DataBlock mine location: " + dataBlock.get("location"));
             getLogger().info("DataBlock spawnLocation location: " + dataBlock.get("spawnLocation"));
             getLogger().info("DataBlock npcLocation location: " + dataBlock.get("npcLocation"));
+            getLogger().info("DataBlock corner1 location: " + dataBlock.get("corner1"));
+            getLogger().info("DataBlock corner2 location: " + dataBlock.get("corner2"));
 
             UUID playerUUID = UUID.fromString(dataBlock.getString("owner"));
             String typeName = String.valueOf(dataBlock.getString("type"));
             String locationName = String.valueOf(dataBlock.getString("location"));
             String spawnLocationName = String.valueOf(dataBlock.getString("spawnLocation"));
             String npcLocationName = String.valueOf(dataBlock.getString("npcLocation"));
+            String corner1Name = String.valueOf(dataBlock.getString("corner1"));
+            String corner2Name = String.valueOf(dataBlock.getString("corner2"));
 
             Location location = LocationUtils.fromString(locationName);
             Location spawnLocation = LocationUtils.fromString(spawnLocationName);
             Location npcLocation = LocationUtils.fromString(npcLocationName);
+            Location corner1Location = LocationUtils.fromString(corner1Name);
+            Location corner2Location = LocationUtils.fromString(corner2Name);
+
+            CuboidRegion cuboidRegion = new CuboidRegion
+                    (corner1Location, corner2Location);
 
             Mine mine = new Mine(this, utils);
             MineData mineData = getMineDataMap().get(typeName);
@@ -175,6 +185,8 @@ public class PrivateMines extends JavaPlugin {
             mine.setMineLocation(location);
             mine.setSpawnLocation(spawnLocation);
             mine.setNpcLocation(npcLocation);
+            mine.setCuboidRegion(cuboidRegion);
+            mine.reset();
 
             mineStorage.addMine(playerUUID, mine);
 
@@ -182,9 +194,20 @@ public class PrivateMines extends JavaPlugin {
             getLogger().info("typeName: " + typeName);
             getLogger().info("mine: " + mine);
             getLogger().info("mineData: " + mineData);
-            getLogger().info("mineLocation: " + location);
-            getLogger().info("spawnLocation: " + spawnLocation);
-            getLogger().info("npcLocation: " + npcLocation);
+            getLogger().info("mineLocation: " + mine.getMineLocation());
+            getLogger().info("spawnLocation: " + mine.getSpawnLocation());
+            getLogger().info("npcLocation: " + mine.getNpcLocation());
+            getLogger().info("cuboid region Start: " + mine.getCuboidRegion().getStart());
+            getLogger().info("cuboid region End: " + mine.getCuboidRegion().getEnd());
+            getLogger().info("cuboidRegion: " + mine.getCuboidRegion());
+
+//            getLogger().info("mineData: " + mineData);
+//            getLogger().info("mineLocation: " + location);
+//            getLogger().info("spawnLocation: " + spawnLocation);
+//            getLogger().info("npcLocation: " + npcLocation);
+//            getLogger().info("corner1Location: " + corner1Location);
+//            getLogger().info("corner2Location: " + corner2Location);
+//            getLogger().info("cuboidRegion: " + cuboidRegion);
 
             Bukkit.getLogger().info("mines AFTER: " + mineStorage.getMines());
         });
