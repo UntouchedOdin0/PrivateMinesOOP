@@ -35,6 +35,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.blockdata.DataBlock;
+import redempt.redlib.misc.LocationUtils;
 import redempt.redlib.misc.Task;
 import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.Structure;
@@ -231,12 +232,20 @@ public class Mine {
         this.corner1 = utils.getRelative(structure, mineData.getCorner1());
         this.corner2 = utils.getRelative(structure, mineData.getCorner2());
 
+        BlockDataManager blockDataManager = privateMines.getBlockDataManager();
+        DataBlock dataBlock = blockDataManager.getDataBlock(mineLocation.getBlock());
         CuboidRegion cuboidRegion = new CuboidRegion(corner1, corner2);
         cuboidRegion.expand(1, 0, 1, 0, 1, 0);
         setCuboidRegion(cuboidRegion);
         if (airMaterial != null) {
             spawnLocation.getBlock().setType(airMaterial, false);
             npcLocation.getBlock().setType(airMaterial, false);
+            dataBlock.set("location", LocationUtils.toString(mineLocation));
+            dataBlock.set("spawnLocation", LocationUtils.toString(spawnLocation));
+            dataBlock.set("npcLocation", LocationUtils.toString(npcLocation));
+            dataBlock.set("corner1", LocationUtils.toString(corner1));
+            dataBlock.set("corner2", LocationUtils.toString(corner2));
+            blockDataManager.save();
         }
     }
 
