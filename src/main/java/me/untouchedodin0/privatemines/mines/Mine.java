@@ -146,6 +146,14 @@ public class Mine {
         return corner1;
     }
 
+    public void setCorner1(Location corner1) {
+        this.corner1 = corner1;
+    }
+
+    public void setCorner2(Location corner2) {
+        this.corner2 = corner2;
+    }
+
     /**
      * @return Location - The corner 2 location
      */
@@ -210,6 +218,13 @@ public class Mine {
         this.isAutoResetting = isAutoResetting;
     }
 
+    public Location getRelative(int[] relative) {
+        return structure
+                .getRelative(relative[0], relative[1], relative[2])
+                .getBlock()
+                .getLocation();
+    }
+
     public void build() {
         if (mineData == null) {
             Bukkit.getLogger().info("Failed to build structure due to the mine data being null!");
@@ -224,8 +239,8 @@ public class Mine {
             privateMines.getLogger().info("Location " + mineLocation);
         }
 
-        mineData.getMultiBlockStructure().build(mineLocation);
-        this.structure = mineData.getMultiBlockStructure().assumeAt(mineLocation);
+        this.structure = mineData.getMultiBlockStructure().build(mineLocation);
+//        this.structure = mineData.getMultiBlockStructure().assumeAt(mineLocation);
         this.spawnLocation = utils.getRelative(structure, mineData.getSpawnLocation());
         this.npcLocation = utils.getRelative(structure, mineData.getNpcLocation());
 

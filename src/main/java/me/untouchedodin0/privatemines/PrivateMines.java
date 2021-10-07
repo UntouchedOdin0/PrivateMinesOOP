@@ -44,6 +44,7 @@ import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.configmanager.annotations.ConfigValue;
 import redempt.redlib.misc.LocationUtils;
+import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
 import java.io.File;
@@ -55,6 +56,13 @@ public class PrivateMines extends JavaPlugin {
     private final Map<String, MineData> mineDataMap = new HashMap<>();
     private final TreeMap<String, MineData> mineDataTreeMap = new TreeMap<>();
     private static PrivateMines privateMines;
+
+    private Location spawnLocation;
+    private Location npcLocation;
+    private Location corner1;
+    private Location corner2;
+
+    private Location[][] cornerLocations;
 
     EnumMap<Material, Double> mineBlocks = new EnumMap<>(Material.class);
     EnumMap<Material, Double> mineBlocks2 = new EnumMap<>(Material.class);
@@ -147,54 +155,65 @@ public class PrivateMines extends JavaPlugin {
 
         Bukkit.getLogger().info("mines BEFORE: " + mineStorage.getMines());
         blockDataManager.getAll().forEach(dataBlock -> {
+            MineData mineData = getMineDataMap().get(dataBlock.getString("type"));
+
 //            Mine mine = new Mine(this, utils);
 //            MineData mineData = mineDataMap.get(dataBlock.getString("mineData"));
 //            UUID uuid = UUID.fromString(dataBlock.getString("owner"));
 //            mine.setMineOwner(uuid);
 //            mine.setMineData(mineData);
-            getLogger().info("DataBlock: " + dataBlock);
-            getLogger().info("DataBlock Owner: " + dataBlock.get("owner"));
-            getLogger().info("DataBlock mine type name: " + dataBlock.get("type"));
-            getLogger().info("DataBlock mine location: " + dataBlock.get("location"));
-            getLogger().info("DataBlock spawnLocation location: " + dataBlock.get("spawnLocation"));
-            getLogger().info("DataBlock npcLocation location: " + dataBlock.get("npcLocation"));
-            getLogger().info("DataBlock corner1 location: " + dataBlock.get("corner1"));
-            getLogger().info("DataBlock corner2 location: " + dataBlock.get("corner2"));
+//            getLogger().info("DataBlock: " + dataBlock);
+//            getLogger().info("DataBlock Owner: " + dataBlock.get("owner"));
+//            getLogger().info("DataBlock mine type name: " + dataBlock.get("type"));
+//            getLogger().info("DataBlock mine location: " + dataBlock.get("location"));
+//            getLogger().info("DataBlock spawnLocation location: " + dataBlock.get("spawnLocation"));
+//            getLogger().info("DataBlock npcLocation location: " + dataBlock.get("npcLocation"));
+//            getLogger().info("DataBlock corner1 location: " + dataBlock.get("corner1"));
+//            getLogger().info("DataBlock corner2 location: " + dataBlock.get("corner2"));
+//            getLogger().info("DataBlock structure structure: " + dataBlock.get("structure"));
+//
+//            String typeName = String.valueOf(dataBlock.getString("type"));
+//            String locationName = String.valueOf(dataBlock.getString("location"));
+//            String spawnLocationName = String.valueOf(dataBlock.getString("spawnLocation"));
+//            String npcLocationName = String.valueOf(dataBlock.getString("npcLocation"));
 
-            UUID playerUUID = UUID.fromString(dataBlock.getString("owner"));
-            String typeName = String.valueOf(dataBlock.getString("type"));
-            String locationName = String.valueOf(dataBlock.getString("location"));
-            String spawnLocationName = String.valueOf(dataBlock.getString("spawnLocation"));
-            String npcLocationName = String.valueOf(dataBlock.getString("npcLocation"));
-            String corner1Name = String.valueOf(dataBlock.getString("corner1"));
-            String corner2Name = String.valueOf(dataBlock.getString("corner2"));
 
-            Location location = LocationUtils.fromString(locationName);
-            Location spawnLocation = LocationUtils.fromString(spawnLocationName);
-            Location npcLocation = LocationUtils.fromString(npcLocationName);
-            Location corner1Location = LocationUtils.fromString(corner1Name);
-            Location corner2Location = LocationUtils.fromString(corner2Name);
+//            Location location = LocationUtils.fromString(locationName);
+//            Location spawnLocation = LocationUtils.fromString(spawnLocationName);
+//            Location npcLocation = LocationUtils.fromString(npcLocationName);
 
-            CuboidRegion cuboidRegion = new CuboidRegion
-                    (corner1Location, corner2Location);
 
             Mine mine = new Mine(this, utils);
-            MineData mineData = getMineDataMap().get(typeName);
-            mine.setMineOwner(playerUUID);
-            mine.setMineData(mineData);
-            mine.setMineLocation(location);
+
+            UUID playerUUID = UUID.fromString(dataBlock.getString("owner"));
+
+            int[] relativeSpawn = mineData.getSpawnLocation();
+            int[] relativeNpc = mineData.getNpcLocation();
+            int[] relativeCorner1 = mineData.getCorner1();
+            int[] relativeCorner2 = mineData.getCorner2();
+
+            this.spawnLocation = mine.getRelative(relativeSpawn);
+            this.npcLocation = mine.getRelative(relativeNpc);
+            this.corner1 = mine.getRelative(relativeCorner1);
+            this.corner2 = mine.getRelative(relativeCorner2);
+
+            CuboidRegion cuboidRegion = new CuboidRegion(corner1, corner2);
+
+//            mine.setMineLocation(location);
             mine.setSpawnLocation(spawnLocation);
             mine.setNpcLocation(npcLocation);
             mine.setCuboidRegion(cuboidRegion);
             mine.reset();
 
+            mine.setMineOwner(playerUUID);
+            mine.setMineData(mineData);
+
             mineStorage.addMine(playerUUID, mine);
 
             getLogger().info("playerUUID: " + playerUUID);
-            getLogger().info("typeName: " + typeName);
             getLogger().info("mine: " + mine);
             getLogger().info("mineData: " + mineData);
-            getLogger().info("mineLocation: " + mine.getMineLocation());
+//            getLogger().info("mineLocation: " + mine.getMineLocation());
             getLogger().info("spawnLocation: " + mine.getSpawnLocation());
             getLogger().info("npcLocation: " + mine.getNpcLocation());
             getLogger().info("cuboid region Start: " + mine.getCuboidRegion().getStart());
