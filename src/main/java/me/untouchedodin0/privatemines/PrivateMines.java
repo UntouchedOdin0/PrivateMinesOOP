@@ -28,14 +28,13 @@ import me.untouchedodin0.privatemines.commands.PrivateMinesCommand;
 import me.untouchedodin0.privatemines.config.MineConfig;
 import me.untouchedodin0.privatemines.factory.MineFactory;
 import me.untouchedodin0.privatemines.mines.Mine;
-import me.untouchedodin0.privatemines.mines.MineData;
+import me.untouchedodin0.privatemines.mines.MineType;
 import me.untouchedodin0.privatemines.storage.MineStorage;
 import me.untouchedodin0.privatemines.util.Metrics;
 import me.untouchedodin0.privatemines.util.Utils;
 import me.untouchedodin0.privatemines.world.MineWorldManager;
 import me.untouchedodin0.privatemines.world.utils.MineLoopUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 import redempt.redlib.blockdata.BlockDataManager;
@@ -43,9 +42,6 @@ import redempt.redlib.commandmanager.CommandParser;
 import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.configmanager.annotations.ConfigValue;
-import redempt.redlib.misc.LocationUtils;
-import redempt.redlib.multiblock.Structure;
-import redempt.redlib.region.CuboidRegion;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,16 +49,10 @@ import java.util.*;
 
 public class PrivateMines extends JavaPlugin {
 
-    private final Map<String, MineData> mineDataMap = new HashMap<>();
-    private final TreeMap<String, MineData> mineDataTreeMap = new TreeMap<>();
+    private final Map<String, MineType> mineDataMap = new HashMap<>();
+    private final TreeMap<String, MineType> mineDataTreeMap = new TreeMap<>();
     private static PrivateMines privateMines;
 
-    private Location spawnLocation;
-    private Location npcLocation;
-    private Location corner1;
-    private Location corner2;
-
-    private Location[][] cornerLocations;
 
     EnumMap<Material, Double> mineBlocks = new EnumMap<>(Material.class);
     EnumMap<Material, Double> mineBlocks2 = new EnumMap<>(Material.class);
@@ -155,7 +145,7 @@ public class PrivateMines extends JavaPlugin {
 
         Bukkit.getLogger().info("mines BEFORE: " + mineStorage.getMines());
         blockDataManager.getAll().forEach(dataBlock -> {
-            MineData mineData = getMineDataMap().get(dataBlock.getString("type"));
+            MineType mineType = getMineDataMap().get(dataBlock.getString("type"));
 
 //            Mine mine = new Mine(this, utils);
 //            MineData mineData = mineDataMap.get(dataBlock.getString("mineData"));
@@ -187,38 +177,49 @@ public class PrivateMines extends JavaPlugin {
 
             UUID playerUUID = UUID.fromString(dataBlock.getString("owner"));
 
-            int[] relativeSpawn = mineData.getSpawnLocation();
-            int[] relativeNpc = mineData.getNpcLocation();
-            int[] relativeCorner1 = mineData.getCorner1();
-            int[] relativeCorner2 = mineData.getCorner2();
 
-            this.spawnLocation = mine.getRelative(relativeSpawn);
-            this.npcLocation = mine.getRelative(relativeNpc);
-            this.corner1 = mine.getRelative(relativeCorner1);
-            this.corner2 = mine.getRelative(relativeCorner2);
+            int[] relativeSpawn = mineType.getSpawnLocation();
+            int[] relativeNpc = mineType.getNpcLocation();
+            int[] relativeCorner1 = mineType.getCorner1();
+            int[] relativeCorner2 = mineType.getCorner2();
 
-            CuboidRegion cuboidRegion = new CuboidRegion(corner1, corner2);
+//            this.structure = mine.getStructure();
+//            this.structure = mineData.getStructure();
+//            this.spawnLocation = mine.getRelative(relativeSpawn);
+//            this.npcLocation = mine.getRelative(relativeNpc);
+//            this.corner1 = mine.getRelative(relativeCorner1);
+//            this.corner2 = mine.getRelative(relativeCorner2);
+
 
 //            mine.setMineLocation(location);
-            mine.setSpawnLocation(spawnLocation);
-            mine.setNpcLocation(npcLocation);
-            mine.setCuboidRegion(cuboidRegion);
-            mine.reset();
 
+//            this.spawnLocation = mineType.getSpawnLocation();
+//            this.npcLocation = mineType.getNpcLocation();
+//            this.corner1 = mineType.getCorner1();
+//            this.corner2 = mineType.getCorner2();
+
+//            CuboidRegion cuboidRegion = new CuboidRegion(mine.getRelative(corner1), mine.getRelative(corner2));
+
+//            mine.setSpawnLocation(mine.getRelative(spawnLocation));
+//            mine.setNpcLocation(mine.getRelative(npcLocation));
+//            mine.setCuboidRegion(cuboidRegion);
+            mine.reset();
             mine.setMineOwner(playerUUID);
-            mine.setMineData(mineData);
+            mine.setMineData(mineType);
 
             mineStorage.addMine(playerUUID, mine);
 
-            getLogger().info("playerUUID: " + playerUUID);
-            getLogger().info("mine: " + mine);
-            getLogger().info("mineData: " + mineData);
+//            getLogger().info("playerUUID: " + playerUUID);
+//            getLogger().info("mine: " + mine);
+//            getLogger().info("mineData: " + mineType);
 //            getLogger().info("mineLocation: " + mine.getMineLocation());
-            getLogger().info("spawnLocation: " + mine.getSpawnLocation());
-            getLogger().info("npcLocation: " + mine.getNpcLocation());
-            getLogger().info("cuboid region Start: " + mine.getCuboidRegion().getStart());
-            getLogger().info("cuboid region End: " + mine.getCuboidRegion().getEnd());
-            getLogger().info("cuboidRegion: " + mine.getCuboidRegion());
+//            getLogger().info("spawnLocation: " + mine.getSpawnLocation());
+//            getLogger().info("npcLocation: " + mine.getNpcLocation());
+//            getLogger().info("spawnLocation: " + spawnLocation);
+//            getLogger().info("npcLocation: " + npcLocation);
+//            getLogger().info("cuboid region Start: " + mine.getCuboidRegion().getStart());
+//            getLogger().info("cuboid region End: " + mine.getCuboidRegion().getEnd());
+//            getLogger().info("cuboidRegion: " + mine.getCuboidRegion());
 
 //            getLogger().info("mineData: " + mineData);
 //            getLogger().info("mineLocation: " + location);
@@ -292,16 +293,16 @@ public class PrivateMines extends JavaPlugin {
         Adds a MineData to the maps
      */
 
-    public void addMineData(String name, MineData mineData) {
-        mineDataMap.putIfAbsent(name, mineData);
-        mineDataTreeMap.put(name, mineData);
+    public void addMineData(String name, MineType mineType) {
+        mineDataMap.putIfAbsent(name, mineType);
+        mineDataTreeMap.put(name, mineType);
     }
 
     /*
         Gets a map of all the MineData types
      */
 
-    public Map<String, MineData> getMineDataMap() {
+    public Map<String, MineType> getMineDataMap() {
         return mineDataMap;
     }
 
@@ -309,7 +310,7 @@ public class PrivateMines extends JavaPlugin {
         Gets the default mine data
      */
 
-    public MineData getDefaultMineData() {
+    public MineType getDefaultMineData() {
         if (mineDataTreeMap.isEmpty()) {
             Bukkit.getLogger().info("No default mine data was found!");
             Bukkit.getLogger().info("Create a mine type in the mineTypes");
@@ -349,7 +350,7 @@ public class PrivateMines extends JavaPlugin {
         Gets the next MineData from the TreeMap using String
      */
 
-    public MineData getNextMineData(String mineData) {
+    public MineType getNextMineData(String mineData) {
         return mineDataTreeMap.higherEntry(mineData).getValue();
     }
 
@@ -358,21 +359,21 @@ public class PrivateMines extends JavaPlugin {
         Gets the next MineData from the TreeMap using MineData
      */
 
-    public MineData getNextMineData(MineData mineData) {
-        MineData lastValue = mineDataTreeMap.lastEntry().getValue();
-        if (mineDataTreeMap.higherEntry(mineData.getName()) == null) {
+    public MineType getNextMineData(MineType mineType) {
+        MineType lastValue = mineDataTreeMap.lastEntry().getValue();
+        if (mineDataTreeMap.higherEntry(mineType.getName()) == null) {
             return lastValue;
         }
-        return mineDataTreeMap.higherEntry(mineData.getName()).getValue();
+        return mineDataTreeMap.higherEntry(mineType.getName()).getValue();
     }
 
     /*
         Checks is the mine is currently fully maxed out
      */
 
-    public boolean isAtLastMineData(MineData mineData) {
-        MineData lastValue = mineDataTreeMap.lastEntry().getValue();
-        return mineData.equals(lastValue);
+    public boolean isAtLastMineData(MineType mineType) {
+        MineType lastValue = mineDataTreeMap.lastEntry().getValue();
+        return mineType.equals(lastValue);
     }
 
     /*

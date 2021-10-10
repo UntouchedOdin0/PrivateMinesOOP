@@ -55,7 +55,7 @@ public class Mine {
     private final PrivateMines privateMines;
     private final Utils utils;
     private final Material airMaterial = XMaterial.AIR.parseMaterial();
-    private MineData mineData;
+    private MineType mineType;
     private Location mineLocation;
     private Location spawnLocation;
     private Location npcLocation;
@@ -78,16 +78,16 @@ public class Mine {
      * @return MineData - The mine data for the players mine
      */
 
-    public MineData getMineData() {
-        return mineData;
+    public MineType getMineData() {
+        return mineType;
     }
 
     /**
-     * @param mineData - The mine data to be set for the Mine
+     * @param mineType - The mine data to be set for the Mine
      */
 
-    public void setMineData(MineData mineData) {
-        this.mineData = mineData;
+    public void setMineData(MineType mineType) {
+        this.mineType = mineType;
     }
 
     /**
@@ -202,6 +202,10 @@ public class Mine {
         return structure;
     }
 
+    public void setStructure(Structure structure) {
+        this.structure = structure;
+    }
+
     public WeightedRandom<Material> getWeightedRandom() {
         return weightedRandom;
     }
@@ -218,15 +222,15 @@ public class Mine {
         this.isAutoResetting = isAutoResetting;
     }
 
-    public Location getRelative(int[] relative) {
-        return structure
-                .getRelative(relative[0], relative[1], relative[2])
-                .getBlock()
-                .getLocation();
-    }
+//    public Location getRelative(int[] relative) {
+//        return structure
+//                .getRelative(relative[0], relative[1], relative[2])
+//                .getBlock()
+//                .getLocation();
+//    }
 
     public void build() {
-        if (mineData == null) {
+        if (mineType == null) {
             Bukkit.getLogger().info("Failed to build structure due to the mine data being null!");
         }
         PrivateMines privateMines = PrivateMines.getPlugin(PrivateMines.class);
@@ -235,17 +239,21 @@ public class Mine {
         Utils utils = new Utils(privateMines);
 
         if (debugMode) {
-            privateMines.getLogger().info("MultiBlockStructure: " + mineData.getMultiBlockStructure());
+            privateMines.getLogger().info("MultiBlockStructure: " + mineType.getMultiBlockStructure());
             privateMines.getLogger().info("Location " + mineLocation);
         }
 
-        this.structure = mineData.getMultiBlockStructure().build(mineLocation);
+        this.structure = mineType.getMultiBlockStructure().build(mineLocation);
 //        this.structure = mineData.getMultiBlockStructure().assumeAt(mineLocation);
-        this.spawnLocation = utils.getRelative(structure, mineData.getSpawnLocation());
-        this.npcLocation = utils.getRelative(structure, mineData.getNpcLocation());
+        if (this.structure == null) {
+            Bukkit.getLogger().info("Structure is null");
+        }
 
-        this.corner1 = utils.getRelative(structure, mineData.getCorner1());
-        this.corner2 = utils.getRelative(structure, mineData.getCorner2());
+//        this.spawnLocation =  getRelative(mineType.getSpawnLocation());
+//        this.npcLocation = getRelative(mineType.getNpcLocation());
+//
+//        this.corner1 = getRelative(mineType.getCorner1());
+//        this.corner2 = getRelative(mineType.getCorner2());
 
         BlockDataManager blockDataManager = privateMines.getBlockDataManager();
         DataBlock dataBlock = blockDataManager.getDataBlock(mineLocation.getBlock());
@@ -255,6 +263,13 @@ public class Mine {
         if (airMaterial != null) {
             spawnLocation.getBlock().setType(airMaterial, false);
             npcLocation.getBlock().setType(airMaterial, false);
+
+            privateMines.getLogger().info("structure: " + structure);
+            privateMines.getLogger().info("spawnLocation: " + spawnLocation);
+            privateMines.getLogger().info("npcLocation: " + npcLocation);
+            privateMines.getLogger().info("corner1: " + corner1);
+            privateMines.getLogger().info("corner2: " + corner2);
+
             dataBlock.set("location", LocationUtils.toString(mineLocation));
             dataBlock.set("spawnLocation", LocationUtils.toString(spawnLocation));
             dataBlock.set("npcLocation", LocationUtils.toString(npcLocation));
@@ -273,7 +288,7 @@ public class Mine {
 
     public void delete() {
         PrivateMines privateMines = PrivateMines.getPlugin(PrivateMines.class);
-        if (mineData == null) {
+        if (mineType == null) {
             privateMines.getLogger().info("Failed to delete the mine due to mine data being null!");
         }
         MineStorage mineStorage = privateMines.getMineStorage();
@@ -284,7 +299,7 @@ public class Mine {
             BlockDataManager blockDataManager = privateMines.getBlockDataManager();
             DataBlock dataBlock = blockDataManager.getDataBlock(mineLocation.getBlock());
             Location location = dataBlock.getBlock().getLocation();
-            this.structure = mineData.getMultiBlockStructure().assumeAt(location);
+            this.structure = mineType.getMultiBlockStructure().assumeAt(location);
             if (debugMode) {
                 privateMines.getLogger().info("delete Structure: " + structure);
             }
@@ -296,8 +311,9 @@ public class Mine {
 
     // Nice l
     public void reset() {
+        if (cuboidRegion == null) return;
         cuboidRegion.forEachBlock(block -> {
-            Material material = XMaterial.matchXMaterial(mineData.getWeightedRandom().roll()).parseMaterial();
+            Material material = XMaterial.matchXMaterial(mineType.getWeightedRandom().roll()).parseMaterial();
             if (material != null) {
                 block.setType(material);
             }
@@ -334,7 +350,7 @@ public class Mine {
         Utils utils = new Utils(privateMines);
         MineFactory mineFactory = privateMines.getMineFactory();
         MineStorage mineStorage = privateMines.getMineStorage();
-        MineData upgradeData = utils.getNextMineData(this);
+        MineType upgradeData = utils.getNextMineData(this);
         Player player = Bukkit.getPlayer(mineOwner);
 
         if (debugMode) {
@@ -342,7 +358,7 @@ public class Mine {
             Bukkit.getLogger().info("upgradeData Name: " + upgradeData.getName());
         }
 
-        if (privateMines.isAtLastMineData(mineData)) {
+        if (privateMines.isAtLastMineData(mineType)) {
             Bukkit.getLogger().info("Can't upgrade anymore, at highest!");
             return;
         }

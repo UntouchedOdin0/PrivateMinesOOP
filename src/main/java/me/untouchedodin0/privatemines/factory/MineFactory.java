@@ -26,7 +26,7 @@ package me.untouchedodin0.privatemines.factory;
 
 import me.untouchedodin0.privatemines.PrivateMines;
 import me.untouchedodin0.privatemines.mines.Mine;
-import me.untouchedodin0.privatemines.mines.MineData;
+import me.untouchedodin0.privatemines.mines.MineType;
 import me.untouchedodin0.privatemines.storage.MineStorage;
 import me.untouchedodin0.privatemines.util.Utils;
 import org.bukkit.Bukkit;
@@ -37,7 +37,6 @@ import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.misc.LocationUtils;
-import redempt.redlib.multiblock.MultiBlockStructure;
 import redempt.redlib.multiblock.Structure;
 
 public class MineFactory {
@@ -47,7 +46,7 @@ public class MineFactory {
     Utils utils;
     MineStorage mineStorage;
     MineFactory mineFactory;
-    MineData defaultMineData;
+    MineType defaultMineType;
     BlockDataManager blockDataManager;
     ConfigManager minesConfig;
     Structure structure;
@@ -57,14 +56,14 @@ public class MineFactory {
         this.utils = privateMines.getUtils();
         this.mineStorage = privateMines.getMineStorage();
         this.mineFactory = privateMines.getMineFactory();
-        this.defaultMineData = privateMines.getDefaultMineData();
+        this.defaultMineType = privateMines.getDefaultMineData();
         this.blockDataManager = blockDataManager;
         this.debugMode = privateMines.isDebugMode();
         this.minesConfig = privateMines.getMinesConfig();
     }
 
     public Mine createMine(Player player, Location location) {
-        if (defaultMineData == null) {
+        if (defaultMineType == null) {
             privateMines.getLogger().warning("Failed to create mine due to defaultMineData being null");
         }
 
@@ -74,15 +73,15 @@ public class MineFactory {
         Mine mine = new Mine(privateMines, utils);
         mine.setMineOwner(player.getUniqueId());
         mine.setMineLocation(location);
-        mine.setMineData(defaultMineData);
-        mine.setWeightedRandom(defaultMineData.getWeightedRandom());
+        mine.setMineData(defaultMineType);
+        mine.setWeightedRandom(defaultMineType.getWeightedRandom());
         mine.build();
 
-        Location corner1 = utils.getRelative(mine.getStructure(), defaultMineData.getCorner1());
-        Location corner2 = utils.getRelative(mine.getStructure(), defaultMineData.getCorner2());
+        Location corner1 = utils.getRelative(mine.getStructure(), defaultMineType.getCorner1());
+        Location corner2 = utils.getRelative(mine.getStructure(), defaultMineType.getCorner2());
 
-        Location spawnLocation = utils.getRelative(mine.getStructure(), defaultMineData.getSpawnLocation());
-        Location npcLocation = utils.getRelative(mine.getStructure(), defaultMineData.getNpcLocation());
+        Location spawnLocation = utils.getRelative(mine.getStructure(), defaultMineType.getSpawnLocation());
+        Location npcLocation = utils.getRelative(mine.getStructure(), defaultMineType.getNpcLocation());
 
         mine.setCorner1(corner1);
         mine.setCorner2(corner2);
@@ -95,7 +94,7 @@ public class MineFactory {
 
         DataBlock dataBlock = blockDataManager.getDataBlock(block);
         dataBlock.set("owner", String.valueOf(userUUID));
-        dataBlock.set("type", defaultMineData.getName());
+        dataBlock.set("type", defaultMineType.getName());
         dataBlock.set("location", LocationUtils.toString(location));
         dataBlock.set("spawnLocation", LocationUtils.toString(mine.getSpawnLocation()));
         dataBlock.set("npcLocation", LocationUtils.toString(mine.getNpcLocation()));
@@ -154,11 +153,11 @@ public class MineFactory {
     /**
      * @param player   - The target player to be given a mine
      * @param location - The spigot world location where to create the mine
-     * @param mineData - The mine data such as the MultiBlockStructure and the Materials
+     * @param mineType - The mine data such as the MultiBlockStructure and the Materials
      */
 
-    public Mine createMine(Player player, Location location, MineData mineData) {
-        if (mineData == null) {
+    public Mine createMine(Player player, Location location, MineType mineType) {
+        if (mineType == null) {
             privateMines.getLogger().warning("Failed to create mine due to defaultMineData being null");
         } else {
             String userUUID = player.getUniqueId().toString();
@@ -166,15 +165,15 @@ public class MineFactory {
             Mine mine = new Mine(privateMines, utils);
             mine.setMineOwner(player.getUniqueId());
             mine.setMineLocation(location);
-            mine.setMineData(mineData);
-            mine.setWeightedRandom(mineData.getWeightedRandom());
+            mine.setMineData(mineType);
+            mine.setWeightedRandom(mineType.getWeightedRandom());
             mine.build();
 
-            Location corner1 = utils.getRelative(mine.getStructure(), mineData.getCorner1());
-            Location corner2 = utils.getRelative(mine.getStructure(), mineData.getCorner2());
+            Location corner1 = utils.getRelative(mine.getStructure(), mineType.getCorner1());
+            Location corner2 = utils.getRelative(mine.getStructure(), mineType.getCorner2());
 
-            Location spawnLocation = utils.getRelative(mine.getStructure(), mineData.getSpawnLocation());
-            Location npcLocation = utils.getRelative(mine.getStructure(), mineData.getNpcLocation());
+            Location spawnLocation = utils.getRelative(mine.getStructure(), mineType.getSpawnLocation());
+            Location npcLocation = utils.getRelative(mine.getStructure(), mineType.getNpcLocation());
 
             mine.setCorner1(corner1);
             mine.setCorner2(corner2);
@@ -185,7 +184,7 @@ public class MineFactory {
             Block block = location.getBlock();
             DataBlock dataBlock = blockDataManager.getDataBlock(block);
             dataBlock.set("owner", String.valueOf(userUUID));
-            dataBlock.set("type", defaultMineData.getName());
+            dataBlock.set("type", defaultMineType.getName());
             dataBlock.set("location", LocationUtils.toString(location));
             dataBlock.set("spawnLocation", LocationUtils.toString(mine.getSpawnLocation()));
             dataBlock.set("npcLocation", LocationUtils.toString(mine.getNpcLocation()));

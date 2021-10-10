@@ -2,7 +2,7 @@ package me.untouchedodin0.privatemines.util;
 
 import me.untouchedodin0.privatemines.PrivateMines;
 import me.untouchedodin0.privatemines.mines.Mine;
-import me.untouchedodin0.privatemines.mines.MineData;
+import me.untouchedodin0.privatemines.mines.MineType;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import redempt.redlib.multiblock.Structure;
@@ -26,21 +26,21 @@ public class Utils {
     }
 
 
-    public MineData getNextMineData(Mine mine) {
-        MineData mineData = mine.getMineData();
-        MineData upgradeMineData;
-        boolean isAtLastMineData = privateMines.isAtLastMineData(mineData);
+    public MineType getNextMineData(Mine mine) {
+        MineType mineType = mine.getMineData();
+        MineType upgradeMineType;
+        boolean isAtLastMineData = privateMines.isAtLastMineData(mineType);
         if (isAtLastMineData) {
             privateMines.getLogger().info("Mine is already maxed out!");
-            return mineData;
+            return mineType;
         }
         if (debugMode) {
-            privateMines.getLogger().info("Current mine data Name: " + mineData.getName());
-            upgradeMineData = privateMines.getNextMineData(mineData);
-            privateMines.getLogger().info("Next mine data name: " + upgradeMineData.getName());
+            privateMines.getLogger().info("Current mine data Name: " + mineType.getName());
+            upgradeMineType = privateMines.getNextMineData(mineType);
+            privateMines.getLogger().info("Next mine data name: " + upgradeMineType.getName());
         }
-        upgradeMineData = privateMines.getNextMineData(mineData);
-        return upgradeMineData;
+        upgradeMineType = privateMines.getNextMineData(mineType);
+        return upgradeMineType;
     }
 
     public double getPercentageLeft(Mine mine) {

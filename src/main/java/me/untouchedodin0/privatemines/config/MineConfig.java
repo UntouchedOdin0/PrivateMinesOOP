@@ -25,7 +25,7 @@ SOFTWARE.
 package me.untouchedodin0.privatemines.config;
 
 import me.untouchedodin0.privatemines.PrivateMines;
-import me.untouchedodin0.privatemines.mines.MineData;
+import me.untouchedodin0.privatemines.mines.MineType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import redempt.redlib.configmanager.ConfigManager;
@@ -93,16 +93,14 @@ public class MineConfig {
 
         this.multiBlockStructure = MultiBlockStructure.create(contents, name, false, true);
 
-        MineData mineData = new MineData(privateMines);
-        mineData.setName(getName());
-        mineData.setMultiBlockStructure(multiBlockStructure);
-        mineData.setMineTier(getPriority());
-        mineData.setResetTime(getResetTime());
-        mineData.setResetPercentage(getResetPercentage());
-        mineData.setMaterials(getMaterials());
-        mineData.setupRelativeLocations();
+        MineType mineType = new MineType(privateMines, multiBlockStructure);
+        mineType.setName(getName());
+        mineType.setMineTier(getPriority());
+        mineType.setResetTime(getResetTime());
+        mineType.setResetPercentage(getResetPercentage());
+        mineType.setMaterials(getMaterials());
 
-        privateMines.addMineData(getName(), mineData);
+        privateMines.addMineData(getName(), mineType);
     }
 
     // a getter for the private mines instance
