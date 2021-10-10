@@ -222,13 +222,6 @@ public class Mine {
         this.isAutoResetting = isAutoResetting;
     }
 
-//    public Location getRelative(int[] relative) {
-//        return structure
-//                .getRelative(relative[0], relative[1], relative[2])
-//                .getBlock()
-//                .getLocation();
-//    }
-
     /*
         The method for creating the structures into the world
      */
