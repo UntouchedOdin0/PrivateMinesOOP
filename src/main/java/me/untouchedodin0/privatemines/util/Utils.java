@@ -25,20 +25,20 @@ public class Utils {
                 .getLocation();
     }
 
-    public MineType getNextMineData(Mine mine) {
+    public MineType getNextMineType(Mine mine) {
         MineType mineType = mine.getMineData();
         MineType upgradeMineType;
-        boolean isAtLastMineData = privateMines.isAtLastMineData(mineType);
-        if (isAtLastMineData) {
+        boolean isAtLastMineType = privateMines.isAtLastMineType(mineType);
+        if (isAtLastMineType) {
             privateMines.getLogger().info("Mine is already maxed out!");
             return mineType;
         }
         if (debugMode) {
             privateMines.getLogger().info("Current mine data Name: " + mineType.getName());
-            upgradeMineType = privateMines.getNextMineData(mineType);
+            upgradeMineType = privateMines.getNextMineType(mineType);
             privateMines.getLogger().info("Next mine data name: " + upgradeMineType.getName());
         }
-        upgradeMineType = privateMines.getNextMineData(mineType);
+        upgradeMineType = privateMines.getNextMineType(mineType);
         return upgradeMineType;
     }
 

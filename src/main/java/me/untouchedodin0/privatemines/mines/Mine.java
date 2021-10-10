@@ -86,7 +86,7 @@ public class Mine {
      * @param mineType - The mine data to be set for the Mine
      */
 
-    public void setMineData(MineType mineType) {
+    public void setMineType(MineType mineType) {
         this.mineType = mineType;
     }
 
@@ -263,6 +263,8 @@ public class Mine {
 
         this.spawnLocation = utils.getRelative(structure, mineType.getSpawnLocation());
         this.npcLocation = utils.getRelative(structure, mineType.getNpcLocation());
+        this.corner1 = utils.getRelative(structure, mineType.getCorner1());
+        this.corner2 = utils.getRelative(structure, mineType.getCorner2());
 
         // Initialize the block manager
 
@@ -374,26 +376,26 @@ public class Mine {
         Utils utils = new Utils(privateMines);
         MineFactory mineFactory = privateMines.getMineFactory();
         MineStorage mineStorage = privateMines.getMineStorage();
-        MineType upgradeData = utils.getNextMineData(this);
+        MineType upgradeType = utils.getNextMineType(this);
         Player player = Bukkit.getPlayer(mineOwner);
 
         if (debugMode) {
-            Bukkit.getLogger().info("upgradeData: " + upgradeData);
-            Bukkit.getLogger().info("upgradeData Name: " + upgradeData.getName());
+            Bukkit.getLogger().info("upgradeType: " + upgradeType);
+            Bukkit.getLogger().info("upgradeType Name: " + upgradeType.getName());
         }
 
-        if (privateMines.isAtLastMineData(mineType)) {
+        if (privateMines.isAtLastMineType(mineType)) {
             Bukkit.getLogger().info("Can't upgrade anymore, at highest!");
             return;
         }
 
-        setMineData(upgradeData);
+        setMineType(upgradeType);
         if (player != null) {
             Structure structure = getStructure();
             if (airMaterial != null) {
                 structure.getRegion().forEachBlock(block -> block.setType(airMaterial, false));
             }
-            Mine mine = mineFactory.createMine(player, getMineLocation(), upgradeData);
+            Mine mine = mineFactory.createMine(player, getMineLocation(), upgradeType);
             mine.teleportPlayer(player);
             mineStorage.replaceMine(player.getUniqueId(), mine);
         }

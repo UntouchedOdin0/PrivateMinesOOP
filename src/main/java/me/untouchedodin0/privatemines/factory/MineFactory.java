@@ -54,7 +54,7 @@ public class MineFactory {
         this.utils = privateMines.getUtils();
         this.mineStorage = privateMines.getMineStorage();
         this.mineFactory = privateMines.getMineFactory();
-        this.defaultMineType = privateMines.getDefaultMineData();
+        this.defaultMineType = privateMines.getDefaultMineType();
         this.blockDataManager = blockDataManager;
         this.debugMode = privateMines.isDebugMode();
         this.minesConfig = privateMines.getMinesConfig();
@@ -71,7 +71,7 @@ public class MineFactory {
         Mine mine = new Mine(privateMines, utils);
         mine.setMineOwner(player.getUniqueId());
         mine.setMineLocation(location);
-        mine.setMineData(defaultMineType);
+        mine.setMineType(defaultMineType);
         mine.setWeightedRandom(defaultMineType.getWeightedRandom());
         mine.build();
 
@@ -88,8 +88,6 @@ public class MineFactory {
 
         mineStorage.addMine(player.getUniqueId(), mine);
 
-//        structure.getRelative(defaultMineData.getCorner1()).getBlock().getLocation();
-
         DataBlock dataBlock = blockDataManager.getDataBlock(block);
         dataBlock.set("owner", String.valueOf(userUUID));
         dataBlock.set("type", defaultMineType.getName());
@@ -100,9 +98,6 @@ public class MineFactory {
         dataBlock.set("corner2", LocationUtils.toString(mine.getCorner2()));
         dataBlock.set("structure", mine.getStructure());
 
-//        dataBlock.set("name", defaultMineData.getName());
-//        dataBlock.set("corner1", mine.getCorner1());
-//        dataBlock.set("corner2", mine.getCorner2());
 
         blockDataManager.save();
         DataBlock mineDataBlock = blockDataManager.getExisting(block);
@@ -163,7 +158,7 @@ public class MineFactory {
             Mine mine = new Mine(privateMines, utils);
             mine.setMineOwner(player.getUniqueId());
             mine.setMineLocation(location);
-            mine.setMineData(mineType);
+            mine.setMineType(mineType);
             mine.setWeightedRandom(mineType.getWeightedRandom());
             mine.build();
 

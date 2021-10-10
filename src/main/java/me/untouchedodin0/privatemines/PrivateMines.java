@@ -50,7 +50,7 @@ import java.util.*;
 public class PrivateMines extends JavaPlugin {
 
     private final Map<String, MineType> mineDataMap = new HashMap<>();
-    private final TreeMap<String, MineType> mineDataTreeMap = new TreeMap<>();
+    private final TreeMap<String, MineType> mineTypeTreeMap = new TreeMap<>();
     private static PrivateMines privateMines;
 
 
@@ -205,7 +205,7 @@ public class PrivateMines extends JavaPlugin {
 //            mine.setCuboidRegion(cuboidRegion);
             mine.reset();
             mine.setMineOwner(playerUUID);
-            mine.setMineData(mineType);
+            mine.setMineType(mineType);
 
             mineStorage.addMine(playerUUID, mine);
 
@@ -295,7 +295,7 @@ public class PrivateMines extends JavaPlugin {
 
     public void addMineData(String name, MineType mineType) {
         mineDataMap.putIfAbsent(name, mineType);
-        mineDataTreeMap.put(name, mineType);
+        mineTypeTreeMap.put(name, mineType);
     }
 
     /*
@@ -310,16 +310,16 @@ public class PrivateMines extends JavaPlugin {
         Gets the default mine data
      */
 
-    public MineType getDefaultMineData() {
-        if (mineDataTreeMap.isEmpty()) {
-            Bukkit.getLogger().info("No default mine data was found!");
+    public MineType getDefaultMineType() {
+        if (mineTypeTreeMap.isEmpty()) {
+            Bukkit.getLogger().info("No default mine type was found!");
             Bukkit.getLogger().info("Create a mine type in the mineTypes");
             Bukkit.getLogger().info("section of the config.yml");
             Bukkit.getLogger().info("Please ask in the discord server" +
                     " if you need help");
             return null;
         }
-        return mineDataTreeMap.firstEntry().getValue();
+        return mineTypeTreeMap.firstEntry().getValue();
     }
 
     /*
@@ -350,8 +350,8 @@ public class PrivateMines extends JavaPlugin {
         Gets the next MineData from the TreeMap using String
      */
 
-    public MineType getNextMineData(String mineData) {
-        return mineDataTreeMap.higherEntry(mineData).getValue();
+    public MineType getNextMineType(String mineData) {
+        return mineTypeTreeMap.higherEntry(mineData).getValue();
     }
 
 
@@ -359,20 +359,20 @@ public class PrivateMines extends JavaPlugin {
         Gets the next MineData from the TreeMap using MineData
      */
 
-    public MineType getNextMineData(MineType mineType) {
-        MineType lastValue = mineDataTreeMap.lastEntry().getValue();
-        if (mineDataTreeMap.higherEntry(mineType.getName()) == null) {
+    public MineType getNextMineType(MineType mineType) {
+        MineType lastValue = mineTypeTreeMap.lastEntry().getValue();
+        if (mineTypeTreeMap.higherEntry(mineType.getName()) == null) {
             return lastValue;
         }
-        return mineDataTreeMap.higherEntry(mineType.getName()).getValue();
+        return mineTypeTreeMap.higherEntry(mineType.getName()).getValue();
     }
 
     /*
         Checks is the mine is currently fully maxed out
      */
 
-    public boolean isAtLastMineData(MineType mineType) {
-        MineType lastValue = mineDataTreeMap.lastEntry().getValue();
+    public boolean isAtLastMineType(MineType mineType) {
+        MineType lastValue = mineTypeTreeMap.lastEntry().getValue();
         return mineType.equals(lastValue);
     }
 
