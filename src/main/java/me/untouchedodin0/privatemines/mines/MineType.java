@@ -54,11 +54,11 @@ public class MineType {
     private int resetTime = 1;
     private double resetPercentage;
     private Map<Material, Double> materials = new HashMap<>();
-    private WeightedRandom<Material> weightedRandom = new WeightedRandom<>();
+    private final WeightedRandom<Material> weightedRandom = new WeightedRandom<>();
     private MultiBlockStructure multiBlockStructure;
-    private int[] spawnLocation;
-    private int[] npcLocation;
-    private int[][] cornerLocations;
+    private final int[] spawnLocation;
+    private final int[] npcLocation;
+    private final int[][] cornerLocations;
 
     private Material spawnMaterial;
     private Material sellNpcMaterial;
@@ -82,7 +82,7 @@ public class MineType {
 
         this.spawnLocation = mineLoopUtil.findSpawnLocation(multiBlockStructure, spawnMaterial);
         this.npcLocation = mineLoopUtil.findNpcLocation(multiBlockStructure, sellNpcMaterial);
-        this.cornerLocations = mineLoopUtil.findCornerLocations(multiBlockStructure, cornerMaterial);;
+        this.cornerLocations = mineLoopUtil.findCornerLocations(multiBlockStructure, cornerMaterial);
 
         /*
             all coming from here
