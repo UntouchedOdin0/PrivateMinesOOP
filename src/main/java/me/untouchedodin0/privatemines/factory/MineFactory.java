@@ -37,7 +37,6 @@ import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.misc.LocationUtils;
-import redempt.redlib.multiblock.Structure;
 
 public class MineFactory {
 
@@ -49,7 +48,6 @@ public class MineFactory {
     MineType defaultMineType;
     BlockDataManager blockDataManager;
     ConfigManager minesConfig;
-    Structure structure;
 
     public MineFactory(PrivateMines privateMines, BlockDataManager blockDataManager) {
         this.privateMines = privateMines;
