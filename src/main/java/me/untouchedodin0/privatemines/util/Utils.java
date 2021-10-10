@@ -25,7 +25,6 @@ public class Utils {
                 .getLocation();
     }
 
-
     public MineType getNextMineData(Mine mine) {
         MineType mineType = mine.getMineData();
         MineType upgradeMineType;

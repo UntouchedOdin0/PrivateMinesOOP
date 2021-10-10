@@ -229,37 +229,68 @@ public class Mine {
 //                .getLocation();
 //    }
 
+    /*
+        The method for creating the structures into the world
+     */
+
     public void build() {
+
+        // Simple check to make sure the type isn't null
+
         if (mineType == null) {
-            Bukkit.getLogger().info("Failed to build structure due to the mine data being null!");
+            Bukkit.getLogger().info("Failed to build structure due to the mine type being null!");
         }
+
+        // Get the main class
         PrivateMines privateMines = PrivateMines.getPlugin(PrivateMines.class);
+
+        // Set the debugMode field to true or false
         this.debugMode = privateMines.isDebugMode();
 
+        // Initialise the util class
         Utils utils = new Utils(privateMines);
 
+        // Print out more debug stuff if the mode is enabled
         if (debugMode) {
             privateMines.getLogger().info("MultiBlockStructure: " + mineType.getMultiBlockStructure());
             privateMines.getLogger().info("Location " + mineLocation);
         }
 
+        // Build the multi block structure at the location and set the structure field
+
         this.structure = mineType.getMultiBlockStructure().build(mineLocation);
-//        this.structure = mineData.getMultiBlockStructure().assumeAt(mineLocation);
+
+        // Simple check to make sure the structure isn't null
+
         if (this.structure == null) {
             Bukkit.getLogger().info("Structure is null");
         }
 
-//        this.spawnLocation =  getRelative(mineType.getSpawnLocation());
-//        this.npcLocation = getRelative(mineType.getNpcLocation());
-//
-//        this.corner1 = getRelative(mineType.getCorner1());
-//        this.corner2 = getRelative(mineType.getCorner2());
+        // Set the mines spawn and npc locations using the relative location from the mineType's
+
+        this.spawnLocation = utils.getRelative(structure, mineType.getSpawnLocation());
+        this.npcLocation = utils.getRelative(structure, mineType.getNpcLocation());
+
+        // Initialize the block manager
 
         BlockDataManager blockDataManager = privateMines.getBlockDataManager();
+
+        // Initialize the data block
+
         DataBlock dataBlock = blockDataManager.getDataBlock(mineLocation.getBlock());
+
+        /*
+            Create a cuboid region with the two corners
+            Expand the region (small fix for the mines not fully filling)
+            Set the mines cuboid region with the created region
+            set the spawn and npc location blocks to air
+            Finally set and save the values into the block data manager
+         */
+
         CuboidRegion cuboidRegion = new CuboidRegion(corner1, corner2);
         cuboidRegion.expand(1, 0, 1, 0, 1, 0);
         setCuboidRegion(cuboidRegion);
+
         if (airMaterial != null) {
             spawnLocation.getBlock().setType(airMaterial, false);
             npcLocation.getBlock().setType(airMaterial, false);
