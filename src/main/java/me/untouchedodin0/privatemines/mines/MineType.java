@@ -172,8 +172,10 @@ public class MineType {
     /**
      *
      * @param multiBlockStructure - The new MultiBlockStructure to be set for the MineData
+     *  This method will likely go idk yet
      */
 
+    @Deprecated
     public void setMultiBlockStructure(MultiBlockStructure multiBlockStructure) {
         this.multiBlockStructure = multiBlockStructure;
     }
