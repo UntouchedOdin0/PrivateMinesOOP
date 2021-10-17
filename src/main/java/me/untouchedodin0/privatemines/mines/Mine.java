@@ -337,9 +337,23 @@ public class Mine {
 
     // Nice l
     public void reset() {
-        if (cuboidRegion == null) return;
+        if (cuboidRegion == null) {
+            privateMines.getLogger().warning("Failed to reset mine due to the region being null!");
+            return;
+        }
+        if (mineType == null) {
+            privateMines.getLogger().warning("Failed to reset mine due to the type being null!");
+            return;
+        }
+        if (mineType.getWeightedRandom().getWeights().isEmpty()) {
+            privateMines.getLogger().warning("There were no materials in the weighted random!");
+            return;
+        }
         cuboidRegion.forEachBlock(block -> {
             Material material = XMaterial.matchXMaterial(mineType.getWeightedRandom().roll()).parseMaterial();
+            if (material == null) {
+                privateMines.getLogger().warning("Failed to reset mine due to the material being null!");
+            }
             if (material != null) {
                 block.setType(material);
             }

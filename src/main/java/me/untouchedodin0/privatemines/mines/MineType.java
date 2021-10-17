@@ -54,7 +54,7 @@ public class MineType {
     private int resetTime = 1;
     private double resetPercentage;
     private Map<Material, Double> materials = new HashMap<>();
-    private final WeightedRandom<Material> weightedRandom = new WeightedRandom<>();
+    private WeightedRandom<Material> weightedRandom = new WeightedRandom<>();
     private MultiBlockStructure multiBlockStructure;
     private final int[] spawnLocation;
     private final int[] npcLocation;
@@ -169,6 +169,13 @@ public class MineType {
 
     public Map<Material, Double> getMaterials() { return materials; }
 
+
+    public void setWeightedRandom(WeightedRandom<Material> weightedRandom) {
+        this.weightedRandom = weightedRandom;
+    }
+
+    public WeightedRandom<Material> getWeightedRandom() { return weightedRandom; }
+
     /**
      *
      * @param multiBlockStructure - The new MultiBlockStructure to be set for the MineData
@@ -225,5 +232,4 @@ public class MineType {
         return getCornerLocations()[1];
     }
 
-    public WeightedRandom<Material> getWeightedRandom() { return weightedRandom; }
 }

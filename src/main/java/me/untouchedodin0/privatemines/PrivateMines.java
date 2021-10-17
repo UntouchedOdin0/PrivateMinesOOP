@@ -89,22 +89,21 @@ public class PrivateMines extends JavaPlugin {
     public void onEnable() {
         privateMines = this;
         configFile = new File(getDataFolder(), "config.yml");
-        minesFile = new File(getDataFolder(), "mines.yml");
 
         if (!configFile.exists()) {
             saveDefaultConfig();
         }
-        if (!minesFile.exists()) {
-            boolean createdFile = false;
-            try {
-                createdFile = minesFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            if (createdFile) {
-                Bukkit.getLogger().info("Created the mines.yml file!");
-            }
-        }
+//        if (!minesFile.exists()) {
+//            boolean createdFile = false;
+//            try {
+//                createdFile = minesFile.createNewFile();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            if (createdFile) {
+//                Bukkit.getLogger().info("Created the mines.yml file!");
+//            }
+//        }
 
         ConfigManager configManager = new ConfigManager(this).register(this).load();
         this.minesConfig = new ConfigManager(minesFile).register(this).load();

@@ -33,6 +33,7 @@ import redempt.redlib.configmanager.annotations.ConfigMappable;
 import redempt.redlib.configmanager.annotations.ConfigPath;
 import redempt.redlib.configmanager.annotations.ConfigPostInit;
 import redempt.redlib.configmanager.annotations.ConfigValue;
+import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.MultiBlockStructure;
 
 import java.io.IOException;
@@ -70,6 +71,8 @@ public class MineConfig {
 
     private MultiBlockStructure multiBlockStructure;
 
+    private WeightedRandom<Material> weightedRandom = new WeightedRandom<>();
+
     public MineConfig() {
         this.privateMines = PrivateMines.getPlugin(PrivateMines.class);
     }
@@ -99,6 +102,8 @@ public class MineConfig {
         mineType.setResetTime(getResetTime());
         mineType.setResetPercentage(getResetPercentage());
         mineType.setMaterials(getMaterials());
+        getMaterials().forEach((material, percentage) -> weightedRandom.set(material, percentage));
+        mineType.setWeightedRandom(weightedRandom);
 
         privateMines.addMineData(getName(), mineType);
     }

@@ -61,6 +61,7 @@ public class MineFactory {
     }
 
     public Mine createMine(Player player, Location location) {
+        privateMines.getLogger().info("createMine working");
         if (defaultMineType == null) {
             privateMines.getLogger().warning("Failed to create mine due to defaultMineData being null");
         }
@@ -75,16 +76,16 @@ public class MineFactory {
         mine.setWeightedRandom(defaultMineType.getWeightedRandom());
         mine.build();
 
-        Location corner1 = utils.getRelative(mine.getStructure(), defaultMineType.getCorner1());
-        Location corner2 = utils.getRelative(mine.getStructure(), defaultMineType.getCorner2());
-
-        Location spawnLocation = utils.getRelative(mine.getStructure(), defaultMineType.getSpawnLocation());
-        Location npcLocation = utils.getRelative(mine.getStructure(), defaultMineType.getNpcLocation());
-
-        mine.setCorner1(corner1);
-        mine.setCorner2(corner2);
-        mine.setSpawnLocation(spawnLocation);
-        mine.setNpcLocation(npcLocation);
+//        Location corner1 = utils.getRelative(mine.getStructure(), defaultMineType.getCorner1());
+//        Location corner2 = utils.getRelative(mine.getStructure(), defaultMineType.getCorner2());
+//
+//        Location spawnLocation = utils.getRelative(mine.getStructure(), defaultMineType.getSpawnLocation());
+//        Location npcLocation = utils.getRelative(mine.getStructure(), defaultMineType.getNpcLocation());
+//
+//        mine.setCorner1(corner1);
+//        mine.setCorner2(corner2);
+//        mine.setSpawnLocation(spawnLocation);
+//        mine.setNpcLocation(npcLocation);
 
         mineStorage.addMine(player.getUniqueId(), mine);
 
@@ -97,7 +98,6 @@ public class MineFactory {
         dataBlock.set("corner1", LocationUtils.toString(mine.getCorner1()));
         dataBlock.set("corner2", LocationUtils.toString(mine.getCorner2()));
         dataBlock.set("structure", mine.getStructure());
-
 
         blockDataManager.save();
         DataBlock mineDataBlock = blockDataManager.getExisting(block);
@@ -134,7 +134,11 @@ public class MineFactory {
 //        minesConfig.getConfig().set(mines + userUUID + ".isAutoResetting", mine.isAutoResetting());
 //        minesConfig.save();
 
+        //todo fix this reset thing
         mine.reset();
+
+
+
 //        if (debugMode) {
 //            privateMines.getLogger().info("createMine block: " + block);
 //            privateMines.getLogger().info("createMine dataBlock: " + dataBlock);
