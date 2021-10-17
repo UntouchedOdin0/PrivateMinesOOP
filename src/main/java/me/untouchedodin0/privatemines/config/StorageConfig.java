@@ -1,6 +1,5 @@
 package me.untouchedodin0.privatemines.config;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import redempt.redlib.configmanager.annotations.ConfigMappable;
 import redempt.redlib.configmanager.annotations.ConfigPath;

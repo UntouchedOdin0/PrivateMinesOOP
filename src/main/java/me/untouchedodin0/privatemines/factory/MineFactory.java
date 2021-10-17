@@ -35,7 +35,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.blockdata.DataBlock;
-import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.misc.LocationUtils;
 
 public class MineFactory {
