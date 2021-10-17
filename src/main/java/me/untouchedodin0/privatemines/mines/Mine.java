@@ -319,7 +319,7 @@ public class Mine {
         }
         MineStorage mineStorage = privateMines.getMineStorage();
 
-        if (mineOwner != null) {
+        if (mineOwner != null && mineLocation != null) {
             mineStorage.removeMine(mineOwner);
 
             BlockDataManager blockDataManager = privateMines.getBlockDataManager();
