@@ -47,7 +47,6 @@ public class MineFactory {
     MineFactory mineFactory;
     MineType defaultMineType;
     BlockDataManager blockDataManager;
-    ConfigManager minesConfig;
 
     public MineFactory(PrivateMines privateMines, BlockDataManager blockDataManager) {
         this.privateMines = privateMines;
@@ -57,7 +56,6 @@ public class MineFactory {
         this.defaultMineType = privateMines.getDefaultMineType();
         this.blockDataManager = blockDataManager;
         this.debugMode = privateMines.isDebugMode();
-        this.minesConfig = privateMines.getMinesConfig();
     }
 
     public Mine createMine(Player player, Location location) {

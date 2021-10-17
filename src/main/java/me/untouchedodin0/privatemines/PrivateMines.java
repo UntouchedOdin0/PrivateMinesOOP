@@ -44,7 +44,6 @@ import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.configmanager.annotations.ConfigValue;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 public class PrivateMines extends JavaPlugin {
@@ -106,9 +105,7 @@ public class PrivateMines extends JavaPlugin {
 //        }
 
         ConfigManager configManager = new ConfigManager(this).register(this).load();
-        this.minesConfig = new ConfigManager(minesFile).register(this).load();
         Bukkit.getLogger().info("minesFile: " + minesFile);
-        Bukkit.getLogger().info("minesConfig: " + minesConfig);
 
         blockDataManager = new BlockDataManager(
                 getDataFolder()
@@ -409,9 +406,5 @@ public class PrivateMines extends JavaPlugin {
 
     public Utils getUtils() {
         return utils;
-    }
-
-    public ConfigManager getMinesConfig() {
-        return minesConfig;
     }
 }
