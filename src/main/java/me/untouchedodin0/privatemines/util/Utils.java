@@ -26,7 +26,7 @@ public class Utils {
     }
 
     public MineType getNextMineType(Mine mine) {
-        MineType mineType = mine.getMineData();
+        MineType mineType = mine.getMineType();
         MineType upgradeMineType;
         boolean isAtLastMineType = privateMines.isAtLastMineType(mineType);
         if (isAtLastMineType) {
