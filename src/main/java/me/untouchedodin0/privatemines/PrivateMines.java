@@ -173,7 +173,6 @@ public class PrivateMines extends JavaPlugin {
 
             UUID playerUUID = UUID.fromString(dataBlock.getString("owner"));
 
-
             int[] relativeSpawn = mineType.getSpawnLocation();
             int[] relativeNpc = mineType.getNpcLocation();
             int[] relativeCorner1 = mineType.getCorner1();
@@ -199,9 +198,10 @@ public class PrivateMines extends JavaPlugin {
 //            mine.setSpawnLocation(mine.getRelative(spawnLocation));
 //            mine.setNpcLocation(mine.getRelative(npcLocation));
 //            mine.setCuboidRegion(cuboidRegion);
-            mine.reset();
             mine.setMineOwner(playerUUID);
             mine.setMineType(mineType);
+
+            mine.reset();
 
             mineStorage.addMine(playerUUID, mine);
 
@@ -227,6 +227,13 @@ public class PrivateMines extends JavaPlugin {
 
             Bukkit.getLogger().info("mines AFTER: " + mineStorage.getMines());
         });
+
+        mineStorage.getMines().forEach(((uuid, mine) -> {
+            getLogger().info("loading mine... " + mine);
+            getLogger().info("mine owner: " + mine.getMineOwner());
+            getLogger().info("mine type: " + mine.getMineType());
+
+        }));
 
         // Loads the mines back after each reboot (fixes vanishing mines)
 
