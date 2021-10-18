@@ -78,7 +78,7 @@ public class Mine {
      * @return MineData - The mine data for the players mine
      */
 
-    public MineType getMineData() {
+    public MineType getMineType() {
         return mineType;
     }
 
@@ -290,17 +290,23 @@ public class Mine {
             spawnLocation.getBlock().setType(airMaterial, false);
             npcLocation.getBlock().setType(airMaterial, false);
 
-            privateMines.getLogger().info("structure: " + structure);
-            privateMines.getLogger().info("spawnLocation: " + spawnLocation);
-            privateMines.getLogger().info("npcLocation: " + npcLocation);
-            privateMines.getLogger().info("corner1: " + corner1);
-            privateMines.getLogger().info("corner2: " + corner2);
+            privateMines.getLogger().info("owner uuid: " + getMineOwner());
+            privateMines.getLogger().info("mine type: " + getMineType());
+            privateMines.getLogger().info("mine type name: " + getMineType().getName());
+            dataBlock.set("owner", getMineOwner());
+            dataBlock.set("type", getMineType().getName());
 
-            dataBlock.set("location", LocationUtils.toString(mineLocation));
-            dataBlock.set("spawnLocation", LocationUtils.toString(spawnLocation));
-            dataBlock.set("npcLocation", LocationUtils.toString(npcLocation));
-            dataBlock.set("corner1", LocationUtils.toString(corner1));
-            dataBlock.set("corner2", LocationUtils.toString(corner2));
+//            privateMines.getLogger().info("structure: " + structure);
+//            privateMines.getLogger().info("spawnLocation: " + spawnLocation);
+//            privateMines.getLogger().info("npcLocation: " + npcLocation);
+//            privateMines.getLogger().info("corner1: " + corner1);
+//            privateMines.getLogger().info("corner2: " + corner2);
+//
+//            dataBlock.set("location", LocationUtils.toString(mineLocation));
+//            dataBlock.set("spawnLocation", LocationUtils.toString(spawnLocation));
+//            dataBlock.set("npcLocation", LocationUtils.toString(npcLocation));
+//            dataBlock.set("corner1", LocationUtils.toString(corner1));
+//            dataBlock.set("corner2", LocationUtils.toString(corner2));
             blockDataManager.save();
         }
     }
@@ -337,14 +343,18 @@ public class Mine {
 
     // Nice l
     public void reset() {
-        if (cuboidRegion == null) {
-            privateMines.getLogger().warning("Failed to reset mine due to the region being null!");
-            return;
-        }
+        if (mineLocation == null) return;
         if (mineType == null) {
             privateMines.getLogger().warning("Failed to reset mine due to the type being null!");
             return;
         }
+
+        this.structure = mineType.getMultiBlockStructure().assumeAt(mineLocation);
+        this.corner1 = utils.getRelative(structure, mineType.getCorner1());
+        this.corner2 = utils.getRelative(structure, mineType.getCorner2());
+
+        this.cuboidRegion = new CuboidRegion(corner1, corner2);
+
         if (mineType.getWeightedRandom().getWeights().isEmpty()) {
             privateMines.getLogger().warning("There were no materials in the weighted random!");
             return;
