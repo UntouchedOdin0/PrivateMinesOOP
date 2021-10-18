@@ -354,11 +354,13 @@ public class Mine {
         this.corner2 = utils.getRelative(structure, mineType.getCorner2());
 
         this.cuboidRegion = new CuboidRegion(corner1, corner2);
+        cuboidRegion.expand(1, 0, 1, 0, 1, 0);
 
         if (mineType.getWeightedRandom().getWeights().isEmpty()) {
             privateMines.getLogger().warning("There were no materials in the weighted random!");
             return;
         }
+
         cuboidRegion.forEachBlock(block -> {
             Material material = XMaterial.matchXMaterial(mineType.getWeightedRandom().roll()).parseMaterial();
             if (material == null) {
