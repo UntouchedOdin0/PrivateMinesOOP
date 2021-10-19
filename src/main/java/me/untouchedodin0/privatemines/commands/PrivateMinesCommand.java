@@ -71,15 +71,15 @@ public class PrivateMinesCommand {
 
         privateMines.getLogger().info("mine: " + mine);
 
-        cuboidRegion.forEachBlock(block -> {
-            Material material = XMaterial.matchXMaterial(mineType.getWeightedRandom().roll()).parseMaterial();
-            if (material == null) {
-                privateMines.getLogger().warning("no material null bla bla bla");
-            }
-            if (material != null) {
-                block.setType(material);
-            }
-        });
+//        cuboidRegion.forEachBlock(block -> {
+//            Material material = XMaterial.matchXMaterial(mineType.getWeightedRandom().roll()).parseMaterial();
+//            if (material == null) {
+//                privateMines.getLogger().warning("no material null bla bla bla");
+//            }
+//            if (material != null) {
+//                block.setType(material);
+//            }
+//        });
 
 //        if (!mineStorage.hasMine(player.getUniqueId())) {
 //            Messages.msg("doNotOwnMine");

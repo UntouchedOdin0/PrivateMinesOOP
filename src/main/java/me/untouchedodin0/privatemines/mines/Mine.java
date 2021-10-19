@@ -360,15 +360,17 @@ public class Mine {
             return;
         }
 
-        cuboidRegion.forEachBlock(block -> {
-            Material material = XMaterial.matchXMaterial(mineType.getWeightedRandom().roll()).parseMaterial();
-            if (material == null) {
-                privateMines.getLogger().warning("Failed to reset mine due to the material being null!");
-            }
-            if (material != null) {
-                block.setType(material);
-            }
-        });
+        utils.fillRegion(cuboidRegion, mineType.getWeightedRandom(), true);
+
+//        cuboidRegion.forEachBlock(block -> {
+//            Material material = XMaterial.matchXMaterial(mineType.getWeightedRandom().roll()).parseMaterial();
+//            if (material == null) {
+//                privateMines.getLogger().warning("Failed to reset mine due to the material being null!");
+//            }
+//            if (material != null) {
+//                block.setType(material);
+//            }
+//        });
     }
 
     public void autoReset() {
