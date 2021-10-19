@@ -17,8 +17,10 @@ public class PrivateMinesCommand {
     private final MineFactory mineFactory;
     private final MineStorage mineStorage;
     private final MineWorldManager mineWorldManager;
+    private final PrivateMines privateMines;
 
     public PrivateMinesCommand(PrivateMines privateMine) {
+        this.privateMines = privateMine;
         this.mineFactory = privateMine.getMineFactory();
         this.mineStorage = privateMine.getMineStorage();
         this.mineWorldManager = privateMine.getMineWorldManager();
@@ -50,11 +52,18 @@ public class PrivateMinesCommand {
     @CommandHook("reset")
     public void reset(CommandSender commandSender) {
         Player player = (Player) commandSender;
-        if (!mineStorage.hasMine(player.getUniqueId())) {
-            Messages.msg("doNotOwnMine");
-            return;
-        }
+        privateMines.getLogger().info("mineStorage: " + mineStorage);
+        privateMines.getLogger().info("mineStorage mines: " + mineStorage.getMines());
+        boolean hasMine = mineStorage.hasMine(player.getUniqueId());
+        privateMines.getLogger().info("has mine: " + hasMine);
         Mine mine = mineStorage.getMine(player.getUniqueId());
+        privateMines.getLogger().info("mine: " + mine);
+
+
+//        if (!mineStorage.hasMine(player.getUniqueId())) {
+//            Messages.msg("doNotOwnMine");
+//            return;
+//        }
         Messages.msg("mineReset");
         mine.reset();
     }
@@ -67,7 +76,7 @@ public class PrivateMinesCommand {
             return;
         }
         Mine mine = mineStorage.getMine(player.getUniqueId());
-        player.teleport(mine.getSpawnLocation());
+        mine.teleportPlayer(player);
         Messages.msg("teleportedToMine");
     }
 
