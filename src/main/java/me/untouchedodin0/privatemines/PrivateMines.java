@@ -35,6 +35,7 @@ import me.untouchedodin0.privatemines.util.Utils;
 import me.untouchedodin0.privatemines.world.MineWorldManager;
 import me.untouchedodin0.privatemines.world.utils.MineLoopUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 import redempt.redlib.blockdata.BlockDataManager;
@@ -42,6 +43,9 @@ import redempt.redlib.commandmanager.CommandParser;
 import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.configmanager.annotations.ConfigValue;
+import redempt.redlib.misc.LocationUtils;
+import redempt.redlib.multiblock.MultiBlockStructure;
+import redempt.redlib.multiblock.Structure;
 
 import java.io.File;
 import java.util.*;
@@ -65,6 +69,7 @@ public class PrivateMines extends JavaPlugin {
     BlockDataManager blockDataManager;
     Utils utils;
     ConfigManager minesConfig;
+    Structure structure;
 
     @ConfigValue
     private String spawnPoint;
@@ -140,7 +145,12 @@ public class PrivateMines extends JavaPlugin {
         mineBlocks2.put(Material.GOLD_ORE, 0.5);
 
         Bukkit.getLogger().info("mines BEFORE: " + mineStorage.getMines());
+
+        // Loops all the data blocks
         blockDataManager.getAll().forEach(dataBlock -> {
+
+            // Gets the mine type from the data block
+
             MineType mineType = getMineDataMap().get(dataBlock.getString("type"));
 
 //            Mine mine = new Mine(this, utils);
@@ -168,15 +178,17 @@ public class PrivateMines extends JavaPlugin {
 //            Location spawnLocation = LocationUtils.fromString(spawnLocationName);
 //            Location npcLocation = LocationUtils.fromString(npcLocationName);
 
-
+            // Creates a new mine object
             Mine mine = new Mine(this, utils);
 
+            // Gets the player uuid string from the data block then converts it to a UUID
             UUID playerUUID = UUID.fromString(dataBlock.getString("owner"));
 
-            int[] relativeSpawn = mineType.getSpawnLocation();
-            int[] relativeNpc = mineType.getNpcLocation();
-            int[] relativeCorner1 = mineType.getCorner1();
-            int[] relativeCorner2 = mineType.getCorner2();
+            // Gets the mine location string from the datablock then converts it to a bukkit Location
+            Location location = LocationUtils.fromString(dataBlock.getString("location"));
+
+            // The multi block structure for the mine initialized further on
+            MultiBlockStructure multiBlockStructure;
 
 //            this.structure = mine.getStructure();
 //            this.structure = mineData.getStructure();
@@ -198,8 +210,31 @@ public class PrivateMines extends JavaPlugin {
 //            mine.setSpawnLocation(mine.getRelative(spawnLocation));
 //            mine.setNpcLocation(mine.getRelative(npcLocation));
 //            mine.setCuboidRegion(cuboidRegion);
+
+            // Sets the mine owner and the mine type
             mine.setMineOwner(playerUUID);
             mine.setMineType(mineType);
+
+            // Initialize the multi block structure from the mine type
+            multiBlockStructure = mineType.getMultiBlockStructure();
+
+            if (location == null) {
+                getLogger().warning("Mine location was null, couldn't find the structure!");
+                return;
+            }
+
+            // Initialize the structure by using the multi block structure to assume the structure is at a location
+
+            this.structure = multiBlockStructure.assumeAt(location);
+
+            privateMines.getLogger().info("Searching at location... " + location);
+            privateMines.getLogger().info("multiblockstructure: " + multiBlockStructure);
+            privateMines.getLogger().info("structure: " + structure);
+
+            int[] relativeSpawn = mineType.getSpawnLocation();
+            int[] relativeNpc = mineType.getNpcLocation();
+            int[] relativeCorner1 = mineType.getCorner1();
+            int[] relativeCorner2 = mineType.getCorner2();
 
             mine.reset();
 
