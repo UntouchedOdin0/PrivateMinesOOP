@@ -1,16 +1,20 @@
 package me.untouchedodin0.privatemines.commands;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.untouchedodin0.privatemines.PrivateMines;
 import me.untouchedodin0.privatemines.factory.MineFactory;
 import me.untouchedodin0.privatemines.mines.Mine;
+import me.untouchedodin0.privatemines.mines.MineType;
 import me.untouchedodin0.privatemines.storage.MineStorage;
 import me.untouchedodin0.privatemines.world.MineWorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import redempt.redlib.commandmanager.CommandHook;
 import redempt.redlib.commandmanager.Messages;
+import redempt.redlib.region.CuboidRegion;
 
 public class PrivateMinesCommand {
 
@@ -57,8 +61,25 @@ public class PrivateMinesCommand {
         boolean hasMine = mineStorage.hasMine(player.getUniqueId());
         privateMines.getLogger().info("has mine: " + hasMine);
         Mine mine = mineStorage.getMine(player.getUniqueId());
+        MineType mineType = mine.getMineType();
+        CuboidRegion cuboidRegion = mine.getCuboidRegion();
+
+        if (mineType.getWeightedRandom().getWeights().isEmpty()) {
+            privateMines.getLogger().warning("There were no materials in the weighted random!");
+            return;
+        }
+
         privateMines.getLogger().info("mine: " + mine);
 
+        cuboidRegion.forEachBlock(block -> {
+            Material material = XMaterial.matchXMaterial(mineType.getWeightedRandom().roll()).parseMaterial();
+            if (material == null) {
+                privateMines.getLogger().warning("no material null bla bla bla");
+            }
+            if (material != null) {
+                block.setType(material);
+            }
+        });
 
 //        if (!mineStorage.hasMine(player.getUniqueId())) {
 //            Messages.msg("doNotOwnMine");
