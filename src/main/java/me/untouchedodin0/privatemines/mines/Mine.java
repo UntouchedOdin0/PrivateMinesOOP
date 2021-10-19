@@ -118,7 +118,7 @@ public class Mine {
      */
 
     public void setSpawnLocation(Location spawnLocation) {
-        this.spawnLocation = mineLocation;
+        this.spawnLocation = spawnLocation;
     }
 
     /**
