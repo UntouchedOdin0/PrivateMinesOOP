@@ -46,6 +46,7 @@ import redempt.redlib.configmanager.annotations.ConfigValue;
 import redempt.redlib.misc.LocationUtils;
 import redempt.redlib.multiblock.MultiBlockStructure;
 import redempt.redlib.multiblock.Structure;
+import redempt.redlib.region.CuboidRegion;
 
 import java.io.File;
 import java.util.*;
@@ -235,6 +236,23 @@ public class PrivateMines extends JavaPlugin {
             int[] relativeNpc = mineType.getNpcLocation();
             int[] relativeCorner1 = mineType.getCorner1();
             int[] relativeCorner2 = mineType.getCorner2();
+
+            Location spawnLocation = utils.getRelative(structure, relativeSpawn);
+            Location npcLocation = utils.getRelative(structure, relativeNpc);
+            Location corner1Location = utils.getRelative(structure, relativeCorner1);
+            Location corner2Location = utils.getRelative(structure, relativeCorner2);
+
+            CuboidRegion cuboidRegion = new CuboidRegion(corner1Location, corner2Location);
+
+            getLogger().info("spawnLocation: " + spawnLocation);
+            getLogger().info("npcLocation: " + npcLocation);
+            getLogger().info("corner1: " + corner1Location);
+            getLogger().info("corner2: " + corner2Location);
+            getLogger().info("cuboidRegion: " + cuboidRegion);
+
+            mine.setSpawnLocation(spawnLocation);
+            mine.setNpcLocation(npcLocation);
+            mine.setCuboidRegion(cuboidRegion);
 
             mine.reset();
 
