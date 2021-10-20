@@ -352,15 +352,18 @@ public class Mine {
         this.corner1 = utils.getRelative(structure, mineType.getCorner1());
         this.corner2 = utils.getRelative(structure, mineType.getCorner2());
 
-        this.cuboidRegion = new CuboidRegion(corner1, corner2);
-        cuboidRegion.expand(1, 0, 1, 0, 1, 0);
+//        this.cuboidRegion = new CuboidRegion(corner1, corner2);
+//        cuboidRegion.expand(1, 0, 1, 0, 1, 0);
 
         if (mineType.getWeightedRandom().getWeights().isEmpty()) {
             privateMines.getLogger().warning("There were no materials in the weighted random!");
             return;
         }
 
-        utils.fillRegion(cuboidRegion, mineType.getWeightedRandom(), true);
+        corner1.getBlock().setType(Material.EMERALD_BLOCK);
+        corner2.getBlock().setType(Material.DIAMOND_BLOCK);
+
+//        utils.fillRegion(getCuboidRegion(), mineType.getWeightedRandom(), true);
 
 //        cuboidRegion.forEachBlock(block -> {
 //            Material material = XMaterial.matchXMaterial(mineType.getWeightedRandom().roll()).parseMaterial();
@@ -373,16 +376,41 @@ public class Mine {
 //        });
     }
 
+    public void resetNonExpand() {
+        if (mineLocation == null) return;
+        if (mineType == null) {
+            privateMines.getLogger().warning("Failed to reset mine due to the type being null!");
+            return;
+        }
+
+        this.structure = mineType.getMultiBlockStructure().assumeAt(mineLocation);
+        this.corner1 = utils.getRelative(structure, mineType.getCorner1());
+        this.corner2 = utils.getRelative(structure, mineType.getCorner2());
+
+        CuboidRegion cuboidRegion = new CuboidRegion(corner1, corner2);
+//        this.cuboidRegion = new CuboidRegion(corner1, corner2);
+
+        if (mineType.getWeightedRandom().getWeights().isEmpty()) {
+            privateMines.getLogger().warning("There were no materials in the weighted random!");
+            return;
+        }
+
+        cuboidRegion.forEachBlock(block -> {
+            block.setType(Material.EMERALD_BLOCK);
+        });
+//        utils.fillRegion(cuboidRegion, mineType.getWeightedRandom(), true);
+    }
+
     public void autoReset() {
         this.task = Task.syncRepeating(privateMines, () -> {
             double blocksPercentageLeft = utils.getPercentageLeft(this);
             if (blocksPercentageLeft <= blocksPercentageLeft) {
-                reset();
+                resetNonExpand();
             }
         }, 0L, 20L);
 
         this.task = Task.syncRepeating(privateMines,
-                this::reset, 0L, 20L);
+                this::resetNonExpand, 0L, 20L);
     }
 
     public void cancelAutoReset() {

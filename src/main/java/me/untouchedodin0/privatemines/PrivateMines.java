@@ -243,6 +243,7 @@ public class PrivateMines extends JavaPlugin {
             Location corner2Location = utils.getRelative(structure, relativeCorner2);
 
             CuboidRegion cuboidRegion = new CuboidRegion(corner1Location, corner2Location);
+            cuboidRegion.expand(1, 0, 1, 0, 1, 0);
 
             getLogger().info("spawnLocation: " + spawnLocation);
             getLogger().info("npcLocation: " + npcLocation);
