@@ -68,9 +68,6 @@ public class PrivateMinesCommand {
             privateMines.getLogger().warning("There were no materials in the weighted random!");
             return;
         }
-        privateMines.getLogger().info("mine weightedRandom: " + mine.getWeightedRandom());
-        privateMines.getLogger().info("mineType weightedRandom: " + mineType.getWeightedRandom());
-        privateMines.getLogger().info("mineType weightedRandom weights: " + mineType.getWeightedRandom().getWeights());
 
         CuboidRegion cuboidRegion = mine.getCuboidRegion();
         cuboidRegion.forEachBlock(block -> block.setType(mineType.getWeightedRandom().roll(), false));

@@ -31,7 +31,6 @@ import org.bukkit.Material;
 import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.MultiBlockStructure;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +38,6 @@ public class MineType {
 
     PrivateMines privateMines;
     MineLoopUtil mineLoopUtil;
-
 
     /*
         name: Name of the mine type
@@ -83,14 +81,6 @@ public class MineType {
         this.spawnLocation = mineLoopUtil.findSpawnLocation(multiBlockStructure, spawnMaterial);
         this.npcLocation = mineLoopUtil.findNpcLocation(multiBlockStructure, sellNpcMaterial);
         this.cornerLocations = mineLoopUtil.findCornerLocations(multiBlockStructure, cornerMaterial);
-
-        /*
-            all coming from here
-         */
-
-        privateMines.getLogger().info("spawnLocation test: " + Arrays.toString(spawnLocation));
-        privateMines.getLogger().info("npcLocation test: " + Arrays.toString(npcLocation));
-        privateMines.getLogger().info("cornerLocations test: " + Arrays.deepToString(cornerLocations));
     }
 
     /**

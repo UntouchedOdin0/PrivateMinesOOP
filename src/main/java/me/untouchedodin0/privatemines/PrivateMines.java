@@ -36,7 +36,6 @@ import me.untouchedodin0.privatemines.world.MineWorldManager;
 import me.untouchedodin0.privatemines.world.utils.MineLoopUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.commandmanager.CommandParser;
@@ -49,7 +48,10 @@ import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
 import java.io.File;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.UUID;
 
 public class PrivateMines extends JavaPlugin {
 
@@ -57,11 +59,7 @@ public class PrivateMines extends JavaPlugin {
     private final TreeMap<String, MineType> mineTypeTreeMap = new TreeMap<>();
     private static PrivateMines privateMines;
 
-
-    EnumMap<Material, Double> mineBlocks = new EnumMap<>(Material.class);
-    EnumMap<Material, Double> mineBlocks2 = new EnumMap<>(Material.class);
     File configFile;
-    File minesFile;
 
     MineLoopUtil mineLoopUtil;
     MineFactory mineFactory;
@@ -96,7 +94,6 @@ public class PrivateMines extends JavaPlugin {
         }
 
         ConfigManager configManager = new ConfigManager(this).register(this).load();
-        Bukkit.getLogger().info("minesFile: " + minesFile);
 
         blockDataManager = new BlockDataManager(
                 getDataFolder()
@@ -110,16 +107,10 @@ public class PrivateMines extends JavaPlugin {
         utils = new Utils(this);
         int pluginId = 11413;
 
-        mineTypes.forEach((string, mineConfig) -> {
-            getLogger().info("Loading mine type... " + string);
-        });
-
         int loaded = mineTypes.size();
         getLogger().info("Loaded a total of {loaded} mine types!"
                 .replace("{loaded}",
                         String.valueOf(loaded)));
-
-        Bukkit.getLogger().info("mines BEFORE: " + mineStorage.getMines());
 
         // Loops all the data blocks
         blockDataManager.getAll().forEach(dataBlock -> {
@@ -151,10 +142,7 @@ public class PrivateMines extends JavaPlugin {
 
             this.structure = multiBlockStructure.assumeAt(location);
 
-            privateMines.getLogger().info("Searching at location... " + location);
-            privateMines.getLogger().info("multiblockstructure: " + multiBlockStructure);
-            privateMines.getLogger().info("structure: " + structure);
-
+            // Get the relative locations
             int[] relativeSpawn = mineType.getSpawnLocation();
             int[] relativeNpc = mineType.getNpcLocation();
             int[] relativeCorner1 = mineType.getCorner1();
@@ -168,36 +156,20 @@ public class PrivateMines extends JavaPlugin {
             CuboidRegion cuboidRegion = new CuboidRegion(corner1Location, corner2Location);
             cuboidRegion.expand(1, 0, 1, 0, 1, 0);
 
-            getLogger().info("spawnLocation: " + spawnLocation);
-            getLogger().info("npcLocation: " + npcLocation);
-            getLogger().info("corner1: " + corner1Location);
-            getLogger().info("corner2: " + corner2Location);
-            getLogger().info("cuboidRegion: " + cuboidRegion);
-
             mine.setSpawnLocation(spawnLocation);
             mine.setNpcLocation(npcLocation);
             mine.setCuboidRegion(cuboidRegion);
             mine.setMineOwner(playerUUID);
             mine.setStructure(structure);
-
-            getLogger().info("mine spawnLocation: " + mine.getSpawnLocation());
-            getLogger().info("mine npcLocation: " + mine.getNpcLocation());
-            getLogger().info("mine cuboidregion: " + mine.getCuboidRegion());
-            getLogger().info("mine corner 1: " + mine.getCuboidRegion().getStart());
-            getLogger().info("mine corner 2: " + mine.getCuboidRegion().getEnd());
-
-            getLogger().info("mine owner: " + mine.getMineOwner());
-
             mine.reset();
 
             mineStorage.addMine(playerUUID, mine);
         });
 
         mineStorage.getMines().forEach(((uuid, mine) -> {
-            getLogger().info("loading mine... " + mine);
-            getLogger().info("mine owner: " + mine.getMineOwner());
-            getLogger().info("mine type: " + mine.getMineType());
-
+            String username = Bukkit.getOfflinePlayer(mine.getMineOwner()).getName();
+            String loadingMessage = String.format("Loading %s's Mine!", username);
+            getLogger().info(loadingMessage);
         }));
 
         /*

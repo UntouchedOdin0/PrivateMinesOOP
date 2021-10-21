@@ -276,9 +276,6 @@ public class Mine {
             spawnLocation.getBlock().setType(airMaterial, false);
             npcLocation.getBlock().setType(airMaterial, false);
 
-            privateMines.getLogger().info("owner uuid: " + getMineOwner());
-            privateMines.getLogger().info("mine type: " + getMineType());
-            privateMines.getLogger().info("mine type name: " + getMineType().getName());
             dataBlock.set("owner", getMineOwner());
             dataBlock.set("type", getMineType().getName());
             blockDataManager.save();
