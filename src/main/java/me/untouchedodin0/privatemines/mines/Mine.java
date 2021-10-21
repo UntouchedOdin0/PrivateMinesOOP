@@ -348,36 +348,13 @@ public class Mine {
             return;
         }
 
-        this.structure = mineType.getMultiBlockStructure().assumeAt(mineLocation);
-        this.corner1 = utils.getRelative(structure, mineType.getCorner1());
-        this.corner2 = utils.getRelative(structure, mineType.getCorner2());
-
-//        this.cuboidRegion = new CuboidRegion(corner1, corner2);
-//        cuboidRegion.expand(1, 0, 1, 0, 1, 0);
-
         if (mineType.getWeightedRandom().getWeights().isEmpty()) {
             privateMines.getLogger().warning("There were no materials in the weighted random!");
             return;
         }
 
-//        CuboidRegion cuboidRegion = getCuboidRegion();
-
-        getCuboidRegion().forEachBlock(block -> {
-            block.setType(Material.REDSTONE_BLOCK);
-        });
-
-
-//        utils.fillRegion(getCuboidRegion(), mineType.getWeightedRandom(), true);
-
-//        cuboidRegion.forEachBlock(block -> {
-//            Material material = XMaterial.matchXMaterial(mineType.getWeightedRandom().roll()).parseMaterial();
-//            if (material == null) {
-//                privateMines.getLogger().warning("Failed to reset mine due to the material being null!");
-//            }
-//            if (material != null) {
-//                block.setType(material);
-//            }
-//        });
+        CuboidRegion cuboidRegion = getCuboidRegion();
+        cuboidRegion.forEachBlock(block -> block.setType(mineType.getWeightedRandom().roll(), false));
     }
 
     public void resetNonExpand() {
