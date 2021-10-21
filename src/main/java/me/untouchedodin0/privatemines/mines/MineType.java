@@ -211,5 +211,4 @@ public class MineType {
     public int[] getCorner2() {
         return getCornerLocations()[1];
     }
-
 }
