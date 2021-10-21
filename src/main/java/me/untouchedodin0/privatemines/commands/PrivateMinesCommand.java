@@ -6,13 +6,11 @@ import me.untouchedodin0.privatemines.mines.Mine;
 import me.untouchedodin0.privatemines.mines.MineType;
 import me.untouchedodin0.privatemines.storage.MineStorage;
 import me.untouchedodin0.privatemines.world.MineWorldManager;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import redempt.redlib.commandmanager.CommandHook;
 import redempt.redlib.commandmanager.Messages;
-import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
 public class PrivateMinesCommand {
@@ -37,7 +35,6 @@ public class PrivateMinesCommand {
         }
         commandSender.sendMessage(ChatColor.GREEN + "Giving " + target.getName() + " a private mine!");
         Mine mine = mineFactory.createMine(target, mineWorldManager.getNextFreeLocation());
-        Bukkit.getLogger().info("mine: " + mine);
         mine.teleportPlayer(target);
     }
 
@@ -49,8 +46,6 @@ public class PrivateMinesCommand {
         }
         commandSender.sendMessage(ChatColor.YELLOW + "Deleting " + target.getName() + "'s Private Mine");
         Mine mine = mineStorage.getMine(target.getUniqueId());
-        Structure structure = mine.getStructure();
-        privateMines.getLogger().info("structure: " + structure);
         mine.delete();
     }
 
