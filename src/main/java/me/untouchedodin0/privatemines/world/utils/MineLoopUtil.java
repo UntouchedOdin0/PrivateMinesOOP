@@ -31,6 +31,7 @@ import redempt.redlib.multiblock.Structure;
 public class MineLoopUtil {
 
     // Find the corner locations of a mine in a MultiBlockStructure
+    // All credits go to Redempt for helping fix this up!
 
     /**
      * @param multiBlockStructure The MultiBlockStructure to search through

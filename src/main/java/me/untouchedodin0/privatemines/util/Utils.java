@@ -1,13 +1,10 @@
 package me.untouchedodin0.privatemines.util;
 
-import com.cryptomorin.xseries.XMaterial;
 import me.untouchedodin0.privatemines.PrivateMines;
 import me.untouchedodin0.privatemines.mines.Mine;
 import me.untouchedodin0.privatemines.mines.MineType;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
-import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
@@ -50,14 +47,5 @@ public class Utils {
         int totalBlocks = cuboidRegion.getBlockVolume();
         long airBlocks = cuboidRegion.stream().filter(Block::isEmpty).count();
         return (double) airBlocks * 100 / totalBlocks;
-    }
-
-    public void fillRegion(CuboidRegion cuboidRegion, WeightedRandom<Material> weightedRandom, boolean fastMode) {
-        Material material = XMaterial.matchXMaterial(weightedRandom.roll()).parseMaterial();
-        cuboidRegion.forEachBlock(block -> {
-            if (material != null) {
-                block.setType(material, fastMode);
-            }
-        });
     }
 }
