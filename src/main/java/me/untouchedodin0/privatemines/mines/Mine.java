@@ -294,18 +294,6 @@ public class Mine {
             privateMines.getLogger().info("mine type name: " + getMineType().getName());
             dataBlock.set("owner", getMineOwner());
             dataBlock.set("type", getMineType().getName());
-
-//            privateMines.getLogger().info("structure: " + structure);
-//            privateMines.getLogger().info("spawnLocation: " + spawnLocation);
-//            privateMines.getLogger().info("npcLocation: " + npcLocation);
-//            privateMines.getLogger().info("corner1: " + corner1);
-//            privateMines.getLogger().info("corner2: " + corner2);
-//
-//            dataBlock.set("location", LocationUtils.toString(mineLocation));
-//            dataBlock.set("spawnLocation", LocationUtils.toString(spawnLocation));
-//            dataBlock.set("npcLocation", LocationUtils.toString(npcLocation));
-//            dataBlock.set("corner1", LocationUtils.toString(corner1));
-//            dataBlock.set("corner2", LocationUtils.toString(corner2));
             blockDataManager.save();
         }
     }
@@ -374,21 +362,9 @@ public class Mine {
         CuboidRegion cuboidRegion = new CuboidRegion(corner1, corner2);
         cuboidRegion.expand(1, 0, 1, 0, 1, 0);
 
-//        this.cuboidRegion = new CuboidRegion(corner1, corner2);
-
         if (mineType.getWeightedRandom().getWeights().isEmpty()) {
             privateMines.getLogger().warning("There were no materials in the weighted random!");
-            return;
         }
-
-        cuboidRegion.forEachBlock(block -> block.setType(Material.REDSTONE_BLOCK));
-//        getCuboidRegion().forEachBlock(block -> {
-//            block.setType(Material.REDSTONE_BLOCK);
-//        });
-//        cuboidRegion.forEachBlock(block -> {
-//            block.setType(Material.EMERALD_BLOCK);
-//        });
-//        utils.fillRegion(cuboidRegion, mineType.getWeightedRandom(), true);
     }
 
     public void autoReset() {
