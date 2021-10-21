@@ -91,6 +91,11 @@ public class MineConfig {
                             "please make a ticket on the discord reporting this");
         }
 
+        if (file == null) {
+            String missingFile = "Can't find the file specified, are you sure it exists?";
+            privateMines.getLogger().warning(missingFile);
+        }
+
         this.path = privateMines.getDataFolder().toPath().resolve(file);
         this.contents = Files.lines(path).collect(Collectors.joining());
 
