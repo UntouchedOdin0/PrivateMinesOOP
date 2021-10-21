@@ -178,6 +178,7 @@ public class PrivateMines extends JavaPlugin {
             mine.setNpcLocation(npcLocation);
             mine.setCuboidRegion(cuboidRegion);
             mine.setMineOwner(playerUUID);
+            mine.setStructure(structure);
 
             getLogger().info("mine spawnLocation: " + mine.getSpawnLocation());
             getLogger().info("mine npcLocation: " + mine.getNpcLocation());

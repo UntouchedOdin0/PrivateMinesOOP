@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import redempt.redlib.commandmanager.CommandHook;
 import redempt.redlib.commandmanager.Messages;
+import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
 public class PrivateMinesCommand {
@@ -48,6 +49,8 @@ public class PrivateMinesCommand {
         }
         commandSender.sendMessage(ChatColor.YELLOW + "Deleting " + target.getName() + "'s Private Mine");
         Mine mine = mineStorage.getMine(target.getUniqueId());
+        Structure structure = mine.getStructure();
+        privateMines.getLogger().info("structure: " + structure);
         mine.delete();
     }
 

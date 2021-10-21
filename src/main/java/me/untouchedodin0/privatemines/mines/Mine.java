@@ -196,6 +196,10 @@ public class Mine {
         return structure;
     }
 
+    public void setStructure(Structure structure) {
+        this.structure = structure;
+    }
+
     public WeightedRandom<Material> getWeightedRandom() {
         return weightedRandom;
     }
@@ -295,18 +299,12 @@ public class Mine {
         }
         MineStorage mineStorage = privateMines.getMineStorage();
 
-        if (mineOwner != null && mineLocation != null) {
-            mineStorage.removeMine(mineOwner);
+        this.structure = getStructure();
 
-            BlockDataManager blockDataManager = privateMines.getBlockDataManager();
-            DataBlock dataBlock = blockDataManager.getDataBlock(mineLocation.getBlock());
-            Location location = dataBlock.getBlock().getLocation();
-            this.structure = mineType.getMultiBlockStructure().assumeAt(location);
-            if (debugMode) {
-                privateMines.getLogger().info("delete Structure: " + structure);
-            }
+        if (mineOwner != null) {
+            mineStorage.removeMine(mineOwner);
             if (airMaterial != null) {
-                structure.getRegion().forEachBlock(b -> b.setType(airMaterial, false));
+                structure.getRegion().forEachBlock(block -> block.setType(airMaterial, false));
             }
         }
     }
