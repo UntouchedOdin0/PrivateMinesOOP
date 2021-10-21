@@ -56,36 +56,21 @@ public class PrivateMinesCommand {
     @CommandHook("reset")
     public void reset(CommandSender commandSender) {
         Player player = (Player) commandSender;
-        privateMines.getLogger().info("mineStorage: " + mineStorage);
-        privateMines.getLogger().info("mineStorage mines: " + mineStorage.getMines());
         boolean hasMine = mineStorage.hasMine(player.getUniqueId());
-        privateMines.getLogger().info("has mine: " + hasMine);
         Mine mine = mineStorage.getMine(player.getUniqueId());
         if (mine == null) return;
         if (!hasMine) return;
 
         MineType mineType = mine.getMineType();
-        CuboidRegion cuboidRegion = mine.getCuboidRegion();
 
         if (mineType.getWeightedRandom().getWeights().isEmpty()) {
             privateMines.getLogger().warning("There were no materials in the weighted random!");
             return;
         }
 
-        privateMines.getLogger().info("mine: " + mine);
-
-        mine.resetNonExpand();
-//        cuboidRegion.expand(1, 0, 1, 0, 1, 0);
-//        cuboidRegion.forEachBlock(block -> {
-//            Material material = XMaterial.matchXMaterial(mineType.getWeightedRandom().roll()).parseMaterial();
-//            if (material == null) {
-//                privateMines.getLogger().warning("The mine material was null couldn't reset!");
-//            }
-//            if (material != null) {
-//                block.setType(material);
-//            }
-//            Messages.msg("mineReset");
-//        });
+        CuboidRegion cuboidRegion = mine.getCuboidRegion();
+        cuboidRegion.forEachBlock(block -> block.setType(mine.getWeightedRandom().roll(), false));
+        Messages.msg("mineReset");
     }
 
     @CommandHook("teleport")

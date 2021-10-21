@@ -360,8 +360,12 @@ public class Mine {
             return;
         }
 
-        corner1.getBlock().setType(Material.EMERALD_BLOCK);
-        corner2.getBlock().setType(Material.DIAMOND_BLOCK);
+//        CuboidRegion cuboidRegion = getCuboidRegion();
+
+        getCuboidRegion().forEachBlock(block -> {
+            block.setType(Material.REDSTONE_BLOCK);
+        });
+
 
 //        utils.fillRegion(getCuboidRegion(), mineType.getWeightedRandom(), true);
 
@@ -384,10 +388,15 @@ public class Mine {
         }
 
         this.structure = mineType.getMultiBlockStructure().assumeAt(mineLocation);
-        this.corner1 = utils.getRelative(structure, mineType.getCorner1());
-        this.corner2 = utils.getRelative(structure, mineType.getCorner2());
+        Location corner1 = utils.getRelative(structure, mineType.getCorner1());
+        Location corner2 = utils.getRelative(structure, mineType.getCorner2());
+
+        corner1.getBlock().setType(Material.EMERALD_BLOCK);
+        corner2.getBlock().setType(Material.DIAMOND_BLOCK);
 
         CuboidRegion cuboidRegion = new CuboidRegion(corner1, corner2);
+        cuboidRegion.expand(1, 0, 1, 0, 1, 0);
+
 //        this.cuboidRegion = new CuboidRegion(corner1, corner2);
 
         if (mineType.getWeightedRandom().getWeights().isEmpty()) {
@@ -395,9 +404,13 @@ public class Mine {
             return;
         }
 
-        cuboidRegion.forEachBlock(block -> {
-            block.setType(Material.EMERALD_BLOCK);
-        });
+        cuboidRegion.forEachBlock(block -> block.setType(Material.REDSTONE_BLOCK));
+//        getCuboidRegion().forEachBlock(block -> {
+//            block.setType(Material.REDSTONE_BLOCK);
+//        });
+//        cuboidRegion.forEachBlock(block -> {
+//            block.setType(Material.EMERALD_BLOCK);
+//        });
 //        utils.fillRegion(cuboidRegion, mineType.getWeightedRandom(), true);
     }
 
