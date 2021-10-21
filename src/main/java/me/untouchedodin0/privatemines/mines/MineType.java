@@ -196,26 +196,6 @@ public class MineType {
         return multiBlockStructure;
     }
 
-
-//    public void setupRelativeLocations() {
-//        MineLoopUtil mineLoopUtil = new MineLoopUtil();
-//        if (XMaterial.matchXMaterial(privateMines.getSpawnMaterial()).isPresent()) {
-//            spawnMaterial = XMaterial.matchXMaterial(privateMines.getSpawnMaterial()).get().parseMaterial();
-//        }
-//        if (XMaterial.matchXMaterial(privateMines.getSellNpcMaterial()).isPresent()) {
-//            sellNpcMaterial = XMaterial.matchXMaterial(privateMines.getSellNpcMaterial()).get().parseMaterial();
-//        }
-//        if (XMaterial.matchXMaterial(privateMines.getCornerMaterial()).isPresent()) {
-//            cornerMaterial = XMaterial.matchXMaterial(privateMines.getCornerMaterial()).get().parseMaterial();
-//        }
-//
-//        materials.forEach((material, aDouble) -> weightedRandom.set(XMaterial.matchXMaterial(material).parseMaterial(), aDouble));
-//
-//        this.spawnLocation = mineLoopUtil.findSpawnLocation(multiBlockStructure, spawnMaterial);
-//        this.npcLocation = mineLoopUtil.findNpcLocation(multiBlockStructure, sellNpcMaterial);
-//        this.cornerLocations = mineLoopUtil.findCornerLocations(multiBlockStructure, cornerMaterial);
-//    }
-
     public int[] getSpawnLocation() {
         return spawnLocation;
     }
