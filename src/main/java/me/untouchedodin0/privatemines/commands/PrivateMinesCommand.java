@@ -1,6 +1,5 @@
 package me.untouchedodin0.privatemines.commands;
 
-import com.cryptomorin.xseries.XMaterial;
 import me.untouchedodin0.privatemines.PrivateMines;
 import me.untouchedodin0.privatemines.factory.MineFactory;
 import me.untouchedodin0.privatemines.mines.Mine;
@@ -9,7 +8,6 @@ import me.untouchedodin0.privatemines.storage.MineStorage;
 import me.untouchedodin0.privatemines.world.MineWorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import redempt.redlib.commandmanager.CommandHook;
