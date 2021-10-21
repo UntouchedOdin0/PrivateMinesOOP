@@ -35,14 +35,12 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.blockdata.DataBlock;
-import redempt.redlib.misc.Task;
 import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
 import java.util.UUID;
 
-@SuppressWarnings("unused")
 public class Mine {
 
     /*
@@ -52,7 +50,6 @@ public class Mine {
      */
 
     private final PrivateMines privateMines;
-    private final Utils utils;
     private final Material airMaterial = XMaterial.AIR.parseMaterial();
     private MineType mineType;
     private Location mineLocation;
@@ -63,14 +60,12 @@ public class Mine {
     private CuboidRegion cuboidRegion;
     private UUID mineOwner;
     private Structure structure;
-    private Task task;
     private WeightedRandom<Material> weightedRandom;
     private boolean debugMode;
     private boolean isAutoResetting;
 
-    public Mine(PrivateMines privateMines, Utils utils) {
+    public Mine(PrivateMines privateMines) {
         this.privateMines = privateMines;
-        this.utils = utils;
     }
 
     /**
@@ -201,24 +196,12 @@ public class Mine {
         return structure;
     }
 
-    public void setStructure(Structure structure) {
-        this.structure = structure;
-    }
-
     public WeightedRandom<Material> getWeightedRandom() {
         return weightedRandom;
     }
 
     public void setWeightedRandom(WeightedRandom<Material> weightedRandom) {
         this.weightedRandom = weightedRandom;
-    }
-
-    public boolean isAutoResetting() {
-        return isAutoResetting;
-    }
-
-    public void setAutoResetting(boolean isAutoResetting) {
-        this.isAutoResetting = isAutoResetting;
     }
 
     /*
@@ -343,46 +326,6 @@ public class Mine {
 
         CuboidRegion cuboidRegion = getCuboidRegion();
         cuboidRegion.forEachBlock(block -> block.setType(mineType.getWeightedRandom().roll(), false));
-    }
-
-    public void resetNonExpand() {
-        if (mineLocation == null) return;
-        if (mineType == null) {
-            privateMines.getLogger().warning("Failed to reset mine due to the type being null!");
-            return;
-        }
-
-        this.structure = mineType.getMultiBlockStructure().assumeAt(mineLocation);
-        Location corner1 = utils.getRelative(structure, mineType.getCorner1());
-        Location corner2 = utils.getRelative(structure, mineType.getCorner2());
-
-        corner1.getBlock().setType(Material.EMERALD_BLOCK);
-        corner2.getBlock().setType(Material.DIAMOND_BLOCK);
-
-        CuboidRegion cuboidRegion = new CuboidRegion(corner1, corner2);
-        cuboidRegion.expand(1, 0, 1, 0, 1, 0);
-
-        if (mineType.getWeightedRandom().getWeights().isEmpty()) {
-            privateMines.getLogger().warning("There were no materials in the weighted random!");
-        }
-    }
-
-    public void autoReset() {
-        this.task = Task.syncRepeating(privateMines, () -> {
-            double blocksPercentageLeft = utils.getPercentageLeft(this);
-            if (blocksPercentageLeft <= blocksPercentageLeft) {
-                resetNonExpand();
-            }
-        }, 0L, 20L);
-
-        this.task = Task.syncRepeating(privateMines,
-                this::resetNonExpand, 0L, 20L);
-    }
-
-    public void cancelAutoReset() {
-        if (task.isCurrentlyRunning()) {
-            task.cancel();
-        }
     }
 
     /*

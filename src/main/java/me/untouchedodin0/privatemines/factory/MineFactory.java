@@ -66,7 +66,7 @@ public class MineFactory {
         Utils utils = new Utils(privateMines);
         Block block = location.getBlock();
         String userUUID = player.getUniqueId().toString();
-        Mine mine = new Mine(privateMines, utils);
+        Mine mine = new Mine(privateMines);
         mine.setMineOwner(player.getUniqueId());
         mine.setMineLocation(location);
         mine.setMineType(defaultMineType);
@@ -156,7 +156,7 @@ public class MineFactory {
         } else {
             String userUUID = player.getUniqueId().toString();
 
-            Mine mine = new Mine(privateMines, utils);
+            Mine mine = new Mine(privateMines);
             mine.setMineOwner(player.getUniqueId());
             mine.setMineLocation(location);
             mine.setMineType(mineType);

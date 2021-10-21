@@ -119,6 +119,7 @@ public class MineType {
      * @return The tier of the mine
      */
 
+
     public int getMineTier() { return mineTier; }
 
     /**

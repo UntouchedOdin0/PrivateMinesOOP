@@ -180,7 +180,7 @@ public class PrivateMines extends JavaPlugin {
 //            Location npcLocation = LocationUtils.fromString(npcLocationName);
 
             // Creates a new mine object
-            Mine mine = new Mine(this, utils);
+            Mine mine = new Mine(this);
 
             // Gets the player uuid string from the data block then converts it to a UUID
             UUID playerUUID = UUID.fromString(dataBlock.getString("owner"));
