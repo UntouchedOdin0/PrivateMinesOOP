@@ -194,9 +194,7 @@ public class PrivateMines extends JavaPlugin {
     @Override
     public void onDisable() {
         getLogger().info("Disabling Private Mines...");
-        getLogger().info("Mine data map before: " + mineDataMap);
         mineDataMap.clear();
-        getLogger().info("Mine data map after: " + mineDataMap);
         getLogger().info("Saving and closing the BlockDataManager...");
         blockDataManager.getAll().forEach(dataBlock -> {
             Bukkit.getLogger().info("Saving data block: " + dataBlock);

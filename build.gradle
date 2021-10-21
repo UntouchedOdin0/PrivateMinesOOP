@@ -6,13 +6,11 @@ plugins {
 }
 
 group 'me.untouchedodin0.privatemines'
-version '3.0.2-SNAPSHOT'
+version '3.0.3-SNAPSHOT'
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
 apply plugin: "java"
 
-//def command = "java -jar E:/Coding/Spigot Test Servers/1.17 - Paper (pmines rewrite)/paper.jar"
-def output = "java -jar E:/Coding/Spigot Test Servers/1.17 - Paper (pmines rewrite)/paper.jar".execute().text
 
 ext {
     javaMainClass = "me.untouchedodin0.privatemines.PrivateMines"
@@ -60,16 +58,5 @@ shadowJar {
 
 task copyJarToPlugins(type: Copy) {
     from shadowJar // shortcut for createJar.outputs.files
-//    into "./devserver/plugins"
     into "E:/Coding/Spigot Test Servers/1.17 - Paper (pmines rewrite)/plugins"
 }
-
-task runServer(type: Exec) {
-    doFirst {
-        println "Starting Spigot server..."
-        workingDir = file('./devserver/')
-        commandLine = ['cmd', '/C', 'start', 'start.bat']
-        // cmd /C start D:/Projects/WorkSpaces/WorldCleaner/devserver/start.bat
-    }
-}
-
