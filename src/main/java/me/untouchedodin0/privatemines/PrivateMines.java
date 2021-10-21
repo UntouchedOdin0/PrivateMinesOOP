@@ -69,7 +69,6 @@ public class PrivateMines extends JavaPlugin {
     MineStorage mineStorage;
     BlockDataManager blockDataManager;
     Utils utils;
-    ConfigManager minesConfig;
     Structure structure;
 
     @ConfigValue
@@ -87,9 +86,6 @@ public class PrivateMines extends JavaPlugin {
     @ConfigValue
     private Map<String, MineConfig> mineTypes = ConfigManager.map(MineConfig.class);
 
-//    @ConfigValue
-//    private Map<String, StorageConfig> mines = ConfigManager.map(StorageConfig.class);
-
     @Override
     public void onEnable() {
         privateMines = this;
@@ -98,17 +94,6 @@ public class PrivateMines extends JavaPlugin {
         if (!configFile.exists()) {
             saveDefaultConfig();
         }
-//        if (!minesFile.exists()) {
-//            boolean createdFile = false;
-//            try {
-//                createdFile = minesFile.createNewFile();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            if (createdFile) {
-//                Bukkit.getLogger().info("Created the mines.yml file!");
-//            }
-//        }
 
         ConfigManager configManager = new ConfigManager(this).register(this).load();
         Bukkit.getLogger().info("minesFile: " + minesFile);
@@ -134,17 +119,6 @@ public class PrivateMines extends JavaPlugin {
                 .replace("{loaded}",
                         String.valueOf(loaded)));
 
-//        mines.forEach((string, storageConfig) -> {
-//            Bukkit.getLogger().info("Loading mine " + string +
-//                    " from storage config " + storageConfig);
-//        });
-
-        mineBlocks.put(Material.STONE, 0.5);
-        mineBlocks.put(Material.EMERALD_ORE, 0.5);
-
-        mineBlocks2.put(Material.COBBLESTONE, 0.5);
-        mineBlocks2.put(Material.GOLD_ORE, 0.5);
-
         Bukkit.getLogger().info("mines BEFORE: " + mineStorage.getMines());
 
         // Loops all the data blocks
@@ -153,31 +127,6 @@ public class PrivateMines extends JavaPlugin {
             // Gets the mine type from the data block
 
             MineType mineType = getMineDataMap().get(dataBlock.getString("type"));
-
-//            Mine mine = new Mine(this, utils);
-//            MineData mineData = mineDataMap.get(dataBlock.getString("mineData"));
-//            UUID uuid = UUID.fromString(dataBlock.getString("owner"));
-//            mine.setMineOwner(uuid);
-//            mine.setMineData(mineData);
-//            getLogger().info("DataBlock: " + dataBlock);
-//            getLogger().info("DataBlock Owner: " + dataBlock.get("owner"));
-//            getLogger().info("DataBlock mine type name: " + dataBlock.get("type"));
-//            getLogger().info("DataBlock mine location: " + dataBlock.get("location"));
-//            getLogger().info("DataBlock spawnLocation location: " + dataBlock.get("spawnLocation"));
-//            getLogger().info("DataBlock npcLocation location: " + dataBlock.get("npcLocation"));
-//            getLogger().info("DataBlock corner1 location: " + dataBlock.get("corner1"));
-//            getLogger().info("DataBlock corner2 location: " + dataBlock.get("corner2"));
-//            getLogger().info("DataBlock structure structure: " + dataBlock.get("structure"));
-//
-//            String typeName = String.valueOf(dataBlock.getString("type"));
-//            String locationName = String.valueOf(dataBlock.getString("location"));
-//            String spawnLocationName = String.valueOf(dataBlock.getString("spawnLocation"));
-//            String npcLocationName = String.valueOf(dataBlock.getString("npcLocation"));
-
-
-//            Location location = LocationUtils.fromString(locationName);
-//            Location spawnLocation = LocationUtils.fromString(spawnLocationName);
-//            Location npcLocation = LocationUtils.fromString(npcLocationName);
 
             // Creates a new mine object
             Mine mine = new Mine(this);
@@ -191,38 +140,12 @@ public class PrivateMines extends JavaPlugin {
             // The multi block structure for the mine initialized further on
             MultiBlockStructure multiBlockStructure;
 
-//            this.structure = mine.getStructure();
-//            this.structure = mineData.getStructure();
-//            this.spawnLocation = mine.getRelative(relativeSpawn);
-//            this.npcLocation = mine.getRelative(relativeNpc);
-//            this.corner1 = mine.getRelative(relativeCorner1);
-//            this.corner2 = mine.getRelative(relativeCorner2);
-
-
-//            mine.setMineLocation(location);
-
-//            this.spawnLocation = mineType.getSpawnLocation();
-//            this.npcLocation = mineType.getNpcLocation();
-//            this.corner1 = mineType.getCorner1();
-//            this.corner2 = mineType.getCorner2();
-
-//            CuboidRegion cuboidRegion = new CuboidRegion(mine.getRelative(corner1), mine.getRelative(corner2));
-
-//            mine.setSpawnLocation(mine.getRelative(spawnLocation));
-//            mine.setNpcLocation(mine.getRelative(npcLocation));
-//            mine.setCuboidRegion(cuboidRegion);
-
             // Sets the mine owner and the mine type
             mine.setMineOwner(playerUUID);
             mine.setMineType(mineType);
 
             // Initialize the multi block structure from the mine type
             multiBlockStructure = mineType.getMultiBlockStructure();
-
-            if (location == null) {
-                getLogger().warning("Mine location was null, couldn't find the structure!");
-                return;
-            }
 
             // Initialize the structure by using the multi block structure to assume the structure is at a location
 
@@ -267,28 +190,6 @@ public class PrivateMines extends JavaPlugin {
             mine.reset();
 
             mineStorage.addMine(playerUUID, mine);
-
-//            getLogger().info("playerUUID: " + playerUUID);
-//            getLogger().info("mine: " + mine);
-//            getLogger().info("mineData: " + mineType);
-//            getLogger().info("mineLocation: " + mine.getMineLocation());
-//            getLogger().info("spawnLocation: " + mine.getSpawnLocation());
-//            getLogger().info("npcLocation: " + mine.getNpcLocation());
-//            getLogger().info("spawnLocation: " + spawnLocation);
-//            getLogger().info("npcLocation: " + npcLocation);
-//            getLogger().info("cuboid region Start: " + mine.getCuboidRegion().getStart());
-//            getLogger().info("cuboid region End: " + mine.getCuboidRegion().getEnd());
-//            getLogger().info("cuboidRegion: " + mine.getCuboidRegion());
-
-//            getLogger().info("mineData: " + mineData);
-//            getLogger().info("mineLocation: " + location);
-//            getLogger().info("spawnLocation: " + spawnLocation);
-//            getLogger().info("npcLocation: " + npcLocation);
-//            getLogger().info("corner1Location: " + corner1Location);
-//            getLogger().info("corner2Location: " + corner2Location);
-//            getLogger().info("cuboidRegion: " + cuboidRegion);
-
-            Bukkit.getLogger().info("mines AFTER: " + mineStorage.getMines());
         });
 
         mineStorage.getMines().forEach(((uuid, mine) -> {
@@ -297,27 +198,6 @@ public class PrivateMines extends JavaPlugin {
             getLogger().info("mine type: " + mine.getMineType());
 
         }));
-
-        // Loads the mines back after each reboot (fixes vanishing mines)
-
-//        mines.forEach((string, storageConfig) -> {
-//            Bukkit.getLogger().info("Loading mine " + string + " back!");
-//        });
-
-//        if (!minesConfig.configExists()) {
-//            return;
-//        } else {
-//            if (minesConfig.getConfig().getConfigurationSection("mines") == null) {
-//                getLogger().info("No mines to load!");
-//            } else {
-//                for (String mine : Objects.requireNonNull(minesConfig
-//                        .getConfig()
-//                        .getConfigurationSection("mines"))
-//                        .getKeys(true)) {
-//                    Bukkit.getLogger().info("config mines for loop : " + mine);
-//                }
-//            }
-//        }
 
         /*
             Does these things in order
@@ -419,7 +299,6 @@ public class PrivateMines extends JavaPlugin {
     public MineType getNextMineType(String mineData) {
         return mineTypeTreeMap.higherEntry(mineData).getValue();
     }
-
 
     /*
         Gets the next MineData from the TreeMap using MineData
