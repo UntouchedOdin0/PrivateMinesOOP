@@ -37,6 +37,7 @@ import me.untouchedodin0.privatemines.world.utils.MineLoopUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.codemc.worldguardwrapper.WorldGuardWrapper;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.commandmanager.CommandParser;
 import redempt.redlib.commandmanager.Messages;
@@ -185,6 +186,8 @@ public class PrivateMines extends JavaPlugin {
                         new PrivateMinesCommand(this));
         Messages.load(this);
         Metrics metrics = new Metrics(this, pluginId);
+
+        getLogger().info("Loading worldguard wrapper version: " + WorldGuardWrapper.getInstance().getApiVersion());
     }
 
     /*

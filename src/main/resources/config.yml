@@ -12,6 +12,10 @@ mineTypes:
     materials:
       STONE: 0.9
       COBBLESTONE: 0.1
+    allowFlags:
+      - "block-break"
+    denyFlags:
+      - "block-place"
   Test2:
     file: "structure2.dat"
     priority: 2
@@ -19,6 +23,10 @@ mineTypes:
     materials:
       STONE: 0.9
       COBBLESTONE: 0.1
+    allowFlags:
+      - "block-break"
+    denyFlags:
+      - "block-place"
   Test3:
     file: "structure3.dat"
     priority: 3
@@ -26,3 +34,7 @@ mineTypes:
     materials:
       STONE: 0.9
       COBBLESTONE: 0.1
+    allowFlags:
+      - "block-break"
+    denyFlags:
+      - "block-place"

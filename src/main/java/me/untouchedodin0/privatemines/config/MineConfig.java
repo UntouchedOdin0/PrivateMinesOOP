@@ -39,6 +39,7 @@ import redempt.redlib.multiblock.MultiBlockStructure;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -68,6 +69,12 @@ public class MineConfig {
     @ConfigValue
     private Map<Material, Double> materials =
             ConfigManager.map(Material.class, Double.class); // reads the materials from the section
+
+    @ConfigValue
+    private List<String> allowFlags = ConfigManager.stringList();
+
+    @ConfigValue
+    private List<String> denyFlags = ConfigManager.stringList();
 
     private MultiBlockStructure multiBlockStructure;
 
@@ -159,4 +166,8 @@ public class MineConfig {
     public MultiBlockStructure getMultiBlockStructure() {
         return multiBlockStructure;
     }
+
+    public List<String> getAllowFlags() { return allowFlags; }
+
+    public List<String> getDenyFlags() { return denyFlags; }
 }

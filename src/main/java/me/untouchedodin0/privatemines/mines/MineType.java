@@ -32,6 +32,7 @@ import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.MultiBlockStructure;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MineType {
@@ -57,10 +58,13 @@ public class MineType {
     private final int[] spawnLocation;
     private final int[] npcLocation;
     private final int[][] cornerLocations;
+    private List<String> allowFlags;
+    private List<String> denyFlags;
 
     private Material spawnMaterial;
     private Material sellNpcMaterial;
     private Material cornerMaterial;
+
 
     public MineType(PrivateMines privateMines,
                     MultiBlockStructure multiBlockStructure) {
@@ -178,6 +182,14 @@ public class MineType {
         this.multiBlockStructure = multiBlockStructure;
     }
 
+    public void setAllowFlags(List<String> allowFlags) {
+        this.allowFlags = allowFlags;
+    }
+
+    public void setDenyFlags(List<String> denyFlags) {
+        this.denyFlags = denyFlags;
+    }
+
     /**
      *
      * @return The MultiBlockStructure of the MineData
@@ -201,5 +213,13 @@ public class MineType {
 
     public int[] getCorner2() {
         return getCornerLocations()[1];
+    }
+
+    public List<String> getAllowFlags() {
+        return allowFlags;
+    }
+
+    public List<String> getDenyFlags() {
+        return denyFlags;
     }
 }

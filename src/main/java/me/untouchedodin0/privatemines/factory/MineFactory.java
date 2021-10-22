@@ -32,9 +32,16 @@ import me.untouchedodin0.privatemines.util.Utils;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.codemc.worldguardwrapper.WorldGuardWrapper;
+import org.codemc.worldguardwrapper.flag.WrappedState;
+import org.codemc.worldguardwrapper.region.IWrappedRegion;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.misc.LocationUtils;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 public class MineFactory {
 
@@ -61,6 +68,8 @@ public class MineFactory {
             privateMines.getLogger().warning("Failed to create mine due to defaultMineData being null");
         }
 
+        final WorldGuardWrapper worldGuardWrapper = WorldGuardWrapper.getInstance();
+
         Block block = location.getBlock();
         String userUUID = player.getUniqueId().toString();
         Mine mine = new Mine(privateMines);
@@ -81,6 +90,34 @@ public class MineFactory {
         dataBlock.set("corner1", LocationUtils.toString(mine.getCorner1()));
         dataBlock.set("corner2", LocationUtils.toString(mine.getCorner2()));
         dataBlock.set("structure", mine.getStructure());
+
+        IWrappedRegion mineRegion =
+                WorldGuardWrapper.getInstance()
+                .addCuboidRegion(
+                        String.valueOf(userUUID),
+                        mine.getCorner1(),
+                        mine.getCorner2())
+                        .orElseThrow(()
+                                -> new RuntimeException("Could not create the mine WorldGuard region!"));
+        mineRegion.getOwners().addPlayer(player.getUniqueId());
+
+        MineType mineType = mine.getMineType();
+
+        List<String> allowFlags = mineType.getAllowFlags();
+        List<String> denyFlags = mineType.getDenyFlags();
+
+        Stream.of(
+                worldGuardWrapper.getFlag("block-place", WrappedState.class),
+                worldGuardWrapper.getFlag("mob-spawning", WrappedState.class)
+        ).filter(Optional::isPresent)
+                .map(Optional::get)
+                .forEach(flag -> mineRegion.setFlag(flag, WrappedState.DENY));
+
+        Stream.of(
+                worldGuardWrapper.getFlag("block-break", WrappedState.class)
+        ).filter(Optional::isPresent)
+                .map(Optional::get)
+                .forEach(wrappedStateIWrappedFlag -> mineRegion.setFlag(wrappedStateIWrappedFlag, WrappedState.ALLOW));
 
         blockDataManager.save();
         mine.reset();

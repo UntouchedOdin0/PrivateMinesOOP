@@ -37,6 +37,7 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     compileOnly 'com.github.Redempt:RedLib:6.0.6'
     compileOnly 'org.spigotmc:spigot-api:1.17-R0.1-SNAPSHOT' // The Spigot API with no shadowing. Requires the OSS repo.
+    implementation 'org.codemc.worldguardwrapper:worldguardwrapper:1.2.0-SNAPSHOT'
     implementation 'com.github.CryptoMorin:XSeries:v8.4.0'
 }
 
@@ -52,9 +53,9 @@ test {
     useJUnitPlatform()
 }
 
-//shadowJar {
-//    relocate 'org.bstats', 'me.untouchedodin0'
-//}
+shadowJar {
+    relocate 'org.codemc.worldguardwrapper', 'me.untouchedodin0.privatemines.worldguardwrapper'
+}
 
 task copyJarToPlugins(type: Copy) {
     from shadowJar // shortcut for createJar.outputs.files
