@@ -93,10 +93,10 @@ public class MineFactory {
 
         IWrappedRegion mineRegion =
                 WorldGuardWrapper.getInstance()
-                .addCuboidRegion(
-                        String.valueOf(userUUID),
-                        mine.getCorner1(),
-                        mine.getCorner2())
+                        .addCuboidRegion(
+                                String.valueOf(userUUID),
+                                mine.getCorner1(),
+                                mine.getCorner2())
                         .orElseThrow(()
                                 -> new RuntimeException("Could not create the mine WorldGuard region!"));
         mineRegion.getOwners().addPlayer(player.getUniqueId());
