@@ -91,10 +91,12 @@ public class MineFactory {
         dataBlock.set("corner2", LocationUtils.toString(mine.getCorner2()));
         dataBlock.set("structure", mine.getStructure());
 
+        String regionName = String.format("mine-%s", userUUID);
+
         IWrappedRegion mineRegion =
                 WorldGuardWrapper.getInstance()
                         .addCuboidRegion(
-                                String.valueOf(userUUID),
+                                regionName,
                                 mine.getCorner1(),
                                 mine.getCorner2())
                         .orElseThrow(()
