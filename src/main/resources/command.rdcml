@@ -39,5 +39,6 @@ privatemine,privatemines,pmine {
     create string:name {
         hook create
         help /pmine create <name> - Creates a mine structure with the set name
+        permission: privatemines.create
     }
 }

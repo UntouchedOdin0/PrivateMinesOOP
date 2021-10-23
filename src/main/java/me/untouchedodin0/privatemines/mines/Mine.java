@@ -348,13 +348,14 @@ public class Mine {
             return;
         }
 
-        setMineType(upgradeType);
         if (player != null) {
             Structure structure = getStructure();
             if (airMaterial != null) {
                 structure.getRegion().forEachBlock(block -> block.setType(airMaterial, false));
             }
-            Mine mine = mineFactory.createMine(player, getMineLocation(), upgradeType);
+
+            setMineType(upgradeType);
+            Mine mine = mineFactory.createMine(player, mineLocation, upgradeType);
             mine.teleportPlayer(player);
             mineStorage.replaceMine(player.getUniqueId(), mine);
         }

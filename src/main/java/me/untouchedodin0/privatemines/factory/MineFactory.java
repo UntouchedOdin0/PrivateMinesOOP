@@ -138,6 +138,7 @@ public class MineFactory {
         } else {
             String userUUID = player.getUniqueId().toString();
 
+            Utils utils = privateMines.getUtils();
             Mine mine = new Mine(privateMines);
             mine.setMineOwner(player.getUniqueId());
             mine.setMineLocation(location);
