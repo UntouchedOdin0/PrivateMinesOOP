@@ -321,6 +321,7 @@ public class Mine {
 
         CuboidRegion cuboidRegion = getCuboidRegion();
         cuboidRegion.forEachBlock(block -> block.setType(mineType.getWeightedRandom().roll(), false));
+        teleportPlayer(Bukkit.getPlayer(getMineOwner()));
     }
 
     /*
