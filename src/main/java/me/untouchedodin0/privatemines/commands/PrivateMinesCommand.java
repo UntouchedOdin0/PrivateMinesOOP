@@ -126,7 +126,6 @@ public class PrivateMinesCommand {
 
     @CommandHook("create")
     public void create(CommandSender commandSender, String name) {
-        WorldEditPlugin worldEditPlugin = privateMines.getWorldEditPlugin();
         Player player = (Player) commandSender;
         SessionManager manager = WorldEdit.getInstance().getSessionManager();
         LocalSession localSession = manager.get(BukkitAdapter.adapt(player));
