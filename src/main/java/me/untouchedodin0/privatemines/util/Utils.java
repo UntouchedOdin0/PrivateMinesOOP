@@ -55,6 +55,7 @@ public class Utils {
         return (double) airBlocks * 100 / totalBlocks;
     }
 
+    @SuppressWarnings("unused")
     public CuboidRegion getRegion(Clipboard clipboard) {
         int minX = clipboard.getRegion().getMinimumPoint().getBlockX();
         int maxX = clipboard.getRegion().getMinimumPoint().getBlockX();
