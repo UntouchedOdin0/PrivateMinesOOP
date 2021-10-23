@@ -78,8 +78,8 @@ public class Utils {
         world = BukkitAdapter.adapt(Objects.requireNonNull(clipboard.getRegion().getWorld()));
         start = new Location(world, minX, minY, minZ);
         end = new Location(world, maxX, maxY, maxZ);
-        cuboidRegion = new CuboidRegion(start, end);
-        return cuboidRegion;
+
+        return new CuboidRegion(start, end);
     }
 
     public Location blockVector3toBukkit(World world, BlockVector3 blockVector3) {
