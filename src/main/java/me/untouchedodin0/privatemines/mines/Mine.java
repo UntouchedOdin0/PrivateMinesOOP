@@ -32,12 +32,14 @@ import me.untouchedodin0.privatemines.util.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
+import redempt.redlib.region.Region;
 
 import java.util.UUID;
 
@@ -235,12 +237,29 @@ public class Mine {
             privateMines.getLogger().info("Location " + mineLocation);
         }
 
-        Location assumeStart = mineType.getMultiBlockStructure().assumeAt(mineLocation).getRegion().getStart();
-        Location assumeEnd = mineType.getMultiBlockStructure().assumeAt(mineLocation).getRegion().getEnd();
+        Region assumeRegion = mineType.getMultiBlockStructure().assumeAt(mineLocation).getRegion();
 
-        // Build the multi block structure at the location and set the structure field
+        World world = mineLocation.getWorld();
+        int minHeight = 0;
+        int maxHeight = 0;
 
-        this.structure = mineType.getMultiBlockStructure().build(mineLocation);
+        if (world != null) {
+            minHeight = world.getMinHeight();
+            maxHeight = world.getMaxHeight();
+        }
+
+        Location assumeStart = assumeRegion.getStart();
+        Location assumeEnd = assumeRegion.getEnd();
+
+        if (assumeStart.getBlockY() > minHeight && assumeStart.getBlockY() < maxHeight) {
+            if (assumeEnd.getBlockY() > minHeight && assumeEnd.getBlockY() < maxHeight) {
+                // Build the multi block structure at the location and set the structure field
+
+                this.structure = mineType.getMultiBlockStructure().build(mineLocation);
+            }
+        }
+
+
 
         // Simple check to make sure the structure isn't null
 
