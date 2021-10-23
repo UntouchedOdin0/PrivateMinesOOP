@@ -256,10 +256,18 @@ public class Mine {
                 // Build the multi block structure at the location and set the structure field
 
                 this.structure = mineType.getMultiBlockStructure().build(mineLocation);
+            } else {
+                privateMines.getLogger().warning(
+                        "Failed to create structure due to the end height" +
+                        "either being too high or too low!");
+                return;
             }
+        } else {
+            privateMines.getLogger().warning(
+                    "Failed to create structure due to the start height" +
+                            "either being too high or too low!");
+            return;
         }
-
-
 
         // Simple check to make sure the structure isn't null
 
