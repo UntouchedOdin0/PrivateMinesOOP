@@ -55,7 +55,6 @@ public class Utils {
         return (double) airBlocks * 100 / totalBlocks;
     }
 
-    @SuppressWarnings("unused")
     public CuboidRegion getRegion(Clipboard clipboard) {
         final BlockVector3 minimumPoint = clipboard.getRegion().getMinimumPoint();
         final BlockVector3 maximumPoint = clipboard.getRegion().getMaximumPoint();
@@ -70,7 +69,6 @@ public class Utils {
         World world;
         Location start;
         Location end;
-        CuboidRegion cuboidRegion;
 
         if (clipboard.getRegion().getWorld() == null) {
             return null;
