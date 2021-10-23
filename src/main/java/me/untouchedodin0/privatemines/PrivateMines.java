@@ -337,6 +337,4 @@ public class PrivateMines extends JavaPlugin {
     public Utils getUtils() {
         return utils;
     }
-
-    public WorldEditPlugin getWorldEditPlugin() { return worldEditPlugin; }
 }
