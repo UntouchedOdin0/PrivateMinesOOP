@@ -57,26 +57,29 @@ public class Utils {
 
     @SuppressWarnings("unused")
     public CuboidRegion getRegion(Clipboard clipboard) {
-        int minX = clipboard.getRegion().getMinimumPoint().getBlockX();
-        int maxX = clipboard.getRegion().getMinimumPoint().getBlockX();
-        int minY = clipboard.getRegion().getMinimumPoint().getBlockY();
-        int maxY = clipboard.getRegion().getMinimumPoint().getBlockY();
-        int minZ = clipboard.getRegion().getMinimumPoint().getBlockZ();
-        int maxZ = clipboard.getRegion().getMinimumPoint().getBlockZ();
+        final BlockVector3 minimumPoint = clipboard.getRegion().getMinimumPoint();
+        final BlockVector3 maximumPoint = clipboard.getRegion().getMaximumPoint();
+
+        final int minX = minimumPoint.getBlockX();
+        final int maxX = maximumPoint.getBlockX();
+        final int minY = minimumPoint.getBlockY();
+        final int maxY = maximumPoint.getBlockY();
+        final int minZ = minimumPoint.getBlockZ();
+        final int maxZ = maximumPoint.getBlockZ();
 
         World world;
         Location start;
         Location end;
         CuboidRegion cuboidRegion;
 
-        if (clipboard.getRegion().getWorld() != null) {
-            world = BukkitAdapter.adapt(Objects.requireNonNull(clipboard.getRegion().getWorld()));
-            start = new Location(world, minX, minY, minZ);
-            end = new Location(world, maxX, maxY, maxZ);
-            cuboidRegion = new CuboidRegion(start, end);
-            return cuboidRegion;
+        if (clipboard.getRegion().getWorld() == null) {
+            return null;
         }
-        return null;
+        world = BukkitAdapter.adapt(Objects.requireNonNull(clipboard.getRegion().getWorld()));
+        start = new Location(world, minX, minY, minZ);
+        end = new Location(world, maxX, maxY, maxZ);
+        cuboidRegion = new CuboidRegion(start, end);
+        return cuboidRegion;
     }
 
     public Location blockVector3toBukkit(World world, BlockVector3 blockVector3) {
