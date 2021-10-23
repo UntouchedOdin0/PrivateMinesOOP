@@ -139,8 +139,7 @@ public class PrivateMinesCommand {
         try {
             if (selectionWorld == null) throw new IncompleteRegionException();
             region = localSession.getSelection(selectionWorld);
-            player.sendMessage("localSession: " + localSession);
-            player.sendMessage("region: " + region.toString());
+
             minimum = region.getMinimumPoint();
             maximum = region.getMaximumPoint();
             minimumBukkit = utils.blockVector3toBukkit(BukkitAdapter.adapt(selectionWorld), minimum);

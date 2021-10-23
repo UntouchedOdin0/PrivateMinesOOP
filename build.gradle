@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'me.untouchedodin0.privatemines'
-version '3.0.4-SNAPSHOT'
+version '3.0.5-SNAPSHOT'
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
 apply plugin: "java"
