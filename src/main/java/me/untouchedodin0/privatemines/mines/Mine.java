@@ -235,6 +235,9 @@ public class Mine {
             privateMines.getLogger().info("Location " + mineLocation);
         }
 
+        Location assumeStart = mineType.getMultiBlockStructure().assumeAt(mineLocation).getRegion().getStart();
+        Location assumeEnd = mineType.getMultiBlockStructure().assumeAt(mineLocation).getRegion().getEnd();
+
         // Build the multi block structure at the location and set the structure field
 
         this.structure = mineType.getMultiBlockStructure().build(mineLocation);
