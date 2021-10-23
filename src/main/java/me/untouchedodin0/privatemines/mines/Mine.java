@@ -306,7 +306,7 @@ public class Mine {
         }
     }
 
-    // Nice l
+    // Nice little reset system for filling in the cuboid region using the mine type's weighted random.
     public void reset() {
         if (mineLocation == null) return;
         if (mineType == null) {
