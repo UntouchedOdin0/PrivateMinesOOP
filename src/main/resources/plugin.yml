@@ -6,3 +6,5 @@ api-version: 1.13
 depend:
   - RedLib
   - WorldGuard
+softdepend:
+  - WorldEdit

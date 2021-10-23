@@ -24,6 +24,8 @@ SOFTWARE.
 
 package me.untouchedodin0.privatemines;
 
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import me.untouchedodin0.privatemines.commands.PrivateMinesCommand;
 import me.untouchedodin0.privatemines.config.MineConfig;
 import me.untouchedodin0.privatemines.factory.MineFactory;
@@ -69,6 +71,7 @@ public class PrivateMines extends JavaPlugin {
     BlockDataManager blockDataManager;
     Utils utils;
     Structure structure;
+    WorldEditPlugin worldEditPlugin;
 
     @ConfigValue
     private String spawnPoint;
@@ -106,6 +109,8 @@ public class PrivateMines extends JavaPlugin {
         mineWorldManager = new MineWorldManager();
         mineLoopUtil = new MineLoopUtil();
         utils = new Utils(this);
+        worldEditPlugin = (WorldEditPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
+
         int pluginId = 11413;
 
         int loaded = mineTypes.size();
@@ -188,6 +193,8 @@ public class PrivateMines extends JavaPlugin {
         Metrics metrics = new Metrics(this, pluginId);
 
         getLogger().info("Loading worldguard wrapper version: " + WorldGuardWrapper.getInstance().getApiVersion());
+        getLogger().info("Loading worldedit version: " + WorldEdit.getVersion());
+
     }
 
     /*
@@ -330,4 +337,6 @@ public class PrivateMines extends JavaPlugin {
     public Utils getUtils() {
         return utils;
     }
+
+    public WorldEditPlugin getWorldEditPlugin() { return worldEditPlugin; }
 }

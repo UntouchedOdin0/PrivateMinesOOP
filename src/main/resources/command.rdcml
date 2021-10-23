@@ -35,4 +35,9 @@ privatemine,privatemines,pmine {
         help /pmine upgrade <name> - Upgrade a users private mine
         permission: privatemines.upgrade
     }
+
+    create string:name {
+        hook create
+        help /pmine create <name> - Creates a mine structure with the set name
+    }
 }

@@ -1,17 +1,35 @@
 package me.untouchedodin0.privatemines.commands;
 
+import com.sk89q.worldedit.IncompleteRegionException;
+import com.sk89q.worldedit.LocalSession;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.session.SessionManager;
+import com.sk89q.worldedit.world.World;
 import me.untouchedodin0.privatemines.PrivateMines;
 import me.untouchedodin0.privatemines.factory.MineFactory;
 import me.untouchedodin0.privatemines.mines.Mine;
 import me.untouchedodin0.privatemines.mines.MineType;
 import me.untouchedodin0.privatemines.storage.MineStorage;
+import me.untouchedodin0.privatemines.util.Utils;
 import me.untouchedodin0.privatemines.world.MineWorldManager;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import redempt.redlib.commandmanager.CommandHook;
 import redempt.redlib.commandmanager.Messages;
+import redempt.redlib.multiblock.MultiBlockStructure;
 import redempt.redlib.region.CuboidRegion;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 public class PrivateMinesCommand {
 
@@ -19,12 +37,15 @@ public class PrivateMinesCommand {
     private final MineStorage mineStorage;
     private final MineWorldManager mineWorldManager;
     private final PrivateMines privateMines;
+    Utils utils;
+    Path path;
 
     public PrivateMinesCommand(PrivateMines privateMine) {
         this.privateMines = privateMine;
         this.mineFactory = privateMine.getMineFactory();
         this.mineStorage = privateMine.getMineStorage();
         this.mineWorldManager = privateMine.getMineWorldManager();
+        this.utils = privateMine.getUtils();
     }
 
     @CommandHook("give")
@@ -101,5 +122,44 @@ public class PrivateMinesCommand {
         Mine mine = mineStorage.getMine(target.getUniqueId());
         Messages.msg("attemptingMineUpgrade");
         mine.upgrade();
+    }
+
+    @CommandHook("create")
+    public void create(CommandSender commandSender, String name) {
+        WorldEditPlugin worldEditPlugin = privateMines.getWorldEditPlugin();
+        Player player = (Player) commandSender;
+        SessionManager manager = WorldEdit.getInstance().getSessionManager();
+        LocalSession localSession = manager.get(BukkitAdapter.adapt(player));
+        Region region; // declare the region variable
+        World selectionWorld = localSession.getSelectionWorld();
+        BlockVector3 minimum;
+        BlockVector3 maximum;
+        Location minimumBukkit;
+        Location maximumBukkit;
+        String multiBlockStructure;
+
+        try {
+            if (selectionWorld == null) throw new IncompleteRegionException();
+            region = localSession.getSelection(selectionWorld);
+            player.sendMessage("localSession: " + localSession);
+            player.sendMessage("region: " + region.toString());
+            minimum = region.getMinimumPoint();
+            maximum = region.getMaximumPoint();
+            minimumBukkit = utils.blockVector3toBukkit(BukkitAdapter.adapt(selectionWorld), minimum);
+            maximumBukkit = utils.blockVector3toBukkit(BukkitAdapter.adapt(selectionWorld), maximum);
+
+            // Credits to redempt for this part
+            multiBlockStructure = MultiBlockStructure.stringify(minimumBukkit, maximumBukkit);
+            try {
+                path = Paths.get("plugins/PrivateMines/").resolve(name + ".dat");
+                player.sendMessage(ChatColor.YELLOW + "Attempting to write the file, " + path.getFileName() + "...");
+                Files.write(path, multiBlockStructure.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            player.sendMessage(ChatColor.GREEN + "Successfully created the file " + path.getFileName());
+        } catch (IncompleteRegionException incompleteRegionException) {
+            player.sendMessage("Please make a full selection!");
+        }
     }
 }
