@@ -168,6 +168,7 @@ public class PrivateMines extends JavaPlugin {
             mine.setMineOwner(playerUUID);
             mine.setStructure(structure);
             mine.reset();
+            mine.startAutoReset(mineType.getResetTime());
 
             mineStorage.addMine(playerUUID, mine);
         });
