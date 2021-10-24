@@ -48,6 +48,7 @@ public class Utils {
         return upgradeMineType;
     }
 
+    @SuppressWarnings("unused")
     public double getPercentageLeft(Mine mine) {
         CuboidRegion cuboidRegion = mine.getCuboidRegion();
         int totalBlocks = cuboidRegion.getBlockVolume();
@@ -55,6 +56,7 @@ public class Utils {
         return (double) airBlocks * 100 / totalBlocks;
     }
 
+    @SuppressWarnings("unused")
     public CuboidRegion getRegion(Clipboard clipboard) {
         final BlockVector3 minimumPoint = clipboard.getRegion().getMinimumPoint();
         final BlockVector3 maximumPoint = clipboard.getRegion().getMaximumPoint();
