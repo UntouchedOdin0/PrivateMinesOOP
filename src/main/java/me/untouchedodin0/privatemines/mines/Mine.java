@@ -36,12 +36,14 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.blockdata.DataBlock;
+import redempt.redlib.misc.Task;
 import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 import redempt.redlib.region.Region;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class Mine {
 
@@ -65,6 +67,7 @@ public class Mine {
     private WeightedRandom<Material> weightedRandom;
     private boolean debugMode;
     private boolean isAutoResetting;
+    private Task resetTask;
 
     public Mine(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -352,6 +355,11 @@ public class Mine {
         CuboidRegion cuboidRegion = getCuboidRegion();
         cuboidRegion.forEachBlock(block -> block.setType(mineType.getWeightedRandom().roll(), false));
         teleportPlayer(Bukkit.getPlayer(getMineOwner()));
+    }
+
+    public void startAutoReset(int interval) {
+        this.isAutoResetting = true;
+        this.resetTask = Task.syncRepeating(this::reset, 0L, TimeUnit.MINUTES.toMillis(interval));
     }
 
     /*
