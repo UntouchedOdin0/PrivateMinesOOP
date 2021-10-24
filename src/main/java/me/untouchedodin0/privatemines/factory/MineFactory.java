@@ -79,8 +79,6 @@ public class MineFactory {
         mine.setWeightedRandom(defaultMineType.getWeightedRandom());
         mine.build();
 
-        int resetInterval = defaultMineType.getResetTime();
-
         mineStorage.addMine(player.getUniqueId(), mine);
 
         DataBlock dataBlock = blockDataManager.getDataBlock(block);
@@ -148,8 +146,6 @@ public class MineFactory {
             mine.setMineType(mineType);
             mine.setWeightedRandom(mineType.getWeightedRandom());
             mine.build();
-
-            int resetInterval = mineType.getResetTime();
 
             Location corner1 = utils.getRelative(mine.getStructure(), mineType.getCorner1());
             Location corner2 = utils.getRelative(mine.getStructure(), mineType.getCorner2());
