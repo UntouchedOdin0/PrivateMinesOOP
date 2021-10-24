@@ -33,10 +33,10 @@ public enum Direction {
     SOUTH(0, 1),  SOUTH_WEST(-1, 1),
     WEST(-1, 0),  NORTH_WEST(-1, -1);
 
-    private final int xMulti;
-    private final int zMulti;
+    private final double xMulti;
+    private final double zMulti;
 
-    Direction(int xMulti, int zMulti) {
+    Direction(double xMulti, double zMulti) {
         this.xMulti = xMulti;
         this.zMulti = zMulti;
     }
@@ -58,6 +58,6 @@ public enum Direction {
      */
 
     public Location addTo(Location location, int value) {
-        return location.clone().add(value * (double) xMulti, 0, value * (double) zMulti);
+        return location.clone().add(value * xMulti, 0, value * zMulti);
     }
 }
