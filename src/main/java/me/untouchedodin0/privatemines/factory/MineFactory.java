@@ -125,7 +125,7 @@ public class MineFactory {
 
         blockDataManager.save();
         mine.reset();
-        mine.startAutoReset(resetInterval);
+        mine.startAutoResetTask();
         return mine;
     }
 
@@ -151,7 +151,6 @@ public class MineFactory {
 
             int resetInterval = mineType.getResetTime();
 
-
             Location corner1 = utils.getRelative(mine.getStructure(), mineType.getCorner1());
             Location corner2 = utils.getRelative(mine.getStructure(), mineType.getCorner2());
 
@@ -176,7 +175,7 @@ public class MineFactory {
             dataBlock.set("structure", mine.getStructure());
             blockDataManager.save();
             mine.reset();
-            mine.startAutoReset(resetInterval);
+            mine.startAutoResetTask();
 
             if (debugMode) {
                 privateMines.getLogger().info("createMine block: " + block);

@@ -84,4 +84,8 @@ public class Utils {
         Block block = world.getBlockAt(blockVector3.getBlockX(), blockVector3.getBlockY(), blockVector3.getBlockZ());
         return block.getLocation();
     }
+
+    public long minutesToBukkit(int minutes) {
+        return 20L * 60L * minutes;
+    }
 }

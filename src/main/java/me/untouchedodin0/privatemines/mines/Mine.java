@@ -68,9 +68,11 @@ public class Mine {
     private boolean debugMode;
     private boolean isAutoResetting;
     private Task resetTask;
+    private Utils utils;
 
     public Mine(PrivateMines privateMines) {
         this.privateMines = privateMines;
+        this.utils = new Utils(privateMines);
     }
 
     /**
@@ -149,16 +151,16 @@ public class Mine {
         this.corner1 = corner1;
     }
 
-    public void setCorner2(Location corner2) {
-        this.corner2 = corner2;
-    }
-
     /**
      * @return Location - The corner 2 location
      */
 
     public Location getCorner2() {
         return corner2;
+    }
+
+    public void setCorner2(Location corner2) {
+        this.corner2 = corner2;
     }
 
     /**
@@ -262,7 +264,7 @@ public class Mine {
             } else {
                 privateMines.getLogger().warning(
                         "Failed to create structure due to the end height" +
-                        "either being too high or too low!");
+                                "either being too high or too low!");
                 return;
             }
         } else {
@@ -337,6 +339,7 @@ public class Mine {
                 structure.getRegion().forEachBlock(block -> block.setType(airMaterial, false));
             }
         }
+        cancelResetTask();
     }
 
     // Nice little reset system for filling in the cuboid region using the mine type's weighted random.
@@ -357,9 +360,25 @@ public class Mine {
         teleportPlayer(Bukkit.getPlayer(getMineOwner()));
     }
 
-    public void startAutoReset(int interval) {
-        this.isAutoResetting = true;
-        this.resetTask = Task.syncRepeating(this::reset, 0L, TimeUnit.MINUTES.toMillis(interval));
+    public void startAutoResetTask() {
+        int time;
+        long intervalTime;
+
+        if (mineType != null) {
+            time = mineType.getResetTime();
+            intervalTime = utils.minutesToBukkit(time);
+
+            this.resetTask = Task.syncRepeating(privateMines, () -> {
+                CuboidRegion cuboidRegion = getCuboidRegion();
+                cuboidRegion.forEachBlock(block -> block.setType(mineType.getWeightedRandom().roll(), false));
+            }, 0L, intervalTime);
+        }
+    }
+
+    public void cancelResetTask() {
+        if (this.resetTask.isCurrentlyRunning() && this.resetTask != null) {
+            resetTask.cancel();
+        }
     }
 
     /*
