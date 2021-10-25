@@ -59,8 +59,8 @@ public class MineStorage {
 
     /**
      *
-     * @param uuid - The UUID of the player who's mine we'll be deleting from storage
-     * @param mine  - The new mine of which will replace the old mine
+     * @param uuid The UUID of the player who's mine we'll be deleting from storage
+     * @param mine The new mine of which will replace the old mine
      */
 
     public void replaceMine(UUID uuid, Mine mine) {

@@ -247,31 +247,33 @@ public class Mine {
         int minHeight = 0;
         int maxHeight = 0;
 
-        if (world != null) {
-            minHeight = world.getMinHeight();
-            maxHeight = world.getMaxHeight();
-        }
+//        if (world != null) {
+//            minHeight = world.getMinHeight();
+//            maxHeight = world.getMaxHeight();
+//        }
 
         Location assumeStart = assumeRegion.getStart();
         Location assumeEnd = assumeRegion.getEnd();
 
-        if (assumeStart.getBlockY() > minHeight && assumeStart.getBlockY() < maxHeight) {
-            if (assumeEnd.getBlockY() > minHeight && assumeEnd.getBlockY() < maxHeight) {
-                // Build the multi block structure at the location and set the structure field
+        this.structure = mineType.getMultiBlockStructure().build(mineLocation);
 
-                this.structure = mineType.getMultiBlockStructure().build(mineLocation);
-            } else {
-                privateMines.getLogger().warning(
-                        "Failed to create structure due to the end height" +
-                                "either being too high or too low!");
-                return;
-            }
-        } else {
-            privateMines.getLogger().warning(
-                    "Failed to create structure due to the start height" +
-                            "either being too high or too low!");
-            return;
-        }
+//        if (assumeStart.getBlockY() > minHeight && assumeStart.getBlockY() < maxHeight) {
+//            if (assumeEnd.getBlockY() > minHeight && assumeEnd.getBlockY() < maxHeight) {
+//                // Build the multi block structure at the location and set the structure field
+//
+//                this.structure = mineType.getMultiBlockStructure().build(mineLocation);
+//            } else {
+//                privateMines.getLogger().warning(
+//                        "Failed to create structure due to the end height" +
+//                                "either being too high or too low!");
+//                return;
+//            }
+//        } else {
+//            privateMines.getLogger().warning(
+//                    "Failed to create structure due to the start height" +
+//                            "either being too high or too low!");
+//            return;
+//        }
 
         // Simple check to make sure the structure isn't null
 
@@ -408,6 +410,8 @@ public class Mine {
         if (player != null) {
             Structure structure = getStructure();
             if (airMaterial != null) {
+                Mine mine = mineStorage.getMine(mineOwner);
+                mine.cancelResetTask();
                 structure.getRegion().forEachBlock(block -> block.setType(airMaterial, false));
             }
 

@@ -59,7 +59,20 @@ shadowJar {
     relocate 'org.codemc.worldguardwrapper', 'me.untouchedodin0.privatemines.worldguardwrapper'
 }
 
-task copyJarToPlugins(type: Copy) {
-    from shadowJar // shortcut for createJar.outputs.files
-    into "E:/Coding/Spigot Test Servers/1.17 - Paper (pmines rewrite)/plugins"
+task updateJars {
+    doLast {
+        copy {
+            from shadowJar
+            into "E:/Coding/Spigot Test Servers/1.8.8/plugins"
+        }
+        copy {
+            from shadowJar
+            into "E:/Coding/Spigot Test Servers/1.17 - Paper (pmines rewrite)/plugins"
+        }
+    }
 }
+//task copyJarToPlugins(type: Copy) {
+//    from shadowJar // shortcut for createJar.outputs.files
+//    into "E:/Coding/Spigot Test Servers/1.8.8/plugins"
+//    into "E:/Coding/Spigot Test Servers/1.17 - Paper (pmines rewrite)/plugins"
+//}
