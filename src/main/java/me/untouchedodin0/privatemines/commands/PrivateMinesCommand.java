@@ -29,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 
 public class PrivateMinesCommand {
 
@@ -158,5 +159,10 @@ public class PrivateMinesCommand {
         } catch (IncompleteRegionException incompleteRegionException) {
             player.sendMessage("Please make a full selection!");
         }
+    }
+
+    @CommandHook("setblocks")
+    public void setBlocks(CommandSender commandSender, Player target, ArrayList<String> materials) {
+
     }
 }

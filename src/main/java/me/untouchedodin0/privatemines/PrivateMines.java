@@ -72,6 +72,8 @@ public class PrivateMines extends JavaPlugin {
     Utils utils;
     Structure structure;
     WorldEditPlugin worldEditPlugin;
+    String worldEditVersion1_12 = "";
+    String worldEditVersion1_13 = "";
 
     @ConfigValue
     private String spawnPoint;
@@ -193,9 +195,14 @@ public class PrivateMines extends JavaPlugin {
         Messages.load(this);
         Metrics metrics = new Metrics(this, pluginId);
 
-        getLogger().info("Loading worldguard wrapper version: " + WorldGuardWrapper.getInstance().getApiVersion());
-        getLogger().info("Loading worldedit version: " + WorldEdit.getVersion());
+        if (worldEditPlugin != null) {
+            worldEditVersion1_12 = worldEditPlugin.getDescription().getVersion();
+            worldEditVersion1_13 = WorldEdit.getVersion();
+        }
 
+        getLogger().info("Loading worldguard wrapper version: " + WorldGuardWrapper.getInstance().getApiVersion());
+        getLogger().info("Loading worldedit version 1_12: " + worldEditVersion1_12);
+        getLogger().info("Loading worldedit version 1_13: " + worldEditVersion1_13);
     }
 
     /*

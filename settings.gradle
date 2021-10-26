@@ -1,2 +1,5 @@
 rootProject.name = 'PrivateMinesOOP'
+include 'we-1_8'
+include 'we-1_13'
+include 'base'
 
