@@ -41,4 +41,12 @@ privatemine,privatemines,pmine {
         help /pmine create <name> - Creates a mine structure with the set name
         permission: privatemines.create
     }
+
+    setblocks player:target material[]:materials {
+        hook setblocks
+    }
+
+    settype player:target string:type {
+        hook settype
+    }
 }

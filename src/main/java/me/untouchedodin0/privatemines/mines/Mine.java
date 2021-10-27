@@ -314,6 +314,7 @@ public class Mine {
 
             dataBlock.set("owner", getMineOwner());
             dataBlock.set("type", getMineType().getName());
+            dataBlock.set("weightedRandom", getMineType().getMaterials());
             blockDataManager.save();
         }
     }

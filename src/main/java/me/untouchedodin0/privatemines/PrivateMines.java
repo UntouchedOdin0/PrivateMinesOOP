@@ -39,9 +39,11 @@ import me.untouchedodin0.privatemines.world.MineWorldManager;
 import me.untouchedodin0.privatemines.world.utils.MineLoopUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.codemc.worldguardwrapper.WorldGuardWrapper;
 import redempt.redlib.blockdata.BlockDataManager;
+import redempt.redlib.commandmanager.ArgType;
 import redempt.redlib.commandmanager.CommandParser;
 import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.configmanager.ConfigManager;
@@ -137,6 +139,13 @@ public class PrivateMines extends JavaPlugin {
             // Gets the mine location string from the datablock then converts it to a bukkit Location
             Location location = LocationUtils.fromString(dataBlock.getString("location"));
 
+//            mineType.getWeightedRandom().toString(Material::toString);
+//
+//            WeightedRandom<Material> weightedRandom = WeightedRandom
+//                    .fromString(dataBlock.getString("weightedRandom"), Material::valueOf);
+//
+//            getLogger().info("weightedRandom from String valueOf: " + weightedRandom);
+
             // The multi block structure for the mine initialized further on
             MultiBlockStructure multiBlockStructure;
 
@@ -190,6 +199,7 @@ public class PrivateMines extends JavaPlugin {
          */
 
         new CommandParser(this.getResource("command.rdcml"))
+                .setArgTypes(ArgType.of("material", Material.class))
                 .parse()
                 .register("privatemines",
                         new PrivateMinesCommand(this));
@@ -289,12 +299,23 @@ public class PrivateMines extends JavaPlugin {
         return sellNpc;
     }
 
+    public MineType getMineType(String mineType) {
+        MineType newType = mineTypeTreeMap.get(mineType);
+        Bukkit.broadcastMessage("new type: " + newType);
+        return newType;
+    }
+
     /*
         Gets the next MineData from the TreeMap using String
      */
 
-    public MineType getNextMineType(String mineData) {
-        return mineTypeTreeMap.higherEntry(mineData).getValue();
+    public MineType getNextMineType(String mineType) {
+
+        MineType lastValue = mineTypeTreeMap.lastEntry().getValue();
+        if (mineTypeTreeMap.higherEntry(mineType) == null) {
+            return lastValue;
+        }
+        return mineTypeTreeMap.higherEntry(mineType).getValue();
     }
 
     /*

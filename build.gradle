@@ -42,6 +42,7 @@ dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.17-R0.1-SNAPSHOT' // The Spigot API with no shadowing. Requires the OSS repo.
     compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.2.0-SNAPSHOT'
     compileOnly 'me.clip:placeholderapi:2.10.10'
+//    compileOnly 'com.github.Redempt:RedLib:6.0.9.1'
 
     implementation 'org.codemc.worldguardwrapper:worldguardwrapper:1.2.0-SNAPSHOT'
     implementation 'com.github.CryptoMorin:XSeries:v8.4.0'
@@ -66,6 +67,7 @@ test {
 
 shadowJar {
     relocate 'org.codemc.worldguardwrapper', 'me.untouchedodin0.privatemines.worldguardwrapper'
+//    relocate 'redempt.redlib', 'me.untouchedodin0.privatemines.redlib'
 }
 
 task updateJars {
@@ -80,8 +82,4 @@ task updateJars {
         }
     }
 }
-//task copyJarToPlugins(type: Copy) {
-//    from shadowJar // shortcut for createJar.outputs.files
-//    into "E:/Coding/Spigot Test Servers/1.8.8/plugins"
-//    into "E:/Coding/Spigot Test Servers/1.17 - Paper (pmines rewrite)/plugins"
-//}
+
