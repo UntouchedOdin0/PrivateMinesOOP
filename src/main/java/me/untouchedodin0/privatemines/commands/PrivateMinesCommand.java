@@ -223,6 +223,5 @@ public class PrivateMinesCommand {
             mineStorage.replaceMine(player.getUniqueId(), mine);
             mine.teleportPlayer(target);
         }
-        player.sendMessage("done lol");
     }
 }
