@@ -314,7 +314,7 @@ public class Mine {
 
             dataBlock.set("owner", getMineOwner());
             dataBlock.set("type", getMineType().getName());
-            dataBlock.set("weightedRandom", getMineType().getMaterials());
+//            dataBlock.set("weightedRandom", getMineType().getMaterials());
             blockDataManager.save();
         }
     }
@@ -342,6 +342,7 @@ public class Mine {
             }
         }
         cancelResetTask();
+        this.cuboidRegion = null;
     }
 
     // Nice little reset system for filling in the cuboid region using the mine type's weighted random.
@@ -378,9 +379,7 @@ public class Mine {
     }
 
     public void cancelResetTask() {
-        if (this.resetTask.isCurrentlyRunning() && this.resetTask != null) {
             resetTask.cancel();
-        }
     }
 
     /*
@@ -414,6 +413,7 @@ public class Mine {
                 Mine mine = mineStorage.getMine(mineOwner);
                 mine.cancelResetTask();
                 structure.getRegion().forEachBlock(block -> block.setType(airMaterial, false));
+                this.cuboidRegion = null;
             }
 
             setMineType(upgradeType);

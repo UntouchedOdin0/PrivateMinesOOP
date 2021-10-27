@@ -86,22 +86,18 @@ public class PrivateMinesCommand {
         if (mine == null) return;
         if (!hasMine) return;
 
-        if (!mine.getWeightedRandom().getWeights().isEmpty()) {
-            CuboidRegion cuboidRegion = mine.getCuboidRegion();
-            cuboidRegion.forEachBlock(block -> block.setType(mine.getWeightedRandom().roll(), false));
-        } else {
-            MineType mineType = mine.getMineType();
+        MineType mineType = mine.getMineType();
 
-            if (mineType.getWeightedRandom().getWeights().isEmpty()) {
-                privateMines.getLogger().warning("There were no materials in the weighted random!");
-                return;
-            }
-
-            CuboidRegion cuboidRegion = mine.getCuboidRegion();
-            cuboidRegion.forEachBlock(block -> block.setType(mineType.getWeightedRandom().roll(), false));
-            Messages.msg("mineReset");
+        if (mineType.getWeightedRandom().getWeights().isEmpty()) {
+            privateMines.getLogger().warning("There were no materials in the weighted random!");
+            return;
         }
+
+        CuboidRegion cuboidRegion = mine.getCuboidRegion();
+        cuboidRegion.forEachBlock(block -> block.setType(mineType.getWeightedRandom().roll(), false));
+        Messages.msg("mineReset");
     }
+
 
     @CommandHook("teleport")
     public void teleport(CommandSender commandSender) {
@@ -224,6 +220,7 @@ public class PrivateMinesCommand {
             mine.setMineType(newType);
             mine.build();
             mine.startAutoResetTask();
+            mineStorage.replaceMine(player.getUniqueId(), mine);
         }
         player.sendMessage("done lol");
     }

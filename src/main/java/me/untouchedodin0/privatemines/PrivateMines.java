@@ -138,13 +138,6 @@ public class PrivateMines extends JavaPlugin {
             // Gets the mine location string from the datablock then converts it to a bukkit Location
             Location location = LocationUtils.fromString(dataBlock.getString("location"));
 
-//            mineType.getWeightedRandom().toString(Material::toString);
-//
-//            WeightedRandom<Material> weightedRandom = WeightedRandom
-//                    .fromString(dataBlock.getString("weightedRandom"), Material::valueOf);
-//
-//            getLogger().info("weightedRandom from String valueOf: " + weightedRandom);
-
             // The multi block structure for the mine initialized further on
             MultiBlockStructure multiBlockStructure;
 
@@ -213,6 +206,13 @@ public class PrivateMines extends JavaPlugin {
         getLogger().info("Loading worldguard wrapper version: " + WorldGuardWrapper.getInstance().getApiVersion());
         getLogger().info("Loading worldedit version 1_12: " + worldEditVersion1_12);
         getLogger().info("Loading worldedit version 1_13: " + worldEditVersion1_13);
+
+//        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+//            getLogger().info("Connecting to placeholder api and registering the placeholders");
+//            new PrivateMinesExpansion(mineStorage).register();
+//        } else {
+//            getLogger().info("PlaceholderAPI was not present, not able to establish a hook!");
+//        }
     }
 
     /*
