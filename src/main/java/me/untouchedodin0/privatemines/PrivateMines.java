@@ -34,7 +34,6 @@ import me.untouchedodin0.privatemines.mines.MineType;
 import me.untouchedodin0.privatemines.storage.MineStorage;
 import me.untouchedodin0.privatemines.util.Metrics;
 import me.untouchedodin0.privatemines.util.Utils;
-import me.untouchedodin0.privatemines.util.placeholderapi.PrivateMinesExpansion;
 import me.untouchedodin0.privatemines.world.MineWorldManager;
 import me.untouchedodin0.privatemines.world.utils.MineLoopUtil;
 import org.bukkit.Bukkit;
@@ -214,13 +213,6 @@ public class PrivateMines extends JavaPlugin {
         getLogger().info("Loading worldguard wrapper version: " + WorldGuardWrapper.getInstance().getApiVersion());
         getLogger().info("Loading worldedit version 1_12: " + worldEditVersion1_12);
         getLogger().info("Loading worldedit version 1_13: " + worldEditVersion1_13);
-
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            getLogger().info("Connecting to placeholder api and registering the placeholders");
-            new PrivateMinesExpansion(mineStorage).register();
-        } else {
-            getLogger().info("PlaceholderAPI was not present, not able to establish a hook!");
-        }
     }
 
     /*
