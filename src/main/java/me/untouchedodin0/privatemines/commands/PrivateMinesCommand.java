@@ -15,7 +15,6 @@ import me.untouchedodin0.privatemines.mines.MineType;
 import me.untouchedodin0.privatemines.storage.MineStorage;
 import me.untouchedodin0.privatemines.util.Utils;
 import me.untouchedodin0.privatemines.world.MineWorldManager;
-import net.royawesome.jlibnoise.module.combiner.Min;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -37,7 +36,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 
 public class PrivateMinesCommand {
 
