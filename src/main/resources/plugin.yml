@@ -1,6 +1,6 @@
 name: PrivateMines
 main: me.untouchedodin0.privatemines.PrivateMines
-version: 3.0.5
+version: 3.0.6
 api-version: 1.13
 
 depend:
