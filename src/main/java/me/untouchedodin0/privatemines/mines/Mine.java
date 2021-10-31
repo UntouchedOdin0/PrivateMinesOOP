@@ -34,6 +34,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.codemc.worldguardwrapper.WorldGuardWrapper;
+import org.codemc.worldguardwrapper.region.IWrappedRegion;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.misc.Task;
@@ -42,6 +44,7 @@ import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 import redempt.redlib.region.Region;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public class Mine {
@@ -69,6 +72,8 @@ public class Mine {
     private boolean isOpen;
     private Task resetTask;
     private final Utils utils;
+    private World world;
+    Optional<IWrappedRegion> iWrappedRegion;
 
     public Mine(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -223,6 +228,10 @@ public class Mine {
         this.isOpen = isOpen;
     }
 
+    public World getWorld() {
+        return world;
+    }
+
     /*
         The method for creating the structures into the world
      */
@@ -251,6 +260,8 @@ public class Mine {
         }
 
         Region assumeRegion = mineType.getMultiBlockStructure().assumeAt(mineLocation).getRegion();
+        String userUUID = getMineOwner().toString();
+        String regionName = String.format("mine-%s", userUUID);
 
         World world = mineLocation.getWorld();
         int minHeight = 0;
@@ -296,6 +307,7 @@ public class Mine {
         this.npcLocation = utils.getRelative(structure, mineType.getNpcLocation());
         this.corner1 = utils.getRelative(structure, mineType.getCorner1());
         this.corner2 = utils.getRelative(structure, mineType.getCorner2());
+        this.world = mineLocation.getWorld();
 
         // Initialize the block manager
 
@@ -317,6 +329,7 @@ public class Mine {
         cuboidRegion.expand(1, 0, 1, 0, 1, 0);
         setCuboidRegion(cuboidRegion);
 
+        iWrappedRegion = WorldGuardWrapper.getInstance().addCuboidRegion(regionName, corner1, corner2);
         if (airMaterial != null) {
             spawnLocation.getBlock().setType(airMaterial, false);
             npcLocation.getBlock().setType(airMaterial, false);
@@ -406,6 +419,7 @@ public class Mine {
         MineStorage mineStorage = privateMines.getMineStorage();
         MineType upgradeType = utils.getNextMineType(this);
         Player player = Bukkit.getPlayer(mineOwner);
+        String regionName = String.format("mine-%s", mineOwner);
 
         if (debugMode) {
             Bukkit.getLogger().info("upgradeType: " + upgradeType);
@@ -430,6 +444,24 @@ public class Mine {
             Mine mine = mineFactory.createMine(player, mineLocation, upgradeType);
             mine.teleportPlayer(player);
             mineStorage.replaceMine(player.getUniqueId(), mine);
+            WorldGuardWrapper.getInstance().removeRegion(getWorld(), regionName);
+            Location start = mine.getCorner1();
+            Location end = mine.getCorner2();
+
+            iWrappedRegion = WorldGuardWrapper.getInstance().addCuboidRegion(regionName, start, end);
+            Bukkit.broadcastMessage("upgrade iwrappedRegion: " + iWrappedRegion);
+            Bukkit.broadcastMessage("upgrade iwrappedRegion regionName: " + regionName);
+            Bukkit.broadcastMessage("upgrade iwrappedRegion start: " + start);
+            Bukkit.broadcastMessage("upgrade iwrappedRegion end: " + end);
+
+//            iWrappedRegion =
+//                    WorldGuardWrapper.getInstance()
+//                            .addCuboidRegion(
+//                                    regionName,
+//                                    mine.getCorner1(),
+//                                    mine.getCorner2())
+//                            .orElseThrow(()
+//                                    -> new RuntimeException("Could not create the mine WorldGuard region!"));
         }
     }
 }
