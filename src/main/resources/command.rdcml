@@ -53,4 +53,28 @@ privatemine,privatemines,pmine {
         help /pmine settype <name> type
         permission privatemines.settype
     }
+
+    open {
+        hook open
+        help /pmine open - Opens your private mine for others to come and join you!
+        permission: privatemines.open
+    }
+
+    close {
+        hook close
+        help /pmine close - Closes your mine so nobody else can come mine at your mine
+        permission: privatemines.close
+    }
+
+    whitelist player:target {
+        hook whitelist
+        help /pmine whitelist <name> - Whitelists a player to come to your mine even when closed
+        permission: privatemines.whitelist
+    }
+
+    unwhitelist player:target {
+        hook unwhitelist
+        help /pmine unwhitelist <player> - Removes a player from your mines whitelist
+        permission: privatemines.unwhitelist
+    }
 }

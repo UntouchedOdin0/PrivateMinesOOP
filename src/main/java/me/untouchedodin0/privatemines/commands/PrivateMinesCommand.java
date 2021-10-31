@@ -36,6 +36,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.UUID;
 
 public class PrivateMinesCommand {
 
@@ -165,6 +166,7 @@ public class PrivateMinesCommand {
             player.sendMessage(ChatColor.GREEN + "Successfully created the file " + path.getFileName());
         } catch (IncompleteRegionException incompleteRegionException) {
             player.sendMessage("Please make a full selection!");
+            Messages.msg("pleaseMakeFullSelection");
         }
     }
 
@@ -176,11 +178,8 @@ public class PrivateMinesCommand {
         Mine mine;
 
         for (Material material : materials) {
-            Bukkit.broadcastMessage("Material[]: " + material.name());
             weightedRandom.set(material, 1);
         }
-        player.sendMessage("materialArgType: " + materialArgType);
-        player.sendMessage("weightedRandom: " + weightedRandom.getWeights());
 
         if (!mineStorage.hasMine(target.getUniqueId())) {
             player.sendMessage(ChatColor.RED + "Target doesn't have a mine!");
@@ -204,12 +203,12 @@ public class PrivateMinesCommand {
         MineType newType;
         Structure structure;
 
-        MineStorage mineStorage = privateMines.getMineStorage();
         if (mineStorage.hasMine(target.getUniqueId())) {
             mine = mineStorage.getMine(target.getUniqueId());
             newType = privateMines.getMineType(type);
             if (newType == null) {
                 player.sendMessage(ChatColor.RED + "Invalid mine type!");
+                Messages.msg("invalidMineType");
                 return;
             }
             mine.cancelResetTask();
@@ -221,5 +220,72 @@ public class PrivateMinesCommand {
             mineStorage.replaceMine(player.getUniqueId(), mine);
             mine.teleportPlayer(target);
         }
+    }
+
+    @CommandHook("open")
+    public void open(CommandSender commandSender) {
+        Player player = (Player) commandSender;
+        Mine mine;
+        UUID uuid = player.getUniqueId();
+
+        if (!mineStorage.hasMine(uuid)) {
+            Messages.msg("doNotOwnMine");
+            return;
+        }
+        mine = mineStorage.getMine(player.getUniqueId());
+
+        if (mine.isOpen()) {
+            Messages.msg("mineAlreadyOpen");
+        } else if (!mine.isOpen()) {
+            mine.setIsOpen(true);
+            Messages.msg("mineOpened");
+        }
+    }
+
+
+    @CommandHook("close")
+    public void close(CommandSender commandSender) {
+        Player player = (Player) commandSender;
+        Mine mine;
+        UUID uuid = player.getUniqueId();
+
+        if (!mineStorage.hasMine(uuid)) {
+            Messages.msg("doNotOwnMine");
+            return;
+        }
+        mine = mineStorage.getMine(uuid);
+        if (!mine.isOpen()) {
+            Messages.msg("mineAlreadyClosed");
+            player.sendMessage(ChatColor.RED + "Your mine was already closed!");
+        } else  {
+            Messages.msg("mineOpened");
+            player.sendMessage("Opening your mine!");
+        }
+    }
+
+    @CommandHook("whitelist")
+    public void whitelist(CommandSender commandSender, Player target) {
+        Player player = (Player) commandSender;
+        Mine mine;
+        UUID uuid = player.getUniqueId();
+
+        if (!mineStorage.hasMine(uuid)) {
+            Messages.msg("doNotOwnMine");
+        }
+        mine = mineStorage.getMine(uuid);
+        player.sendMessage("whitelist mine: " + mine);
+    }
+
+    @CommandHook("unwhitelist")
+    public void unwhitelist(CommandSender commandSender, Player target) {
+        Player player = (Player) commandSender;
+        Mine mine;
+        UUID uuid = player.getUniqueId();
+
+        if (!mineStorage.hasMine(uuid)) {
+            Messages.msg("doNotOwnMine");
+        }
+        mine = mineStorage.getMine(uuid);
+        player.sendMessage("un-whitelist mine: " + mine);
     }
 }

@@ -66,8 +66,9 @@ public class Mine {
     private WeightedRandom<Material> weightedRandom;
     private boolean debugMode;
     private boolean isAutoResetting;
+    private boolean isOpen;
     private Task resetTask;
-    private Utils utils;
+    private final Utils utils;
 
     public Mine(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -212,6 +213,14 @@ public class Mine {
 
     public void setWeightedRandom(WeightedRandom<Material> weightedRandom) {
         this.weightedRandom = weightedRandom;
+    }
+
+    public boolean isOpen() {
+        return isOpen;
+    }
+
+    public void setIsOpen(boolean isOpen) {
+        this.isOpen = isOpen;
     }
 
     /*
@@ -381,6 +390,7 @@ public class Mine {
     public void cancelResetTask() {
             resetTask.cancel();
     }
+
 
     /*
         This system upgrades the private mines onto the next MineData and

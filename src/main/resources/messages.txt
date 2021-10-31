@@ -7,3 +7,9 @@ doNotOwnMine: &cYou don't own a Private Mine!
 targetDoesNotOwnMine: &cTarget doesn't own a Private Mine!
 targetAlreadyOwnsAMine: &eTarget already has a mine!
 attemptingMineUpgrade: &aAttempting to upgrade users mine.....
+mineAlreadyOpen: &cYour mine was already open!
+mineAlreadyClosed: &cYour mine was already closed!
+mineOpened: &7Your mine is now &aopen&7!
+mineClosed: &7Your mine is now &cclosed&7!
+invalidMineType: &cInvalid mine type!
+pleaseMakeFullSelection: &cPlease make a full selection!
