@@ -447,21 +447,7 @@ public class Mine {
             WorldGuardWrapper.getInstance().removeRegion(getWorld(), regionName);
             Location start = mine.getCorner1();
             Location end = mine.getCorner2();
-
             iWrappedRegion = WorldGuardWrapper.getInstance().addCuboidRegion(regionName, start, end);
-            Bukkit.broadcastMessage("upgrade iwrappedRegion: " + iWrappedRegion);
-            Bukkit.broadcastMessage("upgrade iwrappedRegion regionName: " + regionName);
-            Bukkit.broadcastMessage("upgrade iwrappedRegion start: " + start);
-            Bukkit.broadcastMessage("upgrade iwrappedRegion end: " + end);
-
-//            iWrappedRegion =
-//                    WorldGuardWrapper.getInstance()
-//                            .addCuboidRegion(
-//                                    regionName,
-//                                    mine.getCorner1(),
-//                                    mine.getCorner2())
-//                            .orElseThrow(()
-//                                    -> new RuntimeException("Could not create the mine WorldGuard region!"));
         }
     }
 }
