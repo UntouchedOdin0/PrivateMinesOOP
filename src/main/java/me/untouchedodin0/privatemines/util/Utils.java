@@ -9,10 +9,15 @@ import me.untouchedodin0.privatemines.mines.MineType;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.codemc.worldguardwrapper.WorldGuardWrapper;
+import org.codemc.worldguardwrapper.flag.WrappedState;
+import org.codemc.worldguardwrapper.region.IWrappedRegion;
 import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 public class Utils {
 
@@ -89,5 +94,26 @@ public class Utils {
 
     public long minutesToBukkit(int minutes) {
         return 20L * 60L * minutes;
+    }
+
+    public void setMineFlags(Optional<IWrappedRegion> region) {
+        final WorldGuardWrapper w = WorldGuardWrapper.getInstance();
+
+        Stream.of(
+                w.getFlag("block-place", WrappedState.class),
+                w.getFlag("block-break", WrappedState.class)
+        ).filter(Optional::isPresent)
+                .map(Optional::get)
+                .forEach(flag -> {
+                    region.ifPresent(iWrappedRegion -> iWrappedRegion.setFlag(flag, WrappedState.ALLOW));
+                });
+
+        Stream.of(
+                w.getFlag("mob-spawning", WrappedState.class)
+        ).filter(Optional::isPresent)
+                .map(Optional::get)
+                .forEach(flag -> {
+                    region.ifPresent(iWrappedRegion -> iWrappedRegion.setFlag(flag, WrappedState.DENY));
+                });
     }
 }

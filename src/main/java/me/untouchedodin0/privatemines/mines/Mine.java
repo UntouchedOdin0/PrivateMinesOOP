@@ -448,6 +448,7 @@ public class Mine {
             Location start = mine.getCorner1();
             Location end = mine.getCorner2();
             iWrappedRegion = WorldGuardWrapper.getInstance().addCuboidRegion(regionName, start, end);
+            utils.setMineFlags(iWrappedRegion);
         }
     }
 }
