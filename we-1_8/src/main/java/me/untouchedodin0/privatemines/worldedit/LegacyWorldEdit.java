@@ -18,6 +18,7 @@ public class LegacyWorldEdit {
 
     String multiBlockStructure;
     Path path;
+    Selection selection;
 
     public WorldEditPlugin getWorldEdit() {
         Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
@@ -28,8 +29,6 @@ public class LegacyWorldEdit {
         }
     }
 
-    Selection selection;
-
     public void createMultiBlockStructure(Player player, String name) {
 
         selection = getWorldEdit().getSelection(player);
@@ -39,11 +38,14 @@ public class LegacyWorldEdit {
             player.sendMessage("Failed to make a selection!");
         } else {
             multiBlockStructure = MultiBlockStructure.stringify(minimum, maximum);
-
             try {
                 path = Paths.get("plugins/PrivateMines/" + name + ".dat");
                 player.sendMessage("Attempting to write the file " + path.getFileName() + "...");
-                Files.write(path, multiBlockStructure.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                Files.write(
+                        path,
+                        multiBlockStructure.getBytes(),
+                        StandardOpenOption.CREATE,
+                        StandardOpenOption.TRUNCATE_EXISTING);
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
