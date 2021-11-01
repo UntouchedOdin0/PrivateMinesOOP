@@ -37,6 +37,7 @@ public class MineStorage {
      */
 
     private final Map<UUID, Mine> mines = new HashMap<>();
+    private static final Map<UUID, Mine> staticMines = new HashMap<>();
 
     /**
      *
@@ -46,6 +47,7 @@ public class MineStorage {
 
     public void addMine(UUID uuid, Mine mine) {
         mines.putIfAbsent(uuid, mine);
+        staticMines.put(uuid, mine);
     }
 
     /**
@@ -89,5 +91,18 @@ public class MineStorage {
 
     public boolean hasMine(UUID uuid) {
         return mines.containsKey(uuid);
+    }
+
+    /**
+     * A simple get method to get how many mines have been created
+     * @return the amount of mines created in a integer form.
+     */
+
+    public static int getLoadedMineSize() {
+        return staticMines.size();
+    }
+
+    public int getMineCount() {
+        return mines.size();
     }
 }
