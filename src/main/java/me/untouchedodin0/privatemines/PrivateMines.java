@@ -37,6 +37,8 @@ import me.untouchedodin0.privatemines.util.Utils;
 import me.untouchedodin0.privatemines.util.placeholderapi.PrivateMinesExpansion;
 import me.untouchedodin0.privatemines.world.MineWorldManager;
 import me.untouchedodin0.privatemines.world.utils.MineLoopUtil;
+import me.untouchedodin0.privatemines.worldedit.LegacyWorldEdit;
+import me.untouchedodin0.privatemines.worldedit.ModernWorldEdit;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -77,6 +79,9 @@ public class PrivateMines extends JavaPlugin {
     WorldEditPlugin worldEditPlugin;
     String worldEditVersion1_12 = "";
     String worldEditVersion1_13 = "";
+
+    LegacyWorldEdit legacyWorldEdit;
+    ModernWorldEdit modernWorldEdit;
 
     @ConfigValue
     private String spawnPoint;
@@ -204,6 +209,7 @@ public class PrivateMines extends JavaPlugin {
             worldEditVersion1_12 = worldEditPlugin.getDescription().getVersion();
             worldEditVersion1_13 = WorldEdit.getVersion();
         }
+
 
         getLogger().info("Loading worldguard wrapper version: " + WorldGuardWrapper.getInstance().getApiVersion());
         getLogger().info("Loading worldedit version 1_12: " + worldEditVersion1_12);
