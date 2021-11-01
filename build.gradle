@@ -45,8 +45,8 @@ dependencies {
     implementation 'com.github.CryptoMorin:XSeries:v8.4.0'
     implementation 'com.github.Redempt:RedLib:6.0.9.1'
 
-//    compile project(":we-1_8")
-//    compile project(":we-1_13")
+    implementation project(':we-1_8')
+    implementation project(':we-1_13')
 }
 
 license {
