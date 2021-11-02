@@ -1,11 +1,12 @@
 plugins {
-    id 'java'
+    id "java"
     id 'com.github.johnrengelman.shadow' version '6.0.0'
     id 'com.github.joschi.licenser' version '0.6.0'
 }
 
 group 'me.untouchedodin0.privatemines'
 version '3.0.7-SNAPSHOT'
+
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 

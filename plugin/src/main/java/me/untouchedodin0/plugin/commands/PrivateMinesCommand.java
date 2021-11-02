@@ -15,6 +15,7 @@ import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.world.MineWorldManager;
+import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -137,36 +138,47 @@ public class PrivateMinesCommand {
         SessionManager manager = WorldEdit.getInstance().getSessionManager();
         LocalSession localSession = manager.get(BukkitAdapter.adapt(player));
         Region region; // declare the region variable
+        CuboidRegion cuboidRegion;
         World selectionWorld = localSession.getSelectionWorld();
-        BlockVector3 minimum;
-        BlockVector3 maximum;
-        Location minimumBukkit;
-        Location maximumBukkit;
+        Location minimum;
+        Location maximum;
         String multiBlockStructure;
+        WorldEditUtilities worldEditUtilities;
 
-        try {
-            if (selectionWorld == null) throw new IncompleteRegionException();
-            region = localSession.getSelection(selectionWorld);
+        worldEditUtilities = privateMines.getWorldEditUtils();
+        cuboidRegion = worldEditUtilities.getRegion(player);
 
-            minimum = region.getMinimumPoint();
-            maximum = region.getMaximumPoint();
-            minimumBukkit = utils.blockVector3toBukkit(BukkitAdapter.adapt(selectionWorld), minimum);
-            maximumBukkit = utils.blockVector3toBukkit(BukkitAdapter.adapt(selectionWorld), maximum);
+        player.sendMessage("region: " + worldEditUtilities.getRegion(player));
+        player.sendMessage("cuboid region: " + cuboidRegion);
+        minimum = cuboidRegion.getStart();
+        maximum = cuboidRegion.getEnd();
+        player.sendMessage("cuboid region minimum: " + minimum);
+        player.sendMessage("cuboid region maximum: " + maximum);
 
-            // Credits to redempt for this part
-            multiBlockStructure = MultiBlockStructure.stringify(minimumBukkit, maximumBukkit);
-            try {
-                path = Paths.get("plugins/PrivateMines/").resolve(name + ".dat");
-                player.sendMessage(ChatColor.YELLOW + "Attempting to write the file, " + path.getFileName() + "...");
-                Files.write(path, multiBlockStructure.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-            player.sendMessage(ChatColor.GREEN + "Successfully created the file " + path.getFileName());
-        } catch (IncompleteRegionException incompleteRegionException) {
-            player.sendMessage("Please make a full selection!");
-            Messages.msg("pleaseMakeFullSelection");
-        }
+
+//        try {
+//            if (selectionWorld == null) throw new IncompleteRegionException();
+//            region = localSession.getSelection(selectionWorld);
+//
+//            minimum = region.getMinimumPoint();
+//            maximum = region.getMaximumPoint();
+//            minimumBukkit = utils.blockVector3toBukkit(BukkitAdapter.adapt(selectionWorld), minimum);
+//            maximumBukkit = utils.blockVector3toBukkit(BukkitAdapter.adapt(selectionWorld), maximum);
+//
+//            // Credits to redempt for this part
+//            multiBlockStructure = MultiBlockStructure.stringify(minimumBukkit, maximumBukkit);
+//            try {
+//                path = Paths.get("plugins/PrivateMines/").resolve(name + ".dat");
+//                player.sendMessage(ChatColor.YELLOW + "Attempting to write the file, " + name + ".dat...");
+//                Files.write(path, multiBlockStructure.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+//            } catch (IOException ioException) {
+//                ioException.printStackTrace();
+//            }
+//            player.sendMessage(ChatColor.GREEN + "Successfully created the file " + path.getFileName());
+//        } catch (IncompleteRegionException incompleteRegionException) {
+//            player.sendMessage("Please make a full selection!");
+//            Messages.msg("pleaseMakeFullSelection");
+//        }
     }
 
     @CommandHook("setblocks")

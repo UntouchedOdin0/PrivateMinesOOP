@@ -24,6 +24,7 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin;
 
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import me.untouchedodin0.plugin.commands.PrivateMinesCommand;
 import me.untouchedodin0.plugin.config.MineConfig;
 import me.untouchedodin0.plugin.factory.MineFactory;
@@ -57,6 +58,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
+
 
 public class PrivateMines extends JavaPlugin {
 
@@ -206,6 +208,8 @@ public class PrivateMines extends JavaPlugin {
 
         if (worldEditPlugin != null) {
             worldEditUtils = WorldEditUtilities.getInstance();
+            getLogger().info("Loading worldedit v" + WorldEditPlugin.getPlugin(WorldEditPlugin.class)
+                    .getDescription().getVersion());
         }
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
@@ -356,5 +360,9 @@ public class PrivateMines extends JavaPlugin {
 
     public Utils getUtils() {
         return utils;
+    }
+
+    public WorldEditUtilities getWorldEditUtils() {
+        return worldEditUtils;
     }
 }

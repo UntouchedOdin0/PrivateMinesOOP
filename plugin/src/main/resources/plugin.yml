@@ -1,5 +1,5 @@
 name: PrivateMines
-main: me.untouchedodin0.privatemines.PrivateMines
+main: me.untouchedodin0.plugin.PrivateMines
 version: 3.0.7
 api-version: 1.13
 
