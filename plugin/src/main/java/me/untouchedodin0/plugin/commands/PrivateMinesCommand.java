@@ -151,6 +151,8 @@ public class PrivateMinesCommand {
         player.sendMessage("cuboid region minimum: " + minimum);
         player.sendMessage("cuboid region maximum: " + maximum);
 
+        worldEditUtilities.createMultiBlockStructure(player, name);
+
         if (minimum != null && maximum != null) {
             multiBlockStructure = MultiBlockStructure.stringify(minimum, maximum);
             try {
