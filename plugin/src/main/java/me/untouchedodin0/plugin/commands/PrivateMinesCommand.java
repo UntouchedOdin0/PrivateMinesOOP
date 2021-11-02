@@ -135,11 +135,7 @@ public class PrivateMinesCommand {
     @CommandHook("create")
     public void create(CommandSender commandSender, String name) {
         Player player = (Player) commandSender;
-        SessionManager manager = WorldEdit.getInstance().getSessionManager();
-        LocalSession localSession = manager.get(BukkitAdapter.adapt(player));
-        Region region; // declare the region variable
         CuboidRegion cuboidRegion;
-        World selectionWorld = localSession.getSelectionWorld();
         Location minimum;
         Location maximum;
         String multiBlockStructure;
@@ -155,6 +151,17 @@ public class PrivateMinesCommand {
         player.sendMessage("cuboid region minimum: " + minimum);
         player.sendMessage("cuboid region maximum: " + maximum);
 
+        if (minimum != null && maximum != null) {
+            multiBlockStructure = MultiBlockStructure.stringify(minimum, maximum);
+            try {
+                path = Paths.get("plugins/PrivateMines/").resolve(name + ".dat");
+                player.sendMessage(ChatColor.YELLOW + "Attempting to write the file, " + name + ".dat...");
+                Files.write(path, multiBlockStructure.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            } catch (IOException ioException) {
+                player.sendMessage("oh no");
+                ioException.printStackTrace();
+            }
+        }
 
 //        try {
 //            if (selectionWorld == null) throw new IncompleteRegionException();
