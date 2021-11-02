@@ -104,16 +104,12 @@ public class Utils {
                         w.getFlag("block-break", WrappedState.class)
                 ).filter(Optional::isPresent)
                 .map(Optional::get)
-                .forEach(flag -> {
-                    region.ifPresent(iWrappedRegion -> iWrappedRegion.setFlag(flag, WrappedState.ALLOW));
-                });
+                .forEach(flag -> region.ifPresent(iWrappedRegion -> iWrappedRegion.setFlag(flag, WrappedState.ALLOW)));
 
         Stream.of(
                         w.getFlag("mob-spawning", WrappedState.class)
                 ).filter(Optional::isPresent)
                 .map(Optional::get)
-                .forEach(flag -> {
-                    region.ifPresent(iWrappedRegion -> iWrappedRegion.setFlag(flag, WrappedState.DENY));
-                });
+                .forEach(flag -> region.ifPresent(iWrappedRegion -> iWrappedRegion.setFlag(flag, WrappedState.DENY)));
     }
 }
