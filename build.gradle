@@ -1,60 +1,63 @@
 plugins {
     id 'java'
-    id "application"
     id 'com.github.johnrengelman.shadow' version '6.0.0'
     id 'com.github.joschi.licenser' version '0.6.0'
 }
 
 group 'me.untouchedodin0.privatemines'
 version '3.0.7-SNAPSHOT'
+
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
-apply plugin: "java"
+compileJava.options.encoding = 'UTF-8'
 
-
-ext {
-    javaMainClass = "me.untouchedodin0.privatemines.PrivateMines"
+static addRepositories(Project project) {
+    project.repositories {
+        mavenCentral()
+        maven { url = 'https://jitpack.io' }
+        maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+        maven { url = "https://repo.codemc.org/repository/maven-public/" }
+        maven { url = 'https://maven.sk89q.com/repo/' }
+        maven { url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
+    }
 }
 
-repositories {
-    mavenCentral()
-    maven { url 'https://jitpack.io' }
-    maven {
-        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+addRepositories(project)
 
-        // As of Gradle 5.1, you can limit this to only those
-        // dependencies you expect from it
-        content {
-            includeGroup 'org.bukkit'
-            includeGroup 'org.spigotmc'
-        }
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'com.github.johnrengelman.shadow'
+
+    group = parent.group
+    version = parent.version
+
+    sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+
+    compileJava.options.encoding = 'UTF-8'
+
+    license {
+        header = project.file('LICENCE')
     }
-    maven { url = "https://repo.codemc.org/repository/maven-public/" }
-    maven { url = 'https://maven.sk89q.com/repo/' }
-    maven { url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
+
+    addRepositories(project)
+
+    dependencies {
+        implementation 'org.jetbrains:annotations:22.0.0'
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+        compileOnly 'org.spigotmc:spigot-api:1.17-R0.1-SNAPSHOT' // The Spigot API with no shadowing. Requires the OSS repo.
+        // compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.2.0-SNAPSHOT'
+        compileOnly 'me.clip:placeholderapi:2.10.9'
+        implementation 'org.codemc.worldguardwrapper:worldguardwrapper:1.2.0-SNAPSHOT'
+        implementation 'com.github.CryptoMorin:XSeries:v8.4.0'
+        implementation 'com.github.Redempt:RedLib:6.0.9.1'
+    }
 }
 
 dependencies {
-    implementation 'org.jetbrains:annotations:22.0.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-    compileOnly 'org.spigotmc:spigot-api:1.17-R0.1-SNAPSHOT' // The Spigot API with no shadowing. Requires the OSS repo.
-    compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.2.0-SNAPSHOT'
-    compileOnly 'me.clip:placeholderapi:2.10.9'
-    implementation 'org.codemc.worldguardwrapper:worldguardwrapper:1.2.0-SNAPSHOT'
-    implementation 'com.github.CryptoMorin:XSeries:v8.4.0'
-    implementation 'com.github.Redempt:RedLib:6.0.9.1'
-
-    implementation project(':we-1_8')
-    implementation project(':we-1_13')
-}
-
-license {
-    header = project.file('LICENCE')
-}
-
-application {
-    mainClassName = javaMainClass
+    for (Project project : subprojects) {
+        implementation project
+    }
 }
 
 test {
