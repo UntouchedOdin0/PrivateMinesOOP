@@ -81,15 +81,7 @@ public class MineFactory {
 
         mineStorage.addMine(player.getUniqueId(), mine);
 
-        DataBlock dataBlock = blockDataManager.getDataBlock(block);
-        dataBlock.set("owner", String.valueOf(userUUID));
-        dataBlock.set("type", defaultMineType.getName());
-        dataBlock.set("location", LocationUtils.toString(location));
-        dataBlock.set("spawnLocation", LocationUtils.toString(mine.getSpawnLocation()));
-        dataBlock.set("npcLocation", LocationUtils.toString(mine.getNpcLocation()));
-        dataBlock.set("corner1", LocationUtils.toString(mine.getCorner1()));
-        dataBlock.set("corner2", LocationUtils.toString(mine.getCorner2()));
-        dataBlock.set("structure", mine.getStructure());
+        DataBlock dataBlock = getDataBlock(block, player, location, mine);
 
         String regionName = String.format("mine-%s", userUUID);
 
@@ -118,6 +110,19 @@ public class MineFactory {
         mine.reset();
         mine.startAutoResetTask();
         return mine;
+    }
+
+    private DataBlock getDataBlock(Block block, Player player, Location location, Mine mine) {
+        DataBlock dataBlock = blockDataManager.getDataBlock(block);
+        dataBlock.set("owner", String.valueOf(player.getUniqueId()));
+        dataBlock.set("type", defaultMineType.getName());
+        dataBlock.set("location", LocationUtils.toString(location));
+        dataBlock.set("spawnLocation", LocationUtils.toString(mine.getSpawnLocation()));
+        dataBlock.set("npcLocation", LocationUtils.toString(mine.getNpcLocation()));
+        dataBlock.set("corner1", LocationUtils.toString(mine.getCorner1()));
+        dataBlock.set("corner2", LocationUtils.toString(mine.getCorner2()));
+        dataBlock.set("structure", mine.getStructure());
+        return dataBlock;
     }
 
     /**
@@ -153,15 +158,7 @@ public class MineFactory {
 
             mineStorage.addMine(player.getUniqueId(), mine);
             Block block = location.getBlock();
-            DataBlock dataBlock = blockDataManager.getDataBlock(block);
-            dataBlock.set("owner", String.valueOf(userUUID));
-            dataBlock.set("type", defaultMineType.getName());
-            dataBlock.set("location", LocationUtils.toString(location));
-            dataBlock.set("spawnLocation", LocationUtils.toString(mine.getSpawnLocation()));
-            dataBlock.set("npcLocation", LocationUtils.toString(mine.getNpcLocation()));
-            dataBlock.set("corner1", LocationUtils.toString(mine.getCorner1()));
-            dataBlock.set("corner2", LocationUtils.toString(mine.getCorner2()));
-            dataBlock.set("structure", mine.getStructure());
+            DataBlock dataBlock = getDataBlock(block, player, location, mine);
             blockDataManager.save();
             mine.reset();
             mine.startAutoResetTask();

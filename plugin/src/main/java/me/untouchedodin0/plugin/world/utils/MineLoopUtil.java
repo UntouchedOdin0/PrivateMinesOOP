@@ -30,18 +30,18 @@ import redempt.redlib.multiblock.Structure;
 
 public class MineLoopUtil {
 
-    // Find the corner locations of a mine in a MultiBlockStructure
-    // All credits go to Redempt for helping fix this up!
-
     /**
+     * Find the corner locations of a mine in a MultiBlockStructure
+     * All credits go to Redempt for helping fix this up!
+     *
      * @param multiBlockStructure The MultiBlockStructure to search through
      * @param cornerMaterial      The material to look for in the MultiBlockStructure
      * @return The relative corner locations of a structure
      */
-
-    public int[][] findCornerLocations(MultiBlockStructure multiBlockStructure, Material cornerMaterial) {
-
-        int[] structureDimensions = multiBlockStructure.getDimensions();
+    private int[][] findCornerLocations(MultiBlockStructure multiBlockStructure, Structure structure, Material cornerMaterial) {
+        int[] structureDimensions = multiBlockStructure == null
+                ? structure.getType().getDimensions()
+                : multiBlockStructure.getDimensions();
         int dimensionsX = structureDimensions[0];
         int dimensionsY = structureDimensions[1];
         int dimensionsZ = structureDimensions[2];
@@ -59,7 +59,9 @@ public class MineLoopUtil {
         for (int x = 0; x < dimensionsX; x++) {
             for (int y = 0; y < dimensionsY; y++) {
                 for (int z = 0; z < dimensionsZ; z++) {
-                    if (multiBlockStructure.getType(x, y, z) != cornerMaterial) {
+                    if ((multiBlockStructure == null
+                            ? structure.getRelative(x, y, z).getBlock().getType()
+                            : multiBlockStructure.getType(x, y, z)) != cornerMaterial) {
                         continue;
                     }
                     locations[corners] = new int[]{x, y, z};
@@ -69,38 +71,28 @@ public class MineLoopUtil {
             }
         }
         return locations;
+    }
+
+    /**
+     * Find the corner locations of a mine in a MultiBlockStructure
+     *
+     * @param multiBlockStructure The MultiBlockStructure to search through
+     * @param cornerMaterial      The material to look for in the MultiBlockStructure
+     * @return The relative corner locations of a structure
+     */
+    public int[][] findCornerLocations(MultiBlockStructure multiBlockStructure, Material cornerMaterial) {
+        return findCornerLocations(multiBlockStructure, null, cornerMaterial);
     }
 
     public int[][] findCornerLocations(Structure structure, Material cornerMaterial) {
-        int[] dimensions = structure.getType().getDimensions();
-
-        int dimX = dimensions[0];
-        int dimY = dimensions[1];
-        int dimZ = dimensions[2];
-
-        int[][] locations = new int[2][];
-        int corners = 0;
-
-        for (int x = 0; x < dimX; x++) {
-            for (int y = 0; y < dimY; y++) {
-                for (int z = 0; z < dimZ; z++) {
-                    if (structure.getRelative(x, y, z).getBlock().getType() != cornerMaterial) {
-                        continue;
-                    }
-                    locations[corners] = new int[]{x, y, z};
-                    corners++;
-                    if (corners >= 2) break;
-                }
-            }
-        }
-        return locations;
+        return findCornerLocations(null, structure, cornerMaterial);
     }
 
-    // Find the Spawn Point location for the mine
+    private int[] findLocation(MultiBlockStructure multiBlockStructure, Structure structure, Material material) {
 
-    public int[] findSpawnLocation(MultiBlockStructure multiBlockStructure, Material spawnMaterial) {
-
-        int[] structureDimensions = multiBlockStructure.getDimensions();
+        int[] structureDimensions = multiBlockStructure == null
+                ? structure.getType().getDimensions()
+                : multiBlockStructure.getDimensions();
         int dimensionsX = structureDimensions[0];
         int dimensionsY = structureDimensions[1];
         int dimensionsZ = structureDimensions[2];
@@ -117,7 +109,9 @@ public class MineLoopUtil {
         for (int x = 0; x < dimensionsX; x++) {
             for (int y = 0; y < dimensionsY; y++) {
                 for (int z = 0; z < dimensionsZ; z++) {
-                    if (multiBlockStructure.getType(x, y, z) != spawnMaterial) {
+                    if ((multiBlockStructure == null
+                            ? structure.getRelative(x, y, z).getBlock().getType()
+                            : multiBlockStructure.getType(x, y, z)) != material) {
                         continue;
                     }
                     location = new int[]{x, y, z};
@@ -125,94 +119,27 @@ public class MineLoopUtil {
             }
         }
         return location;
+    }
+
+    /**
+     * Find the Spawn Point location for the mine
+     */
+    public int[] findSpawnLocation(MultiBlockStructure multiBlockStructure, Material spawnMaterial) {
+        return findLocation(multiBlockStructure, null, spawnMaterial);
     }
 
     public int[] findSpawnLocation(Structure structure, Material spawnMaterial) {
-
-        int[] structureDimensions = structure.getType().getDimensions();
-        int dimensionsX = structureDimensions[0];
-        int dimensionsY = structureDimensions[1];
-        int dimensionsZ = structureDimensions[2];
-
-         /*
-            Creating an array of 1 values to hold the location
-            Thanks to Redempt for the following example.
-
-            Example: [1, 2, 3]
-         */
-
-        int[] location = new int[1];
-
-        for (int x = 0; x < dimensionsX; x++) {
-            for (int y = 0; y < dimensionsY; y++) {
-                for (int z = 0; z < dimensionsZ; z++) {
-                    if (structure.getRelative(x, y, z).getBlock().getType() != spawnMaterial) {
-                        continue;
-                    }
-                    location = new int[]{x, y, z};
-                }
-            }
-        }
-        return location;
+        return findLocation(null, structure, spawnMaterial);
     }
 
-    // Find the Spawn Point location for the mine
-
+    /**
+     * Find the Spawn Point location for the mine
+     */
     public int[] findNpcLocation(MultiBlockStructure multiBlockStructure, Material npcMaterial) {
-
-        int[] structureDimensions = multiBlockStructure.getDimensions();
-        int dimensionsX = structureDimensions[0];
-        int dimensionsY = structureDimensions[1];
-        int dimensionsZ = structureDimensions[2];
-
-         /*
-            Creating an array of 1 values to hold the location
-            Thanks to Redempt for the following example.
-
-            Example: [1, 2, 3]
-         */
-
-        int[] location = new int[1];
-
-        for (int x = 0; x < dimensionsX; x++) {
-            for (int y = 0; y < dimensionsY; y++) {
-                for (int z = 0; z < dimensionsZ; z++) {
-                    if (multiBlockStructure.getType(x, y, z) != npcMaterial) {
-                        continue;
-                    }
-                    location = new int[]{x, y, z};
-                }
-            }
-        }
-        return location;
+        return findLocation(multiBlockStructure, null, npcMaterial);
     }
 
     public int[] findNpcLocation(Structure structure, Material npcMaterial) {
-
-        int[] structureDimensions = structure.getType().getDimensions();
-        int dimensionsX = structureDimensions[0];
-        int dimensionsY = structureDimensions[1];
-        int dimensionsZ = structureDimensions[2];
-
-         /*
-            Creating an array of 1 values to hold the location
-            Thanks to Redempt for the following example.
-
-            Example: [1, 2, 3]
-         */
-
-        int[] location = new int[1];
-
-        for (int x = 0; x < dimensionsX; x++) {
-            for (int y = 0; y < dimensionsY; y++) {
-                for (int z = 0; z < dimensionsZ; z++) {
-                    if (structure.getRelative(x, y, z).getBlock().getType() != npcMaterial) {
-                        continue;
-                    }
-                    location = new int[]{x, y, z};
-                }
-            }
-        }
-        return location;
+        return findLocation(null, structure, npcMaterial);
     }
 }
