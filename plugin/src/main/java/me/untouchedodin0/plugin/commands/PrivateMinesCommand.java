@@ -276,7 +276,7 @@ public class PrivateMinesCommand {
     }
 
     @CommandHook("unwhitelist")
-    public void unwhitelist(CommandSender commandSender, Player target) {
+    public void unWhitelist(CommandSender commandSender, Player target) {
         Player player = (Player) commandSender;
         Mine mine;
         UUID uuid = player.getUniqueId();
