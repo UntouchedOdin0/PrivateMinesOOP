@@ -32,15 +32,24 @@ import java.util.UUID;
 
 public class MineStorage {
 
+    private static final Map<UUID, Mine> staticMines = new HashMap<>();
     /**
-     *  The map of all the mines and their owner's UUID.
+     * The map of all the mines and their owner's UUID.
      */
 
     private final Map<UUID, Mine> mines = new HashMap<>();
-    private static final Map<UUID, Mine> staticMines = new HashMap<>();
 
     /**
+     * A simple get method to get how many mines have been created
      *
+     * @return the amount of mines created in a integer form.
+     */
+
+    public static int getLoadedMineSize() {
+        return staticMines.size();
+    }
+
+    /**
      * @param uuid - The UUID Of the mine owner to be added to the storage
      * @param mine - The Mine to be added into the storage
      */
@@ -51,7 +60,6 @@ public class MineStorage {
     }
 
     /**
-     *
      * @param uuid - The UUID of the player who's mine we'll be deleting from storage
      */
 
@@ -60,7 +68,6 @@ public class MineStorage {
     }
 
     /**
-     *
      * @param uuid The UUID of the player who's mine we'll be deleting from storage
      * @param mine The new mine of which will replace the old mine
      */
@@ -69,8 +76,9 @@ public class MineStorage {
         mines.replace(uuid, getMine(uuid), mine);
     }
 
+    // This is a way to to get a players mine
+
     /**
-     *
      * @return A map of all the mines with the owners UUID's.
      */
 
@@ -78,28 +86,18 @@ public class MineStorage {
         return mines;
     }
 
-    // This is a way to to get a players mine
-
     public Mine getMine(UUID uuid) {
         return mines.get(uuid);
     }
 
     /**
-     *  A simple method to see if a user has a mine or not
-     *  @return boolean if the user has a mine or not.
+     * A simple method to see if a user has a mine or not
+     *
+     * @return boolean if the user has a mine or not.
      */
 
     public boolean hasMine(UUID uuid) {
         return mines.containsKey(uuid);
-    }
-
-    /**
-     * A simple get method to get how many mines have been created
-     * @return the amount of mines created in a integer form.
-     */
-
-    public static int getLoadedMineSize() {
-        return staticMines.size();
     }
 
     public int getMineCount() {

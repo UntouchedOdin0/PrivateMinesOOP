@@ -37,8 +37,8 @@ import java.util.Map;
 
 public class MineType {
 
-    PrivateMines privateMines;
-    MineLoopUtil mineLoopUtil;
+    private final int[] spawnLocation;
+    private final int[] npcLocation;
 
     /*
         name: Name of the mine type
@@ -46,8 +46,9 @@ public class MineType {
         resetTime: How often the mine should reset in minutes.
         materials: A list of materials and their percentages of which goes in the mine
      */
-
-
+    private final int[][] cornerLocations;
+    PrivateMines privateMines;
+    MineLoopUtil mineLoopUtil;
     private String name;
     private int mineTier = 1;
     private int resetTime = 1;
@@ -55,9 +56,6 @@ public class MineType {
     private Map<Material, Double> materials = new HashMap<>();
     private WeightedRandom<Material> weightedRandom = new WeightedRandom<>();
     private MultiBlockStructure multiBlockStructure;
-    private final int[] spawnLocation;
-    private final int[] npcLocation;
-    private final int[][] cornerLocations;
     private List<String> allowFlags;
     private List<String> denyFlags;
 
@@ -88,45 +86,39 @@ public class MineType {
     }
 
     /**
-     *
-     * @param name - The name to set of the mine type
-     */
-
-    public void setName(String name) { this.name = name; }
-
-    /**
-     *
      * @return A string value of the name of the mine
      */
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
     /**
-     *
-     * @param mineTier - The new mine tier to be set
+     * @param name - The name to set of the mine type
      */
 
-    public void setMineTier(int mineTier) { this.mineTier = mineTier; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
     /**
-     *
      * @return The tier of the mine
      */
 
 
-    public int getMineTier() { return mineTier; }
-
-    /**
-     *
-     * @param resetTime - The new reset delay for the mine
-     */
-
-    public void setResetTime(int resetTime) {
-        this.resetTime = resetTime;
+    public int getMineTier() {
+        return mineTier;
     }
 
     /**
-     *
+     * @param mineTier - The new mine tier to be set
+     */
+
+    public void setMineTier(int mineTier) {
+        this.mineTier = mineTier;
+    }
+
+    /**
      * @return The reset time of the mine
      */
 
@@ -135,7 +127,22 @@ public class MineType {
     }
 
     /**
-     *
+     * @param resetTime - The new reset delay for the mine
+     */
+
+    public void setResetTime(int resetTime) {
+        this.resetTime = resetTime;
+    }
+
+    /**
+     * @return The reset percentage for the mine
+     */
+
+    public double getResetPercentage() {
+        return resetPercentage;
+    }
+
+    /**
      * @param resetPercentage - The new reset percentage for the mine
      */
 
@@ -144,54 +151,30 @@ public class MineType {
     }
 
     /**
-     *
-     * @return The reset percentage for the mine
-     */
-
-    public double getResetPercentage() { return resetPercentage; }
-
-    /**
-     *
-     * @param mineBlocks - The map of Materials and their percentages to be set in the private mine
-     */
-
-    public void setMaterials(Map<Material, Double> mineBlocks) { this.materials = mineBlocks; }
-
-    /**
-     *
      * @return A map of Materials and their percentages
      */
 
-    public Map<Material, Double> getMaterials() { return materials; }
+    public Map<Material, Double> getMaterials() {
+        return materials;
+    }
 
+    /**
+     * @param mineBlocks - The map of Materials and their percentages to be set in the private mine
+     */
+
+    public void setMaterials(Map<Material, Double> mineBlocks) {
+        this.materials = mineBlocks;
+    }
+
+    public WeightedRandom<Material> getWeightedRandom() {
+        return weightedRandom;
+    }
 
     public void setWeightedRandom(WeightedRandom<Material> weightedRandom) {
         this.weightedRandom = weightedRandom;
     }
 
-    public WeightedRandom<Material> getWeightedRandom() { return weightedRandom; }
-
     /**
-     *
-     * @param multiBlockStructure - The new MultiBlockStructure to be set for the MineData
-     *  This method will likely go idk yet
-     */
-
-    @Deprecated
-    public void setMultiBlockStructure(MultiBlockStructure multiBlockStructure) {
-        this.multiBlockStructure = multiBlockStructure;
-    }
-
-    public void setAllowFlags(List<String> allowFlags) {
-        this.allowFlags = allowFlags;
-    }
-
-    public void setDenyFlags(List<String> denyFlags) {
-        this.denyFlags = denyFlags;
-    }
-
-    /**
-     *
      * @return The MultiBlockStructure of the MineData
      */
 
@@ -199,17 +182,31 @@ public class MineType {
         return multiBlockStructure;
     }
 
+    /**
+     * @param multiBlockStructure - The new MultiBlockStructure to be set for the MineData
+     *                            This method will likely go idk yet
+     */
+
+    @Deprecated
+    public void setMultiBlockStructure(MultiBlockStructure multiBlockStructure) {
+        this.multiBlockStructure = multiBlockStructure;
+    }
+
     public int[] getSpawnLocation() {
         return spawnLocation;
     }
 
-    public int[] getNpcLocation() { return npcLocation; }
+    public int[] getNpcLocation() {
+        return npcLocation;
+    }
 
     public int[][] getCornerLocations() {
         return cornerLocations;
     }
 
-    public int[] getCorner1() { return getCornerLocations()[0]; }
+    public int[] getCorner1() {
+        return getCornerLocations()[0];
+    }
 
     public int[] getCorner2() {
         return getCornerLocations()[1];
@@ -219,7 +216,15 @@ public class MineType {
         return allowFlags;
     }
 
+    public void setAllowFlags(List<String> allowFlags) {
+        this.allowFlags = allowFlags;
+    }
+
     public List<String> getDenyFlags() {
         return denyFlags;
+    }
+
+    public void setDenyFlags(List<String> denyFlags) {
+        this.denyFlags = denyFlags;
     }
 }

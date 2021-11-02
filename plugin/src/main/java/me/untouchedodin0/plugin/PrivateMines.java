@@ -60,10 +60,9 @@ import java.util.UUID;
 
 public class PrivateMines extends JavaPlugin {
 
+    private static PrivateMines privateMines;
     private final Map<String, MineType> mineDataMap = new HashMap<>();
     private final TreeMap<String, MineType> mineTypeTreeMap = new TreeMap<>();
-    private static PrivateMines privateMines;
-
     private File configFile;
 
     private MineLoopUtil mineLoopUtil;
@@ -89,6 +88,14 @@ public class PrivateMines extends JavaPlugin {
 
     @ConfigValue
     private Map<String, MineConfig> mineTypes = ConfigManager.map(MineConfig.class);
+
+    public static PrivateMines getPrivateMines() {
+        return privateMines;
+    }
+
+    /*
+        Disables the plugin, clears the map and saves the block data manager
+     */
 
     @Override
     public void onEnable() {
@@ -209,10 +216,6 @@ public class PrivateMines extends JavaPlugin {
         }
     }
 
-    /*
-        Disables the plugin, clears the map and saves the block data manager
-     */
-
     @Override
     public void onDisable() {
         getLogger().info("Disabling Private Mines...");
@@ -222,10 +225,6 @@ public class PrivateMines extends JavaPlugin {
             Bukkit.getLogger().info("Saving data block: " + dataBlock);
         });
         blockDataManager.saveAndClose();
-    }
-
-    public static PrivateMines getPrivateMines() {
-        return privateMines;
     }
 
     /*

@@ -25,7 +25,12 @@ SOFTWARE.
 package me.untouchedodin0.plugin.world;
 
 import me.untouchedodin0.plugin.world.utils.Direction;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
+import org.bukkit.WorldType;
+
 import static me.untouchedodin0.plugin.world.utils.Direction.NORTH;
 
 public class MineWorldManager {

@@ -8,12 +8,12 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.SessionManager;
 import com.sk89q.worldedit.world.World;
-import me.untouchedodin0.plugin.mines.Mine;
-import me.untouchedodin0.plugin.mines.MineType;
-import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.factory.MineFactory;
+import me.untouchedodin0.plugin.mines.Mine;
+import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.storage.MineStorage;
+import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -256,7 +256,7 @@ public class PrivateMinesCommand {
         if (!mine.isOpen()) {
             Messages.msg("mineAlreadyClosed");
             player.sendMessage(ChatColor.RED + "Your mine was already closed!");
-        } else  {
+        } else {
             Messages.msg("mineOpened");
             player.sendMessage("Opening your mine!");
         }

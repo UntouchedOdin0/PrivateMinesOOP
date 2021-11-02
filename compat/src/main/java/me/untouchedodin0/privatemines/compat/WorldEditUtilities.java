@@ -10,10 +10,10 @@ import org.bukkit.util.BlockVector;
 import redempt.redlib.region.CuboidRegion;
 
 public abstract class WorldEditUtilities {
+    private static WorldEditUtilities INSTANCE;
+
     protected WorldEditUtilities() {
     }
-
-    private static WorldEditUtilities INSTANCE;
 
     public static WorldEditUtilities getInstance() {
         if (INSTANCE == null) {

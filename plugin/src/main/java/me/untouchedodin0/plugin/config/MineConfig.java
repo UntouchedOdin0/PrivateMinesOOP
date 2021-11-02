@@ -24,8 +24,8 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin.config;
 
-import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.PrivateMines;
+import me.untouchedodin0.plugin.mines.MineType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import redempt.redlib.configmanager.ConfigManager;
@@ -127,15 +127,21 @@ public class MineConfig {
 
     // A getter for the path
 
-    public Path getPath() { return path; }
+    public Path getPath() {
+        return path;
+    }
 
     // A getter for the contents
 
-    public String getContents() { return contents; }
+    public String getContents() {
+        return contents;
+    }
 
     // A getter for getting the section name
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
     // A getter for getting the file name from the section
 
@@ -151,9 +157,13 @@ public class MineConfig {
 
     // A getter for getting the reset time from the section
 
-    public int getResetTime() { return resetTime; }
+    public int getResetTime() {
+        return resetTime;
+    }
 
-    public double getResetPercentage() { return resetPercentage; }
+    public double getResetPercentage() {
+        return resetPercentage;
+    }
 
     // A getter for getting the materials from the secion
 
@@ -167,7 +177,11 @@ public class MineConfig {
         return multiBlockStructure;
     }
 
-    public List<String> getAllowFlags() { return allowFlags; }
+    public List<String> getAllowFlags() {
+        return allowFlags;
+    }
 
-    public List<String> getDenyFlags() { return denyFlags; }
+    public List<String> getDenyFlags() {
+        return denyFlags;
+    }
 }

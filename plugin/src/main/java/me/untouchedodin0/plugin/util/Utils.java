@@ -100,17 +100,17 @@ public class Utils {
         final WorldGuardWrapper w = WorldGuardWrapper.getInstance();
 
         Stream.of(
-                w.getFlag("block-place", WrappedState.class),
-                w.getFlag("block-break", WrappedState.class)
-        ).filter(Optional::isPresent)
+                        w.getFlag("block-place", WrappedState.class),
+                        w.getFlag("block-break", WrappedState.class)
+                ).filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(flag -> {
                     region.ifPresent(iWrappedRegion -> iWrappedRegion.setFlag(flag, WrappedState.ALLOW));
                 });
 
         Stream.of(
-                w.getFlag("mob-spawning", WrappedState.class)
-        ).filter(Optional::isPresent)
+                        w.getFlag("mob-spawning", WrappedState.class)
+                ).filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(flag -> {
                     region.ifPresent(iWrappedRegion -> iWrappedRegion.setFlag(flag, WrappedState.DENY));

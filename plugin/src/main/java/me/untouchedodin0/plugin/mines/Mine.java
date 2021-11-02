@@ -25,10 +25,10 @@ SOFTWARE.
 package me.untouchedodin0.plugin.mines;
 
 import com.cryptomorin.xseries.XMaterial;
-import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.storage.MineStorage;
+import me.untouchedodin0.plugin.util.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -57,6 +57,8 @@ public class Mine {
 
     private final PrivateMines privateMines;
     private final Material airMaterial = XMaterial.AIR.parseMaterial();
+    private final Utils utils;
+    Optional<IWrappedRegion> iWrappedRegion;
     private MineType mineType;
     private Location mineLocation;
     private Location spawnLocation;
@@ -71,9 +73,7 @@ public class Mine {
     private boolean isAutoResetting;
     private boolean isOpen;
     private Task resetTask;
-    private final Utils utils;
     private World world;
-    Optional<IWrappedRegion> iWrappedRegion;
 
     public Mine(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -401,7 +401,7 @@ public class Mine {
     }
 
     public void cancelResetTask() {
-            resetTask.cancel();
+        resetTask.cancel();
     }
 
 

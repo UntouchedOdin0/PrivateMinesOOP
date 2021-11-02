@@ -45,7 +45,8 @@ subprojects {
         implementation 'org.jetbrains:annotations:22.0.0'
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
         testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-        compileOnly 'org.spigotmc:spigot-api:1.17-R0.1-SNAPSHOT' // The Spigot API with no shadowing. Requires the OSS repo.
+        compileOnly 'org.spigotmc:spigot-api:1.17-R0.1-SNAPSHOT'
+        // The Spigot API with no shadowing. Requires the OSS repo.
         // compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.2.0-SNAPSHOT'
         compileOnly 'me.clip:placeholderapi:2.10.9'
         implementation 'org.codemc.worldguardwrapper:worldguardwrapper:1.2.0-SNAPSHOT'
