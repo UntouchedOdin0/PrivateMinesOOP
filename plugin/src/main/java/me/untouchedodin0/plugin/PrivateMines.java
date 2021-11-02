@@ -221,9 +221,7 @@ public class PrivateMines extends JavaPlugin {
         getLogger().info("Disabling Private Mines...");
         mineDataMap.clear();
         getLogger().info("Saving and closing the BlockDataManager...");
-        blockDataManager.getAll().forEach(dataBlock -> {
-            Bukkit.getLogger().info("Saving data block: " + dataBlock);
-        });
+        blockDataManager.getAll().forEach(dataBlock -> Bukkit.getLogger().info("Saving data block: " + dataBlock));
         blockDataManager.saveAndClose();
     }
 
