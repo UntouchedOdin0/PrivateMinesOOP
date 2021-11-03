@@ -258,7 +258,7 @@ public class Mine {
         this.debugMode = privateMines.isDebugMode();
 
         // Set to use world edit or not, makes it faster
-        this.useWorldEdit = privateMines.useWorldEdit();
+        this.useWorldEdit = privateMines.isWorldEditEnabled();
 
         // Initialise the util class
         Utils utils = new Utils(privateMines);
@@ -281,9 +281,7 @@ public class Mine {
             if (world != null) {
                 this.editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world));
                 mineType.getMultiBlockStructure().forEachBlock(mineLocation, blockState -> {
-
                     Location location = blockState.getLocation();
-
                     try {
                         editSession.setBlock(BlockVector3.at(
                                 location.getBlockX(),

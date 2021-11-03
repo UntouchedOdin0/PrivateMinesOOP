@@ -75,6 +75,7 @@ public class PrivateMines extends JavaPlugin {
     private Utils utils;
     private Structure structure;
     private WorldEditUtilities worldEditUtils;
+    private boolean isWorldEditEnabled = false;
 
     @ConfigValue
     private String spawnPoint;
@@ -213,6 +214,10 @@ public class PrivateMines extends JavaPlugin {
             worldEditUtils = WorldEditUtilities.getInstance();
             getLogger().info("Loading worldedit v" + WorldEditPlugin.getPlugin(WorldEditPlugin.class)
                     .getDescription().getVersion());
+            if (useWorldEdit) {
+                isWorldEditEnabled = true;
+            }
+            getLogger().info("isWorldEditEnabled: " + isWorldEditEnabled);
         }
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
@@ -357,8 +362,8 @@ public class PrivateMines extends JavaPlugin {
         return debugMode;
     }
 
-    public boolean useWorldEdit() {
-        return useWorldEdit;
+    public boolean isWorldEditEnabled() {
+        return isWorldEditEnabled;
     }
 
     public MineWorldManager getMineWorldManager() {
