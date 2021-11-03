@@ -275,6 +275,8 @@ public class Mine {
 
         World world = mineLocation.getWorld();
 
+        // Paste the structure using the world edit
+
         if (useWorldEdit) {
             if (world != null) {
                 this.editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world));
@@ -296,8 +298,11 @@ public class Mine {
                 });
             }
 
+            // Assume the structure is at the location
             this.structure = mineType.getMultiBlockStructure().assumeAt(mineLocation);
         } else {
+
+            // Paste the structure using redlib
             this.structure = mineType.getMultiBlockStructure().build(mineLocation);
         }
 
