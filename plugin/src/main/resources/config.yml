@@ -3,6 +3,7 @@ spawnPoint: "CHEST"
 mineCorner: "POWERED_RAIL"
 sellNpc: "WHITE_WOOL"
 debugMode: false
+useWorldEdit: false
 
 mineTypes:
   Test:

@@ -89,6 +89,9 @@ public class PrivateMines extends JavaPlugin {
     private boolean debugMode = false;
 
     @ConfigValue
+    private boolean useWorldEdit = false;
+
+    @ConfigValue
     private Map<String, MineConfig> mineTypes = ConfigManager.map(MineConfig.class);
 
     public static PrivateMines getPrivateMines() {
@@ -352,6 +355,10 @@ public class PrivateMines extends JavaPlugin {
 
     public boolean isDebugMode() {
         return debugMode;
+    }
+
+    public boolean useWorldEdit() {
+        return useWorldEdit;
     }
 
     public MineWorldManager getMineWorldManager() {

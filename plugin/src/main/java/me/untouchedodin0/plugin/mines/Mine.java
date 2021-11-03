@@ -47,7 +47,6 @@ import redempt.redlib.misc.Task;
 import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
-import redempt.redlib.region.Region;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -75,6 +74,7 @@ public class Mine {
     private Structure structure;
     private WeightedRandom<Material> weightedRandom;
     private boolean debugMode;
+    private boolean useWorldEdit;
     private boolean isAutoResetting;
     private boolean isOpen;
     private Task resetTask;
@@ -257,6 +257,9 @@ public class Mine {
         // Set the debugMode field to true or false
         this.debugMode = privateMines.isDebugMode();
 
+        // Set to use world edit or not, makes it faster
+        this.useWorldEdit = privateMines.useWorldEdit();
+
         // Initialise the util class
         Utils utils = new Utils(privateMines);
 
@@ -264,48 +267,39 @@ public class Mine {
         if (debugMode) {
             privateMines.getLogger().info("MultiBlockStructure: " + mineType.getMultiBlockStructure());
             privateMines.getLogger().info("Location " + mineLocation);
+            privateMines.getLogger().info("using worldedit?: " + useWorldEdit);
         }
 
-        Region assumeRegion = mineType.getMultiBlockStructure().assumeAt(mineLocation).getRegion();
         String userUUID = getMineOwner().toString();
         String regionName = String.format("mine-%s", userUUID);
 
         World world = mineLocation.getWorld();
-        int minHeight = 0;
-        int maxHeight = 0;
 
-//        if (world != null) {
-//            minHeight = world.getMinHeight();
-//            maxHeight = world.getMaxHeight();
-//        }
+        if (useWorldEdit) {
+            if (world != null) {
+                this.editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world));
+                mineType.getMultiBlockStructure().forEachBlock(mineLocation, blockState -> {
 
-        Location assumeStart = assumeRegion.getStart();
-        Location assumeEnd = assumeRegion.getEnd();
+                    Location location = blockState.getLocation();
 
-        if (world != null) {
-            this.editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world));
-            mineType.getMultiBlockStructure().forEachBlock(mineLocation, blockState -> {
+                    try {
+                        editSession.setBlock(BlockVector3.at(
+                                location.getBlockX(),
+                                location.getBlockY(),
+                                location.getBlockZ()),
+                                BukkitAdapter.adapt(blockState.getBlockData()),
+                                EditSession.Stage.BEFORE_HISTORY);
+                    } catch (WorldEditException e) {
+                        e.printStackTrace();
+                    }
+                    editSession.close();
+                });
+            }
 
-                Material material = blockState.getType();
-                Location location = blockState.getLocation();
-
-                try {
-                    editSession.setBlock(BlockVector3.at(
-                            location.getBlockX(),
-                            location.getBlockY(),
-                            location.getBlockZ()),
-                            BukkitAdapter.adapt(blockState.getBlockData()),
-                            EditSession.Stage.BEFORE_HISTORY);
-                } catch (WorldEditException e) {
-                    e.printStackTrace();
-                }
-                editSession.close();
-            });
+            this.structure = mineType.getMultiBlockStructure().assumeAt(mineLocation);
+        } else {
+            this.structure = mineType.getMultiBlockStructure().build(mineLocation);
         }
-
-        this.structure = mineType.getMultiBlockStructure().assumeAt(mineLocation);
-
-//        this.structure = mineType.getMultiBlockStructure().build(mineLocation);
 
         // Simple check to make sure the structure isn't null
 
