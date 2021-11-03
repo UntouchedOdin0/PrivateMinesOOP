@@ -1,10 +1,21 @@
 package me.untouchedodin0.plugin.util.placeholderapi;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import me.untouchedodin0.plugin.PrivateMines;
+import me.untouchedodin0.plugin.mines.Mine;
+import me.untouchedodin0.plugin.storage.MineStorage;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.UUID;
+
 public class PrivateMinesExpansion extends PlaceholderExpansion {
+
+    PrivateMines privateMines;
+    MineStorage mineStorage;
+    Mine mine;
+    UUID uuid;
 
     @Override
     public @org.jetbrains.annotations.NotNull String getAuthor() {
@@ -31,16 +42,28 @@ public class PrivateMinesExpansion extends PlaceholderExpansion {
 
     @Override
     public String onRequest(final OfflinePlayer offlinePlayer, @NotNull String identifier) {
-        try {
-            switch (identifier) {
-                case "1":
-                    return "yes";
-                case "2":
-                    return "no";
+        Player player = offlinePlayer.getPlayer();
+
+        if (player != null) {
+            uuid = player.getUniqueId();
+        }
+
+        this.privateMines = PrivateMines.getPrivateMines();
+        this.mineStorage = privateMines.getMineStorage();
+        if (mineStorage.hasMine(uuid)) {
+            mine = mineStorage.getMine(uuid);
+
+            try {
+                switch (identifier) {
+                    case "type":
+                        return mine.getMineType().getName();
+                    case "2":
+                        return "no";
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "NOT_WORKING";
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "NOT_WORKING";
         }
         return identifier;
     }

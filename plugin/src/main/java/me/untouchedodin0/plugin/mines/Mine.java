@@ -217,6 +217,7 @@ public class Mine {
         this.structure = structure;
     }
 
+    @SuppressWarnings("unused")
     public WeightedRandom<Material> getWeightedRandom() {
         return weightedRandom;
     }
