@@ -74,7 +74,6 @@ public class Mine {
     private Structure structure;
     private WeightedRandom<Material> weightedRandom;
     private boolean debugMode;
-    private boolean useWorldEdit;
     private boolean isAutoResetting;
     private boolean isOpen;
     private Task resetTask;
@@ -258,7 +257,7 @@ public class Mine {
         this.debugMode = privateMines.isDebugMode();
 
         // Set to use world edit or not, makes it faster
-        this.useWorldEdit = privateMines.isWorldEditEnabled();
+        boolean useWorldEdit = privateMines.isWorldEditEnabled();
 
         // Initialise the util class
         Utils utils = new Utils(privateMines);
