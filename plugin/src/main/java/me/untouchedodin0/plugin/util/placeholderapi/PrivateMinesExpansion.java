@@ -57,8 +57,8 @@ public class PrivateMinesExpansion extends PlaceholderExpansion {
                 switch (identifier) {
                     case "type":
                         return mine.getMineType().getName();
-                    case "2":
-                        return "no";
+                    case "hasMine":
+                        return String.valueOf(mineStorage.hasMine(uuid));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
