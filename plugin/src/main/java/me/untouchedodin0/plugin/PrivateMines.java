@@ -65,9 +65,7 @@ public class PrivateMines extends JavaPlugin {
     private static PrivateMines privateMines;
     private final Map<String, MineType> mineDataMap = new HashMap<>();
     private final TreeMap<String, MineType> mineTypeTreeMap = new TreeMap<>();
-    private File configFile;
 
-    private MineLoopUtil mineLoopUtil;
     private MineFactory mineFactory;
     private MineWorldManager mineWorldManager;
     private MineStorage mineStorage;
@@ -106,7 +104,7 @@ public class PrivateMines extends JavaPlugin {
     @Override
     public void onEnable() {
         privateMines = this;
-        configFile = new File(getDataFolder(), "config.yml");
+        File configFile = new File(getDataFolder(), "config.yml");
 
         if (!configFile.exists()) {
             saveDefaultConfig();
@@ -122,7 +120,7 @@ public class PrivateMines extends JavaPlugin {
         mineStorage = new MineStorage();
         mineFactory = new MineFactory(this, blockDataManager);
         mineWorldManager = new MineWorldManager();
-        mineLoopUtil = new MineLoopUtil();
+        MineLoopUtil mineLoopUtil = new MineLoopUtil();
         utils = new Utils(this);
         Plugin worldEditPlugin = Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
 
