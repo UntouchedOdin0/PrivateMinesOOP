@@ -25,6 +25,11 @@ SOFTWARE.
 package me.untouchedodin0.plugin.mines;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.WorldEditException;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.math.BlockVector3;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.storage.MineStorage;
@@ -74,6 +79,7 @@ public class Mine {
     private boolean isOpen;
     private Task resetTask;
     private World world;
+    private EditSession editSession;
 
     public Mine(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -238,6 +244,7 @@ public class Mine {
 
     public void build() {
 
+
         // Simple check to make sure the type isn't null
 
         if (mineType == null) {
@@ -275,25 +282,30 @@ public class Mine {
         Location assumeStart = assumeRegion.getStart();
         Location assumeEnd = assumeRegion.getEnd();
 
-        this.structure = mineType.getMultiBlockStructure().build(mineLocation);
+        if (world != null) {
+            this.editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world));
+            mineType.getMultiBlockStructure().forEachBlock(mineLocation, blockState -> {
 
-//        if (assumeStart.getBlockY() > minHeight && assumeStart.getBlockY() < maxHeight) {
-//            if (assumeEnd.getBlockY() > minHeight && assumeEnd.getBlockY() < maxHeight) {
-//                // Build the multi block structure at the location and set the structure field
-//
-//                this.structure = mineType.getMultiBlockStructure().build(mineLocation);
-//            } else {
-//                privateMines.getLogger().warning(
-//                        "Failed to create structure due to the end height" +
-//                                "either being too high or too low!");
-//                return;
-//            }
-//        } else {
-//            privateMines.getLogger().warning(
-//                    "Failed to create structure due to the start height" +
-//                            "either being too high or too low!");
-//            return;
-//        }
+                Material material = blockState.getType();
+                Location location = blockState.getLocation();
+
+                try {
+                    editSession.setBlock(BlockVector3.at(
+                            location.getBlockX(),
+                            location.getBlockY(),
+                            location.getBlockZ()),
+                            BukkitAdapter.adapt(blockState.getBlockData()),
+                            EditSession.Stage.BEFORE_HISTORY);
+                } catch (WorldEditException e) {
+                    e.printStackTrace();
+                }
+                editSession.close();
+            });
+        }
+
+        this.structure = mineType.getMultiBlockStructure().assumeAt(mineLocation);
+
+//        this.structure = mineType.getMultiBlockStructure().build(mineLocation);
 
         // Simple check to make sure the structure isn't null
 

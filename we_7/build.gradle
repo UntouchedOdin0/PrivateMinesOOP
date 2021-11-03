@@ -1,3 +1,6 @@
+repositories {
+    maven { url = 'https://ci.athion.net/job/FastAsyncWorldEdit/ws/mvn/' }
+}
 dependencies {
     compileOnly project(':compat')
     compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.2.0-SNAPSHOT'
