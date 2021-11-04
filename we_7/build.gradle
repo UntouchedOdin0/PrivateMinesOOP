@@ -1,5 +1,7 @@
 repositories {
-    maven { url = 'https://ci.athion.net/job/FastAsyncWorldEdit/ws/mvn/' }
+    maven {
+        url = uri("https://mvn.intellectualsites.com/content/groups/public/")
+    }
 }
 dependencies {
     compileOnly project(':compat')

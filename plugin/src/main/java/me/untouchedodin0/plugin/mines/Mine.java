@@ -259,7 +259,7 @@ public class Mine {
 
         // Set to use world edit or not, makes it faster
         boolean useWorldEdit = privateMines.isWorldEditEnabled();
-
+        
         // Initialise the util class
         Utils utils = new Utils(privateMines);
 
