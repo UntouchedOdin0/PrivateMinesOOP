@@ -1,5 +1,6 @@
 package me.untouchedodin0.privatemines.we_7.worldedit;
 
+import com.fastasyncworldedit.core.FaweAPI;
 import com.sk89q.worldedit.EmptyClipboardException;
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.LocalSession;
