@@ -47,7 +47,7 @@ public abstract class WorldEditUtilities {
         return block.getLocation();
     }
 
-    public abstract CuboidRegion getRegion(Player player);
+    public abstract CuboidRegion getCuboidRegion(Player player);
 
     public abstract void createMultiBlockStructure(Player player, String name);
 }

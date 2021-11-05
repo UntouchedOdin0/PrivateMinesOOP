@@ -28,7 +28,6 @@ public class WorldEditUtils extends WorldEditUtilities {
 
     private final SessionManager sessionManager = WorldEdit.getInstance().getSessionManager();
 
-    @Override
     public CuboidRegion getRegion(Player player) {
         LocalSession localSession = sessionManager.get((SessionOwner) player);
 
@@ -60,6 +59,11 @@ public class WorldEditUtils extends WorldEditUtilities {
     private WorldEditPlugin getWorldEdit() {
         Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
         return (WorldEditPlugin) plugin;
+    }
+
+    @Override
+    public CuboidRegion getCuboidRegion(Player player) {
+        return null;
     }
 
     @Override

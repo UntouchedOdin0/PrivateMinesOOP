@@ -1,13 +1,5 @@
 package me.untouchedodin0.plugin.commands;
 
-import com.sk89q.worldedit.IncompleteRegionException;
-import com.sk89q.worldedit.LocalSession;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldedit.regions.Region;
-import com.sk89q.worldedit.session.SessionManager;
-import com.sk89q.worldedit.world.World;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.mines.Mine;
@@ -142,9 +134,9 @@ public class PrivateMinesCommand {
         WorldEditUtilities worldEditUtilities;
 
         worldEditUtilities = privateMines.getWorldEditUtils();
-        cuboidRegion = worldEditUtilities.getRegion(player);
+        cuboidRegion = worldEditUtilities.getCuboidRegion(player);
 
-        player.sendMessage("region: " + worldEditUtilities.getRegion(player));
+        player.sendMessage("region: " + worldEditUtilities.getCuboidRegion(player));
         player.sendMessage("cuboid region: " + cuboidRegion);
         minimum = cuboidRegion.getStart();
         maximum = cuboidRegion.getEnd();

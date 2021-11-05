@@ -36,7 +36,7 @@ public class WorldEditUtils extends WorldEditUtilities {
         return block.getLocation();
     }
 
-    public CuboidRegion getRegion(Player player) {
+    public CuboidRegion getCuboidRegion(Player player) {
         LocalSession localSession = sessionManager.get(BukkitAdapter.adapt(player));
 
         com.sk89q.worldedit.world.World world = localSession.getSelectionWorld();
@@ -56,6 +56,8 @@ public class WorldEditUtils extends WorldEditUtilities {
         }
         return null;
     }
+
+
 
     private WorldEditPlugin getWorldEdit() {
         Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
