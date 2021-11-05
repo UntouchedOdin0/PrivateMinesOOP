@@ -66,11 +66,9 @@ subprojects {
     }
 }
 
-
 dependencies {
     subprojects.forEach(project -> implementation(project))
 }
-
 
 task copyTo1_8Server(type: Copy) {
     from shadowJar
