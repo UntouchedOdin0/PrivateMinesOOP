@@ -51,6 +51,7 @@ import redempt.redlib.region.CuboidRegion;
 import java.util.Optional;
 import java.util.UUID;
 
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class Mine {
 
     /*
