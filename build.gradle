@@ -50,6 +50,8 @@ allprojects {
 }
 
 subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'com.github.johnrengelman.shadow'
 
     dependencies {
         compileOnly 'org.spigotmc:spigot-api:1.17-R0.1-SNAPSHOT'
@@ -62,7 +64,27 @@ subprojects {
     shadowJar {
         relocate 'org.codemc.worldguardwrapper', 'me.untouchedodin0.privatemines.worldguardwrapper'
     }
+}
 
+
+dependencies {
+    subprojects.forEach(project -> implementation(project))
+}
+
+
+task copyTo1_8Server(type: Copy) {
+    from shadowJar
+    into "E:/Coding/Spigot Test Servers/1.8.8/plugins"
+}
+
+task copyTo1_12Server(type: Copy) {
+    from shadowJar
+    into "E:/Coding/Spigot Test Servers/1.12.2 Private Mines/plugins"
+}
+
+task copyTo1_17Server(type: Copy) {
+    from shadowJar
+    into "E:/Coding/Spigot Test Servers/1.17 - Paper (pmines rewrite)/plugins"
 }
 
 
@@ -70,18 +92,8 @@ task updateJars {
     if (!new File("E:/Coding").exists()) {
         return
     }
-    doLast {
-        copy {
-            from shadowJar
-            into "E:/Coding/Spigot Test Servers/1.8.8/plugins"
-        }
-        copy {
-            from shadowJar
-            into "E:/Coding/Spigot Test Servers/1.12.2 Private Mines/plugins"
-        }
-        copy {
-            from shadowJar
-            into "E:/Coding/Spigot Test Servers/1.17 - Paper (pmines rewrite)/plugins"
-        }
-    }
+
+    dependsOn copyTo1_8Server
+    dependsOn copyTo1_12Server
+    dependsOn copyTo1_17Server
 }
