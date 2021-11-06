@@ -1,19 +1,17 @@
 package me.untouchedodin0.privatemines.we_7.worldedit;
 
-import com.sk89q.worldedit.EmptyClipboardException;
-import com.sk89q.worldedit.IncompleteRegionException;
-import com.sk89q.worldedit.LocalSession;
-import com.sk89q.worldedit.WorldEdit;
+import com.fastasyncworldedit.core.FaweAPI;
+import com.fastasyncworldedit.core.util.EditSessionBuilder;
+import com.sk89q.worldedit.*;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.SessionManager;
+import com.sk89q.worldedit.world.block.BlockType;
 import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -96,6 +94,65 @@ public class WorldEditUtils extends WorldEditUtilities {
             }
         } catch (IncompleteRegionException | EmptyClipboardException incompleteRegionException) {
             player.sendMessage("Please make a full selection");
+        }
+    }
+
+    @Override
+    public void setBlocks(CuboidRegion cuboidRegion, String material) {
+        Location start = cuboidRegion.getStart();
+        Location end = cuboidRegion.getEnd();
+        World world = start.getWorld();
+        String worldName;
+
+        if (start.getWorld() != null) {
+            worldName = start.getWorld().getName();
+            int startX = start.getBlockX();
+            int startY = start.getBlockY();
+            int startZ = start.getBlockZ();
+
+            int endX = end.getBlockX();
+            int endY = end.getBlockY();
+            int endZ = end.getBlockZ();
+
+            BlockVector3 startVector3 = BlockVector3.at(startX, startY, startZ);
+            BlockVector3 endVector3 = BlockVector3.at(endX, endY, endZ);
+
+            BlockType blockType = BlockType.REGISTRY.get(material.toLowerCase());
+            Region cube = new com.sk89q.worldedit.regions.CuboidRegion(startVector3, endVector3);
+
+            EditSessionBuilder editSessionBuilder = FaweAPI.getEditSessionBuilder(FaweAPI.getWorld(world.getName()));
+            EditSession editSession = editSessionBuilder.build();
+
+//            EditSessionBuilder editSessionBuilder = FaweAPI.getEditSessionBuilder(FaweAPI.getWorld(worldName))
+//                    .limitUnlimited()
+//                    .allowedRegionsEverywhere()
+//                    .fastmode(true);
+
+            editSessionBuilder.fastmode(true);
+            editSession.setBlocks(cube, blockType);
+            editSession.flushQueue();
+        }
+    }
+
+    @Override
+    public void setBlock(Location location, String material) {
+        World world = location.getWorld();
+        String worldName;
+
+        if (location.getWorld() != null) {
+            worldName = location.getWorld().getName();
+            BlockType blockType = BlockType.REGISTRY.get(material.toLowerCase());
+            int x = location.getBlockX();
+            int y = location.getBlockY();
+            int z = location.getBlockZ();
+
+            EditSessionBuilder editSessionBuilder = FaweAPI.getEditSessionBuilder(FaweAPI.getWorld(worldName))
+                    .limitUnlimited()
+                    .allowedRegionsEverywhere()
+                    .fastmode(true);
+            EditSession editSession = editSessionBuilder.build();
+            editSession.setBlock(x, y, z, blockType);
+            editSession.flushQueue();
         }
     }
 }

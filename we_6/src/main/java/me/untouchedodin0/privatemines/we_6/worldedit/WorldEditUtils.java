@@ -11,6 +11,7 @@ import com.sk89q.worldedit.session.SessionOwner;
 import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -87,5 +88,15 @@ public class WorldEditUtils extends WorldEditUtilities {
                 ioException.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void setBlocks(CuboidRegion cuboidRegion, String blockType) {
+
+    }
+
+    @Override
+    public void setBlock(Location location, String blockType) {
+
     }
 }

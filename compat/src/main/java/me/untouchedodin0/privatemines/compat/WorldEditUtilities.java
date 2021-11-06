@@ -2,6 +2,7 @@ package me.untouchedodin0.privatemines.compat;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -50,4 +51,8 @@ public abstract class WorldEditUtilities {
     public abstract CuboidRegion getCuboidRegion(Player player);
 
     public abstract void createMultiBlockStructure(Player player, String name);
+
+    public abstract void setBlocks(CuboidRegion cuboidRegion, String blockType);
+
+    public abstract void setBlock(Location location, String blockType);
 }

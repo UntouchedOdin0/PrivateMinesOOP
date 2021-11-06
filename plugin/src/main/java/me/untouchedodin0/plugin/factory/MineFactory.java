@@ -85,26 +85,26 @@ public class MineFactory {
 
         String regionName = String.format("mine-%s", userUUID);
 
-        IWrappedRegion mineRegion = WorldGuardWrapper.getInstance()
-                .addCuboidRegion(regionName, mine.getCorner1(), mine.getCorner2())
-                .orElseThrow(() -> new RuntimeException("Could not create the mine WorldGuard region!"));
-        mineRegion.getOwners().addPlayer(player.getUniqueId());
+//        IWrappedRegion mineRegion = WorldGuardWrapper.getInstance()
+//                .addCuboidRegion(regionName, mine.getCorner1(), mine.getCorner2())
+//                .orElseThrow(() -> new RuntimeException("Could not create the mine WorldGuard region!"));
+//        mineRegion.getOwners().addPlayer(player.getUniqueId());
 
         MineType mineType = mine.getMineType();
 
         List<String> allowFlags = mineType.getAllowFlags();
         List<String> denyFlags = mineType.getDenyFlags();
 
-        Stream.of(worldGuardWrapper.getFlag("block-place", WrappedState.class),
-                        worldGuardWrapper.getFlag("mob-spawning", WrappedState.class)
-                ).filter(Optional::isPresent)
-                .map(Optional::get)
-                .forEach(flag -> mineRegion.setFlag(flag, WrappedState.DENY));
-
-        Stream.of(worldGuardWrapper.getFlag("block-break", WrappedState.class)
-                ).filter(Optional::isPresent)
-                .map(Optional::get)
-                .forEach(wrappedStateIWrappedFlag -> mineRegion.setFlag(wrappedStateIWrappedFlag, WrappedState.ALLOW));
+//        Stream.of(worldGuardWrapper.getFlag("block-place", WrappedState.class),
+//                        worldGuardWrapper.getFlag("mob-spawning", WrappedState.class)
+//                ).filter(Optional::isPresent)
+//                .map(Optional::get)
+//                .forEach(flag -> mineRegion.setFlag(flag, WrappedState.DENY));
+//
+//        Stream.of(worldGuardWrapper.getFlag("block-break", WrappedState.class)
+//                ).filter(Optional::isPresent)
+//                .map(Optional::get)
+//                .forEach(wrappedStateIWrappedFlag -> mineRegion.setFlag(wrappedStateIWrappedFlag, WrappedState.ALLOW));
 
         blockDataManager.save();
         mine.reset();
