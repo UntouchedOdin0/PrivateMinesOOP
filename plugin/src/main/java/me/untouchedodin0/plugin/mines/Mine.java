@@ -38,6 +38,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.codemc.worldguardwrapper.WorldGuardWrapper;
 import org.codemc.worldguardwrapper.region.IWrappedRegion;
@@ -48,8 +49,7 @@ import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class Mine {
@@ -71,6 +71,7 @@ public class Mine {
     private Location corner1;
     private Location corner2;
     private CuboidRegion cuboidRegion;
+    private CuboidRegion bedrockCube;
     private UUID mineOwner;
     private Structure structure;
     private WeightedRandom<Material> weightedRandom;
@@ -459,6 +460,22 @@ public class Mine {
             Location end = mine.getCorner2();
             iWrappedRegion = WorldGuardWrapper.getInstance().addCuboidRegion(regionName, start, end);
             utils.setMineFlags(iWrappedRegion);
+        }
+    }
+
+    public void expandMine(int amount) {
+        Player player = Bukkit.getPlayer(mineOwner);
+        List<BlockFace> faces = List.of(BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.EAST);
+
+        bedrockCube = cuboidRegion;
+        for (BlockFace face : faces) {
+            bedrockCube.getFace(face).forEachBlock(block -> {
+                block.setType(Material.AIR, false);
+            });
+            bedrockCube.expand(face, amount);
+            bedrockCube.getFace(face).forEachBlock(block -> {
+                block.setType(Material.BEDROCK, false);
+            });
         }
     }
 }

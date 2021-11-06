@@ -77,4 +77,10 @@ privatemine,privatemines,pmine {
         help /pmine unwhitelist <player> - Removes a player from your mines whitelist
         permission: privatemines.unwhitelist
     }
+
+    expand player:target int:amount {
+        hook expand
+        help /pmine expand <player> <amount> - Expands a players mine by a certain amount
+        permission: privatemines.expand
+    }
 }

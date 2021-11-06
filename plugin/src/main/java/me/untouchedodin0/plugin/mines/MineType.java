@@ -46,6 +46,7 @@ public class MineType {
         resetTime: How often the mine should reset in minutes.
         materials: A list of materials and their percentages of which goes in the mine
      */
+
     private final int[][] cornerLocations;
     PrivateMines privateMines;
     MineLoopUtil mineLoopUtil;

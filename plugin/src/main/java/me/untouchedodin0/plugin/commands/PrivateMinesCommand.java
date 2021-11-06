@@ -124,6 +124,18 @@ public class PrivateMinesCommand {
         mine.upgrade();
     }
 
+    @CommandHook("expand")
+    public void expand(CommandSender commandSender, Player target, int amount) {
+        Player player = (Player) commandSender;
+        if (!mineStorage.hasMine(target.getUniqueId())) {
+            Messages.msg("targetDoesNotOwnMine");
+            return;
+        }
+        Mine mine = mineStorage.getMine(target.getUniqueId());
+        player.sendMessage("attempting to expand your mine");
+        mine.expandMine(amount);
+    }
+
     @CommandHook("create")
     public void create(CommandSender commandSender, String name) {
         Player player = (Player) commandSender;
