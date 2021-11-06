@@ -30,8 +30,6 @@ import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldedit.regions.Region;
-import com.sk89q.worldedit.world.block.BlockType;
 import com.sk89q.worldedit.world.block.BlockTypes;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.factory.MineFactory;
@@ -52,7 +50,9 @@ import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class Mine {
@@ -74,7 +74,6 @@ public class Mine {
     private Location corner1;
     private Location corner2;
     private CuboidRegion cuboidRegion;
-    private CuboidRegion bedrockCube;
     private UUID mineOwner;
     private Structure structure;
     private WeightedRandom<Material> weightedRandom;
@@ -474,7 +473,7 @@ public class Mine {
         Player player = Bukkit.getPlayer(mineOwner);
         List<BlockFace> faces = List.of(BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST);
 
-        bedrockCube = cuboidRegion;
+        CuboidRegion bedrockCube = cuboidRegion;
         for (BlockFace face : faces) {
             bedrockCube.getFace(face).forEachBlock(block -> {
                 block.setType(Material.AIR, false);
