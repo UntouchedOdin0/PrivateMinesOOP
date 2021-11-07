@@ -351,7 +351,6 @@ public class Mine {
         cuboidRegion.expand(1, 0, 1, 0, 1, 0);
         setCuboidRegion(cuboidRegion);
 
-
         this.worldEditCube = new com.sk89q.worldedit.regions.CuboidRegion(
                 BlockVector3.at(
                         cuboidRegion.getStart().getBlockX(),
@@ -413,13 +412,17 @@ public class Mine {
             return;
         }
 
-        Material material = mineType.getWeightedRandom().roll();
-        String blockType = Objects.requireNonNull(BlockType.REGISTRY.get(material.name())).getId().toLowerCase();
+//        Material material = mineType.getWeightedRandom().roll();
+//        String blockType = Objects.requireNonNull(BlockType.REGISTRY.get(material.name())).getId().toLowerCase();
+//
+//        cuboidRegion.forEachBlock(block -> {
+//            privateMines.getWorldEditUtils().setBlock(block.getLocation(), blockType.toLowerCase());
+//        });
 
-        privateMines.getWorldEditUtils().setBlocks(getCuboidRegion(), blockType);
+//        privateMines.getWorldEditUtils().setBlocks(getCuboidRegion(), blockType);
 
-//        CuboidRegion cuboidRegion = getCuboidRegion();
-//        cuboidRegion.forEachBlock(block -> block.setType(mineType.getWeightedRandom().roll(), false));
+        CuboidRegion cuboidRegion = getCuboidRegion();
+        cuboidRegion.forEachBlock(block -> block.setType(mineType.getWeightedRandom().roll(), false));
         teleportPlayer(Bukkit.getPlayer(getMineOwner()));
     }
 
@@ -439,7 +442,7 @@ public class Mine {
     }
 
     public void cancelResetTask() {
-        resetTask.cancel();
+        this.resetTask.cancel();
     }
 
 
@@ -528,6 +531,7 @@ public class Mine {
         Region cube = new com.sk89q.worldedit.regions.CuboidRegion(corner1, corner1);
         com.sk89q.worldedit.regions.CuboidRegion test = new com.sk89q.worldedit.regions.CuboidRegion(corner1, corner2);
         test.expand(corner1, corner2);
+        test.getBoundingBox();
 
         com.sk89q.worldedit.regions.CuboidRegion cuboid =
                 new com.sk89q.worldedit.regions.CuboidRegion(corner1, corner2);
