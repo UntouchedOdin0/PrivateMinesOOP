@@ -28,6 +28,7 @@ import java.nio.file.StandardOpenOption;
 public class WorldEditUtils extends WorldEditUtilities {
 
     private final SessionManager sessionManager = WorldEdit.getInstance().getSessionManager();
+    private EditSession editSession;
 
     public Location blockVector3toBukkit(World world, BlockVector3 blockVector3) {
         Block block = world.getBlockAt(blockVector3.getBlockX(), blockVector3.getBlockY(), blockVector3.getBlockZ());
@@ -54,7 +55,6 @@ public class WorldEditUtils extends WorldEditUtilities {
         }
         return null;
     }
-
 
 
     private WorldEditPlugin getWorldEdit() {
@@ -150,9 +150,17 @@ public class WorldEditUtils extends WorldEditUtilities {
                     .limitUnlimited()
                     .allowedRegionsEverywhere()
                     .fastmode(true);
-            EditSession editSession = editSessionBuilder.build();
+
+            editSession = editSessionBuilder.build();
             editSession.setBlock(x, y, z, blockType);
-            editSession.flushQueue();
+
+//            editSession.flushQueue();
+//            editSession.flushSession();
         }
+        flushQueue();
+    }
+
+    public void flushQueue() {
+        editSession.flushQueue();
     }
 }

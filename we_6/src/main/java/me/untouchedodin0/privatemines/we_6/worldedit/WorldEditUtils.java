@@ -99,4 +99,9 @@ public class WorldEditUtils extends WorldEditUtilities {
     public void setBlock(Location location, String blockType) {
 
     }
+
+    @Override
+    public void flushQueue() {
+
+    }
 }

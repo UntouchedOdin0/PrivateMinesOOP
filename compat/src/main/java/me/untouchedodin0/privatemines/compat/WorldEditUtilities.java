@@ -55,4 +55,6 @@ public abstract class WorldEditUtilities {
     public abstract void setBlocks(CuboidRegion cuboidRegion, String blockType);
 
     public abstract void setBlock(Location location, String blockType);
+
+    public abstract void flushQueue();
 }

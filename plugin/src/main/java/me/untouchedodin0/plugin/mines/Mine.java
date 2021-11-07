@@ -26,10 +26,14 @@ package me.untouchedodin0.plugin.mines;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.world.block.BlockType;
 import com.sk89q.worldedit.world.block.BlockTypes;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.factory.MineFactory;
@@ -51,6 +55,7 @@ import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -83,6 +88,7 @@ public class Mine {
     private Task resetTask;
     private World world;
     private EditSession editSession;
+    private com.sk89q.worldedit.regions.CuboidRegion worldEditCube;
 
     public Mine(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -263,7 +269,7 @@ public class Mine {
 
         // Set to use world edit or not, makes it faster
         boolean useWorldEdit = privateMines.isWorldEditEnabled();
-        
+
         // Initialise the util class
         Utils utils = new Utils(privateMines);
 
@@ -291,9 +297,9 @@ public class Mine {
 
                     try {
                         editSession.setBlock(BlockVector3.at(
-                                location.getBlockX(),
-                                location.getBlockY(),
-                                location.getBlockZ()),
+                                        location.getBlockX(),
+                                        location.getBlockY(),
+                                        location.getBlockZ()),
                                 BukkitAdapter.adapt(blockState.getBlockData()),
                                 EditSession.Stage.BEFORE_HISTORY);
                     } catch (WorldEditException e) {
@@ -344,6 +350,17 @@ public class Mine {
         CuboidRegion cuboidRegion = new CuboidRegion(corner1, corner2);
         cuboidRegion.expand(1, 0, 1, 0, 1, 0);
         setCuboidRegion(cuboidRegion);
+
+
+        this.worldEditCube = new com.sk89q.worldedit.regions.CuboidRegion(
+                BlockVector3.at(
+                        cuboidRegion.getStart().getBlockX(),
+                        cuboidRegion.getStart().getBlockY(),
+                        cuboidRegion.getStart().getBlockZ()),
+                BlockVector3.at(
+                        cuboidRegion.getEnd().getBlockX(),
+                        cuboidRegion.getEnd().getBlockY(),
+                        cuboidRegion.getEnd().getBlockZ()));
 
         iWrappedRegion = WorldGuardWrapper.getInstance().addCuboidRegion(regionName, corner1, corner2);
         if (airMaterial != null) {
@@ -396,8 +413,13 @@ public class Mine {
             return;
         }
 
-        CuboidRegion cuboidRegion = getCuboidRegion();
-        cuboidRegion.forEachBlock(block -> block.setType(mineType.getWeightedRandom().roll(), false));
+        Material material = mineType.getWeightedRandom().roll();
+        String blockType = Objects.requireNonNull(BlockType.REGISTRY.get(material.name())).getId().toLowerCase();
+
+        privateMines.getWorldEditUtils().setBlocks(getCuboidRegion(), blockType);
+
+//        CuboidRegion cuboidRegion = getCuboidRegion();
+//        cuboidRegion.forEachBlock(block -> block.setType(mineType.getWeightedRandom().roll(), false));
         teleportPlayer(Bukkit.getPlayer(getMineOwner()));
     }
 
@@ -471,41 +493,66 @@ public class Mine {
     public void expandMine(int amount) {
         PrivateMines privateMines = PrivateMines.getPlugin(PrivateMines.class);
         Player player = Bukkit.getPlayer(mineOwner);
-        List<BlockFace> faces = List.of(BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST);
+        List<BlockFace> faces = List.of(BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.DOWN);
 
         CuboidRegion bedrockCube = cuboidRegion;
-        for (BlockFace face : faces) {
-            bedrockCube.getFace(face).forEachBlock(block -> {
-                block.setType(Material.AIR, false);
-            });
-            bedrockCube.expand(face, amount);
-            Location bedrockStart = bedrockCube.getStart();
-            Location bedrockEnd = bedrockCube.getEnd();
 
-            int x1 = bedrockStart.getBlockX();
-            int x2 = bedrockEnd.getBlockX();
+        this.editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world));
+//        bedrockCube.expand(1, 1, 0, 0, 1, 1);
 
-            int y1 = bedrockStart.getBlockX();
-            int y2 = bedrockEnd.getBlockX();
 
-            int z1 = bedrockStart.getBlockX();
-            int z2 = bedrockEnd.getBlockX();
+//        for (BlockFace face : faces) {
+//            bedrockCube.getFace(face).forEachBlock(block -> {
+//                block.setType(Material.AIR, false);
+//            });
 
-            BlockVector3 corner1 = BlockVector3.at(x1, y1, z1);
-            BlockVector3 corner2 = BlockVector3.at(x2, y2, z2);
+//            bedrockCube.expand(face, amount);
+        Location bedrockStart = bedrockCube.getStart();
+        Location bedrockEnd = bedrockCube.getEnd();
 
-            com.sk89q.worldedit.regions.CuboidRegion cuboid =
-                    new com.sk89q.worldedit.regions.CuboidRegion(corner1, corner2);
-            privateMines.getWorldEditUtils().setBlocks(bedrockCube, BlockTypes.EMERALD_BLOCK.getId());
+        int x1 = bedrockStart.getBlockX();
+        int x2 = bedrockEnd.getBlockX();
 
-            for (BlockFace blockFace : faces) {
-                bedrockCube.getFace(blockFace).forEachBlock(block -> {
-                    privateMines.getWorldEditUtils().setBlock(block.getLocation(), BlockTypes.EMERALD_BLOCK.getId());
-                });
-            }
-            bedrockCube.getFace(BlockFace.EAST);
+        int y1 = bedrockStart.getBlockX();
+        int y2 = bedrockEnd.getBlockX();
+
+        int z1 = bedrockStart.getBlockX();
+        int z2 = bedrockEnd.getBlockX();
+
+        BlockVector3 corner1 = BlockVector3.at(x1, y1, z1);
+        BlockVector3 corner2 = BlockVector3.at(x2, y2, z2);
+
+        corner1.subtract(1, 1, 1);
+        corner2.add(1, 1, 1);
+
+        Region cube = new com.sk89q.worldedit.regions.CuboidRegion(corner1, corner1);
+        com.sk89q.worldedit.regions.CuboidRegion test = new com.sk89q.worldedit.regions.CuboidRegion(corner1, corner2);
+        test.expand(corner1, corner2);
+
+        com.sk89q.worldedit.regions.CuboidRegion cuboid =
+                new com.sk89q.worldedit.regions.CuboidRegion(corner1, corner2);
+//            cuboid.expand();
+        BlockType type = BlockType.REGISTRY.get(BlockTypes.EMERALD_BLOCK.getId());
+
+        try {
+            editSession.setBlocks(test, (Pattern) type);
+        } catch (MaxChangedBlocksException e) {
+            e.printStackTrace();
         }
 
-        privateMines.getWorldEditUtils().setBlocks(cuboidRegion, BlockTypes.EMERALD_BLOCK.getId());
+//            privateMines.getWorldEditUtils().setBlocks(bedrockCube, BlockTypes.EMERALD_BLOCK.getId());
+
+//        for (BlockFace blockFace : faces) {
+//            bedrockCube.getFace(blockFace).forEachBlock(block -> {
+////                    block.setType(Material.EMERALD_BLOCK);
+//                privateMines.getWorldEditUtils().setBlock(block.getLocation(), BlockTypes.EMERALD_BLOCK.getId());
+//            });
+//        }
+
+        editSession.flushSession();
+//        privateMines.getWorldEditUtils().flushQueue();
+        bedrockCube.getFace(BlockFace.EAST);
     }
+
+//        privateMines.getWorldEditUtils().setBlocks(cuboidRegion, BlockTypes.EMERALD_BLOCK.getId());
 }
