@@ -49,13 +49,17 @@ public class PrivateMinesCommand {
 
     @CommandHook("give")
     public void give(CommandSender commandSender, Player target) {
-        if (mineStorage.hasMine(target.getUniqueId())) {
-            Messages.msg("targetAlreadyOwnsAMine");
-            return;
+        try {
+            if (mineStorage.hasMine(target.getUniqueId())) {
+                Messages.msg("targetAlreadyOwnsAMine");
+                return;
+            }
+            commandSender.sendMessage(ChatColor.GREEN + "Giving " + target.getName() + " a private mine!");
+            Mine mine = mineFactory.createMine(target, mineWorldManager.getNextFreeLocation());
+            mine.teleportPlayer(target);
+        } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException) {
+            arrayIndexOutOfBoundsException.printStackTrace();
         }
-        commandSender.sendMessage(ChatColor.GREEN + "Giving " + target.getName() + " a private mine!");
-        Mine mine = mineFactory.createMine(target, mineWorldManager.getNextFreeLocation());
-        mine.teleportPlayer(target);
     }
 
     @CommandHook("delete")
