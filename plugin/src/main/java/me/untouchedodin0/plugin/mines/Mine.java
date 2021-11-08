@@ -55,7 +55,6 @@ import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -72,6 +71,8 @@ public class Mine {
     private final Material airMaterial = XMaterial.AIR.parseMaterial();
     private final Utils utils;
     Optional<IWrappedRegion> iWrappedRegion;
+    BlockVector3 cornerVector1;
+    BlockVector3 cornerVector2;
     private MineType mineType;
     private Location mineLocation;
     private Location spawnLocation;
@@ -351,6 +352,21 @@ public class Mine {
         cuboidRegion.expand(1, 0, 1, 0, 1, 0);
         setCuboidRegion(cuboidRegion);
 
+        int x1 = getCorner1().getBlockX();
+        int x2 = getCorner2().getBlockX();
+
+        int y1 = getCorner1().getBlockY();
+        int y2 = getCorner2().getBlockY();
+
+        int z1 = getCorner2().getBlockZ();
+        int z2 = getCorner2().getBlockZ();
+
+        BlockVector3 vector1 = BlockVector3.at(x1, y1, z1);
+        BlockVector3 vector2 = BlockVector3.at(x2, y2, z2);
+
+        this.cornerVector1 = vector1;
+        this.cornerVector2 = vector2;
+
         this.worldEditCube = new com.sk89q.worldedit.regions.CuboidRegion(
                 BlockVector3.at(
                         cuboidRegion.getStart().getBlockX(),
@@ -496,67 +512,75 @@ public class Mine {
     public void expandMine(int amount) {
         PrivateMines privateMines = PrivateMines.getPlugin(PrivateMines.class);
         Player player = Bukkit.getPlayer(mineOwner);
-        List<BlockFace> faces = List.of(BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.DOWN);
+        List<BlockFace> faces = List.of(BlockFace.NORTH, BlockFace.SOUTH);
+        Material borderMaterial = Material.OBSIDIAN;
 
-        CuboidRegion bedrockCube = cuboidRegion;
+        CuboidRegion mineCube = getCuboidRegion();
+        CuboidRegion bedrockCube;
 
+        bedrockCube = mineCube.clone();
         this.editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world));
-//        bedrockCube.expand(1, 1, 0, 0, 1, 1);
 
+        Material outsideStart;
+        Material outsideEnd;
 
-//        for (BlockFace face : faces) {
-//            bedrockCube.getFace(face).forEachBlock(block -> {
-//                block.setType(Material.AIR, false);
-//            });
+        outsideStart = bedrockCube.getStart().getBlock().getRelative(BlockFace.NORTH).getType();
+        outsideEnd = bedrockCube.getEnd().getBlock().getRelative(BlockFace.SOUTH).getType();
 
-//            bedrockCube.expand(face, amount);
+        if (outsideStart == borderMaterial && outsideEnd == borderMaterial) {
+            Bukkit.broadcastMessage("we upgrade, yes yes??");
+        } else {
+            Bukkit.broadcastMessage("we expand, yes yes");
+            mineCube.expand(1, 1, 0, 0, 1, 1);
+            bedrockCube.expand(1, 1, 0, 0, 1, 1);
+        }
+
+        Location mineStart = mineCube.getStart();
+        Location mineEnd = mineCube.getEnd();
+
         Location bedrockStart = bedrockCube.getStart();
         Location bedrockEnd = bedrockCube.getEnd();
 
-        int x1 = bedrockStart.getBlockX();
-        int x2 = bedrockEnd.getBlockX();
+        BlockVector3 mineCorner1 = BlockVector3.at(mineStart.getBlockX(), mineStart.getBlockY(), mineStart.getBlockZ());
+        BlockVector3 mineCorner2 = BlockVector3.at(mineEnd.getBlockX(), mineEnd.getBlockY(), mineEnd.getBlockZ());
 
-        int y1 = bedrockStart.getBlockX();
-        int y2 = bedrockEnd.getBlockX();
+        BlockVector3 bedrockCorner1 = BlockVector3.at(bedrockStart.getBlockX(), bedrockStart.getBlockY(), bedrockStart.getBlockZ());
+        BlockVector3 bedrockCorner2 = BlockVector3.at(bedrockEnd.getBlockX(), bedrockEnd.getBlockY(), bedrockEnd.getBlockZ());
 
-        int z1 = bedrockStart.getBlockX();
-        int z2 = bedrockEnd.getBlockX();
+        Location bukkitCorner1 = new Location(mineStart.getWorld(), mineStart.getBlockX(), mineStart.getBlockY(), mineStart.getBlockZ());
+        Location bukkitCorner2 = new Location(mineEnd.getWorld(), mineEnd.getBlockX(), mineEnd.getBlockY(), mineEnd.getBlockZ());
 
-        BlockVector3 corner1 = BlockVector3.at(x1, y1, z1);
-        BlockVector3 corner2 = BlockVector3.at(x2, y2, z2);
+        Region cube = new com.sk89q.worldedit.regions.CuboidRegion(mineCorner1, mineCorner2);
+        Region wallsCube = new com.sk89q.worldedit.regions.CuboidRegion(bedrockCorner1, bedrockCorner2);
 
-        corner1.subtract(1, 1, 1);
-        corner2.add(1, 1, 1);
-
-        Region cube = new com.sk89q.worldedit.regions.CuboidRegion(corner1, corner1);
-        com.sk89q.worldedit.regions.CuboidRegion test = new com.sk89q.worldedit.regions.CuboidRegion(corner1, corner2);
-        test.expand(corner1, corner2);
-        test.getBoundingBox();
-
-        com.sk89q.worldedit.regions.CuboidRegion cuboid =
-                new com.sk89q.worldedit.regions.CuboidRegion(corner1, corner2);
-//            cuboid.expand();
-        BlockType type = BlockType.REGISTRY.get(BlockTypes.EMERALD_BLOCK.getId());
+        BlockType type = BlockType.REGISTRY.get(BlockTypes.BEDROCK.getId());
+        BlockType type2 = BlockType.REGISTRY.get(BlockTypes.DIAMOND_BLOCK.getId());
 
         try {
-            editSession.setBlocks(test, (Pattern) type);
+            editSession.setBlocks(cube, (Pattern) type2);
+            editSession.makeCuboidWalls(wallsCube, (Pattern) type);
         } catch (MaxChangedBlocksException e) {
             e.printStackTrace();
         }
 
-//            privateMines.getWorldEditUtils().setBlocks(bedrockCube, BlockTypes.EMERALD_BLOCK.getId());
-
-//        for (BlockFace blockFace : faces) {
-//            bedrockCube.getFace(blockFace).forEachBlock(block -> {
-////                    block.setType(Material.EMERALD_BLOCK);
-//                privateMines.getWorldEditUtils().setBlock(block.getLocation(), BlockTypes.EMERALD_BLOCK.getId());
-//            });
-//        }
-
         editSession.flushSession();
-//        privateMines.getWorldEditUtils().flushQueue();
-        bedrockCube.getFace(BlockFace.EAST);
-    }
 
-//        privateMines.getWorldEditUtils().setBlocks(cuboidRegion, BlockTypes.EMERALD_BLOCK.getId());
+        int minX = cube.getMinimumPoint().getBlockX();
+        int minY = cube.getMinimumPoint().getBlockY();
+        int minZ = cube.getMinimumPoint().getBlockZ();
+
+        int maxX = cube.getMaximumPoint().getBlockX();
+        int maxY = cube.getMaximumPoint().getBlockY();
+        int maxZ = cube.getMaximumPoint().getBlockZ();
+
+        Location min = new Location(bukkitCorner1.getWorld(), minX, minY, minZ);
+        Location max = new Location(bukkitCorner2.getWorld(), maxX, maxY, maxZ);
+
+        CuboidRegion mineRegion = new CuboidRegion(min, max);
+        setCuboidRegion(mineRegion);
+
+        if (player != null) {
+            player.sendMessage("Your mine has expanded!");
+        }
+    }
 }

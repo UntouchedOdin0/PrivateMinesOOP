@@ -46,14 +46,18 @@ allprojects {
         sourceCompatibility = JavaVersion.VERSION_16
         targetCompatibility = JavaVersion.VERSION_16
 
-//        sourceCompatibility = JavaVersion.VERSION_11
-//        targetCompatibility = JavaVersion.VERSION_11
+//        sourceCompatibility = JavaVersion.VERSION_1_8
+//        targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
 
 subprojects {
     apply plugin: 'java-library'
     apply plugin: 'com.github.johnrengelman.shadow'
+
+    // java fix?
+//    sourceCompatibility = JavaVersion.VERSION_1_9
+//    targetCompatibility = JavaVersion.VERSION_1_9
 
     dependencies {
         compileOnly 'org.spigotmc:spigot-api:1.17-R0.1-SNAPSHOT'
