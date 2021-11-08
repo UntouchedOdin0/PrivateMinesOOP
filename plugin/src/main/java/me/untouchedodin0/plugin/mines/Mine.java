@@ -510,9 +510,7 @@ public class Mine {
     }
 
     public void expandMine(int amount) {
-        PrivateMines privateMines = PrivateMines.getPlugin(PrivateMines.class);
         Player player = Bukkit.getPlayer(mineOwner);
-        List<BlockFace> faces = List.of(BlockFace.NORTH, BlockFace.SOUTH);
         Material borderMaterial = Material.OBSIDIAN;
 
         CuboidRegion mineCube = getCuboidRegion();
@@ -528,11 +526,11 @@ public class Mine {
         outsideEnd = bedrockCube.getEnd().getBlock().getRelative(BlockFace.SOUTH).getType();
 
         if (outsideStart == borderMaterial && outsideEnd == borderMaterial) {
-            Bukkit.broadcastMessage("we upgrade, yes yes??");
+            Bukkit.broadcastMessage("Upgrading the mine...");
         } else {
-            Bukkit.broadcastMessage("we expand, yes yes");
-            mineCube.expand(1, 1, 0, 0, 1, 1);
-            bedrockCube.expand(1, 1, 0, 0, 1, 1);
+            Bukkit.broadcastMessage("Expanding the mine...");
+            mineCube.expand(amount, amount, 0, 0, amount, amount); // We no touch Y levels!
+            bedrockCube.expand(amount, amount, 0, 0, amount, amount); // We no touch Y levels!
         }
 
         Location mineStart = mineCube.getStart();
@@ -580,7 +578,7 @@ public class Mine {
         setCuboidRegion(mineRegion);
 
         if (player != null) {
-            player.sendMessage("Your mine has expanded!");
+            player.sendMessage("Executed correctly...");
         }
     }
 }
