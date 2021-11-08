@@ -54,7 +54,6 @@ import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -80,6 +79,7 @@ public class Mine {
     private Location corner1;
     private Location corner2;
     private CuboidRegion cuboidRegion;
+    private CuboidRegion bedrockCubeRegion;
     private UUID mineOwner;
     private Structure structure;
     private WeightedRandom<Material> weightedRandom;
@@ -198,6 +198,14 @@ public class Mine {
 
     public void setCuboidRegion(CuboidRegion cuboidRegion) {
         this.cuboidRegion = cuboidRegion;
+    }
+
+    /**
+     * @param cuboidRegion - The cuboid region for the bedrock area
+     */
+
+    public void setBedrockCubeRegion(CuboidRegion cuboidRegion) {
+        this.bedrockCubeRegion = cuboidRegion;
     }
 
     /**
@@ -409,10 +417,12 @@ public class Mine {
             mineStorage.removeMine(mineOwner);
             if (airMaterial != null) {
                 structure.getRegion().forEachBlock(block -> block.setType(airMaterial, false));
+                bedrockCubeRegion.forEachBlock(block -> block.setType(airMaterial, false));
             }
         }
         cancelResetTask();
         this.cuboidRegion = null;
+        this.bedrockCubeRegion = null;
     }
 
     // Nice little reset system for filling in the cuboid region using the mine type's weighted random.
@@ -525,7 +535,7 @@ public class Mine {
         outsideStart = bedrockCube.getStart().getBlock().getRelative(BlockFace.NORTH).getType();
         outsideEnd = bedrockCube.getEnd().getBlock().getRelative(BlockFace.SOUTH).getType();
 
-        if (outsideStart == borderMaterial && outsideEnd == borderMaterial) {
+        if (outsideStart == Material.OBSIDIAN || outsideEnd == Material.OBSIDIAN) {
             Bukkit.broadcastMessage("Upgrading the mine...");
         } else {
             Bukkit.broadcastMessage("Expanding the mine...");
@@ -561,7 +571,9 @@ public class Mine {
             e.printStackTrace();
         }
 
-        editSession.flushSession();
+//        editSession.flushSession();
+
+        editSession.close();
 
         int minX = cube.getMinimumPoint().getBlockX();
         int minY = cube.getMinimumPoint().getBlockY();
@@ -576,6 +588,7 @@ public class Mine {
 
         CuboidRegion mineRegion = new CuboidRegion(min, max);
         setCuboidRegion(mineRegion);
+        setBedrockCubeRegion(bedrockCube);
 
         if (player != null) {
             player.sendMessage("Executed correctly...");
