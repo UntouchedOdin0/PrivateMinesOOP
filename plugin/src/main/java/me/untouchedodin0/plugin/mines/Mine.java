@@ -535,7 +535,7 @@ public class Mine {
         outsideStart = bedrockCube.getStart().getBlock().getRelative(BlockFace.NORTH).getType();
         outsideEnd = bedrockCube.getEnd().getBlock().getRelative(BlockFace.SOUTH).getType();
 
-        if (outsideStart == Material.OBSIDIAN || outsideEnd == Material.OBSIDIAN) {
+        if (outsideStart.equals(Material.OBSIDIAN) || outsideEnd.equals(Material.OBSIDIAN)) {
             Bukkit.broadcastMessage("Upgrading the mine...");
         } else {
             Bukkit.broadcastMessage("Expanding the mine...");
