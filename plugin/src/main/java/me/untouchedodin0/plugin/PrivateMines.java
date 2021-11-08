@@ -85,6 +85,9 @@ public class PrivateMines extends JavaPlugin {
     private String sellNpc;
 
     @ConfigValue
+    private String upgradeMaterial;
+
+    @ConfigValue
     private boolean debugMode = false;
 
     @ConfigValue
@@ -215,7 +218,6 @@ public class PrivateMines extends JavaPlugin {
             if (useWorldEdit) {
                 isWorldEditEnabled = true;
             }
-            getLogger().info("isWorldEditEnabled: " + isWorldEditEnabled);
         }
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
@@ -224,6 +226,7 @@ public class PrivateMines extends JavaPlugin {
         } else {
             getLogger().info("PlaceholderAPI was not present, not able to establish a hook!");
         }
+        getLogger().info("upgradeMaterial: " + getUpgradeMaterial());
     }
 
     @Override
@@ -291,6 +294,15 @@ public class PrivateMines extends JavaPlugin {
     public String getSellNpcMaterial() {
         return sellNpc;
     }
+
+    /*
+        Gets the upgrade material
+     */
+
+    public String getUpgradeMaterial() {
+        return upgradeMaterial;
+    }
+
 
     public MineType getMineType(String mineType) {
         MineType newType = mineTypeTreeMap.get(mineType);

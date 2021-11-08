@@ -2,6 +2,8 @@
 spawnPoint: "CHEST"
 mineCorner: "POWERED_RAIL"
 sellNpc: "WHITE_WOOL"
+upgradeMaterial: "OBSIDIAN"
+
 debugMode: false
 useWorldEdit: false
 

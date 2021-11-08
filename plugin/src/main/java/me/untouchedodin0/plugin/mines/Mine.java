@@ -90,6 +90,7 @@ public class Mine {
     private World world;
     private EditSession editSession;
     private com.sk89q.worldedit.regions.CuboidRegion worldEditCube;
+    Material expandMaterial;
 
     public Mine(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -521,7 +522,9 @@ public class Mine {
 
     public void expandMine(int amount) {
         Player player = Bukkit.getPlayer(mineOwner);
-        Material borderMaterial = Material.OBSIDIAN;
+        if (XMaterial.matchXMaterial(privateMines.getUpgradeMaterial()).isPresent()) {
+            expandMaterial = XMaterial.matchXMaterial(privateMines.getUpgradeMaterial()).get().parseMaterial();
+        }
 
         CuboidRegion mineCube = getCuboidRegion();
         CuboidRegion bedrockCube;
@@ -535,10 +538,9 @@ public class Mine {
         outsideStart = bedrockCube.getStart().getBlock().getRelative(BlockFace.NORTH).getType();
         outsideEnd = bedrockCube.getEnd().getBlock().getRelative(BlockFace.SOUTH).getType();
 
-        if (outsideStart.equals(Material.OBSIDIAN) || outsideEnd.equals(Material.OBSIDIAN)) {
+        if (outsideStart.equals(expandMaterial) || outsideEnd.equals(expandMaterial)) {
             Bukkit.broadcastMessage("Upgrading the mine...");
         } else {
-            Bukkit.broadcastMessage("Expanding the mine...");
             mineCube.expand(amount, amount, 0, 0, amount, amount); // We no touch Y levels!
             bedrockCube.expand(amount, amount, 0, 0, amount, amount); // We no touch Y levels!
         }
@@ -589,9 +591,5 @@ public class Mine {
         CuboidRegion mineRegion = new CuboidRegion(min, max);
         setCuboidRegion(mineRegion);
         setBedrockCubeRegion(bedrockCube);
-
-        if (player != null) {
-            player.sendMessage("Executed correctly...");
-        }
     }
 }
