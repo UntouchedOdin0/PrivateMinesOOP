@@ -128,6 +128,8 @@ public class PrivateMinesCommand {
         mine.upgrade();
     }
 
+    // Add 1 to whatever args you put so if you wanna expand by one do /pmine expand 2
+
     @CommandHook("expand")
     public void expand(CommandSender commandSender, Player target, int amount) {
         Player player = (Player) commandSender;
@@ -137,7 +139,7 @@ public class PrivateMinesCommand {
         }
         Mine mine = mineStorage.getMine(target.getUniqueId());
         player.sendMessage("attempting to expand your mine");
-        mine.expandMine(amount);
+        mine.expand(amount);
     }
 
     @CommandHook("create")
