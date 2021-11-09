@@ -48,7 +48,7 @@ public class PrivateMinesCommand {
     }
 
     @CommandHook("give")
-    public void give(CommandSender commandSender, Player target) {
+    public void give(CommandSender commandSender, Player target) throws ArrayIndexOutOfBoundsException {
         try {
             if (mineStorage.hasMine(target.getUniqueId())) {
                 Messages.msg("targetAlreadyOwnsAMine");

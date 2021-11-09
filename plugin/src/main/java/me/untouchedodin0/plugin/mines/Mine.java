@@ -386,7 +386,9 @@ public class Mine {
                         cuboidRegion.getEnd().getBlockY(),
                         cuboidRegion.getEnd().getBlockZ()));
 
-        iWrappedRegion = WorldGuardWrapper.getInstance().addCuboidRegion(regionName, corner1, corner2);
+        iWrappedRegion = WorldGuardWrapper.getInstance().addCuboidRegion(regionName, cuboidRegion.getStart(), cuboidRegion.getEnd());
+        utils.setMineFlags(iWrappedRegion);
+
         if (airMaterial != null) {
             spawnLocation.getBlock().setType(airMaterial, false);
             npcLocation.getBlock().setType(airMaterial, false);
@@ -532,6 +534,7 @@ public class Mine {
         bedrockCube = mineCube.clone();
         this.editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world));
 
+
         Material outsideStart;
         Material outsideEnd;
 
@@ -563,12 +566,16 @@ public class Mine {
         Region cube = new com.sk89q.worldedit.regions.CuboidRegion(mineCorner1, mineCorner2);
         Region wallsCube = new com.sk89q.worldedit.regions.CuboidRegion(bedrockCorner1, bedrockCorner2);
 
+        CuboidRegion floor = new CuboidRegion(bedrockStart, bedrockEnd);
+
         BlockType type = BlockType.REGISTRY.get(BlockTypes.BEDROCK.getId());
         BlockType type2 = BlockType.REGISTRY.get(BlockTypes.DIAMOND_BLOCK.getId());
 
         try {
             editSession.setBlocks(cube, (Pattern) type2);
-            editSession.makeCuboidWalls(wallsCube, (Pattern) type);
+//            editSession.makeCuboidWalls(wallsCube, (Pattern) type);
+            editSession.makeWalls(wallsCube, (Pattern) type);
+//            editSession.makeCuboidFaces(wallsCube, (Pattern) type);
         } catch (MaxChangedBlocksException e) {
             e.printStackTrace();
         }
@@ -576,6 +583,10 @@ public class Mine {
 //        editSession.flushSession();
 
         editSession.close();
+
+        floor.getFace(BlockFace.DOWN).forEachBlock(block -> block.setType(Material.BEDROCK));
+
+//        bedrockCube.getFace(BlockFace.UP).forEachBlock(block -> block.setType(Material.AIR, false));
 
         int minX = cube.getMinimumPoint().getBlockX();
         int minY = cube.getMinimumPoint().getBlockY();
@@ -588,7 +599,12 @@ public class Mine {
         Location min = new Location(bukkitCorner1.getWorld(), minX, minY, minZ);
         Location max = new Location(bukkitCorner2.getWorld(), maxX, maxY, maxZ);
 
+        Location minCopy = new Location(bukkitCorner1.getWorld(), minX, minY, minZ);
+        Location maxCopy = new Location(bukkitCorner2.getWorld(), maxX, maxY + 1, maxZ);
+
         CuboidRegion mineRegion = new CuboidRegion(min, max);
+        CuboidRegion fillRegion = new CuboidRegion(minCopy, maxCopy);
+
         setCuboidRegion(mineRegion);
         setBedrockCubeRegion(bedrockCube);
     }
