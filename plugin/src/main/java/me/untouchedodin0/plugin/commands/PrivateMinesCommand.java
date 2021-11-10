@@ -88,8 +88,8 @@ public class PrivateMinesCommand {
             return;
         }
 
-        mine.reset(mine.getWorldEditCube());
-//        mine.reset();
+        mine.reset();
+//        mine.reset(mine.getWorldEditCube());
 //        CuboidRegion cuboidRegion = mine.getCuboidRegion();
 //        cuboidRegion.forEachBlock(block -> block.setType(mineType.getWeightedRandom().roll(), false));
         Messages.msg("mineReset");

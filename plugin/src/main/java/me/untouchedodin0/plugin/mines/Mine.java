@@ -461,8 +461,8 @@ public class Mine {
     public void reset() {
 
         final var emerald = BlockTypes.EMERALD_BLOCK;
-        final var mine = Adapter.adapt(getCuboidRegion());
         final var worldEditCube = Adapter.adapt(cuboidRegion);
+        final var mineArea = Adapter.adapt(getCuboidRegion());
 
         Bukkit.broadcastMessage("corner1: " + worldEditCube.getPos1());
         Bukkit.broadcastMessage("corner2: " + worldEditCube.getPos2());
@@ -480,7 +480,8 @@ public class Mine {
 
         try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(Objects.requireNonNull(world)))) {
             if (emerald != null) {
-                session.setBlocks(worldEditCube, emerald.getDefaultState());
+//                mineArea.contract(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X, BlockVector3.UNIT_MINUS_Y, BlockVector3.UNIT_Z, BlockVector3.UNIT_MINUS_Z);
+                session.setBlocks(mineArea, emerald.getDefaultState());
             }
         } catch (MaxChangedBlocksException exception) {
             exception.printStackTrace();
@@ -500,14 +501,14 @@ public class Mine {
         teleportPlayer(Bukkit.getPlayer(getMineOwner()));
     }
 
-    public void reset(com.sk89q.worldedit.regions.CuboidRegion cuboidRegion) {
-        try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(Objects.requireNonNull(world)))) {
-            final var emerald = BlockTypes.REDSTONE_BLOCK;
-            session.setBlocks(cuboidRegion, emerald.getDefaultState());
-        } catch (MaxChangedBlocksException exception) {
-            exception.printStackTrace();
-        }
-    }
+//    public void reset(com.sk89q.worldedit.regions.CuboidRegion cuboidRegion) {
+//        try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(Objects.requireNonNull(world)))) {
+//            final var emerald = BlockTypes.REDSTONE_BLOCK;
+//            session.setBlocks(cuboidRegion, emerald.getDefaultState());
+//        } catch (MaxChangedBlocksException exception) {
+//            exception.printStackTrace();
+//        }
+//    }
 
     public void startAutoResetTask() {
         int time;
@@ -517,10 +518,9 @@ public class Mine {
             time = mineType.getResetTime();
             intervalTime = utils.minutesToBukkit(time);
 
-            this.resetTask = Task.syncRepeating(privateMines, () -> {
-                CuboidRegion cuboidRegion = getCuboidRegion();
-                cuboidRegion.forEachBlock(block -> block.setType(mineType.getWeightedRandom().roll(), false));
-            }, 0L, intervalTime);
+            //                CuboidRegion cuboidRegion = getCuboidRegion();
+            //                cuboidRegion.forEachBlock(block -> block.setType(mineType.getWeightedRandom().roll(), false));
+            this.resetTask = Task.syncRepeating(privateMines, this::reset, 0L, intervalTime);
         }
     }
 
@@ -608,11 +608,20 @@ public class Mine {
         }
 
         final var mine = Adapter.adapt(getCuboidRegion());
+        final var mineArea = Adapter.adapt(getCuboidRegion());
 
         try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
-            mine.expand(expansionVectors(amount));
+//            mine.expand(expansionVectors(amount));
+//            mineArea.contract(expansionVectors(amount));
 
-            session.setBlocks(mine, fillType.getDefaultState());
+            /*
+                public static final List<BlockVector3> EXPANSION_VECTORS = List.of(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X,
+                                                                       BlockVector3.UNIT_Z, BlockVector3.UNIT_MINUS_Z);
+             */
+
+            mineArea.contract(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X, BlockVector3.UNIT_MINUS_Y, BlockVector3.UNIT_Z, BlockVector3.UNIT_MINUS_Z);
+
+            session.setBlocks(mineArea, fillType.getDefaultState());
             session.setBlocks(Adapter.walls(mine), wallType.getDefaultState());
         } catch (MaxChangedBlocksException ex) {
             ex.printStackTrace();
@@ -621,11 +630,12 @@ public class Mine {
         final var stupidWallCuboid = new CuboidRegion(BukkitAdapter.adapt(world, mine.getMinimumPoint()),
                                                       BukkitAdapter.adapt(world, mine.getMaximumPoint()));
 
-        final var test = new CuboidRegion(BukkitAdapter.adapt(world, mine.getMinimumPoint()),
+        final var bedrockRegion = new CuboidRegion(BukkitAdapter.adapt(world, mine.getMinimumPoint()),
                                                       BukkitAdapter.adapt(world, mine.getMaximumPoint()));
-        setCuboidRegion(stupidWallCuboid);
-        setBedrockCubeRegion(stupidWallCuboid);
-        setWorldEditCube(mine);
+        setCuboidRegion(bedrockRegion);
+        setWorldEditCube(mineArea);
+
+//        setBedrockCubeRegion(stupidWallCuboid);
 //        setBedrockCubeRegion(stupidWallCuboid);
     }
 
