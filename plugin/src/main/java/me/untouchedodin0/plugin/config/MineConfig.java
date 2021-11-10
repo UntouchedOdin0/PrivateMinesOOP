@@ -26,6 +26,7 @@ package me.untouchedodin0.plugin.config;
 
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.mines.MineType;
+import me.untouchedodin0.plugin.mines.WorldEditMineType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import redempt.redlib.configmanager.ConfigManager;
@@ -108,16 +109,17 @@ public class MineConfig {
 
         this.multiBlockStructure = MultiBlockStructure.create(contents, name, false, true);
 
-        MineType mineType = new MineType(privateMines, multiBlockStructure);
-        mineType.setName(getName());
-        mineType.setMineTier(getPriority());
-        mineType.setResetTime(getResetTime());
-        mineType.setResetPercentage(getResetPercentage());
-        mineType.setMaterials(getMaterials());
-        getMaterials().forEach((material, percentage) -> weightedRandom.set(material, percentage));
-        mineType.setWeightedRandom(weightedRandom);
+            MineType mineType = new MineType(privateMines, multiBlockStructure);
+            mineType.setName(getName());
+            mineType.setMineTier(getPriority());
+            mineType.setResetTime(getResetTime());
+            mineType.setResetPercentage(getResetPercentage());
+            mineType.setMaterials(getMaterials());
+            getMaterials().forEach((material, percentage) -> weightedRandom.set(material, percentage));
+            mineType.setWeightedRandom(weightedRandom);
+            mineType.setFile(path.toFile());
 
-        privateMines.addMineData(getName(), mineType);
+            privateMines.addMineData(getName(), mineType);
     }
 
     // a getter for the private mines instance

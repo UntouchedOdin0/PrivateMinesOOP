@@ -134,60 +134,65 @@ public class PrivateMines extends JavaPlugin {
                 .replace("{loaded}",
                         String.valueOf(loaded)));
 
-        // Loops all the data blocks
-        blockDataManager.getAll().forEach(dataBlock -> {
+        if (useWorldEdit) {
+            getLogger().info("using w/e instead!");
+        } else {
 
-            // Gets the mine type from the data block
+            // Loops all the data blocks
+            blockDataManager.getAll().forEach(dataBlock -> {
 
-            MineType mineType = getMineDataMap().get(dataBlock.getString("type"));
+                // Gets the mine type from the data block
 
-            // Creates a new mine object
-            Mine mine = new Mine(this);
+                MineType mineType = getMineDataMap().get(dataBlock.getString("type"));
 
-            // Gets the player uuid string from the data block then converts it to a UUID
-            UUID playerUUID = UUID.fromString(dataBlock.getString("owner"));
+                // Creates a new mine object
+                Mine mine = new Mine(this);
 
-            // Gets the mine location string from the datablock then converts it to a bukkit Location
-            Location location = LocationUtils.fromString(dataBlock.getString("location"));
+                // Gets the player uuid string from the data block then converts it to a UUID
+                UUID playerUUID = UUID.fromString(dataBlock.getString("owner"));
 
-            // The multi block structure for the mine initialized further on
-            MultiBlockStructure multiBlockStructure;
+                // Gets the mine location string from the datablock then converts it to a bukkit Location
+                Location location = LocationUtils.fromString(dataBlock.getString("location"));
 
-            // Sets the mine owner and the mine type
-            mine.setMineOwner(playerUUID);
-            mine.setMineType(mineType);
+                // The multi block structure for the mine initialized further on
+                MultiBlockStructure multiBlockStructure;
 
-            // Initialize the multi block structure from the mine type
-            multiBlockStructure = mineType.getMultiBlockStructure();
+                // Sets the mine owner and the mine type
+                mine.setMineOwner(playerUUID);
+                mine.setMineType(mineType);
 
-            // Initialize the structure by using the multi block structure to assume the structure is at a location
+                // Initialize the multi block structure from the mine type
+                multiBlockStructure = mineType.getMultiBlockStructure();
 
-            this.structure = multiBlockStructure.assumeAt(location);
+                // Initialize the structure by using the multi block structure to assume the structure is at a location
 
-            // Get the relative locations
-            int[] relativeSpawn = mineType.getSpawnLocation();
-            int[] relativeNpc = mineType.getNpcLocation();
-            int[] relativeCorner1 = mineType.getCorner1();
-            int[] relativeCorner2 = mineType.getCorner2();
+                this.structure = multiBlockStructure.assumeAt(location);
 
-            Location spawnLocation = utils.getRelative(structure, relativeSpawn);
-            Location npcLocation = utils.getRelative(structure, relativeNpc);
-            Location corner1Location = utils.getRelative(structure, relativeCorner1);
-            Location corner2Location = utils.getRelative(structure, relativeCorner2);
+                // Get the relative locations
+                int[] relativeSpawn = mineType.getSpawnLocation();
+                int[] relativeNpc = mineType.getNpcLocation();
+                int[] relativeCorner1 = mineType.getCorner1();
+                int[] relativeCorner2 = mineType.getCorner2();
 
-            CuboidRegion cuboidRegion = new CuboidRegion(corner1Location, corner2Location);
-            cuboidRegion.expand(1, 0, 1, 0, 1, 0);
+                Location spawnLocation = utils.getRelative(structure, relativeSpawn);
+                Location npcLocation = utils.getRelative(structure, relativeNpc);
+                Location corner1Location = utils.getRelative(structure, relativeCorner1);
+                Location corner2Location = utils.getRelative(structure, relativeCorner2);
 
-            mine.setSpawnLocation(spawnLocation);
-            mine.setNpcLocation(npcLocation);
-            mine.setCuboidRegion(cuboidRegion);
-            mine.setMineOwner(playerUUID);
-            mine.setStructure(structure);
-            mine.reset();
-            mine.startAutoResetTask();
+                CuboidRegion cuboidRegion = new CuboidRegion(corner1Location, corner2Location);
+                cuboidRegion.expand(1, 0, 1, 0, 1, 0);
 
-            mineStorage.addMine(playerUUID, mine);
-        });
+                mine.setSpawnLocation(spawnLocation);
+                mine.setNpcLocation(npcLocation);
+                mine.setCuboidRegion(cuboidRegion);
+                mine.setMineOwner(playerUUID);
+                mine.setStructure(structure);
+                mine.reset();
+                mine.startAutoResetTask();
+
+                mineStorage.addMine(playerUUID, mine);
+            });
+        }
 
         mineStorage.getMines().forEach(((uuid, mine) -> {
             String username = Bukkit.getOfflinePlayer(mine.getMineOwner()).getName();
@@ -374,6 +379,10 @@ public class PrivateMines extends JavaPlugin {
 
     public boolean isWorldEditEnabled() {
         return isWorldEditEnabled;
+    }
+
+    public boolean useWorldEdit() {
+        return useWorldEdit;
     }
 
     public MineWorldManager getMineWorldManager() {

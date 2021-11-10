@@ -31,6 +31,7 @@ import org.bukkit.Material;
 import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.MultiBlockStructure;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +58,7 @@ public class MineType {
     private Map<Material, Double> materials = new HashMap<>();
     private WeightedRandom<Material> weightedRandom = new WeightedRandom<>();
     private MultiBlockStructure multiBlockStructure;
+    private File file;
     private List<String> allowFlags;
     private List<String> denyFlags;
 
@@ -85,6 +87,7 @@ public class MineType {
         this.npcLocation = mineLoopUtil.findNpcLocation(multiBlockStructure, sellNpcMaterial);
         this.cornerLocations = mineLoopUtil.findCornerLocations(multiBlockStructure, cornerMaterial);
     }
+
 
     /**
      * @return A string value of the name of the mine
@@ -191,6 +194,14 @@ public class MineType {
     @Deprecated
     public void setMultiBlockStructure(MultiBlockStructure multiBlockStructure) {
         this.multiBlockStructure = multiBlockStructure;
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
     }
 
     public int[] getSpawnLocation() {

@@ -30,8 +30,15 @@ import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.extent.clipboard.Clipboard;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
+import com.sk89q.worldedit.function.operation.Operation;
+import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.block.BlockType;
 import com.sk89q.worldedit.world.block.BlockTypes;
 import me.untouchedodin0.plugin.PrivateMines;
@@ -54,6 +61,10 @@ import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -64,6 +75,8 @@ public class Mine {
 
     public static final List<BlockVector3> EXPANSION_VECTORS = List.of(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X,
                                                                        BlockVector3.UNIT_Z, BlockVector3.UNIT_MINUS_Z);
+
+    // https://paste.bristermitten.me/xevumodazo.java
 
     /*
         mineType: The type of mine (of which where the blocks come from etc..)
@@ -315,21 +328,24 @@ public class Mine {
 
                 this.editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world));
 
-                mineType.getMultiBlockStructure().forEachBlock(mineLocation, blockState -> {
-                    Location location = blockState.getLocation();
+                File file = mineType.getFile();
+                pasteSchematic(file, mineLocation);
 
-                    try {
-                        editSession.setBlock(BlockVector3.at(
-                                                     location.getBlockX(),
-                                                     location.getBlockY(),
-                                                     location.getBlockZ()),
-                                             BukkitAdapter.adapt(blockState.getBlockData()),
-                                             EditSession.Stage.BEFORE_HISTORY);
-                    } catch (WorldEditException e) {
-                        e.printStackTrace();
-                    }
-                });
-                editSession.close();
+//                mineType.getMultiBlockStructure().forEachBlock(mineLocation, blockState -> {
+//                    Location location = blockState.getLocation();
+//
+//                    try {
+//                        editSession.setBlock(BlockVector3.at(
+//                                                     location.getBlockX(),
+//                                                     location.getBlockY(),
+//                                                     location.getBlockZ()),
+//                                             BukkitAdapter.adapt(blockState.getBlockData()),
+//                                             EditSession.Stage.BEFORE_HISTORY);
+//                    } catch (WorldEditException e) {
+//                        e.printStackTrace();
+//                    }
+//                });
+//                editSession.close();
             }
 
             // Assume the structure is at the location
@@ -374,6 +390,10 @@ public class Mine {
 //        cuboidRegion.expand(1, 0, 1, 0, 1, 0);
         setCuboidRegion(cuboidRegion);
 
+        final var mine = Adapter.adapt(getCuboidRegion());
+        final var stupidWallCuboid = new CuboidRegion(BukkitAdapter.adapt(world, mine.getMinimumPoint()),
+                                                      BukkitAdapter.adapt(world, mine.getMaximumPoint()));
+
         int x1 = getCorner1().getBlockX();
         int x2 = getCorner2().getBlockX();
 
@@ -399,6 +419,12 @@ public class Mine {
                         cuboidRegion.getEnd().getBlockY(),
                         cuboidRegion.getEnd().getBlockZ()));
         setWorldEditCube(worldEditCube);
+        setBedrockCubeRegion(cuboidRegion);
+
+        this.editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world));
+
+        mine.expand(expansionVectors(1));
+        mine.contract(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X, BlockVector3.UNIT_MINUS_Y, BlockVector3.UNIT_Z, BlockVector3.UNIT_MINUS_Z);
 
         iWrappedRegion = WorldGuardWrapper.getInstance().addCuboidRegion(regionName, cuboidRegion.getStart(), cuboidRegion.getEnd());
         utils.setMineFlags(iWrappedRegion);
@@ -411,6 +437,42 @@ public class Mine {
             dataBlock.set("type", getMineType().getName());
 //            dataBlock.set("weightedRandom", getMineType().getMaterials());
             blockDataManager.save();
+        }
+    }
+
+    public void pasteSchematic(File file, Location location) {
+        privateMines.getLogger().info("pasteSchematic file: " + file);
+        privateMines.getLogger().info("pasteSchematic location: " + location);
+
+        if (file == null) {
+            privateMines.getLogger().warning("Failed to paste schematic, file missing!");
+            return;
+        } else if (location == null) {
+            privateMines.getLogger().warning("Failed to paste schematic, location missing!");
+            return;
+        }
+
+        int x = location.getBlockX();
+        int y = location.getBlockY();
+        int z = location.getBlockZ();
+
+        Clipboard clipboard;
+        ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(file);
+        BlockVector3 pasteLocation = BlockVector3.at(x, y, z);
+
+        if (clipboardFormat != null) {
+            try (ClipboardReader clipboardReader = clipboardFormat.getReader(new FileInputStream(file))) {
+                clipboard = clipboardReader.read();
+
+                Operation operation =
+                        new ClipboardHolder(clipboard)
+                                .createPaste(editSession)
+                                .to(pasteLocation)
+                                .build();
+                Operations.complete(operation);
+            } catch (IOException | WorldEditException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -466,6 +528,17 @@ public class Mine {
 
         Bukkit.broadcastMessage("corner1: " + worldEditCube.getPos1());
         Bukkit.broadcastMessage("corner2: " + worldEditCube.getPos2());
+
+
+        /*
+                final var mine = Adapter.adapt(getCuboidRegion());
+
+        try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
+            mine.expand(expansionVectors(amount));
+
+            session.setBlocks(mine, fillType.getDefaultState());
+            session.setBlocks(Adapter.walls(mine), wallType.getDefaultState());
+         */
 
         if (mineLocation == null) return;
         if (mineType == null) {
@@ -608,20 +681,11 @@ public class Mine {
         }
 
         final var mine = Adapter.adapt(getCuboidRegion());
-        final var mineArea = Adapter.adapt(getCuboidRegion());
 
         try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
-//            mine.expand(expansionVectors(amount));
-//            mineArea.contract(expansionVectors(amount));
+            mine.expand(expansionVectors(amount));
 
-            /*
-                public static final List<BlockVector3> EXPANSION_VECTORS = List.of(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X,
-                                                                       BlockVector3.UNIT_Z, BlockVector3.UNIT_MINUS_Z);
-             */
-
-            mineArea.contract(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X, BlockVector3.UNIT_MINUS_Y, BlockVector3.UNIT_Z, BlockVector3.UNIT_MINUS_Z);
-
-            session.setBlocks(mineArea, fillType.getDefaultState());
+            session.setBlocks(mine, fillType.getDefaultState());
             session.setBlocks(Adapter.walls(mine), wallType.getDefaultState());
         } catch (MaxChangedBlocksException ex) {
             ex.printStackTrace();
@@ -630,12 +694,11 @@ public class Mine {
         final var stupidWallCuboid = new CuboidRegion(BukkitAdapter.adapt(world, mine.getMinimumPoint()),
                                                       BukkitAdapter.adapt(world, mine.getMaximumPoint()));
 
-        final var bedrockRegion = new CuboidRegion(BukkitAdapter.adapt(world, mine.getMinimumPoint()),
-                                                      BukkitAdapter.adapt(world, mine.getMaximumPoint()));
-        setCuboidRegion(bedrockRegion);
-        setWorldEditCube(mineArea);
-
-//        setBedrockCubeRegion(stupidWallCuboid);
+        final var test = new CuboidRegion(BukkitAdapter.adapt(world, mine.getMinimumPoint()),
+                                          BukkitAdapter.adapt(world, mine.getMaximumPoint()));
+        setCuboidRegion(stupidWallCuboid);
+        setBedrockCubeRegion(stupidWallCuboid);
+        setWorldEditCube(mine);
 //        setBedrockCubeRegion(stupidWallCuboid);
     }
 
@@ -682,12 +745,8 @@ public class Mine {
         wall.expand(expansionVectors(amount));
 
         com.sk89q.worldedit.regions.CuboidRegion cube = new com.sk89q.worldedit.regions.CuboidRegion(mineCorner1, mineCorner2);
-
-        BlockType type2 = BlockType.REGISTRY.get(BlockTypes.DIAMOND_BLOCK.getId());
-
         try {
             editSession.setBlocks(Adapter.walls(wall), BlockTypes.BEDROCK.getDefaultState());
-            editSession.setBlocks(cube, (Pattern) type2);
 //            editSession.makeCuboidWalls(wallsCube, (Pattern) type);
 //            editSession.makeCuboidFaces(wallsCube, (Pattern) type);
 
