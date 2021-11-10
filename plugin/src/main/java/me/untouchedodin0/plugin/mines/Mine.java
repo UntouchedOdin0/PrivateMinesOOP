@@ -413,15 +413,29 @@ public class Mine {
 
     public void delete() {
         PrivateMines privateMines = PrivateMines.getPlugin(PrivateMines.class);
+        final var air = BlockTypes.AIR;
+
         if (mineType == null) {
             privateMines.getLogger().info("Failed to delete the mine due to mine data being null!");
         }
+
+        if (air == null) return;
+
         MineStorage mineStorage = privateMines.getMineStorage();
 
         this.structure = getStructure();
 
         if (mineOwner != null) {
             mineStorage.removeMine(mineOwner);
+
+            final var mine = Adapter.adapt(getCuboidRegion());
+
+            try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
+                session.setBlocks(mine, air.getDefaultState());
+            } catch (MaxChangedBlocksException exception) {
+                exception.printStackTrace();
+            }
+
             if (airMaterial != null) {
                 structure.getRegion().forEachBlock(block -> block.setType(airMaterial, false));
                 bedrockCubeRegion.forEachBlock(block -> block.setType(airMaterial, false));
@@ -541,6 +555,10 @@ public class Mine {
 
 
         // expand (returned amount) -> update theme -> expand the rest
+
+        final var mine = Adapter.adapt(getCuboidRegion());
+
+        expansionVectors(1);
 
         return -1;
     }
