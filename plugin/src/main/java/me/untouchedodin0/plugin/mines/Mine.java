@@ -55,6 +55,7 @@ import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -203,6 +204,14 @@ public class Mine {
 
     public void setCuboidRegion(CuboidRegion cuboidRegion) {
         this.cuboidRegion = cuboidRegion;
+    }
+
+    public void setWorldEditCube(com.sk89q.worldedit.regions.CuboidRegion cuboidRegion) {
+        this.worldEditCube = cuboidRegion;
+    }
+
+    public com.sk89q.worldedit.regions.CuboidRegion getWorldEditCube() {
+        return worldEditCube;
     }
 
     /**
@@ -362,7 +371,7 @@ public class Mine {
          */
 
         CuboidRegion cuboidRegion = new CuboidRegion(corner1, corner2);
-        cuboidRegion.expand(1, 0, 1, 0, 1, 0);
+//        cuboidRegion.expand(1, 0, 1, 0, 1, 0);
         setCuboidRegion(cuboidRegion);
 
         int x1 = getCorner1().getBlockX();
@@ -389,6 +398,7 @@ public class Mine {
                         cuboidRegion.getEnd().getBlockX(),
                         cuboidRegion.getEnd().getBlockY(),
                         cuboidRegion.getEnd().getBlockZ()));
+        setWorldEditCube(worldEditCube);
 
         iWrappedRegion = WorldGuardWrapper.getInstance().addCuboidRegion(regionName, cuboidRegion.getStart(), cuboidRegion.getEnd());
         utils.setMineFlags(iWrappedRegion);
@@ -430,24 +440,33 @@ public class Mine {
 
             final var mine = Adapter.adapt(getCuboidRegion());
 
-            try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
+            try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(Objects.requireNonNull(world)))) {
                 session.setBlocks(mine, air.getDefaultState());
             } catch (MaxChangedBlocksException exception) {
                 exception.printStackTrace();
             }
 
-            if (airMaterial != null) {
-                structure.getRegion().forEachBlock(block -> block.setType(airMaterial, false));
-                bedrockCubeRegion.forEachBlock(block -> block.setType(airMaterial, false));
-            }
+//            if (airMaterial != null) {
+//                structure.getRegion().forEachBlock(block -> block.setType(airMaterial, false));
+//                bedrockCubeRegion.forEachBlock(block -> block.setType(airMaterial, false));
+//            }
         }
         cancelResetTask();
         this.cuboidRegion = null;
         this.bedrockCubeRegion = null;
+        this.worldEditCube = null;
     }
 
     // Nice little reset system for filling in the cuboid region using the mine type's weighted random.
     public void reset() {
+
+        final var emerald = BlockTypes.EMERALD_BLOCK;
+        final var mine = Adapter.adapt(getCuboidRegion());
+        final var worldEditCube = Adapter.adapt(cuboidRegion);
+
+        Bukkit.broadcastMessage("corner1: " + worldEditCube.getPos1());
+        Bukkit.broadcastMessage("corner2: " + worldEditCube.getPos2());
+
         if (mineLocation == null) return;
         if (mineType == null) {
             privateMines.getLogger().warning("Failed to reset mine due to the type being null!");
@@ -459,6 +478,14 @@ public class Mine {
             return;
         }
 
+        try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(Objects.requireNonNull(world)))) {
+            if (emerald != null) {
+                session.setBlocks(worldEditCube, emerald.getDefaultState());
+            }
+        } catch (MaxChangedBlocksException exception) {
+            exception.printStackTrace();
+        }
+
 //        Material material = mineType.getWeightedRandom().roll();
 //        String blockType = Objects.requireNonNull(BlockType.REGISTRY.get(material.name())).getId().toLowerCase();
 //
@@ -468,9 +495,18 @@ public class Mine {
 
 //        privateMines.getWorldEditUtils().setBlocks(getCuboidRegion(), blockType);
 
-        CuboidRegion cuboidRegion = getCuboidRegion();
-        cuboidRegion.forEachBlock(block -> block.setType(mineType.getWeightedRandom().roll(), false));
+//        CuboidRegion cuboidRegion = getCuboidRegion();
+//        cuboidRegion.forEachBlock(block -> block.setType(mineType.getWeightedRandom().roll(), false));
         teleportPlayer(Bukkit.getPlayer(getMineOwner()));
+    }
+
+    public void reset(com.sk89q.worldedit.regions.CuboidRegion cuboidRegion) {
+        try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(Objects.requireNonNull(world)))) {
+            final var emerald = BlockTypes.REDSTONE_BLOCK;
+            session.setBlocks(cuboidRegion, emerald.getDefaultState());
+        } catch (MaxChangedBlocksException exception) {
+            exception.printStackTrace();
+        }
     }
 
     public void startAutoResetTask() {
@@ -578,7 +614,6 @@ public class Mine {
 
             session.setBlocks(mine, fillType.getDefaultState());
             session.setBlocks(Adapter.walls(mine), wallType.getDefaultState());
-
         } catch (MaxChangedBlocksException ex) {
             ex.printStackTrace();
         }
@@ -586,8 +621,12 @@ public class Mine {
         final var stupidWallCuboid = new CuboidRegion(BukkitAdapter.adapt(world, mine.getMinimumPoint()),
                                                       BukkitAdapter.adapt(world, mine.getMaximumPoint()));
 
+        final var test = new CuboidRegion(BukkitAdapter.adapt(world, mine.getMinimumPoint()),
+                                                      BukkitAdapter.adapt(world, mine.getMaximumPoint()));
         setCuboidRegion(stupidWallCuboid);
         setBedrockCubeRegion(stupidWallCuboid);
+        setWorldEditCube(mine);
+//        setBedrockCubeRegion(stupidWallCuboid);
     }
 
     public void expandMine(int amount) {
@@ -626,23 +665,18 @@ public class Mine {
         Location bukkitCorner1 = new Location(mineStart.getWorld(), mineStart.getBlockX(), mineStart.getBlockY(), mineStart.getBlockZ());
         Location bukkitCorner2 = new Location(mineEnd.getWorld(), mineEnd.getBlockX(), mineEnd.getBlockY(), mineEnd.getBlockZ());
 
-
         final var mine = Adapter.adapt(mineCube);
         final var wall = Adapter.adapt(bedrockCube);
 
         mine.expand(expansionVectors(amount));
         wall.expand(expansionVectors(amount));
 
-
         com.sk89q.worldedit.regions.CuboidRegion cube = new com.sk89q.worldedit.regions.CuboidRegion(mineCorner1, mineCorner2);
-
 
         BlockType type2 = BlockType.REGISTRY.get(BlockTypes.DIAMOND_BLOCK.getId());
 
         try {
-
             editSession.setBlocks(Adapter.walls(wall), BlockTypes.BEDROCK.getDefaultState());
-
             editSession.setBlocks(cube, (Pattern) type2);
 //            editSession.makeCuboidWalls(wallsCube, (Pattern) type);
 //            editSession.makeCuboidFaces(wallsCube, (Pattern) type);

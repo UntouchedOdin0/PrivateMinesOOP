@@ -17,6 +17,7 @@ public enum Adapter {
                 BlockVector3.at(max.getBlockX(), max.getBlockY(), max.getBlockZ()));
     }
 
+
     public static Region walls(CuboidRegion region) {
         BlockVector3 pos1 = region.getPos1();
         BlockVector3 pos2 = region.getPos2();
