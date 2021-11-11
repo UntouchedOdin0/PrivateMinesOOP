@@ -30,10 +30,12 @@ import me.untouchedodin0.plugin.config.MineConfig;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
+import me.untouchedodin0.plugin.mines.WorldEditMineType;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Metrics;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.util.placeholderapi.PrivateMinesExpansion;
+import me.untouchedodin0.plugin.util.worldedit.MineFactoryCompat;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.plugin.world.utils.MineLoopUtil;
 import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
@@ -65,8 +67,10 @@ public class PrivateMines extends JavaPlugin {
     private static PrivateMines privateMines;
     private final Map<String, MineType> mineDataMap = new HashMap<>();
     private final TreeMap<String, MineType> mineTypeTreeMap = new TreeMap<>();
+    private final TreeMap<String, WorldEditMineType> worldEditMineTypeTreeMap = new TreeMap<>();
 
     private MineFactory mineFactory;
+    private MineFactoryCompat mineFactoryCompat;
     private MineWorldManager mineWorldManager;
     private MineStorage mineStorage;
     private BlockDataManager blockDataManager;
@@ -136,6 +140,7 @@ public class PrivateMines extends JavaPlugin {
 
         if (useWorldEdit) {
             getLogger().info("using w/e instead!");
+
         } else {
 
             // Loops all the data blocks
@@ -252,6 +257,10 @@ public class PrivateMines extends JavaPlugin {
         mineTypeTreeMap.put(name, mineType);
     }
 
+    public void addType(String name, WorldEditMineType worldEditMineType) {
+        worldEditMineTypeTreeMap.put(name, worldEditMineType);
+    }
+
     /*
         Gets a map of all the MineData types
      */
@@ -274,6 +283,22 @@ public class PrivateMines extends JavaPlugin {
             return null;
         }
         return mineTypeTreeMap.firstEntry().getValue();
+    }
+
+    /*
+        Get default world edit type
+     */
+
+    public WorldEditMineType getDefaultWorldEditMineType() {
+        if (worldEditMineTypeTreeMap.isEmpty()) {
+            Bukkit.getLogger().info("No default world edit mine type was found!");
+            Bukkit.getLogger().info("Create a mine type in the mineTypes");
+            Bukkit.getLogger().info("section of the config.yml");
+            Bukkit.getLogger().info("Please ask in the discord server" +
+                                            " if you need help");
+            return null;
+        }
+        return worldEditMineTypeTreeMap.firstEntry().getValue();
     }
 
     /*

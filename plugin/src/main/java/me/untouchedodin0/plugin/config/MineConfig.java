@@ -37,6 +37,7 @@ import redempt.redlib.configmanager.annotations.ConfigValue;
 import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.MultiBlockStructure;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -104,10 +105,27 @@ public class MineConfig {
             privateMines.getLogger().warning(missingFile);
         }
 
-        this.path = privateMines.getDataFolder().toPath().resolve(file);
-        this.contents = Files.lines(path).collect(Collectors.joining());
+        if (privateMines.useWorldEdit()) {
+            privateMines.getLogger().info("Creating worldedit mine types...");
+            this.path = privateMines.getDataFolder().toPath().resolve(file);
+            File file = path.toFile();
 
-        this.multiBlockStructure = MultiBlockStructure.create(contents, name, false, true);
+            WorldEditMineType worldEditMineType = new WorldEditMineType(privateMines, file);
+            worldEditMineType.setName(getName());
+            worldEditMineType.setMineTier(getPriority());
+            worldEditMineType.setResetTime(getResetTime());
+            privateMines.addType(getName(), worldEditMineType);
+
+            privateMines.getLogger().info("path: " + path);
+            privateMines.getLogger().info("file: " + file);
+
+        } else {
+            privateMines.getLogger().info("Creating redlib mine types...");
+
+            this.path = privateMines.getDataFolder().toPath().resolve(file);
+            this.contents = Files.lines(path).collect(Collectors.joining());
+
+            this.multiBlockStructure = MultiBlockStructure.create(contents, name, false, true);
 
             MineType mineType = new MineType(privateMines, multiBlockStructure);
             mineType.setName(getName());
@@ -120,6 +138,7 @@ public class MineConfig {
             mineType.setFile(path.toFile());
 
             privateMines.addMineData(getName(), mineType);
+        }
     }
 
     // a getter for the private mines instance

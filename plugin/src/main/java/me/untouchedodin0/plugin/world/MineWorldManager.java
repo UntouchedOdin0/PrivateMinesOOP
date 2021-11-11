@@ -47,7 +47,7 @@ public class MineWorldManager {
                         .generator(new EmptyWorldGenerator()));
         this.borderDistance = 150;
         this.direction = NORTH;
-        defaultLocation = new Location(minesWorld, 0, 1, 0); // may need to raise the Y sometime?
+        defaultLocation = new Location(minesWorld, 0, 50, 0); // may need to raise the Y sometime?
     }
 
     public synchronized Location getNextFreeLocation() {

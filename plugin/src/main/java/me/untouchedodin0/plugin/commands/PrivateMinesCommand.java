@@ -4,6 +4,7 @@ import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
+import me.untouchedodin0.plugin.mines.WorldEditMine;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.world.MineWorldManager;
@@ -55,8 +56,22 @@ public class PrivateMinesCommand {
                 return;
             }
             commandSender.sendMessage(ChatColor.GREEN + "Giving " + target.getName() + " a private mine!");
-            Mine mine = mineFactory.createMine(target, mineWorldManager.getNextFreeLocation());
-            mine.teleportPlayer(target);
+            Mine mine;
+            WorldEditMine worldEditMine;
+            Location location = mineWorldManager.getNextFreeLocation();
+
+//            mine = mineFactory.createMine(target, mineWorldManager.getNextFreeLocation());
+//            mine.teleportPlayer(target);
+
+            if (privateMines.isWorldEditEnabled()) {
+                privateMines.getLogger().info("target: " + target);
+                privateMines.getLogger().info("mineWorldManger: " + mineWorldManager);
+                privateMines.getLogger().info("default world edit mine type: " + privateMines.getDefaultWorldEditMineType());
+
+                worldEditMine = mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType());
+                target.teleport(location);
+//                worldEditMine.teleport(target);
+            }
         } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException) {
             arrayIndexOutOfBoundsException.printStackTrace();
         }

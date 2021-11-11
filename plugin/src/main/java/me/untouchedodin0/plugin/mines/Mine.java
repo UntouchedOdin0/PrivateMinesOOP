@@ -43,6 +43,7 @@ import com.sk89q.worldedit.world.block.BlockType;
 import com.sk89q.worldedit.world.block.BlockTypes;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.factory.MineFactory;
+import me.untouchedodin0.plugin.factory.PasteFactory;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.util.worldedit.Adapter;
@@ -329,7 +330,8 @@ public class Mine {
                 this.editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world));
 
                 File file = mineType.getFile();
-                pasteSchematic(file, mineLocation);
+//                pasteSchematic(file, mineLocation);
+
 
 //                mineType.getMultiBlockStructure().forEachBlock(mineLocation, blockState -> {
 //                    Location location = blockState.getLocation();
