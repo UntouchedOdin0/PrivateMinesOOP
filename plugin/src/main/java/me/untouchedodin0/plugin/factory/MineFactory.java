@@ -248,6 +248,7 @@ public class MineFactory<S> {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                player.sendMessage("Your mine has been created");
             }
 
 //            WorldEditMine worldEditMine = new WorldEditMine(privateMines);
