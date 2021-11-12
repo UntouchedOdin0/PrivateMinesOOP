@@ -3,10 +3,12 @@ package me.untouchedodin0.plugin.util;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.world.block.BlockType;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.codemc.worldguardwrapper.WorldGuardWrapper;
@@ -111,5 +113,11 @@ public class Utils {
                 ).filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(flag -> region.ifPresent(iWrappedRegion -> iWrappedRegion.setFlag(flag, WrappedState.DENY)));
+    }
+
+    // Converts a bukkit material to a world edit block type
+
+    public BlockType bukkitToBlockType(Material material) {
+        return BukkitAdapter.asBlockType(material);
     }
 }
