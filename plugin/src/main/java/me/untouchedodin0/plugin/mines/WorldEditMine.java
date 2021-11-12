@@ -1,98 +1,97 @@
 package me.untouchedodin0.plugin.mines;
 
-import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.extent.clipboard.Clipboard;
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
-import com.sk89q.worldedit.function.operation.Operation;
-import com.sk89q.worldedit.function.operation.Operations;
-import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldedit.session.ClipboardHolder;
+import com.sk89q.worldedit.regions.CuboidRegion;
+import com.sk89q.worldedit.world.block.BlockType;
+import com.sk89q.worldedit.world.block.BlockTypes;
 import me.untouchedodin0.plugin.PrivateMines;
-import me.untouchedodin0.plugin.world.MineWorldManager;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.UUID;
 
 public class WorldEditMine {
 
     private final PrivateMines privateMines;
-    private UUID mineOwner;
-    private Location mineLocation;
-    private Location location;
     private WorldEditMineType worldEditMineType;
-    private EditSession editSession;
-    private Clipboard clipboard;
-    private MineWorldManager mineWorldManager;
+
+    private UUID mineOwner;
+    private CuboidRegion cuboidRegion;
+    private Location spawnLocation;
+    private World world;
+
+    private final BlockType fillType = BlockTypes.DIAMOND_BLOCK;
+
+    // sick this works
+    private final BlockType test = BukkitAdapter.asBlockType(Material.AIR);
 
     public WorldEditMine(PrivateMines privateMines) {
         this.privateMines = privateMines;
-        this.mineWorldManager = privateMines.getMineWorldManager();
     }
 
     public void setMineOwner(UUID mineOwner) {
         this.mineOwner = mineOwner;
     }
 
-    public void setMineLocation(Location location) {
-        this.mineLocation = location;
+    public UUID getMineOwner() {
+        return mineOwner;
     }
 
     public void setWorldEditMineType(WorldEditMineType worldEditMineType) {
         this.worldEditMineType = worldEditMineType;
     }
 
+    public void setCuboidRegion(CuboidRegion cuboidRegion) {
+        this.cuboidRegion = cuboidRegion;
+    }
+
+    public CuboidRegion getCuboidRegion() {
+        return cuboidRegion;
+    }
+
+    public void setSpawnLocation(Location spawnLocation) {
+        this.spawnLocation = spawnLocation;
+    }
+
+    public Location getSpawnLocation() {
+        return spawnLocation;
+    }
+
     public File getSchematicFile() {
         return worldEditMineType.getSchematicFile();
     }
 
-    public void paste(Location location) {
-        World world = location.getWorld();
-        ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(getSchematicFile());
-//        int x = mineLocation.getBlockX();
-//        int y = mineLocation.getBlockY();
-//        int z = mineLocation.getBlockZ();
+    public void teleport(Player player) {
+        player.teleport(getSpawnLocation());
+    }
 
-        int x = location.getBlockX();
-        int y = location.getBlockY();
-        int z = location.getBlockZ();
+    public void setWorld(World world) {
+        this.world = world;
+    }
 
-        BlockVector3 blockVector3 = BlockVector3.at(x, y, z);
+    // Resets the mine
+    public void reset() {
+        final var fillType = BlockTypes.BONE_BLOCK;
 
-        privateMines.getLogger().info("world: " + world);
-        privateMines.getLogger().info("clipboardformat: " + clipboardFormat);
-        privateMines.getLogger().info("x: " + x);
-        privateMines.getLogger().info("y: " + y);
-        privateMines.getLogger().info("z: " + z);
-        privateMines.getLogger().info("blockvector3: " + blockVector3);
+        if (world == null) {
+            privateMines.getLogger().warning("Failed to reset due to the mine being null");
+        }
 
-        if (clipboardFormat != null) {
-            try (ClipboardReader clipboardReader = clipboardFormat.getReader(new FileInputStream(getSchematicFile()))) {
-                clipboard = clipboardReader.read();
-            } catch (IOException e) {
+        // Makes sure everything isn't null
+        if (cuboidRegion != null && fillType != null) {
+
+            // Creates edit session, sets the blocks and flushes it!
+            try (final var session = WorldEdit.getInstance()
+                    .newEditSession(BukkitAdapter.adapt(world))) {
+                session.setBlocks(getCuboidRegion(), fillType.getDefaultState());
+            } catch (MaxChangedBlocksException e) {
                 e.printStackTrace();
             }
-
-            try (EditSession editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
-                Operation operation = new ClipboardHolder(clipboard)
-                        .createPaste(editSession)
-                        .to(blockVector3)
-                        .build();
-                Operations.completeLegacy(operation);
-            } catch (WorldEditException worldEditException) {
-                worldEditException.printStackTrace();
-            }
-
-            privateMines.getLogger().info("clipboard: " + clipboard);
         }
     }
 

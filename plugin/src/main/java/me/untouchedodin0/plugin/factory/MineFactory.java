@@ -24,10 +24,6 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin.factory;
 
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.MaxChangedBlocksException;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
@@ -43,7 +39,6 @@ import me.untouchedodin0.plugin.mines.WorldEditMine;
 import me.untouchedodin0.plugin.mines.WorldEditMineType;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
-import me.untouchedodin0.plugin.util.worldedit.MineFactoryCompat;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -69,8 +64,6 @@ public class MineFactory<S> {
     MineFactory mineFactory;
     MineType defaultMineType;
     BlockDataManager blockDataManager;
-    MineFactoryCompat mineFactoryCompat;
-    private EditSession editSession;
     Location spawnLocation;
     List<Location> corners = new ArrayList<>();
 
@@ -157,7 +150,6 @@ public class MineFactory<S> {
         if (mineType == null) {
             privateMines.getLogger().warning("Failed to create mine due to the minetype being null");
         } else {
-            String userUUID = player.getUniqueId().toString();
 
             Utils utils = privateMines.getUtils();
             Mine mine = new Mine(privateMines);
@@ -210,6 +202,7 @@ public class MineFactory<S> {
 
                 File file = worldEditMineType.getSchematicFile();
                 PasteFactory pasteFactory = new PasteFactory(privateMines);
+                WorldEditMine worldEditMine = new WorldEditMine(privateMines);
 
                 privateMines.getLogger().info("createMine file: " + file);
 
@@ -225,11 +218,11 @@ public class MineFactory<S> {
                         }
                         world = location.getWorld();
 
-                        this.editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world));
-
                         privateMines.getLogger().info("location: " + location);
                         privateMines.getLogger().info("clipboard: " + clipboard);
                         privateMines.getLogger().info("pasteFactory: " + pasteFactory);
+
+                        // Pastes the schematic and loops the region finding blocks
 
                         Region region = pasteFactory.paste(clipboard, location);
                         region.iterator().forEachRemaining(blockVector3 -> {
@@ -247,8 +240,11 @@ public class MineFactory<S> {
                             }
                         });
 
+                        // Gets the corner locations
                         Location corner1 = corners.get(0);
                         Location corner2 = corners.get(1);
+
+                        // Makes the block vector 3 corner locations
 
                         BlockVector3 blockVectorCorner1 = BlockVector3.at(
                                 corner1.getBlockX(),
@@ -260,6 +256,8 @@ public class MineFactory<S> {
                                 corner2.getBlockY(),
                                 corner2.getBlockZ());
 
+                        // Makes the cuboid region to fill with blocks
+
                         CuboidRegion cuboidRegion = new CuboidRegion(blockVectorCorner1, blockVectorCorner2);
 
                         privateMines.getLogger().info("region: " + region);
@@ -269,20 +267,38 @@ public class MineFactory<S> {
                         privateMines.getLogger().info("blockVectorCorner2: " + blockVectorCorner2);
                         privateMines.getLogger().info("cuboidRegion: " + cuboidRegion);
 
-                        try (final var session = WorldEdit.getInstance()
-                                .newEditSession(BukkitAdapter.adapt(world))) {
-                            session.setBlocks(cuboidRegion, fillType.getDefaultState());
-                        }
-                    } catch (IOException | MaxChangedBlocksException e) {
-                        e.printStackTrace();
+                        // Set the cuboid region and mine
+                        worldEditMine.setCuboidRegion(cuboidRegion);
+                        worldEditMine.setSpawnLocation(spawnLocation);
+                        worldEditMine.setWorld(spawnLocation.getWorld());
+
+                        // Attempts to reset the mine
+                        worldEditMine.reset();
+
+                        worldEditMine.teleport(player);
+
+
+
+//                        try (final var session = WorldEdit.getInstance()
+//                                .newEditSession(BukkitAdapter.adapt(world))) {
+//                            session.setBlocks(cuboidRegion, fillType.getDefaultState());
+//                        }
+//                    } catch (IOException | MaxChangedBlocksException e) {
+//                        e.printStackTrace();
+//                    }
+
+                        // Tell the player it's been created ad teleport them
+                        player.sendMessage("Your mine has been created");
+                        player.teleport(spawnLocation);
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
                     }
-                    player.sendMessage("Your mine has been created");
-                }
 
 //            WorldEditMine worldEditMine = new WorldEditMine(privateMines);
 //            worldEditMine.setWorldEditMineType(worldEditMineType);
 //            worldEditMine.paste(location);
 //            worldEditMine.teleport(player);
+                }
             }
         }
         return null;
