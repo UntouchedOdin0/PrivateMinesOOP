@@ -25,6 +25,7 @@ SOFTWARE.
 package me.untouchedodin0.plugin.factory;
 
 import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
@@ -32,7 +33,9 @@ import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
 import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.world.block.BlockTypes;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
@@ -41,8 +44,6 @@ import me.untouchedodin0.plugin.mines.WorldEditMineType;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.util.worldedit.MineFactoryCompat;
-import me.untouchedodin0.plugin.util.worldedit.MineSchematic;
-import me.untouchedodin0.plugin.util.worldedit.WorldEditRegion;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -198,63 +199,91 @@ public class MineFactory<S> {
         Clipboard clipboard;
         Utils utils = new Utils(privateMines);
         World world;
-
+        final var fillType = BlockTypes.DIAMOND_BLOCK;
 
         if (worldEditMineType == null) {
             privateMines.getLogger().warning("Failed to create mine due to the worldedit mine type being null");
         } else {
-            File file = worldEditMineType.getSchematicFile();
-            PasteFactory pasteFactory = new PasteFactory(privateMines);
+            if (fillType == null) {
+                privateMines.getLogger().warning("Failed to fill mine due to fillType being null");
+            } else {
 
-            privateMines.getLogger().info("createMine file: " + file);
+                File file = worldEditMineType.getSchematicFile();
+                PasteFactory pasteFactory = new PasteFactory(privateMines);
 
-            ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(file);
-            privateMines.getLogger().info("createMine clipboardFormat: " + clipboardFormat);
+                privateMines.getLogger().info("createMine file: " + file);
 
-            if (clipboardFormat != null) {
-                try (ClipboardReader clipboardReader = clipboardFormat.getReader(new FileInputStream(file))) {
-                    clipboard = clipboardReader.read();
-                    if (clipboard == null) {
-                        privateMines.getLogger().warning("Clipboard was null");
-                        return null;
-                    }
-                    world = location.getWorld();
+                ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(file);
+                privateMines.getLogger().info("createMine clipboardFormat: " + clipboardFormat);
 
-                    this.editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world));
-
-                    privateMines.getLogger().info("location: " + location);
-                    privateMines.getLogger().info("clipboard: " + clipboard);
-                    privateMines.getLogger().info("pasteFactory: " + pasteFactory);
-
-                    Region region = pasteFactory.paste(clipboard, location);
-                    region.iterator().forEachRemaining(blockVector3 -> {
-                        if (world != null) {
-                            Location bukkitLocation = utils.blockVector3toBukkit(world, blockVector3);
-                            Material bukkitMaterial = bukkitLocation.getBlock().getType();
-
-                            if (bukkitMaterial == Material.CHEST) {
-                                privateMines.getLogger().info("Found chest at " + bukkitLocation);
-                                this.spawnLocation = utils.blockVector3toBukkit(world, blockVector3);
-                            } else if (bukkitMaterial == Material.POWERED_RAIL) {
-                                privateMines.getLogger().info("Found powered rail at " + bukkitLocation);
-                                corners.add(bukkitLocation);
-                            }
+                if (clipboardFormat != null) {
+                    try (ClipboardReader clipboardReader = clipboardFormat.getReader(new FileInputStream(file))) {
+                        clipboard = clipboardReader.read();
+                        if (clipboard == null) {
+                            privateMines.getLogger().warning("Clipboard was null");
+                            return null;
                         }
-                    });
+                        world = location.getWorld();
 
-                    privateMines.getLogger().info("region: " + region);
-                    privateMines.getLogger().info("spawn location: " + spawnLocation);
-                    privateMines.getLogger().info("corners: " + corners);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                        this.editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world));
+
+                        privateMines.getLogger().info("location: " + location);
+                        privateMines.getLogger().info("clipboard: " + clipboard);
+                        privateMines.getLogger().info("pasteFactory: " + pasteFactory);
+
+                        Region region = pasteFactory.paste(clipboard, location);
+                        region.iterator().forEachRemaining(blockVector3 -> {
+                            if (world != null) {
+                                Location bukkitLocation = utils.blockVector3toBukkit(world, blockVector3);
+                                Material bukkitMaterial = bukkitLocation.getBlock().getType();
+
+                                if (bukkitMaterial == Material.CHEST) {
+                                    privateMines.getLogger().info("Found chest at " + bukkitLocation);
+                                    this.spawnLocation = utils.blockVector3toBukkit(world, blockVector3);
+                                } else if (bukkitMaterial == Material.POWERED_RAIL) {
+                                    privateMines.getLogger().info("Found powered rail at " + bukkitLocation);
+                                    corners.add(bukkitLocation);
+                                }
+                            }
+                        });
+
+                        Location corner1 = corners.get(0);
+                        Location corner2 = corners.get(1);
+
+                        BlockVector3 blockVectorCorner1 = BlockVector3.at(
+                                corner1.getBlockX(),
+                                corner1.getBlockY(),
+                                corner1.getBlockZ());
+
+                        BlockVector3 blockVectorCorner2 = BlockVector3.at(
+                                corner2.getBlockX(),
+                                corner2.getBlockY(),
+                                corner2.getBlockZ());
+
+                        CuboidRegion cuboidRegion = new CuboidRegion(blockVectorCorner1, blockVectorCorner2);
+
+                        privateMines.getLogger().info("region: " + region);
+                        privateMines.getLogger().info("spawn location: " + spawnLocation);
+                        privateMines.getLogger().info("corners: " + corners);
+                        privateMines.getLogger().info("blockVectorCorner1: " + blockVectorCorner1);
+                        privateMines.getLogger().info("blockVectorCorner2: " + blockVectorCorner2);
+                        privateMines.getLogger().info("cuboidRegion: " + cuboidRegion);
+
+                        try (final var session = WorldEdit.getInstance()
+                                .newEditSession(BukkitAdapter.adapt(world))) {
+                            session.setBlocks(cuboidRegion, fillType.getDefaultState());
+                        }
+                    } catch (IOException | MaxChangedBlocksException e) {
+                        e.printStackTrace();
+                    }
+                    player.sendMessage("Your mine has been created");
                 }
-                player.sendMessage("Your mine has been created");
-            }
 
 //            WorldEditMine worldEditMine = new WorldEditMine(privateMines);
 //            worldEditMine.setWorldEditMineType(worldEditMineType);
 //            worldEditMine.paste(location);
 //            worldEditMine.teleport(player);
+            }
         }
         return null;
     }
