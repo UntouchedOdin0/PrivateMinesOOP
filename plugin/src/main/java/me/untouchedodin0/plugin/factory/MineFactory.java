@@ -54,6 +54,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 public class MineFactory<S> {
 
@@ -128,8 +130,11 @@ public class MineFactory<S> {
     }
 
     private DataBlock getDataBlock(Block block, Player player, Location location, Mine mine) {
+        UUID ownerUUID = player.getUniqueId();
+        String ownerUUIDString = ownerUUID.toString();
+
         DataBlock dataBlock = blockDataManager.getDataBlock(block);
-        dataBlock.set("owner", String.valueOf(player.getUniqueId()));
+        dataBlock.set("owner", ownerUUIDString);
         dataBlock.set("type", defaultMineType.getName());
         dataBlock.set("location", LocationUtils.toString(location));
         dataBlock.set("spawnLocation", LocationUtils.toString(mine.getSpawnLocation()));
@@ -137,6 +142,69 @@ public class MineFactory<S> {
         dataBlock.set("corner1", LocationUtils.toString(mine.getCorner1()));
         dataBlock.set("corner2", LocationUtils.toString(mine.getCorner2()));
         dataBlock.set("structure", mine.getStructure());
+        return dataBlock;
+    }
+
+    private DataBlock getWorldEditDataBlock(Block block,
+                                            Player player,
+                                            Location location,
+                                            WorldEditMine worldEditMine) {
+        UUID ownerUUID = player.getUniqueId();
+        String ownerUUIDString = ownerUUID.toString();
+        String worldName = Objects.requireNonNull(location.getWorld()).getName();
+
+        DataBlock dataBlock = blockDataManager.getDataBlock(block);
+
+        int corner1X = worldEditMine.getCuboidRegion().getMinimumPoint().getBlockX();
+        int corner1Y = worldEditMine.getCuboidRegion().getMinimumPoint().getBlockY();
+        int corner1Z = worldEditMine.getCuboidRegion().getMinimumPoint().getBlockZ();
+
+        int corner2X = worldEditMine.getCuboidRegion().getMaximumPoint().getBlockX();
+        int corner2Y = worldEditMine.getCuboidRegion().getMaximumPoint().getBlockY();
+        int corner2Z = worldEditMine.getCuboidRegion().getMaximumPoint().getBlockZ();
+
+        int spawnX = location.getBlockX();
+        int spawnY = location.getBlockY();
+        int spawnZ = location.getBlockZ();
+
+        dataBlock.set("owner", ownerUUIDString);
+        dataBlock.set("corner1X", Integer.toString(corner1X));
+        dataBlock.set("corner1Y", Integer.toString(corner1Y));
+        dataBlock.set("corner1Z", Integer.toString(corner1Z));
+
+        dataBlock.set("corner2X", Integer.toString(corner2X));
+        dataBlock.set("corner2Y", Integer.toString(corner2Y));
+        dataBlock.set("corner2Z", Integer.toString(corner2Z));
+
+        dataBlock.set("spawnX", Integer.toString(spawnX));
+        dataBlock.set("spawnY", Integer.toString(spawnY));
+        dataBlock.set("spawnZ", Integer.toString(spawnZ));
+
+        dataBlock.set("world", location.getWorld());
+        dataBlock.set("worldName", worldName);
+        dataBlock.set("location", LocationUtils.toString(location));
+        dataBlock.set("spawnLocation", LocationUtils.toString(spawnLocation));
+//        dataBlock.set("schematic", worldEditMine.getSchematicFile());
+//        dataBlock.set("worldEditMine", worldEditMine);
+
+        privateMines.getLogger().info("worldedit datablock debug:");
+        privateMines.getLogger().info("owner:" + dataBlock.get("owner"));
+        privateMines.getLogger().info("location:" + dataBlock.get("location"));
+
+        privateMines.getLogger().info("corner1X:" + dataBlock.get("corner1X"));
+        privateMines.getLogger().info("corner1Y:" + dataBlock.get("corner1Y"));
+        privateMines.getLogger().info("corner1Z:" + dataBlock.get("corner1Z"));
+
+        privateMines.getLogger().info("corner2X:" + dataBlock.get("corner2X"));
+        privateMines.getLogger().info("corner2Y:" + dataBlock.get("corner2Y"));
+        privateMines.getLogger().info("corner2Z:" + dataBlock.get("corner2Z"));
+
+        privateMines.getLogger().info("spawn X:" + dataBlock.get("spawnX"));
+        privateMines.getLogger().info("spawn Y:" + dataBlock.get("spawnY"));
+        privateMines.getLogger().info("spawn Z:" + dataBlock.get("spawnZ"));
+
+//        privateMines.getLogger().info("schematic:" + dataBlock.get("schematic"));
+//        privateMines.getLogger().info("worldEditMine:" + dataBlock.get("worldEditMine"));
         return dataBlock;
     }
 
@@ -187,11 +255,15 @@ public class MineFactory<S> {
         return null;
     }
 
+    //TODO Store the data from here into the datablock things and see if that works with loading?
+
     public WorldEditMine createMine(Player player, Location location, WorldEditMineType worldEditMineType) {
         Clipboard clipboard;
         Utils utils = new Utils(privateMines);
         World world;
+
         final var fillType = BlockTypes.DIAMOND_BLOCK;
+        final var block = location.getBlock();
 
         if (worldEditMineType == null) {
             privateMines.getLogger().warning("Failed to create mine due to the worldedit mine type being null");
@@ -277,6 +349,7 @@ public class MineFactory<S> {
 
                         worldEditMine.teleport(player);
 
+                        DataBlock dataBlock = getWorldEditDataBlock(block, player, location, worldEditMine);
 
 
 //                        try (final var session = WorldEdit.getInstance()

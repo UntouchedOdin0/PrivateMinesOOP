@@ -3,6 +3,7 @@ package me.untouchedodin0.plugin.util;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.world.block.BlockState;
 import com.sk89q.worldedit.world.block.BlockType;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.mines.Mine;
@@ -17,6 +18,8 @@ import org.codemc.worldguardwrapper.region.IWrappedRegion;
 import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -102,15 +105,15 @@ public class Utils {
         final WorldGuardWrapper w = WorldGuardWrapper.getInstance();
 
         Stream.of(
-                        w.getFlag("block-place", WrappedState.class),
-                        w.getFlag("block-break", WrappedState.class)
-                ).filter(Optional::isPresent)
+                w.getFlag("block-place", WrappedState.class),
+                w.getFlag("block-break", WrappedState.class)
+        ).filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(flag -> region.ifPresent(iWrappedRegion -> iWrappedRegion.setFlag(flag, WrappedState.ALLOW)));
 
         Stream.of(
-                        w.getFlag("mob-spawning", WrappedState.class)
-                ).filter(Optional::isPresent)
+                w.getFlag("mob-spawning", WrappedState.class)
+        ).filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(flag -> region.ifPresent(iWrappedRegion -> iWrappedRegion.setFlag(flag, WrappedState.DENY)));
     }
@@ -119,5 +122,18 @@ public class Utils {
 
     public BlockType bukkitToBlockType(Material material) {
         return BukkitAdapter.asBlockType(material);
+    }
+
+    public List<BlockType> bukkitToBlockType(List<Material> materials) {
+        List<BlockType> converted = new ArrayList<>();
+
+        for (Material material : materials) {
+            converted.add(bukkitToBlockType(material));
+        }
+        return converted;
+    }
+
+    public BlockState getBlockState(BlockType blockType) {
+        return blockType.getDefaultState();
     }
 }

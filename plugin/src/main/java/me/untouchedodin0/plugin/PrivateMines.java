@@ -25,11 +25,13 @@ SOFTWARE.
 package me.untouchedodin0.plugin;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.regions.CuboidRegion;
 import me.untouchedodin0.plugin.commands.PrivateMinesCommand;
 import me.untouchedodin0.plugin.config.MineConfig;
 import me.untouchedodin0.plugin.factory.MineFactory;
-import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
+import me.untouchedodin0.plugin.mines.WorldEditMine;
 import me.untouchedodin0.plugin.mines.WorldEditMineType;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Metrics;
@@ -51,9 +53,7 @@ import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.configmanager.annotations.ConfigValue;
 import redempt.redlib.misc.LocationUtils;
-import redempt.redlib.multiblock.MultiBlockStructure;
 import redempt.redlib.multiblock.Structure;
-import redempt.redlib.region.CuboidRegion;
 
 import java.io.File;
 import java.util.HashMap;
@@ -140,9 +140,60 @@ public class PrivateMines extends JavaPlugin {
 
         if (useWorldEdit) {
             getLogger().info("using w/e instead!");
+            blockDataManager.getAll().forEach(dataBlock -> {
+                UUID uuid = UUID.fromString(dataBlock.getString("owner"));
+                String worldName = dataBlock.getString("worldName");
+                Location location = LocationUtils.fromString(dataBlock.getString("location"));
+                Location spawnLocation = LocationUtils.fromString(dataBlock.getString("spawnLocation"));
 
+//                World world = Bukkit.getWorld(worldName);
+
+                int corner1X = Integer.parseInt(dataBlock.getString("corner1X"));
+                int corner1Y = Integer.parseInt(dataBlock.getString("corner1Y"));
+                int corner1Z = Integer.parseInt(dataBlock.getString("corner1Z"));
+
+                int corner2X = Integer.parseInt(dataBlock.getString("corner2X")); //dataBlock.getInt("corner2X");
+                int corner2Y = Integer.parseInt(dataBlock.getString("corner2Y")); //dataBlock.getInt("corner2X");
+                int corner2Z = Integer.parseInt(dataBlock.getString("corner2Z")); //dataBlock.getInt("corner2X");
+
+                int spawnX = Integer.parseInt(dataBlock.getString("spawnX")); //dataBlock.getInt("corner2X");
+                int spawnY = Integer.parseInt(dataBlock.getString("spawnY")); //dataBlock.getInt("corner2X");
+                int spawnZ = Integer.parseInt(dataBlock.getString("spawnZ")); //dataBlock.getInt("corner2X");
+
+                BlockVector3 corner1Vector = BlockVector3.at(corner1X, corner1Y, corner1Z);
+                BlockVector3 corner2Vector = BlockVector3.at(corner2X, corner2Y, corner2Z);
+
+                CuboidRegion cuboidRegion = new CuboidRegion(corner1Vector, corner2Vector);
+
+                privateMines.getLogger().info("datablock: " + dataBlock + " uuid: " + uuid);
+
+                privateMines.getLogger().info("datablock: " + dataBlock + " corner1X: " + corner1X);
+                privateMines.getLogger().info("datablock: " + dataBlock + " corner1Y: " + corner1Y);
+                privateMines.getLogger().info("datablock: " + dataBlock + " corner1Z: " + corner1Z);
+
+                privateMines.getLogger().info("datablock: " + dataBlock + " corner2X: " + corner2X);
+                privateMines.getLogger().info("datablock: " + dataBlock + " corner2Y: " + corner2Y);
+                privateMines.getLogger().info("datablock: " + dataBlock + " corner2Z: " + corner2Z);
+
+                privateMines.getLogger().info("datablock: " + dataBlock + " spawnX: " + spawnX);
+                privateMines.getLogger().info("datablock: " + dataBlock + " spawnY: " + spawnY);
+                privateMines.getLogger().info("datablock: " + dataBlock + " spawnZ: " + spawnZ);
+
+                privateMines.getLogger().info("cuboidRegion: " + cuboidRegion);
+                privateMines.getLogger().info("location: " + location);
+                privateMines.getLogger().info("spawnLocation: " + spawnLocation);
+
+                WorldEditMine worldEditMine = new WorldEditMine(this);
+                worldEditMine.setMineOwner(uuid);
+                worldEditMine.setCuboidRegion(cuboidRegion);
+                worldEditMine.setLocation(location);
+                worldEditMine.setSpawnLocation(spawnLocation);
+            });
         } else {
 
+            privateMines.getLogger().info("using redlib");
+
+            /*
             // Loops all the data blocks
             blockDataManager.getAll().forEach(dataBlock -> {
 
@@ -197,6 +248,7 @@ public class PrivateMines extends JavaPlugin {
 
                 mineStorage.addMine(playerUUID, mine);
             });
+             */
         }
 
         mineStorage.getMines().forEach(((uuid, mine) -> {

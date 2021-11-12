@@ -4,6 +4,7 @@ import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.regions.CuboidRegion;
+import com.sk89q.worldedit.world.block.BlockState;
 import com.sk89q.worldedit.world.block.BlockType;
 import com.sk89q.worldedit.world.block.BlockTypes;
 import me.untouchedodin0.plugin.PrivateMines;
@@ -25,6 +26,7 @@ public class WorldEditMine {
     private CuboidRegion cuboidRegion;
     private Location spawnLocation;
     private World world;
+    private Location location;
 
     private final BlockType fillType = BlockTypes.DIAMOND_BLOCK;
 
@@ -66,6 +68,14 @@ public class WorldEditMine {
         return spawnLocation;
     }
 
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
     public File getSchematicFile() {
         return worldEditMineType.getSchematicFile();
     }
@@ -83,7 +93,8 @@ public class WorldEditMine {
 
         final var fillType = BlockTypes.BONE_BLOCK;
         final BlockType test = BukkitAdapter.asBlockType(Material.STONE); // make thing from this
-        final BlockType type = utils.bukkitToBlockType(Material.DIAMOND_BLOCK);
+        final BlockType convertedType = utils.bukkitToBlockType(Material.BARREL);
+        BlockState convertedState = utils.getBlockState(convertedType);
 
         if (world == null) {
             privateMines.getLogger().warning("Failed to reset due to the mine being null");
@@ -95,7 +106,7 @@ public class WorldEditMine {
             // Creates edit session, sets the blocks and flushes it!
             try (final var session = WorldEdit.getInstance()
                     .newEditSession(BukkitAdapter.adapt(world))) {
-                session.setBlocks(getCuboidRegion(), fillType.getDefaultState());
+                session.setBlocks(getCuboidRegion(), convertedState);
             } catch (MaxChangedBlocksException e) {
                 e.printStackTrace();
             }
