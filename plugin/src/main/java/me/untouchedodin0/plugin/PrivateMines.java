@@ -188,6 +188,10 @@ public class PrivateMines extends JavaPlugin {
                 worldEditMine.setCuboidRegion(cuboidRegion);
                 worldEditMine.setLocation(location);
                 worldEditMine.setSpawnLocation(spawnLocation);
+
+                privateMines.getLogger().info("worldEditMines: " + mineStorage.getWorldEditMines());
+                mineStorage.addWorldEditMine(uuid, worldEditMine);
+                privateMines.getLogger().info("worldEditMines: " + mineStorage.getWorldEditMines());
             });
         } else {
 
@@ -255,6 +259,7 @@ public class PrivateMines extends JavaPlugin {
             String username = Bukkit.getOfflinePlayer(mine.getMineOwner()).getName();
             String loadingMessage = String.format("Loading %s's Mine!", username);
             getLogger().info(loadingMessage);
+            mine.reset();
         }));
 
         /*

@@ -12,6 +12,7 @@ import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.BlockDataManager;
@@ -88,19 +89,33 @@ public class PrivateMinesCommand {
     @CommandHook("reset")
     public void reset(CommandSender commandSender) {
         Player player = (Player) commandSender;
-        boolean hasMine = mineStorage.hasMine(player.getUniqueId());
-        Mine mine = mineStorage.getMine(player.getUniqueId());
-        if (mine == null) return;
-        if (!hasMine) return;
+        UUID uuid = player.getUniqueId();
 
-        MineType mineType = mine.getMineType();
-
-        if (mineType.getWeightedRandom().getWeights().isEmpty()) {
-            privateMines.getLogger().warning("There were no materials in the weighted random!");
-            return;
+        if (!mineStorage.hasWorldEditMine(uuid)) {
+            player.sendMessage("You don't own a mine!");
+        } else {
+            WorldEditMine worldEditMine = mineStorage.getWorldEditMine(uuid);
+            worldEditMine.reset();
+            worldEditMine.teleport(player);
         }
+//        boolean hasMine = mineStorage.hasMine(uuid);
+//        if (!hasMine) return;
 
-        mine.reset();
+//        Mine mine = mineStorage.getMine(uuid);
+//        WorldEditMine worldEditMine = mineStorage.getWorldEditMine(uuid);
+
+//        if (mine == null) return;
+//        if (worldEditMine == null) return;
+
+
+//        MineType mineType = mine.getMineType();
+
+//        if (mineType.getWeightedRandom().getWeights().isEmpty()) {
+//            privateMines.getLogger().warning("There were no materials in the weighted random!");
+//            return;
+//        }
+
+//        mine.reset();
 //        mine.reset(mine.getWorldEditCube());
 //        CuboidRegion cuboidRegion = mine.getCuboidRegion();
 //        cuboidRegion.forEachBlock(block -> block.setType(mineType.getWeightedRandom().roll(), false));
@@ -111,24 +126,44 @@ public class PrivateMinesCommand {
     @CommandHook("teleport")
     public void teleport(CommandSender commandSender) {
         Player player = (Player) commandSender;
-        if (!mineStorage.hasMine(player.getUniqueId())) {
+        UUID uuid = player.getUniqueId();
+
+        if (!mineStorage.hasWorldEditMine(uuid)) {
             Messages.msg("doNotOwnMine");
             return;
         }
-        Mine mine = mineStorage.getMine(player.getUniqueId());
-        mine.teleportPlayer(player);
+//        if (!mineStorage.hasMine(player.getUniqueId()) || !mineStorage.hasWorldEditMine(player.getUniqueId())) {
+//            Messages.msg("doNotOwnMine");
+//            return;
+//        }
+        WorldEditMine worldEditMine = mineStorage.getWorldEditMine(uuid);
+        worldEditMine.teleport(player);
+//        Mine mine = mineStorage.getMine(player.getUniqueId());
+//        mine.teleportPlayer(player);
         Messages.msg("teleportedToMine");
     }
 
     @CommandHook("teleportOther")
     public void teleportOther(CommandSender commandSender, Player target) {
-        if (!mineStorage.hasMine(target.getUniqueId())) {
-            Messages.msg("targetDoesNotOwnMine");
+        UUID uuid = target.getUniqueId();
+
+        if (!mineStorage.hasWorldEditMine(uuid)) {
+            Messages.msg("doNotOwnMine");
+            return;
         }
-        Mine mine = mineStorage.getMine(target.getUniqueId());
+
+//        if (!mineStorage.hasMine(target.getUniqueId()) || !mineStorage.hasWorldEditMine(target.getUniqueId())) {
+//            Messages.msg("targetDoesNotOwnMine");
+//            return;
+//        }
+
         Player player = (Player) commandSender;
-        mine.teleportPlayer(player);
+        WorldEditMine worldEditMine = mineStorage.getWorldEditMine(uuid);
+        worldEditMine.teleport(player);
         Messages.msg("teleportedToTargetsMine");
+
+//        Mine mine = mineStorage.getMine(target.getUniqueId());
+//        mine.teleportPlayer(player);
     }
 
     @CommandHook("upgrade")

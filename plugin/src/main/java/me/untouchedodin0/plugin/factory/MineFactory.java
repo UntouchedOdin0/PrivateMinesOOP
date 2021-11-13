@@ -261,6 +261,7 @@ public class MineFactory<S> {
         Clipboard clipboard;
         Utils utils = new Utils(privateMines);
         World world;
+        UUID uuid = player.getUniqueId();
 
         final var fillType = BlockTypes.DIAMOND_BLOCK;
         final var block = location.getBlock();
@@ -339,30 +340,22 @@ public class MineFactory<S> {
                         privateMines.getLogger().info("blockVectorCorner2: " + blockVectorCorner2);
                         privateMines.getLogger().info("cuboidRegion: " + cuboidRegion);
 
-                        // Set the cuboid region and mine
+                        spawnLocation.getBlock().setType(Material.AIR, false);
+                        // Set the cuboid region and mine and then reset it and then teleport the player
                         worldEditMine.setCuboidRegion(cuboidRegion);
                         worldEditMine.setSpawnLocation(spawnLocation);
                         worldEditMine.setWorld(spawnLocation.getWorld());
-
-                        // Attempts to reset the mine
+                        worldEditMine.setMaterial(Material.STONE);
                         worldEditMine.reset();
-
                         worldEditMine.teleport(player);
 
                         DataBlock dataBlock = getWorldEditDataBlock(block, player, location, worldEditMine);
 
-
-//                        try (final var session = WorldEdit.getInstance()
-//                                .newEditSession(BukkitAdapter.adapt(world))) {
-//                            session.setBlocks(cuboidRegion, fillType.getDefaultState());
-//                        }
-//                    } catch (IOException | MaxChangedBlocksException e) {
-//                        e.printStackTrace();
-//                    }
-
-                        // Tell the player it's been created ad teleport them
+                        // Tell the player it's been created and teleport them
                         player.sendMessage("Your mine has been created");
                         player.teleport(spawnLocation);
+                        mineStorage.addWorldEditMine(uuid, worldEditMine);
+                        privateMines.getLogger().info("worldEdit mines: " + mineStorage.getWorldEditMines());
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
                     }

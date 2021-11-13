@@ -27,6 +27,7 @@ public class WorldEditMine {
     private Location spawnLocation;
     private World world;
     private Location location;
+    private Material material;
 
     private final BlockType fillType = BlockTypes.DIAMOND_BLOCK;
 
@@ -76,6 +77,19 @@ public class WorldEditMine {
         return location;
     }
 
+    public void setMaterial(Material material) {
+        this.material = material;
+    }
+
+    public Material getMaterial() {
+        return material;
+    }
+
+    public BlockState getFillState() {
+        final BlockType blockType = utils.bukkitToBlockType(getMaterial());
+        return utils.getBlockState(blockType);
+    }
+
     public File getSchematicFile() {
         return worldEditMineType.getSchematicFile();
     }
@@ -91,10 +105,7 @@ public class WorldEditMine {
     // Resets the mine
     public void reset() {
 
-        final var fillType = BlockTypes.BONE_BLOCK;
-        final BlockType test = BukkitAdapter.asBlockType(Material.STONE); // make thing from this
-        final BlockType convertedType = utils.bukkitToBlockType(Material.BARREL);
-        BlockState convertedState = utils.getBlockState(convertedType);
+        final var fillType = utils.bukkitToBlockType(getMaterial());
 
         if (world == null) {
             privateMines.getLogger().warning("Failed to reset due to the mine being null");
@@ -106,7 +117,7 @@ public class WorldEditMine {
             // Creates edit session, sets the blocks and flushes it!
             try (final var session = WorldEdit.getInstance()
                     .newEditSession(BukkitAdapter.adapt(world))) {
-                session.setBlocks(getCuboidRegion(), convertedState);
+                session.setBlocks(getCuboidRegion(), getFillState());
             } catch (MaxChangedBlocksException e) {
                 e.printStackTrace();
             }
