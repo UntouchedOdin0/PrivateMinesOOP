@@ -77,13 +77,19 @@ public class PrivateMinesCommand {
 
     @CommandHook("delete")
     public void delete(CommandSender commandSender, Player target) {
-        if (!mineStorage.hasMine(target.getUniqueId())) {
+        if (!mineStorage.hasWorldEditMine(target.getUniqueId())) {
+            commandSender.sendMessage("no target mine...");
             Messages.msg("targetDoesNotOwnMine");
             return;
         }
-        commandSender.sendMessage(ChatColor.YELLOW + "Deleting " + target.getName() + "'s Private Mine");
-        Mine mine = mineStorage.getMine(target.getUniqueId());
-        mine.delete();
+        WorldEditMine worldEditMine = mineStorage.getWorldEditMine(target.getUniqueId());
+
+        if (worldEditMine != null) {
+            commandSender.sendMessage(ChatColor.YELLOW + "Deleting " + target.getName() + "'s Private Mine");
+            worldEditMine.delete();
+        } else {
+            commandSender.sendMessage(ChatColor.RED + "Player didn't have a mine!");
+        }
     }
 
     @CommandHook("reset")
@@ -92,6 +98,7 @@ public class PrivateMinesCommand {
         UUID uuid = player.getUniqueId();
 
         if (!mineStorage.hasWorldEditMine(uuid)) {
+            Messages.msg("doNotOwnMine");
             player.sendMessage("You don't own a mine!");
         } else {
             WorldEditMine worldEditMine = mineStorage.getWorldEditMine(uuid);

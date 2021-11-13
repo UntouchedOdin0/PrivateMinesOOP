@@ -343,6 +343,7 @@ public class MineFactory<S> {
                         spawnLocation.getBlock().setType(Material.AIR, false);
                         // Set the cuboid region and mine and then reset it and then teleport the player
                         worldEditMine.setCuboidRegion(cuboidRegion);
+                        worldEditMine.setRegion(region);
                         worldEditMine.setSpawnLocation(spawnLocation);
                         worldEditMine.setWorld(spawnLocation.getWorld());
                         worldEditMine.setMaterial(Material.STONE);
