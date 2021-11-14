@@ -12,9 +12,12 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.codemc.worldguardwrapper.WorldGuardWrapper;
 import org.codemc.worldguardwrapper.flag.WrappedState;
 import org.codemc.worldguardwrapper.region.IWrappedRegion;
+import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
@@ -135,5 +138,19 @@ public class Utils {
 
     public BlockState getBlockState(BlockType blockType) {
         return blockType.getDefaultState();
+    }
+
+    public void sendMessage(CommandSender commandSender, String message) {
+        String toSend = Messages.msg(message);
+        if (commandSender != null && toSend != null) {
+            commandSender.sendMessage(toSend);
+        }
+    }
+
+    public void sendMessage(Player player, String message) {
+        String toSend = Messages.msg(message);
+        if (player != null && toSend != null) {
+            player.sendMessage(toSend);
+        }
     }
 }

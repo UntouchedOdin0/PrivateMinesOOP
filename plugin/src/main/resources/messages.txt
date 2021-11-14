@@ -1,5 +1,6 @@
 recievedMine: &aYou've recieved a private mine!
 deletedMine: &aYour mine has been deleted
+deletedPlayersMine: &aYou have deleted the private mine
 teleportedToMine: &aYou've been teleported to your mine!
 teleportedToTargetsMine: &aYou've been teleported to the target's mine!
 mineReset: &aYour mine has been reset!

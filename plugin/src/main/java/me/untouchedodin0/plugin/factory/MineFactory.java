@@ -47,6 +47,7 @@ import org.bukkit.entity.Player;
 import org.codemc.worldguardwrapper.WorldGuardWrapper;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.blockdata.DataBlock;
+import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.misc.LocationUtils;
 
 import java.io.File;
@@ -288,6 +289,8 @@ public class MineFactory {
         World world;
         UUID uuid = player.getUniqueId();
         List<Location> corners = new ArrayList<>();
+        String recievedMine = "recievedMine";
+        String toSend = Messages.msg(recievedMine);
 
         final var fillType = BlockTypes.DIAMOND_BLOCK;
         final var block = location.getBlock();
@@ -385,7 +388,7 @@ public class MineFactory {
 
                         worldEditMine.setDataBlock(dataBlock);
                         // Tell the player it's been created and teleport them
-                        player.sendMessage("Your mine has been created");
+                        player.sendMessage(toSend);
                         player.teleport(spawnLocation);
                         mineStorage.addWorldEditMine(uuid, worldEditMine);
                         privateMines.getLogger().info("worldEdit mines: " + mineStorage.getWorldEditMines());
