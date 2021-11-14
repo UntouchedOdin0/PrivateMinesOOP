@@ -8,8 +8,8 @@ import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.world.block.BlockState;
 import com.sk89q.worldedit.world.block.BlockType;
-import com.sk89q.worldedit.world.block.BlockTypes;
 import me.untouchedodin0.plugin.PrivateMines;
+import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -24,9 +24,6 @@ public class WorldEditMine {
 
     final Utils utils;
     private final PrivateMines privateMines;
-    private final BlockType fillType = BlockTypes.DIAMOND_BLOCK;
-    // sick this works
-    private final BlockType test = BukkitAdapter.asBlockType(Material.AIR);
     private WorldEditMineType worldEditMineType;
     private UUID mineOwner;
     private CuboidRegion cuboidRegion;
@@ -38,10 +35,12 @@ public class WorldEditMine {
     private Location location;
     private Material material;
     private DataBlock dataBlock;
+    private MineStorage mineStorage;
 
     public WorldEditMine(PrivateMines privateMines) {
         this.privateMines = privateMines;
         this.utils = new Utils(privateMines);
+        this.mineStorage = privateMines.getMineStorage();
     }
 
     public UUID getMineOwner() {
@@ -170,17 +169,29 @@ public class WorldEditMine {
             privateMines.getLogger().warning("Failed to delete the mine due to the world being null");
         }
 
-        final var cuboidRegion = getCuboidRegion();
+        int minX = getDataBlock().getInt("minX");
+        int minY = getDataBlock().getInt("minY");
+        int minZ = getDataBlock().getInt("minZ");
+
+        int maxX = getDataBlock().getInt("maxX");
+        int maXY = getDataBlock().getInt("maxY");
+        int maxZ = getDataBlock().getInt("maxZ");
+
+        BlockVector3 min = BlockVector3.at(minX, minY, minZ);
+        BlockVector3 max = BlockVector3.at(maxX, maXY, maxZ);
+
+        final var cuboidRegion = new CuboidRegion(min, max);
+
         final var air = utils.bukkitToBlockType(Material.AIR);
         final var dataBlock = getDataBlock();
-        final var cuboid = new CuboidRegion(getMin(), getMax());
+        final var cuboid = new CuboidRegion(min, max);
+
 
         // Creates edit session, sets the blocks and flushes it!
         try (final var session = WorldEdit.getInstance()
                 .newEditSession(BukkitAdapter.adapt(world))) {
-            session.setBlocks(getRegion(), utils.getBlockState(air));
-            session.setBlocks(cuboidRegion, utils.getBlockState(air));
             session.setBlocks(cuboid, utils.getBlockState(air));
+//            session.setBlocks(region, utils.getBlockState(air));
         } catch (MaxChangedBlocksException exception) {
             exception.printStackTrace();
         }

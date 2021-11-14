@@ -151,13 +151,13 @@ public class PrivateMines extends JavaPlugin {
                 int corner1Y = Integer.parseInt(dataBlock.getString("corner1Y"));
                 int corner1Z = Integer.parseInt(dataBlock.getString("corner1Z"));
 
-                int corner2X = Integer.parseInt(dataBlock.getString("corner2X")); //dataBlock.getInt("corner2X");
-                int corner2Y = Integer.parseInt(dataBlock.getString("corner2Y")); //dataBlock.getInt("corner2X");
-                int corner2Z = Integer.parseInt(dataBlock.getString("corner2Z")); //dataBlock.getInt("corner2X");
+                int corner2X = Integer.parseInt(dataBlock.getString("corner2X"));
+                int corner2Y = Integer.parseInt(dataBlock.getString("corner2Y"));
+                int corner2Z = Integer.parseInt(dataBlock.getString("corner2Z"));
 
-                int spawnX = Integer.parseInt(dataBlock.getString("spawnX")); //dataBlock.getInt("corner2X");
-                int spawnY = Integer.parseInt(dataBlock.getString("spawnY")); //dataBlock.getInt("corner2X");
-                int spawnZ = Integer.parseInt(dataBlock.getString("spawnZ")); //dataBlock.getInt("corner2X");
+                int spawnX = Integer.parseInt(dataBlock.getString("spawnX"));
+                int spawnY = Integer.parseInt(dataBlock.getString("spawnY"));
+                int spawnZ = Integer.parseInt(dataBlock.getString("spawnZ"));
 
                 BlockVector3 corner1Vector = BlockVector3.at(corner1X, corner1Y, corner1Z);
                 BlockVector3 corner2Vector = BlockVector3.at(corner2X, corner2Y, corner2Z);
@@ -178,6 +178,18 @@ public class PrivateMines extends JavaPlugin {
                 privateMines.getLogger().info("datablock: " + dataBlock + " spawnY: " + spawnY);
                 privateMines.getLogger().info("datablock: " + dataBlock + " spawnZ: " + spawnZ);
 
+                privateMines.getLogger().info("datablock: " + dataBlock + " spawnZ: " + spawnZ);
+                privateMines.getLogger().info("datablock: " + dataBlock + " spawnZ: " + spawnZ);
+                privateMines.getLogger().info("datablock: " + dataBlock + " spawnZ: " + spawnZ);
+
+                privateMines.getLogger().info("datablock: " + dataBlock + " minX: " + spawnZ);
+                privateMines.getLogger().info("datablock: " + dataBlock + " minY: " + spawnZ);
+                privateMines.getLogger().info("datablock: " + dataBlock + " minZ: " + spawnZ);
+
+                privateMines.getLogger().info("datablock: " + dataBlock + " maxX: " + spawnZ);
+                privateMines.getLogger().info("datablock: " + dataBlock + " maxY: " + spawnZ);
+                privateMines.getLogger().info("datablock: " + dataBlock + " maxZ: " + spawnZ);
+
                 privateMines.getLogger().info("cuboidRegion: " + cuboidRegion);
                 privateMines.getLogger().info("location: " + location);
                 privateMines.getLogger().info("spawnLocation: " + spawnLocation);
@@ -190,6 +202,7 @@ public class PrivateMines extends JavaPlugin {
                 worldEditMine.setMaterial(Material.STONE);
                 worldEditMine.setWorld(minesWorld);
                 worldEditMine.setWorldEditMineType(worldEditMineType);
+                worldEditMine.setDataBlock(dataBlock);
 
                 privateMines.getLogger().info("worldEditMines: " + mineStorage.getWorldEditMines());
                 mineStorage.addWorldEditMine(uuid, worldEditMine);

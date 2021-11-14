@@ -12,7 +12,6 @@ import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.BlockDataManager;
@@ -77,20 +76,33 @@ public class PrivateMinesCommand {
 
     @CommandHook("delete")
     public void delete(CommandSender commandSender, Player target) {
-        if (!mineStorage.hasWorldEditMine(target.getUniqueId())) {
-            commandSender.sendMessage("no target mine...");
-            Messages.msg("targetDoesNotOwnMine");
-            return;
-        }
-        WorldEditMine worldEditMine = mineStorage.getWorldEditMine(target.getUniqueId());
+        Player player = (Player) commandSender;
+        UUID uuid = target.getUniqueId();
 
-        if (worldEditMine != null) {
-            commandSender.sendMessage(ChatColor.YELLOW + "Deleting " + target.getName() + "'s Private Mine");
-            worldEditMine.delete();
-            mineStorage.removeWorldEditMine(target.getUniqueId());
+        if (!privateMines.getMineStorage().hasWorldEditMine(uuid)) {
+            commandSender.sendMessage("no target mine...");
         } else {
-            commandSender.sendMessage(ChatColor.RED + "Player didn't have a mine!");
+            WorldEditMine worldEditMine = privateMines.getMineStorage().getWorldEditMine(uuid);
+            worldEditMine.delete();
+            privateMines.getMineStorage().removeWorldEditMine(uuid);
+            player.sendMessage("Deleted player's mine");
+            target.sendMessage("Your mine has been deleted.");
         }
+//
+//        if (!mineStorage.hasWorldEditMine(target.getUniqueId())) {
+//            commandSender.sendMessage("no target mine...");
+//            Messages.msg("targetDoesNotOwnMine");
+//            return;
+//        }
+//        WorldEditMine worldEditMine = mineStorage.getWorldEditMine(target.getUniqueId());
+//
+//        if (worldEditMine != null) {
+//            commandSender.sendMessage(ChatColor.YELLOW + "Deleting " + target.getName() + "'s Private Mine");
+//            worldEditMine.delete();
+//            mineStorage.removeWorldEditMine(target.getUniqueId());
+//        } else {
+//            commandSender.sendMessage(ChatColor.RED + "Player didn't have a mine!");
+//        }
     }
 
     @CommandHook("reset")
@@ -106,6 +118,7 @@ public class PrivateMinesCommand {
             worldEditMine.reset();
             worldEditMine.teleport(player);
         }
+
 //        boolean hasMine = mineStorage.hasMine(uuid);
 //        if (!hasMine) return;
 

@@ -165,8 +165,8 @@ public class MineFactory {
         int corner2Y = worldEditMine.getCuboidRegion().getMaximumPoint().getBlockY();
         int corner2Z = worldEditMine.getCuboidRegion().getMaximumPoint().getBlockZ();
 
-        BlockVector3 minimumPoint = worldEditMine.getCuboidRegion().getMinimumPoint();
-        BlockVector3 maximumPoint = worldEditMine.getCuboidRegion().getMaximumPoint();
+        BlockVector3 minimumPoint = worldEditMine.getRegion().getMinimumPoint();
+        BlockVector3 maximumPoint = worldEditMine.getRegion().getMaximumPoint();
 
         int spawnX = location.getBlockX();
         int spawnY = location.getBlockY();
