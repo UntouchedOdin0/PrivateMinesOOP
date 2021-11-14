@@ -3,6 +3,7 @@ package me.untouchedodin0.plugin.mines;
 import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.world.block.BlockState;
@@ -30,6 +31,8 @@ public class WorldEditMine {
     private UUID mineOwner;
     private CuboidRegion cuboidRegion;
     private Region region;
+    private BlockVector3 min;
+    private BlockVector3 max;
     private Location spawnLocation;
     private World world;
     private Location location;
@@ -71,6 +74,22 @@ public class WorldEditMine {
 
     public void setRegion(Region region) {
         this.region = region;
+    }
+
+    public void setMin(BlockVector3 min) {
+        this.min = min;
+    }
+
+    public BlockVector3 getMin() {
+        return min;
+    }
+
+    public void setMax(BlockVector3 max) {
+        this.max = max;
+    }
+
+    public BlockVector3 getMax() {
+        return max;
     }
 
     public Location getSpawnLocation() {
@@ -155,12 +174,14 @@ public class WorldEditMine {
         final var cuboidRegion = getCuboidRegion();
         final var air = utils.bukkitToBlockType(Material.AIR);
         final var dataBlock = getDataBlock();
+        CuboidRegion cuboid = new CuboidRegion(getMin(), getMax());
 
         // Creates edit session, sets the blocks and flushes it!
         try (final var session = WorldEdit.getInstance()
                 .newEditSession(BukkitAdapter.adapt(world))) {
-            session.setBlocks(region, utils.getBlockState(air));
+            session.setBlocks(getRegion(), utils.getBlockState(air));
             session.setBlocks(cuboidRegion, utils.getBlockState(air));
+            session.setBlocks(cuboid, utils.getBlockState(air));
         } catch (MaxChangedBlocksException exception) {
             exception.printStackTrace();
         }
@@ -169,7 +190,6 @@ public class WorldEditMine {
         this.cuboidRegion = null;
         this.region = null;
         dataBlock.remove();
-        privateMines.getMineStorage().removeWorldEditMine(getMineOwner());
     }
 }
 

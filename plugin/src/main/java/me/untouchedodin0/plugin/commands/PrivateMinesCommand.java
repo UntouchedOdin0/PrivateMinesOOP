@@ -87,6 +87,7 @@ public class PrivateMinesCommand {
         if (worldEditMine != null) {
             commandSender.sendMessage(ChatColor.YELLOW + "Deleting " + target.getName() + "'s Private Mine");
             worldEditMine.delete();
+            mineStorage.removeWorldEditMine(target.getUniqueId());
         } else {
             commandSender.sendMessage(ChatColor.RED + "Player didn't have a mine!");
         }

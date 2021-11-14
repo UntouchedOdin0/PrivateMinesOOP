@@ -24,7 +24,6 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
@@ -38,7 +37,6 @@ import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Metrics;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.util.placeholderapi.PrivateMinesExpansion;
-import me.untouchedodin0.plugin.util.worldedit.MineFactoryCompat;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.plugin.world.utils.MineLoopUtil;
 import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
@@ -55,7 +53,6 @@ import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.configmanager.annotations.ConfigValue;
 import redempt.redlib.misc.LocationUtils;
-import redempt.redlib.multiblock.Structure;
 
 import java.io.File;
 import java.util.HashMap;
@@ -72,12 +69,10 @@ public class PrivateMines extends JavaPlugin {
     private final TreeMap<String, WorldEditMineType> worldEditMineTypeTreeMap = new TreeMap<>();
 
     private MineFactory mineFactory;
-    private MineFactoryCompat mineFactoryCompat;
     private MineWorldManager mineWorldManager;
     private MineStorage mineStorage;
     private BlockDataManager blockDataManager;
     private Utils utils;
-    private Structure structure;
     private WorldEditUtilities worldEditUtils;
     private boolean isWorldEditEnabled = false;
     private World minesWorld;
@@ -147,13 +142,10 @@ public class PrivateMines extends JavaPlugin {
             getLogger().info("using w/e instead!");
             blockDataManager.getAll().forEach(dataBlock -> {
                 UUID uuid = UUID.fromString(dataBlock.getString("owner"));
-                String worldName = dataBlock.getString("worldName");
                 Location location = LocationUtils.fromString(dataBlock.getString("location"));
                 Location spawnLocation = LocationUtils.fromString(dataBlock.getString("spawnLocation"));
                 String worldEditMineTypeName = dataBlock.getString("type");
                 WorldEditMineType worldEditMineType = worldEditMineTypeTreeMap.get(worldEditMineTypeName);
-
-//                World world = Bukkit.getWorld(worldName);
 
                 int corner1X = Integer.parseInt(dataBlock.getString("corner1X"));
                 int corner1Y = Integer.parseInt(dataBlock.getString("corner1Y"));

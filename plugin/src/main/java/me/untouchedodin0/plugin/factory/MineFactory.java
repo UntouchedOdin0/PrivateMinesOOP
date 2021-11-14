@@ -57,7 +57,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class MineFactory<S> {
+public class MineFactory {
 
     private final boolean debugMode;
     PrivateMines privateMines;
@@ -67,7 +67,6 @@ public class MineFactory<S> {
     MineType defaultMineType;
     BlockDataManager blockDataManager;
     Location spawnLocation;
-    List<Location> corners = new ArrayList<>();
 
     public MineFactory(PrivateMines privateMines, BlockDataManager blockDataManager) {
         this.privateMines = privateMines;
@@ -166,6 +165,9 @@ public class MineFactory<S> {
         int corner2Y = worldEditMine.getCuboidRegion().getMaximumPoint().getBlockY();
         int corner2Z = worldEditMine.getCuboidRegion().getMaximumPoint().getBlockZ();
 
+        BlockVector3 minimumPoint = worldEditMine.getCuboidRegion().getMinimumPoint();
+        BlockVector3 maximumPoint = worldEditMine.getCuboidRegion().getMaximumPoint();
+
         int spawnX = location.getBlockX();
         int spawnY = location.getBlockY();
         int spawnZ = location.getBlockZ();
@@ -183,6 +185,14 @@ public class MineFactory<S> {
         dataBlock.set("spawnX", Integer.toString(spawnX));
         dataBlock.set("spawnY", Integer.toString(spawnY));
         dataBlock.set("spawnZ", Integer.toString(spawnZ));
+
+        dataBlock.set("minX", minimumPoint.getBlockX());
+        dataBlock.set("minY", minimumPoint.getBlockY());
+        dataBlock.set("minZ", minimumPoint.getBlockZ());
+
+        dataBlock.set("maxX", maximumPoint.getBlockX());
+        dataBlock.set("maxY", maximumPoint.getBlockY());
+        dataBlock.set("maxZ", maximumPoint.getBlockZ());
 
         dataBlock.set("world", location.getWorld());
         dataBlock.set("worldName", worldName);
@@ -207,6 +217,14 @@ public class MineFactory<S> {
         privateMines.getLogger().info("spawn X:" + dataBlock.get("spawnX"));
         privateMines.getLogger().info("spawn Y:" + dataBlock.get("spawnY"));
         privateMines.getLogger().info("spawn Z:" + dataBlock.get("spawnZ"));
+
+        privateMines.getLogger().info("minX:" + dataBlock.get("minX"));
+        privateMines.getLogger().info("minY:" + dataBlock.get("minY"));
+        privateMines.getLogger().info("minZ:" + dataBlock.get("minZ"));
+
+        privateMines.getLogger().info("maxX:" + dataBlock.get("maxX"));
+        privateMines.getLogger().info("maxY:" + dataBlock.get("maxY"));
+        privateMines.getLogger().info("maxZ:" + dataBlock.get("maxZ"));
 
         privateMines.getLogger().info("material: " + material);
 
@@ -269,6 +287,7 @@ public class MineFactory<S> {
         Utils utils = new Utils(privateMines);
         World world;
         UUID uuid = player.getUniqueId();
+        List<Location> corners = new ArrayList<>();
 
         final var fillType = BlockTypes.DIAMOND_BLOCK;
         final var block = location.getBlock();
@@ -353,6 +372,8 @@ public class MineFactory<S> {
 
                         worldEditMine.setCuboidRegion(cuboidRegion);
                         worldEditMine.setRegion(region);
+                        worldEditMine.setMin(region.getMinimumPoint());
+                        worldEditMine.setMax(region.getMaximumPoint());
                         worldEditMine.setSpawnLocation(spawnLocation);
                         worldEditMine.setWorld(spawnLocation.getWorld());
                         worldEditMine.setMaterial(worldEditMineType.getMaterial());
