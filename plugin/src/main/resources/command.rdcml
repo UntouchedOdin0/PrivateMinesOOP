@@ -6,7 +6,7 @@ privatemine,privatemines,pmine {
         permission privatemines.give
     }
 
-    delete player:target {
+    delete,del player:target {
         hook delete
         help /pmine delete <name> - Deletes a players private mine
         permission privatemines.delete
@@ -18,13 +18,13 @@ privatemine,privatemines,pmine {
         permission privatemines.reset
     }
 
-    teleport {
+    teleport,tp {
         hook teleport
         help /pmine teleport - Teleport to your own mine
         permission privatemines.teleport
     }
 
-    teleport player:target {
+    teleport,tp player:target {
         hook teleportOther
         help /pmine teleport <name> - Teleport to another users mine
         permission privatemines.teleport.other
