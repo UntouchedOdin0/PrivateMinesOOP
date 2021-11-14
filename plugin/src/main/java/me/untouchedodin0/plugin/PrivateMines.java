@@ -175,6 +175,7 @@ public class PrivateMines extends JavaPlugin {
         } else {
 
             privateMines.getLogger().info("using redlib");
+            //todo re add this back
 
             /*
             // Loops all the data blocks
