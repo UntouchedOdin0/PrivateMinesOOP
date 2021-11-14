@@ -152,6 +152,9 @@ public class MineFactory<S> {
         UUID ownerUUID = player.getUniqueId();
         String ownerUUIDString = ownerUUID.toString();
         String worldName = Objects.requireNonNull(location.getWorld()).getName();
+        WorldEditMineType worldEditMineType = worldEditMine.getWorldEditMineType();
+
+        Material material = worldEditMine.getMaterial();
 
         DataBlock dataBlock = blockDataManager.getDataBlock(block);
 
@@ -168,6 +171,7 @@ public class MineFactory<S> {
         int spawnZ = location.getBlockZ();
 
         dataBlock.set("owner", ownerUUIDString);
+        dataBlock.set("type", worldEditMineType.getName());
         dataBlock.set("corner1X", Integer.toString(corner1X));
         dataBlock.set("corner1Y", Integer.toString(corner1Y));
         dataBlock.set("corner1Z", Integer.toString(corner1Z));
@@ -184,6 +188,7 @@ public class MineFactory<S> {
         dataBlock.set("worldName", worldName);
         dataBlock.set("location", LocationUtils.toString(location));
         dataBlock.set("spawnLocation", LocationUtils.toString(spawnLocation));
+
 //        dataBlock.set("schematic", worldEditMine.getSchematicFile());
 //        dataBlock.set("worldEditMine", worldEditMine);
 
@@ -202,6 +207,8 @@ public class MineFactory<S> {
         privateMines.getLogger().info("spawn X:" + dataBlock.get("spawnX"));
         privateMines.getLogger().info("spawn Y:" + dataBlock.get("spawnY"));
         privateMines.getLogger().info("spawn Z:" + dataBlock.get("spawnZ"));
+
+        privateMines.getLogger().info("material: " + material);
 
 //        privateMines.getLogger().info("schematic:" + dataBlock.get("schematic"));
 //        privateMines.getLogger().info("worldEditMine:" + dataBlock.get("worldEditMine"));
@@ -341,17 +348,21 @@ public class MineFactory<S> {
                         privateMines.getLogger().info("cuboidRegion: " + cuboidRegion);
 
                         spawnLocation.getBlock().setType(Material.AIR, false);
+
                         // Set the cuboid region and mine and then reset it and then teleport the player
+
                         worldEditMine.setCuboidRegion(cuboidRegion);
                         worldEditMine.setRegion(region);
                         worldEditMine.setSpawnLocation(spawnLocation);
                         worldEditMine.setWorld(spawnLocation.getWorld());
-                        worldEditMine.setMaterial(Material.STONE);
+                        worldEditMine.setMaterial(worldEditMineType.getMaterial());
+                        worldEditMine.setWorldEditMineType(worldEditMineType);
                         worldEditMine.reset();
                         worldEditMine.teleport(player);
 
                         DataBlock dataBlock = getWorldEditDataBlock(block, player, location, worldEditMine);
 
+                        worldEditMine.setDataBlock(dataBlock);
                         // Tell the player it's been created and teleport them
                         player.sendMessage("Your mine has been created");
                         player.teleport(spawnLocation);

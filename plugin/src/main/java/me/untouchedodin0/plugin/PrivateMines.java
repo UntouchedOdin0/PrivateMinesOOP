@@ -24,6 +24,7 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
@@ -44,6 +45,7 @@ import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import redempt.redlib.blockdata.BlockDataManager;
@@ -78,6 +80,7 @@ public class PrivateMines extends JavaPlugin {
     private Structure structure;
     private WorldEditUtilities worldEditUtils;
     private boolean isWorldEditEnabled = false;
+    private World minesWorld;
 
     @ConfigValue
     private String spawnPoint;
@@ -131,6 +134,8 @@ public class PrivateMines extends JavaPlugin {
         utils = new Utils(this);
         Plugin worldEditPlugin = Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
 
+        this.minesWorld = mineWorldManager.getMinesWorld();
+
         int pluginId = 11413;
 
         int loaded = mineTypes.size();
@@ -145,6 +150,8 @@ public class PrivateMines extends JavaPlugin {
                 String worldName = dataBlock.getString("worldName");
                 Location location = LocationUtils.fromString(dataBlock.getString("location"));
                 Location spawnLocation = LocationUtils.fromString(dataBlock.getString("spawnLocation"));
+                String worldEditMineTypeName = dataBlock.getString("type");
+                WorldEditMineType worldEditMineType = worldEditMineTypeTreeMap.get(worldEditMineTypeName);
 
 //                World world = Bukkit.getWorld(worldName);
 
@@ -188,6 +195,9 @@ public class PrivateMines extends JavaPlugin {
                 worldEditMine.setCuboidRegion(cuboidRegion);
                 worldEditMine.setLocation(location);
                 worldEditMine.setSpawnLocation(spawnLocation);
+                worldEditMine.setMaterial(Material.STONE);
+                worldEditMine.setWorld(minesWorld);
+                worldEditMine.setWorldEditMineType(worldEditMineType);
 
                 privateMines.getLogger().info("worldEditMines: " + mineStorage.getWorldEditMines());
                 mineStorage.addWorldEditMine(uuid, worldEditMine);

@@ -69,6 +69,9 @@ public class MineConfig {
     private double resetPercentage = 50.00; // reads the reset percentage from the section
 
     @ConfigValue
+    private Material material = Material.STONE;
+
+    @ConfigValue
     private Map<Material, Double> materials =
             ConfigManager.map(Material.class, Double.class); // reads the materials from the section
 
@@ -114,6 +117,7 @@ public class MineConfig {
             worldEditMineType.setName(getName());
             worldEditMineType.setMineTier(getPriority());
             worldEditMineType.setResetTime(getResetTime());
+            worldEditMineType.setMaterial(getMaterial());
             privateMines.addType(getName(), worldEditMineType);
 
             privateMines.getLogger().info("path: " + path);
@@ -190,6 +194,12 @@ public class MineConfig {
 
     public Map<Material, Double> getMaterials() {
         return materials;
+    }
+
+    // A getter for getting the material from the section
+
+    public Material getMaterial() {
+        return material;
     }
 
     // A getter for getting the multi block structure

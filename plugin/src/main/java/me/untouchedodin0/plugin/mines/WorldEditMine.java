@@ -14,6 +14,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import redempt.redlib.blockdata.DataBlock;
 
 import java.io.File;
 import java.util.UUID;
@@ -33,6 +34,7 @@ public class WorldEditMine {
     private World world;
     private Location location;
     private Material material;
+    private DataBlock dataBlock;
 
     public WorldEditMine(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -49,6 +51,10 @@ public class WorldEditMine {
 
     public void setWorldEditMineType(WorldEditMineType worldEditMineType) {
         this.worldEditMineType = worldEditMineType;
+    }
+
+    public WorldEditMineType getWorldEditMineType() {
+        return worldEditMineType;
     }
 
     public CuboidRegion getCuboidRegion() {
@@ -89,6 +95,14 @@ public class WorldEditMine {
 
     public void setMaterial(Material material) {
         this.material = material;
+    }
+
+    public DataBlock getDataBlock() {
+        return dataBlock;
+    }
+
+    public void setDataBlock(DataBlock dataBlock) {
+        this.dataBlock = dataBlock;
     }
 
     public BlockState getFillState() {
@@ -132,6 +146,7 @@ public class WorldEditMine {
 
     public void delete() {
 
+        this.world = privateMines.getMineWorldManager().getMinesWorld();
         if (world == null) {
             privateMines.getLogger().warning("Failed to delete the mine due to the world being null");
         }
@@ -139,6 +154,7 @@ public class WorldEditMine {
         final var region = getRegion();
         final var cuboidRegion = getCuboidRegion();
         final var air = utils.bukkitToBlockType(Material.AIR);
+        final var dataBlock = getDataBlock();
 
         // Creates edit session, sets the blocks and flushes it!
         try (final var session = WorldEdit.getInstance()
@@ -148,8 +164,12 @@ public class WorldEditMine {
         } catch (MaxChangedBlocksException exception) {
             exception.printStackTrace();
         }
+        setCuboidRegion(null);
+        setRegion(null);
         this.cuboidRegion = null;
         this.region = null;
+        dataBlock.remove();
+        privateMines.getMineStorage().removeWorldEditMine(getMineOwner());
     }
 }
 

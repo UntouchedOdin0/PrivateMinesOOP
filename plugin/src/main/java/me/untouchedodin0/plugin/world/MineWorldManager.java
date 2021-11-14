@@ -39,9 +39,10 @@ public class MineWorldManager {
     private final int borderDistance;
     private int distance = 0;
     private Direction direction;
+    private World minesWorld;
 
     public MineWorldManager() {
-        World minesWorld = Bukkit.createWorld(
+        minesWorld = Bukkit.createWorld(
                 new WorldCreator("privatemines")
                         .type(WorldType.FLAT)
                         .generator(new EmptyWorldGenerator()));
@@ -61,5 +62,9 @@ public class MineWorldManager {
         direction = direction.next();
         if (direction == NORTH) distance++;
         return location;
+    }
+
+    public World getMinesWorld() {
+        return minesWorld;
     }
 }
