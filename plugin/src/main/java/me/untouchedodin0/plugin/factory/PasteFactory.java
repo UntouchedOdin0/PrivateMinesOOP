@@ -11,7 +11,6 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import me.untouchedodin0.plugin.PrivateMines;
-import me.untouchedodin0.plugin.util.worldedit.WorldEditRegion;
 import org.bukkit.Location;
 import org.bukkit.World;
 
