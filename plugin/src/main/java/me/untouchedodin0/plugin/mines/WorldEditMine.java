@@ -170,11 +170,10 @@ public class WorldEditMine {
             privateMines.getLogger().warning("Failed to delete the mine due to the world being null");
         }
 
-        final var region = getRegion();
         final var cuboidRegion = getCuboidRegion();
         final var air = utils.bukkitToBlockType(Material.AIR);
         final var dataBlock = getDataBlock();
-        CuboidRegion cuboid = new CuboidRegion(getMin(), getMax());
+        final var cuboid = new CuboidRegion(getMin(), getMax());
 
         // Creates edit session, sets the blocks and flushes it!
         try (final var session = WorldEdit.getInstance()
