@@ -155,44 +155,10 @@ public class PrivateMines extends JavaPlugin {
                 int corner2Y = Integer.parseInt(dataBlock.getString("corner2Y"));
                 int corner2Z = Integer.parseInt(dataBlock.getString("corner2Z"));
 
-                int spawnX = Integer.parseInt(dataBlock.getString("spawnX"));
-                int spawnY = Integer.parseInt(dataBlock.getString("spawnY"));
-                int spawnZ = Integer.parseInt(dataBlock.getString("spawnZ"));
-
                 BlockVector3 corner1Vector = BlockVector3.at(corner1X, corner1Y, corner1Z);
                 BlockVector3 corner2Vector = BlockVector3.at(corner2X, corner2Y, corner2Z);
 
                 CuboidRegion cuboidRegion = new CuboidRegion(corner1Vector, corner2Vector);
-
-                privateMines.getLogger().info("datablock: " + dataBlock + " uuid: " + uuid);
-
-                privateMines.getLogger().info("datablock: " + dataBlock + " corner1X: " + corner1X);
-                privateMines.getLogger().info("datablock: " + dataBlock + " corner1Y: " + corner1Y);
-                privateMines.getLogger().info("datablock: " + dataBlock + " corner1Z: " + corner1Z);
-
-                privateMines.getLogger().info("datablock: " + dataBlock + " corner2X: " + corner2X);
-                privateMines.getLogger().info("datablock: " + dataBlock + " corner2Y: " + corner2Y);
-                privateMines.getLogger().info("datablock: " + dataBlock + " corner2Z: " + corner2Z);
-
-                privateMines.getLogger().info("datablock: " + dataBlock + " spawnX: " + spawnX);
-                privateMines.getLogger().info("datablock: " + dataBlock + " spawnY: " + spawnY);
-                privateMines.getLogger().info("datablock: " + dataBlock + " spawnZ: " + spawnZ);
-
-                privateMines.getLogger().info("datablock: " + dataBlock + " spawnZ: " + spawnZ);
-                privateMines.getLogger().info("datablock: " + dataBlock + " spawnZ: " + spawnZ);
-                privateMines.getLogger().info("datablock: " + dataBlock + " spawnZ: " + spawnZ);
-
-                privateMines.getLogger().info("datablock: " + dataBlock + " minX: " + spawnZ);
-                privateMines.getLogger().info("datablock: " + dataBlock + " minY: " + spawnZ);
-                privateMines.getLogger().info("datablock: " + dataBlock + " minZ: " + spawnZ);
-
-                privateMines.getLogger().info("datablock: " + dataBlock + " maxX: " + spawnZ);
-                privateMines.getLogger().info("datablock: " + dataBlock + " maxY: " + spawnZ);
-                privateMines.getLogger().info("datablock: " + dataBlock + " maxZ: " + spawnZ);
-
-                privateMines.getLogger().info("cuboidRegion: " + cuboidRegion);
-                privateMines.getLogger().info("location: " + location);
-                privateMines.getLogger().info("spawnLocation: " + spawnLocation);
 
                 WorldEditMine worldEditMine = new WorldEditMine(this);
                 worldEditMine.setMineOwner(uuid);
@@ -204,9 +170,7 @@ public class PrivateMines extends JavaPlugin {
                 worldEditMine.setWorldEditMineType(worldEditMineType);
                 worldEditMine.setDataBlock(dataBlock);
 
-                privateMines.getLogger().info("worldEditMines: " + mineStorage.getWorldEditMines());
                 mineStorage.addWorldEditMine(uuid, worldEditMine);
-                privateMines.getLogger().info("worldEditMines: " + mineStorage.getWorldEditMines());
             });
         } else {
 
