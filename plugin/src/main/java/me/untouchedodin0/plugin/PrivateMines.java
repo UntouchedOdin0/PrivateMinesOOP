@@ -402,6 +402,18 @@ public class PrivateMines extends JavaPlugin {
         return mineTypeTreeMap.higherEntry(mineType.getName()).getValue();
     }
 
+        /*
+        Gets the next MineData from the TreeMap using MineData
+     */
+
+    public WorldEditMineType getNextMineType(WorldEditMineType worldEditMineType) {
+        WorldEditMineType lastValue = worldEditMineTypeTreeMap.lastEntry().getValue();
+        if (mineTypeTreeMap.higherEntry(worldEditMineType.getName()) == null) {
+            return lastValue;
+        }
+        return worldEditMineTypeTreeMap.higherEntry(worldEditMineType.getName()).getValue();
+    }
+
     /*
         Checks is the mine is currently fully maxed out
      */
@@ -409,6 +421,15 @@ public class PrivateMines extends JavaPlugin {
     public boolean isAtLastMineType(MineType mineType) {
         MineType lastValue = mineTypeTreeMap.lastEntry().getValue();
         return mineType.equals(lastValue);
+    }
+
+    /*
+        Checks is the mine is currently fully maxed out
+     */
+
+    public boolean isAtLastMineType(WorldEditMineType worldEditMineType) {
+        WorldEditMineType lastValue = worldEditMineTypeTreeMap.lastEntry().getValue();
+        return worldEditMineType.equals(lastValue);
     }
 
     /*

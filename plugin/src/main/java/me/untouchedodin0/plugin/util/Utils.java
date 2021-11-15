@@ -8,6 +8,8 @@ import com.sk89q.worldedit.world.block.BlockType;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
+import me.untouchedodin0.plugin.mines.WorldEditMine;
+import me.untouchedodin0.plugin.mines.WorldEditMineType;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -59,6 +61,22 @@ public class Utils {
         }
         upgradeMineType = privateMines.getNextMineType(mineType);
         return upgradeMineType;
+    }
+
+    public WorldEditMineType getNextMineType(WorldEditMine worldEditMine) {
+        WorldEditMineType worldEditMineType = worldEditMine.getWorldEditMineType();
+        WorldEditMineType nextWorldEditMineType;
+        boolean isAtLastType = privateMines.isAtLastMineType(worldEditMineType);
+        if (isAtLastType) {
+            privateMines.getLogger().info("Mine is already maxed out!");
+            return worldEditMineType;
+        }
+
+        if (debugMode) {
+            privateMines.getLogger().info("Current mine data Name: " + worldEditMineType.getName());
+        }
+        nextWorldEditMineType = privateMines.getNextMineType(worldEditMineType);
+        return nextWorldEditMineType;
     }
 
     @SuppressWarnings("unused")

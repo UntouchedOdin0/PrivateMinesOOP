@@ -8,9 +8,12 @@ import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.world.block.BlockState;
 import com.sk89q.worldedit.world.block.BlockType;
+import com.sk89q.worldedit.world.block.BlockTypes;
 import me.untouchedodin0.plugin.PrivateMines;
+import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
+import me.untouchedodin0.plugin.util.worldedit.Adapter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -18,6 +21,7 @@ import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.DataBlock;
 
 import java.io.File;
+import java.util.List;
 import java.util.UUID;
 
 public class WorldEditMine {
@@ -27,6 +31,7 @@ public class WorldEditMine {
     private WorldEditMineType worldEditMineType;
     private UUID mineOwner;
     private CuboidRegion cuboidRegion;
+    private Region bedrockCubeRegion;
     private Region region;
     private BlockVector3 min;
     private BlockVector3 max;
@@ -36,6 +41,9 @@ public class WorldEditMine {
     private Material material;
     private DataBlock dataBlock;
     private MineStorage mineStorage;
+
+    public static final List<BlockVector3> EXPANSION_VECTORS = List.of(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X,
+            BlockVector3.UNIT_Z, BlockVector3.UNIT_MINUS_Z);
 
     public WorldEditMine(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -65,6 +73,14 @@ public class WorldEditMine {
 
     public void setCuboidRegion(CuboidRegion cuboidRegion) {
         this.cuboidRegion = cuboidRegion;
+    }
+
+    public Region getBedrockCubeRegion() {
+        return region;
+    }
+
+    public void setBedrockCubeRegion(Region region) {
+        this.bedrockCubeRegion = region;
     }
 
     public Region getRegion() {
@@ -201,6 +217,112 @@ public class WorldEditMine {
         this.region = null;
         dataBlock.remove();
     }
+
+    public void upgrade() {
+        Utils utils = privateMines.getUtils();
+        MineFactory mineFactory = privateMines.getMineFactory();
+        MineStorage mineStorage = privateMines.getMineStorage();
+        WorldEditMineType worldEditMineType = utils.getNextMineType(this);
+
+        int minX = getDataBlock().getInt("minX");
+        int minY = getDataBlock().getInt("minY");
+        int minZ = getDataBlock().getInt("minZ");
+
+        int maxX = getDataBlock().getInt("maxX");
+        int maXY = getDataBlock().getInt("maxY");
+        int maxZ = getDataBlock().getInt("maxZ");
+
+        BlockVector3 min = BlockVector3.at(minX, minY, minZ);
+        BlockVector3 max = BlockVector3.at(maxX, maXY, maxZ);
+
+        final var cuboid = new CuboidRegion(min, max);
+        final var air = utils.bukkitToBlockType(Material.AIR);
+
+        try (final var session = WorldEdit.getInstance()
+                .newEditSession(BukkitAdapter.adapt(world))) {
+            session.setBlocks(cuboid, utils.getBlockState(air));
+        } catch (MaxChangedBlocksException e) {
+            e.printStackTrace();
+        }
+        setCuboidRegion(null);
+        setRegion(null);
+        this.cuboidRegion = null;
+        this.region = null;
+    }
+
+    private BlockVector3[] expansionVectors(final int amount) {
+        return EXPANSION_VECTORS.stream().map(it -> it.multiply(amount)).toArray(BlockVector3[]::new);
+    }
+
+    public void expand(final int amount) {
+        final var fillType = BlockTypes.DIAMOND_BLOCK;
+        final var wallType = BlockTypes.BEDROCK;
+        final var min = getCuboidRegion().getMinimumPoint();
+        final var max = getCuboidRegion().getMaximumPoint();
+
+        if (fillType == null || wallType == null) {
+            return;
+        }
+
+        final var mine = getCuboidRegion(); //Adapter.adapt(getCuboidRegion());
+        privateMines.getLogger().info("expand mine cuboid : " + mine);
+
+        try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
+            mine.expand(expansionVectors(amount));
+            setCuboidRegion(null);
+            setCuboidRegion(mine);
+//            this.cuboidRegion = mine;
+
+            session.setBlocks(mine, fillType.getDefaultState());
+            session.setBlocks(Adapter.walls(mine), wallType.getDefaultState());
+
+        } catch (MaxChangedBlocksException ex) {
+            ex.printStackTrace();
+        }
+
+        privateMines.getLogger().info("expand min: " + min);
+        privateMines.getLogger().info("expand max: " + max);
+
+        final var stupidWallCuboid = Adapter.walls(mine);
+
+//        final var stupidWallCuboid = new CuboidRegion(BukkitAdapter.adapt(world, mine.getMinimumPoint()),
+//                BukkitAdapter.adapt(world, mine.getMaximumPoint()));
+
+        privateMines.getLogger().info("expand mine min: " + mine.getMinimumPoint());
+        privateMines.getLogger().info("expand mine max: " + mine.getMaximumPoint());
+
+//        privateMines.getLogger().info("expand stupidWallCuboid: " + stupidWallCuboid);
+
+        setBedrockCubeRegion(stupidWallCuboid);
+    }
+
+//    public void expand(final int amount) {
+//        final var fillType = BlockTypes.DIAMOND_BLOCK;
+//        final var wallType = BlockTypes.BEDROCK;
+//
+//        if (fillType == null || wallType == null) {
+//            return;
+//        }
+//
+//        final var mine = getCuboidRegion();
+//        final var fillCuboid = mine.clone();
+//
+//        try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
+//
+//            mine.expand(expansionVectors(amount));
+//
+//            session.setBlocks(mine, fillType.getDefaultState());
+//            session.setBlocks(Adapter.walls(mine), wallType.getDefaultState());
+//        } catch (MaxChangedBlocksException ex) {
+//            ex.printStackTrace();
+//        }
+//
+//        final var stupidWallCuboid = new CuboidRegion(mine.getMinimumPoint(), mine.getMaximumPoint());
+//        setCuboidRegion(stupidWallCuboid);
+//        setBedrockCubeRegion(stupidWallCuboid);
+//
+////        setBedrockCubeRegion(stupidWallCuboid);
+//    }
 }
 
 //    public void teleport(Player player) {

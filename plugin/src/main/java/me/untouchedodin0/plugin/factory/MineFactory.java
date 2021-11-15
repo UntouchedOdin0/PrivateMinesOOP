@@ -202,35 +202,6 @@ public class MineFactory {
 
 //        dataBlock.set("schematic", worldEditMine.getSchematicFile());
 //        dataBlock.set("worldEditMine", worldEditMine);
-
-        privateMines.getLogger().info("worldedit datablock debug:");
-        privateMines.getLogger().info("owner:" + dataBlock.get("owner"));
-        privateMines.getLogger().info("location:" + dataBlock.get("location"));
-
-        privateMines.getLogger().info("corner1X:" + dataBlock.get("corner1X"));
-        privateMines.getLogger().info("corner1Y:" + dataBlock.get("corner1Y"));
-        privateMines.getLogger().info("corner1Z:" + dataBlock.get("corner1Z"));
-
-        privateMines.getLogger().info("corner2X:" + dataBlock.get("corner2X"));
-        privateMines.getLogger().info("corner2Y:" + dataBlock.get("corner2Y"));
-        privateMines.getLogger().info("corner2Z:" + dataBlock.get("corner2Z"));
-
-        privateMines.getLogger().info("spawn X:" + dataBlock.get("spawnX"));
-        privateMines.getLogger().info("spawn Y:" + dataBlock.get("spawnY"));
-        privateMines.getLogger().info("spawn Z:" + dataBlock.get("spawnZ"));
-
-        privateMines.getLogger().info("minX:" + dataBlock.get("minX"));
-        privateMines.getLogger().info("minY:" + dataBlock.get("minY"));
-        privateMines.getLogger().info("minZ:" + dataBlock.get("minZ"));
-
-        privateMines.getLogger().info("maxX:" + dataBlock.get("maxX"));
-        privateMines.getLogger().info("maxY:" + dataBlock.get("maxY"));
-        privateMines.getLogger().info("maxZ:" + dataBlock.get("maxZ"));
-
-        privateMines.getLogger().info("material: " + material);
-
-//        privateMines.getLogger().info("schematic:" + dataBlock.get("schematic"));
-//        privateMines.getLogger().info("worldEditMine:" + dataBlock.get("worldEditMine"));
         return dataBlock;
     }
 
@@ -306,10 +277,7 @@ public class MineFactory {
                 PasteFactory pasteFactory = new PasteFactory(privateMines);
                 WorldEditMine worldEditMine = new WorldEditMine(privateMines);
 
-                privateMines.getLogger().info("createMine file: " + file);
-
                 ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(file);
-                privateMines.getLogger().info("createMine clipboardFormat: " + clipboardFormat);
 
                 if (clipboardFormat != null) {
                     try (ClipboardReader clipboardReader = clipboardFormat.getReader(new FileInputStream(file))) {
@@ -318,11 +286,8 @@ public class MineFactory {
                             privateMines.getLogger().warning("Clipboard was null");
                             return null;
                         }
-                        world = location.getWorld();
 
-                        privateMines.getLogger().info("location: " + location);
-                        privateMines.getLogger().info("clipboard: " + clipboard);
-                        privateMines.getLogger().info("pasteFactory: " + pasteFactory);
+                        world = location.getWorld();
 
                         // Pastes the schematic and loops the region finding blocks
 
@@ -333,10 +298,8 @@ public class MineFactory {
                                 Material bukkitMaterial = bukkitLocation.getBlock().getType();
 
                                 if (bukkitMaterial == Material.CHEST) {
-                                    privateMines.getLogger().info("Found chest at " + bukkitLocation);
                                     this.spawnLocation = utils.blockVector3toBukkit(world, blockVector3);
                                 } else if (bukkitMaterial == Material.POWERED_RAIL) {
-                                    privateMines.getLogger().info("Found powered rail at " + bukkitLocation);
                                     corners.add(bukkitLocation);
                                 }
                             }
@@ -362,13 +325,6 @@ public class MineFactory {
 
                         CuboidRegion cuboidRegion = new CuboidRegion(blockVectorCorner1, blockVectorCorner2);
 
-                        privateMines.getLogger().info("region: " + region);
-                        privateMines.getLogger().info("spawn location: " + spawnLocation);
-                        privateMines.getLogger().info("corners: " + corners);
-                        privateMines.getLogger().info("blockVectorCorner1: " + blockVectorCorner1);
-                        privateMines.getLogger().info("blockVectorCorner2: " + blockVectorCorner2);
-                        privateMines.getLogger().info("cuboidRegion: " + cuboidRegion);
-
                         spawnLocation.getBlock().setType(Material.AIR, false);
 
                         // Set the cuboid region and mine and then reset it and then teleport the player
@@ -391,7 +347,6 @@ public class MineFactory {
                         player.sendMessage(toSend);
                         player.teleport(spawnLocation);
                         mineStorage.addWorldEditMine(uuid, worldEditMine);
-                        privateMines.getLogger().info("worldEdit mines: " + mineStorage.getWorldEditMines());
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
                     }

@@ -67,10 +67,6 @@ public class PrivateMinesCommand {
 //            mine.teleportPlayer(target);
 
             if (privateMines.isWorldEditEnabled()) {
-                privateMines.getLogger().info("target: " + target);
-                privateMines.getLogger().info("mineWorldManger: " + mineWorldManager);
-                privateMines.getLogger().info("default world edit mine type: " + privateMines.getDefaultWorldEditMineType());
-
                 WorldEditMine worldEditMine = mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType());
             }
         } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException) {
@@ -189,13 +185,16 @@ public class PrivateMinesCommand {
         String targetDoesNotOwnMine = Messages.msg("targetDoesNotOwnMine");
         String attemptingMineUpgrade = Messages.msg("attemptingMineUpgrade");
 
-        if (!mineStorage.hasMine(target.getUniqueId())) {
+        if (!mineStorage.hasWorldEditMine(target.getUniqueId())) {
             utils.sendMessage(commandSender, targetDoesNotOwnMine);
             return;
         }
-        Mine mine = mineStorage.getMine(target.getUniqueId());
-        utils.sendMessage(commandSender, attemptingMineUpgrade);
-        mine.upgrade();
+
+        WorldEditMine worldEditMine = mineStorage.getWorldEditMine(target.getUniqueId());
+
+//        Mine mine = mineStorage.getMine(target.getUniqueId());
+//        utils.sendMessage(commandSender, attemptingMineUpgrade);
+//        mine.upgrade();
     }
 
     // Add 1 to whatever args you put so if you wanna expand by one do /pmine expand 2
@@ -205,13 +204,15 @@ public class PrivateMinesCommand {
         Player player = (Player) commandSender;
         String targetDoesNotOwnMine = Messages.msg("targetDoesNotOwnMine");
 
-        if (!mineStorage.hasMine(target.getUniqueId())) {
+        if (!mineStorage.hasWorldEditMine(target.getUniqueId())) {
             utils.sendMessage(commandSender, targetDoesNotOwnMine);
             return;
         }
-        Mine mine = mineStorage.getMine(target.getUniqueId());
+        WorldEditMine worldEditMine = mineStorage.getWorldEditMine(target.getUniqueId());
+//        Mine mine = mineStorage.getMine(target.getUniqueId());
         player.sendMessage("attempting to expand your mine");
-        mine.expand(amount);
+        worldEditMine.expand(amount);
+        mineStorage.replaceMine(player.getUniqueId(), worldEditMine);
     }
 
     @CommandHook("create")
