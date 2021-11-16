@@ -24,6 +24,8 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin.factory;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
@@ -37,6 +39,7 @@ import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.WorldEditMine;
 import me.untouchedodin0.plugin.mines.WorldEditMineType;
+import me.untouchedodin0.plugin.mines.data.WorldEditMineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import org.bukkit.Location;
@@ -50,9 +53,9 @@ import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.misc.LocationUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -276,6 +279,7 @@ public class MineFactory {
                 File file = worldEditMineType.getSchematicFile();
                 PasteFactory pasteFactory = new PasteFactory(privateMines);
                 WorldEditMine worldEditMine = new WorldEditMine(privateMines);
+                WorldEditMineData worldEditMineData = new WorldEditMineData();
 
                 ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(file);
 
@@ -339,6 +343,41 @@ public class MineFactory {
                         worldEditMine.setWorldEditMineType(worldEditMineType);
                         worldEditMine.reset();
                         worldEditMine.teleport(player);
+
+
+                        worldEditMineData.setMineOwner(uuid);
+                        worldEditMineData.setSpawnX(spawnLocation.getBlockX());
+                        worldEditMineData.setSpawnY(spawnLocation.getBlockY());
+                        worldEditMineData.setSpawnZ(spawnLocation.getBlockZ());
+
+                        worldEditMineData.setMinX(corner2.getBlockX());
+                        worldEditMineData.setMinY(corner2.getBlockY());
+                        worldEditMineData.setMinZ(corner2.getBlockZ());
+
+                        worldEditMineData.setMaxX(corner1.getBlockX());
+                        worldEditMineData.setMaxY(corner1.getBlockY());
+                        worldEditMineData.setMaxZ(corner1.getBlockZ());
+
+                        if (world != null) {
+                            worldEditMineData.setWorldName(world.getName());
+                        }
+
+//                        worldEditMineData.setWorld(world);
+
+
+                        Path path = Paths.get("plugins/PrivateMines/");
+
+                        String pathName = path.toString();
+
+                        GsonBuilder gsonBuilder = new GsonBuilder();
+                        Gson gson = gsonBuilder.create();
+//                        privateMines.getLogger().info("json: " + gson.toJson(worldEditMineData));
+
+                        File jsonFile = new File(privateMines.getDataFolder(), "test.json");
+
+                        Writer fileWriter = new FileWriter(jsonFile);
+                        fileWriter.write(gson.toJson(worldEditMineData));
+                        fileWriter.close();
 
                         DataBlock dataBlock = getWorldEditDataBlock(block, player, location, worldEditMine);
 

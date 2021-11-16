@@ -223,6 +223,7 @@ public class WorldEditMine {
         MineFactory mineFactory = privateMines.getMineFactory();
         MineStorage mineStorage = privateMines.getMineStorage();
         WorldEditMineType worldEditMineType = utils.getNextMineType(this);
+        DataBlock dataBlock = getDataBlock();
 
         int minX = getDataBlock().getInt("minX");
         int minY = getDataBlock().getInt("minY");
