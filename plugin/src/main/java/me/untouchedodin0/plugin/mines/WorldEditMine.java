@@ -45,7 +45,7 @@ public class WorldEditMine {
     private WorldEditMineData worldEditMineData;
 
     public static final List<BlockVector3> EXPANSION_VECTORS = List.of(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X,
-            BlockVector3.UNIT_Z, BlockVector3.UNIT_MINUS_Z);
+                                                                       BlockVector3.UNIT_Z, BlockVector3.UNIT_MINUS_Z);
 
     public WorldEditMine(PrivateMines privateMines) {
         this.privateMines = privateMines;

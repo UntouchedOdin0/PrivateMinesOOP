@@ -362,6 +362,10 @@ public class MineFactory {
                             worldEditMineData.setWorldName(world.getName());
                         }
 
+                        if (worldEditMineType.getMaterial() != null) {
+                            worldEditMineData.setMaterial(worldEditMineType.getMaterial().toString());
+                        }
+
 //                        worldEditMineData.setWorld(world);
 
 

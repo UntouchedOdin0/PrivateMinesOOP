@@ -24,7 +24,7 @@ public class WorldEditMineData {
 
     CuboidRegion cuboidRegion;
     String worldName;
-    Material material;
+    String material;
 
     public UUID getMineOwner() {
         return mineOwner;
@@ -122,11 +122,11 @@ public class WorldEditMineData {
         this.worldName = worldName;
     }
 
-    public Material getMaterial() {
+    public String getMaterial() {
         return material;
     }
 
-    public void setMaterial(Material material) {
+    public void setMaterial(String material) {
         this.material = material;
     }
 }

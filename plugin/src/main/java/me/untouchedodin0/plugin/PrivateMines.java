@@ -40,6 +40,7 @@ import me.untouchedodin0.plugin.util.placeholderapi.PrivateMinesExpansion;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -54,10 +55,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.regex.Pattern;
 
 
@@ -127,46 +125,6 @@ public class PrivateMines extends JavaPlugin {
             }
         }
 
-        files = minesDirectory.listFiles();
-
-        getLogger().info("files: " + Arrays.toString(files));
-
-        Arrays.stream(files).forEach(file -> {
-            BufferedReader bufferedReader;
-            if (file.getName().matches(String.valueOf(filePattern))) {
-                getLogger().info("Found file: " + file + " using regex pattern: " + filePattern);
-                try {
-                    bufferedReader = Files.newBufferedReader(file.toPath());
-                    WorldEditMine worldEditMine = new WorldEditMine(this);
-
-                    WorldEditMineData worldEditMineData = gson.fromJson(bufferedReader, WorldEditMineData.class);
-                    privateMines.getLogger().info("worldEditMineData: " + worldEditMineData);
-                    privateMines.getLogger().info("mineOwner: " + worldEditMineData.getMineOwner());
-                    privateMines.getLogger().info("spawn x: " + worldEditMineData.getSpawnX());
-                    privateMines.getLogger().info("spawn y: " + worldEditMineData.getSpawnY());
-                    privateMines.getLogger().info("spawn z: " + worldEditMineData.getSpawnZ());
-
-                    privateMines.getLogger().info("min x: " + worldEditMineData.getMinX());
-                    privateMines.getLogger().info("min y: " + worldEditMineData.getMinY());
-                    privateMines.getLogger().info("min z: " + worldEditMineData.getMinZ());
-
-                    privateMines.getLogger().info("max x: " + worldEditMineData.getMaxX());
-                    privateMines.getLogger().info("max y: " + worldEditMineData.getMaxY());
-                    privateMines.getLogger().info("max z: " + worldEditMineData.getMaxZ());
-
-                    privateMines.getLogger().info("world Name: " + worldEditMineData.getWorldName());
-
-                    worldEditMine.setWorldEditMineData(worldEditMineData);
-
-                    privateMines.getLogger().info("worldEditMine get data: " + worldEditMine.getWorldEditMineData());
-//                    WorldEditMine worldEditMine = gson.fromJson(reader, WorldEditMine.class);
-//                    privateMines.getLogger().info("reader worldEditMine: " + worldEditMine);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
         @SuppressWarnings("unused")
         ConfigManager configManager = new ConfigManager(this).register(this).load();
 
@@ -190,6 +148,57 @@ public class PrivateMines extends JavaPlugin {
 
         if (useWorldEdit) {
             getLogger().info("using w/e instead!");
+
+            files = minesDirectory.listFiles();
+
+            getLogger().info("files: " + Arrays.toString(files));
+
+            Arrays.stream(files).forEach(file -> {
+                BufferedReader bufferedReader;
+                if (file.getName().matches(String.valueOf(filePattern))) {
+                    getLogger().info("Found file: " + file + " using regex pattern: " + filePattern);
+                    try {
+                        bufferedReader = Files.newBufferedReader(file.toPath());
+                        WorldEditMine worldEditMine = new WorldEditMine(this);
+
+                        WorldEditMineData worldEditMineData = gson.fromJson(bufferedReader, WorldEditMineData.class);
+                        privateMines.getLogger().info("worldEditMineData: " + worldEditMineData);
+                        privateMines.getLogger().info("mineOwner: " + worldEditMineData.getMineOwner());
+                        privateMines.getLogger().info("spawn x: " + worldEditMineData.getSpawnX());
+                        privateMines.getLogger().info("spawn y: " + worldEditMineData.getSpawnY());
+                        privateMines.getLogger().info("spawn z: " + worldEditMineData.getSpawnZ());
+
+                        privateMines.getLogger().info("min x: " + worldEditMineData.getMinX());
+                        privateMines.getLogger().info("min y: " + worldEditMineData.getMinY());
+                        privateMines.getLogger().info("min z: " + worldEditMineData.getMinZ());
+
+                        privateMines.getLogger().info("max x: " + worldEditMineData.getMaxX());
+                        privateMines.getLogger().info("max y: " + worldEditMineData.getMaxY());
+                        privateMines.getLogger().info("max z: " + worldEditMineData.getMaxZ());
+
+                        privateMines.getLogger().info("world Name: " + worldEditMineData.getWorldName());
+
+                        privateMines.getLogger().info("material: " + worldEditMineData.getMaterial());
+
+                        privateMines.getLogger().info("material valueOf: " + Material.getMaterial(worldEditMineData.getMaterial()));
+
+                        Location spawn = new Location(Bukkit.getWorld(worldEditMineData.getWorldName()),
+                                                      worldEditMineData.getSpawnX(), worldEditMineData.getSpawnY(), worldEditMineData.getSpawnZ());
+
+                        privateMines.getLogger().info("spawn: " + spawn);
+                        worldEditMine.setSpawnLocation(spawn);
+                        worldEditMine.setWorldEditMineData(worldEditMineData);
+
+                        mineStorage.addWorldEditMine(worldEditMineData.getMineOwner(), worldEditMine);
+
+                        privateMines.getLogger().info("worldEditMine get data: " + worldEditMine.getWorldEditMineData());
+                        privateMines.getLogger().info("mineStorage: " + mineStorage.getWorldEditMines());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
 
 //            blockDataManager.getAll().forEach(dataBlock -> {
 //                UUID uuid = UUID.fromString(dataBlock.getString("owner"));
