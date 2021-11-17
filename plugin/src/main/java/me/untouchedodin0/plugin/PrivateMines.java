@@ -24,26 +24,23 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin;
 
+import com.google.gson.Gson;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldedit.regions.CuboidRegion;
 import me.untouchedodin0.plugin.commands.PrivateMinesCommand;
 import me.untouchedodin0.plugin.config.MineConfig;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.WorldEditMine;
 import me.untouchedodin0.plugin.mines.WorldEditMineType;
+import me.untouchedodin0.plugin.mines.data.WorldEditMineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Metrics;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.util.placeholderapi.PrivateMinesExpansion;
 import me.untouchedodin0.plugin.world.MineWorldManager;
-import me.untouchedodin0.plugin.world.utils.MineLoopUtil;
 import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import redempt.redlib.blockdata.BlockDataManager;
@@ -52,13 +49,16 @@ import redempt.redlib.commandmanager.CommandParser;
 import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.configmanager.annotations.ConfigValue;
-import redempt.redlib.misc.LocationUtils;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.UUID;
+import java.util.regex.Pattern;
 
 
 public class PrivateMines extends JavaPlugin {
@@ -75,7 +75,10 @@ public class PrivateMines extends JavaPlugin {
     private Utils utils;
     private WorldEditUtilities worldEditUtils;
     private boolean isWorldEditEnabled = false;
-    private World minesWorld;
+    private final File minesDirectory = new File("plugins/PrivateMines/mines");
+    File[] files;
+    private final Pattern filePattern = Pattern.compile("(.*?)\\.(json)");
+    private Gson gson;
 
     @ConfigValue
     private String spawnPoint;
@@ -109,12 +112,62 @@ public class PrivateMines extends JavaPlugin {
     @Override
     public void onEnable() {
         privateMines = this;
+        gson = new Gson();
+
         File configFile = new File(getDataFolder(), "config.yml");
 
         if (!configFile.exists()) {
             saveDefaultConfig();
         }
 
+        if (!minesDirectory.exists()) {
+            boolean created = minesDirectory.mkdir();
+            if (created) {
+                getLogger().info("Created the mines directory successfully!");
+            }
+        }
+
+        files = minesDirectory.listFiles();
+
+        getLogger().info("files: " + Arrays.toString(files));
+
+        Arrays.stream(files).forEach(file -> {
+            BufferedReader bufferedReader;
+            if (file.getName().matches(String.valueOf(filePattern))) {
+                getLogger().info("Found file: " + file + " using regex pattern: " + filePattern);
+                try {
+                    bufferedReader = Files.newBufferedReader(file.toPath());
+                    WorldEditMine worldEditMine = new WorldEditMine(this);
+
+                    WorldEditMineData worldEditMineData = gson.fromJson(bufferedReader, WorldEditMineData.class);
+                    privateMines.getLogger().info("worldEditMineData: " + worldEditMineData);
+                    privateMines.getLogger().info("mineOwner: " + worldEditMineData.getMineOwner());
+                    privateMines.getLogger().info("spawn x: " + worldEditMineData.getSpawnX());
+                    privateMines.getLogger().info("spawn y: " + worldEditMineData.getSpawnY());
+                    privateMines.getLogger().info("spawn z: " + worldEditMineData.getSpawnZ());
+
+                    privateMines.getLogger().info("min x: " + worldEditMineData.getMinX());
+                    privateMines.getLogger().info("min y: " + worldEditMineData.getMinY());
+                    privateMines.getLogger().info("min z: " + worldEditMineData.getMinZ());
+
+                    privateMines.getLogger().info("max x: " + worldEditMineData.getMaxX());
+                    privateMines.getLogger().info("max y: " + worldEditMineData.getMaxY());
+                    privateMines.getLogger().info("max z: " + worldEditMineData.getMaxZ());
+
+                    privateMines.getLogger().info("world Name: " + worldEditMineData.getWorldName());
+
+                    worldEditMine.setWorldEditMineData(worldEditMineData);
+
+                    privateMines.getLogger().info("worldEditMine get data: " + worldEditMine.getWorldEditMineData());
+//                    WorldEditMine worldEditMine = gson.fromJson(reader, WorldEditMine.class);
+//                    privateMines.getLogger().info("reader worldEditMine: " + worldEditMine);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        @SuppressWarnings("unused")
         ConfigManager configManager = new ConfigManager(this).register(this).load();
 
         blockDataManager = new BlockDataManager(
@@ -125,11 +178,8 @@ public class PrivateMines extends JavaPlugin {
         mineStorage = new MineStorage();
         mineFactory = new MineFactory(this, blockDataManager);
         mineWorldManager = new MineWorldManager();
-        MineLoopUtil mineLoopUtil = new MineLoopUtil();
         utils = new Utils(this);
         Plugin worldEditPlugin = Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
-
-        this.minesWorld = mineWorldManager.getMinesWorld();
 
         int pluginId = 11413;
 
@@ -140,38 +190,39 @@ public class PrivateMines extends JavaPlugin {
 
         if (useWorldEdit) {
             getLogger().info("using w/e instead!");
-            blockDataManager.getAll().forEach(dataBlock -> {
-                UUID uuid = UUID.fromString(dataBlock.getString("owner"));
-                Location location = LocationUtils.fromString(dataBlock.getString("location"));
-                Location spawnLocation = LocationUtils.fromString(dataBlock.getString("spawnLocation"));
-                String worldEditMineTypeName = dataBlock.getString("type");
-                WorldEditMineType worldEditMineType = worldEditMineTypeTreeMap.get(worldEditMineTypeName);
 
-                int corner1X = Integer.parseInt(dataBlock.getString("corner1X"));
-                int corner1Y = Integer.parseInt(dataBlock.getString("corner1Y"));
-                int corner1Z = Integer.parseInt(dataBlock.getString("corner1Z"));
-
-                int corner2X = Integer.parseInt(dataBlock.getString("corner2X"));
-                int corner2Y = Integer.parseInt(dataBlock.getString("corner2Y"));
-                int corner2Z = Integer.parseInt(dataBlock.getString("corner2Z"));
-
-                BlockVector3 corner1Vector = BlockVector3.at(corner1X, corner1Y, corner1Z);
-                BlockVector3 corner2Vector = BlockVector3.at(corner2X, corner2Y, corner2Z);
-
-                CuboidRegion cuboidRegion = new CuboidRegion(corner1Vector, corner2Vector);
-
-                WorldEditMine worldEditMine = new WorldEditMine(this);
-                worldEditMine.setMineOwner(uuid);
-                worldEditMine.setCuboidRegion(cuboidRegion);
-                worldEditMine.setLocation(location);
-                worldEditMine.setSpawnLocation(spawnLocation);
-                worldEditMine.setMaterial(Material.STONE);
-                worldEditMine.setWorld(minesWorld);
-                worldEditMine.setWorldEditMineType(worldEditMineType);
-                worldEditMine.setDataBlock(dataBlock);
-
-                mineStorage.addWorldEditMine(uuid, worldEditMine);
-            });
+//            blockDataManager.getAll().forEach(dataBlock -> {
+//                UUID uuid = UUID.fromString(dataBlock.getString("owner"));
+//                Location location; //= LocationUtils.fromString(dataBlock.getString("location"));
+//                Location spawnLocation = LocationUtils.fromString(dataBlock.getString("spawnLocation"));
+//                String worldEditMineTypeName = dataBlock.getString("type");
+//                WorldEditMineType worldEditMineType = worldEditMineTypeTreeMap.get(worldEditMineTypeName);
+//
+//                int corner1X = Integer.parseInt(dataBlock.getString("corner1X"));
+//                int corner1Y = Integer.parseInt(dataBlock.getString("corner1Y"));
+//                int corner1Z = Integer.parseInt(dataBlock.getString("corner1Z"));
+//
+//                int corner2X = Integer.parseInt(dataBlock.getString("corner2X"));
+//                int corner2Y = Integer.parseInt(dataBlock.getString("corner2Y"));
+//                int corner2Z = Integer.parseInt(dataBlock.getString("corner2Z"));
+//
+//                BlockVector3 corner1Vector = BlockVector3.at(corner1X, corner1Y, corner1Z);
+//                BlockVector3 corner2Vector = BlockVector3.at(corner2X, corner2Y, corner2Z);
+//
+//                CuboidRegion cuboidRegion = new CuboidRegion(corner1Vector, corner2Vector);
+//
+//                WorldEditMine worldEditMine = new WorldEditMine(this);
+//                worldEditMine.setMineOwner(uuid);
+//                worldEditMine.setCuboidRegion(cuboidRegion);
+//                worldEditMine.setLocation(location);
+//                worldEditMine.setSpawnLocation(spawnLocation);
+//                worldEditMine.setMaterial(Material.STONE);
+//                worldEditMine.setWorld(minesWorld);
+//                worldEditMine.setWorldEditMineType(worldEditMineType);
+//                worldEditMine.setDataBlock(dataBlock);
+//
+//                mineStorage.addWorldEditMine(uuid, worldEditMine);
+//            });
         } else {
 
             privateMines.getLogger().info("using redlib");
@@ -478,5 +529,9 @@ public class PrivateMines extends JavaPlugin {
 
     public WorldEditUtilities getWorldEditUtils() {
         return worldEditUtils;
+    }
+
+    public File getMinesDirectory() {
+        return minesDirectory;
     }
 }
