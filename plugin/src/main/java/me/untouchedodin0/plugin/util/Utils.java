@@ -19,14 +19,12 @@ import org.bukkit.entity.Player;
 import org.codemc.worldguardwrapper.WorldGuardWrapper;
 import org.codemc.worldguardwrapper.flag.WrappedState;
 import org.codemc.worldguardwrapper.region.IWrappedRegion;
+import org.jetbrains.annotations.NotNull;
 import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class Utils {
@@ -145,7 +143,7 @@ public class Utils {
         return BukkitAdapter.asBlockType(material);
     }
 
-    public List<BlockType> bukkitToBlockType(List<Material> materials) {
+    public List<BlockType> bukkitToBlockType(@NotNull List<Material> materials) {
         List<BlockType> converted = new ArrayList<>();
 
         for (Material material : materials) {
@@ -154,7 +152,7 @@ public class Utils {
         return converted;
     }
 
-    public BlockState getBlockState(BlockType blockType) {
+    public BlockState getBlockState(@NotNull BlockType blockType) {
         return blockType.getDefaultState();
     }
 
@@ -170,5 +168,9 @@ public class Utils {
         if (player != null && toSend != null) {
             player.sendMessage(toSend);
         }
+    }
+
+    public String getMineFileName(UUID uuid) {
+        return String.format("mine-%s.json", uuid);
     }
 }
