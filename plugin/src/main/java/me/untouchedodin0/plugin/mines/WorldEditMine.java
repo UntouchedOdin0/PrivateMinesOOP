@@ -11,6 +11,7 @@ import com.sk89q.worldedit.world.block.BlockType;
 import com.sk89q.worldedit.world.block.BlockTypes;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.factory.MineFactory;
+import me.untouchedodin0.plugin.mines.data.WorldEditMineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.util.worldedit.Adapter;
@@ -41,6 +42,7 @@ public class WorldEditMine {
     private Material material;
     private DataBlock dataBlock;
     private MineStorage mineStorage;
+    private WorldEditMineData worldEditMineData;
 
     public static final List<BlockVector3> EXPANSION_VECTORS = List.of(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X,
             BlockVector3.UNIT_Z, BlockVector3.UNIT_MINUS_Z);
@@ -49,6 +51,14 @@ public class WorldEditMine {
         this.privateMines = privateMines;
         this.utils = new Utils(privateMines);
         this.mineStorage = privateMines.getMineStorage();
+    }
+
+    public WorldEditMineData getWorldEditMineData() {
+        return worldEditMineData;
+    }
+
+    public void setWorldEditMineData(WorldEditMineData worldEditMineData) {
+        this.worldEditMineData = worldEditMineData;
     }
 
     public UUID getMineOwner() {
