@@ -365,15 +365,25 @@ public class MineFactory {
 //                        worldEditMineData.setWorld(world);
 
 
-                        Path path = Paths.get("plugins/PrivateMines/");
-
-                        String pathName = path.toString();
+                        File minesDirectory = privateMines.getMinesDirectory();
 
                         GsonBuilder gsonBuilder = new GsonBuilder();
                         Gson gson = gsonBuilder.create();
 //                        privateMines.getLogger().info("json: " + gson.toJson(worldEditMineData));
+                        String fileName = player.getUniqueId() + ".json";
 
-                        File jsonFile = new File(privateMines.getDataFolder(), "test.json");
+                        File jsonFile = new File(minesDirectory, fileName);
+
+
+//                        String fileName = player.getUniqueId() + ".json";
+//                        privateMines.getLogger().info("fileName: " + fileName);
+//                        File jsonFile = new File(minesDirectory, fileName);
+//
+//                        try (FileWriter fileWriter = new FileWriter(jsonFile)) {
+//                            gson.toJson(worldEditMine, fileWriter);
+//                        } catch (IOException ioException) {
+//                            ioException.printStackTrace();
+//                        }
 
                         Writer fileWriter = new FileWriter(jsonFile);
                         fileWriter.write(gson.toJson(worldEditMineData));
