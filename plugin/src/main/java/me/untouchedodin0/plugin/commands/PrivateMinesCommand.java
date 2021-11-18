@@ -108,7 +108,8 @@ public class PrivateMinesCommand {
         } else {
             WorldEditMine worldEditMine = mineStorage.getWorldEditMine(uuid);
             worldEditMine.reset();
-            commandSender.sendMessage(ChatColor.GREEN + "Your mine has been reset!");
+            commandSender.sendMessage(mineReset);
+
 //            utils.sendMessage(commandSender, mineReset);
             worldEditMine.teleport(player);
         }
@@ -134,7 +135,6 @@ public class PrivateMinesCommand {
 //        mine.reset(mine.getWorldEditCube());
 //        CuboidRegion cuboidRegion = mine.getCuboidRegion();
 //        cuboidRegion.forEachBlock(block -> block.setType(mineType.getWeightedRandom().roll(), false));
-        Messages.msg("mineReset");
     }
 
 
