@@ -169,7 +169,12 @@ public class WorldEditMine {
     // Resets the mine
     public void reset() {
 
-        final var fillType = utils.bukkitToBlockType(getMaterial());
+        String materialString = getWorldEditMineData().getMaterial();
+        Material material = Material.SLIME_BLOCK;
+
+        final var fillType = utils.bukkitToBlockType(material);
+
+        this.world = privateMines.getMineWorldManager().getMinesWorld();
 
         if (world == null) {
             privateMines.getLogger().warning("Failed to reset due to the mine world being null");

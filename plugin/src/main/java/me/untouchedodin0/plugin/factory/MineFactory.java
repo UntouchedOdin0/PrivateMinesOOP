@@ -341,8 +341,8 @@ public class MineFactory {
                         worldEditMine.setWorld(spawnLocation.getWorld());
                         worldEditMine.setMaterial(worldEditMineType.getMaterial());
                         worldEditMine.setWorldEditMineType(worldEditMineType);
-                        worldEditMine.reset();
-                        worldEditMine.teleport(player);
+//                        worldEditMine.reset();
+//                        worldEditMine.teleport(player);
 
 
                         worldEditMineData.setMineOwner(uuid);
@@ -395,7 +395,9 @@ public class MineFactory {
 
                         DataBlock dataBlock = getWorldEditDataBlock(block, player, location, worldEditMine);
 
+                        worldEditMine.setWorldEditMineData(worldEditMineData);
                         worldEditMine.setDataBlock(dataBlock);
+                        worldEditMine.reset();
                         // Tell the player it's been created and teleport them
                         player.sendMessage(toSend);
                         player.teleport(spawnLocation);
