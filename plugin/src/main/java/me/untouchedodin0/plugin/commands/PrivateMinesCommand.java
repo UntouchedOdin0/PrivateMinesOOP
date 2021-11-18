@@ -109,7 +109,6 @@ public class PrivateMinesCommand {
             WorldEditMine worldEditMine = mineStorage.getWorldEditMine(uuid);
             worldEditMine.reset();
             commandSender.sendMessage(mineReset);
-
 //            utils.sendMessage(commandSender, mineReset);
             worldEditMine.teleport(player);
         }
