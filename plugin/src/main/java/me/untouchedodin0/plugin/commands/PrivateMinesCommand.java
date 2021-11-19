@@ -102,16 +102,18 @@ public class PrivateMinesCommand {
     public void reset(CommandSender commandSender) {
         Player player = (Player) commandSender;
         UUID uuid = player.getUniqueId();
-        String doNotOwnMine = Messages.msg("doNotOwnMine");
-        String mineReset = Messages.msg("mineReset");
+        String doNotOwnMine = "doNotOwnMine";
+        String mineReset = "mineReset";
+        String teleportedToMine = "teleportedToMine";
 
         if (!mineStorage.hasWorldEditMine(uuid)) {
             utils.sendMessage(player, doNotOwnMine);
         } else {
             WorldEditMine worldEditMine = mineStorage.getWorldEditMine(uuid);
             worldEditMine.reset();
-            commandSender.sendMessage(mineReset);
+            utils.sendMessage(player, mineReset);
             worldEditMine.teleport(player);
+            utils.sendMessage(player, teleportedToMine);
         }
 
 //        boolean hasMine = mineStorage.hasMine(uuid);
@@ -142,8 +144,8 @@ public class PrivateMinesCommand {
     public void teleport(CommandSender commandSender) {
         Player player = (Player) commandSender;
         UUID uuid = player.getUniqueId();
-        String doNotOwnMine = Messages.msg("doNotOwnMine");
-        String teleportedToMine = Messages.msg("teleportedToMine");
+        String doNotOwnMine = "doNotOwnMine";
+        String teleportedToMine = "teleportedToMine";
 
         if (!mineStorage.hasWorldEditMine(uuid)) {
             utils.sendMessage(player, doNotOwnMine);
