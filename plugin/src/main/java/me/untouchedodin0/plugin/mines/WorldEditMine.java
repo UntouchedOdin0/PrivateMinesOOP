@@ -27,12 +27,13 @@ import java.util.UUID;
 
 public class WorldEditMine {
 
+    public static final List<BlockVector3> EXPANSION_VECTORS = List.of(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X,
+            BlockVector3.UNIT_Z, BlockVector3.UNIT_MINUS_Z);
     final Utils utils;
     private final PrivateMines privateMines;
     private WorldEditMineType worldEditMineType;
     private UUID mineOwner;
     private CuboidRegion cuboidRegion;
-    private Region bedrockCubeRegion;
     private Region region;
     private BlockVector3 min;
     private BlockVector3 max;
@@ -41,16 +42,11 @@ public class WorldEditMine {
     private Location location;
     private Material material;
     private DataBlock dataBlock;
-    private MineStorage mineStorage;
     private WorldEditMineData worldEditMineData;
-
-    public static final List<BlockVector3> EXPANSION_VECTORS = List.of(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X,
-                                                                       BlockVector3.UNIT_Z, BlockVector3.UNIT_MINUS_Z);
 
     public WorldEditMine(PrivateMines privateMines) {
         this.privateMines = privateMines;
         this.utils = new Utils(privateMines);
-        this.mineStorage = privateMines.getMineStorage();
     }
 
     public WorldEditMineData getWorldEditMineData() {
@@ -69,12 +65,12 @@ public class WorldEditMine {
         this.mineOwner = mineOwner;
     }
 
-    public void setWorldEditMineType(WorldEditMineType worldEditMineType) {
-        this.worldEditMineType = worldEditMineType;
-    }
-
     public WorldEditMineType getWorldEditMineType() {
         return worldEditMineType;
+    }
+
+    public void setWorldEditMineType(WorldEditMineType worldEditMineType) {
+        this.worldEditMineType = worldEditMineType;
     }
 
     public CuboidRegion getCuboidRegion() {
@@ -90,7 +86,6 @@ public class WorldEditMine {
     }
 
     public void setBedrockCubeRegion(Region region) {
-        this.bedrockCubeRegion = region;
     }
 
     public Region getRegion() {
@@ -101,20 +96,20 @@ public class WorldEditMine {
         this.region = region;
     }
 
-    public void setMin(BlockVector3 min) {
-        this.min = min;
-    }
-
     public BlockVector3 getMin() {
         return min;
     }
 
-    public void setMax(BlockVector3 max) {
-        this.max = max;
+    public void setMin(BlockVector3 min) {
+        this.min = min;
     }
 
     public BlockVector3 getMax() {
         return max;
+    }
+
+    public void setMax(BlockVector3 max) {
+        this.max = max;
     }
 
     public Location getSpawnLocation() {
@@ -169,9 +164,6 @@ public class WorldEditMine {
     // Resets the mine
     public void reset() {
 
-        String materialString = getWorldEditMineData().getMaterial();
-        Material material = Material.SLIME_BLOCK;
-
         final var fillType = utils.bukkitToBlockType(material);
 
         this.world = privateMines.getMineWorldManager().getMinesWorld();
@@ -196,41 +188,85 @@ public class WorldEditMine {
     public void delete() {
 
         this.world = privateMines.getMineWorldManager().getMinesWorld();
+        final BlockType air = utils.bukkitToBlockType(Material.AIR);
+
+        int minX = worldEditMineData.getRegionMinX();
+        int minY = worldEditMineData.getRegionMinY();
+        int minZ = worldEditMineData.getRegionMinZ();
+
+        int maxX = worldEditMineData.getRegionMaxX();
+        int maxY = worldEditMineData.getRegionMaxY();
+        int maxZ = worldEditMineData.getRegionMaxZ();
+
+        BlockVector3 min = BlockVector3.at(minX, minY, minZ);
+        BlockVector3 max = BlockVector3.at(maxX, maxY, maxZ);
+
+        CuboidRegion cuboidRegion = new CuboidRegion(min, max);
+
         if (world == null) {
             privateMines.getLogger().warning("Failed to delete the mine due to the world being null");
         }
 
-        int minX = getDataBlock().getInt("minX");
-        int minY = getDataBlock().getInt("minY");
-        int minZ = getDataBlock().getInt("minZ");
+        privateMines.getLogger().info("cuboidRegion: " + cuboidRegion);
 
-        int maxX = getDataBlock().getInt("maxX");
-        int maXY = getDataBlock().getInt("maxY");
-        int maxZ = getDataBlock().getInt("maxZ");
+        privateMines.getLogger().info("region: " + worldEditMineData.getRegion());
 
-        BlockVector3 min = BlockVector3.at(minX, minY, minZ);
-        BlockVector3 max = BlockVector3.at(maxX, maXY, maxZ);
-
-        final var cuboidRegion = new CuboidRegion(min, max);
-
-        final var air = utils.bukkitToBlockType(Material.AIR);
-        final var dataBlock = getDataBlock();
-        final var cuboid = new CuboidRegion(min, max);
-
-
-        // Creates edit session, sets the blocks and flushes it!
-        try (final var session = WorldEdit.getInstance()
-                .newEditSession(BukkitAdapter.adapt(world))) {
-            session.setBlocks(cuboid, utils.getBlockState(air));
-//            session.setBlocks(region, utils.getBlockState(air));
-        } catch (MaxChangedBlocksException exception) {
-            exception.printStackTrace();
+        try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
+            privateMines.getLogger().info("delete session: " + session);
+            session.setBlocks(cuboidRegion, utils.getBlockState(air));
+        } catch (MaxChangedBlocksException e) {
+            e.printStackTrace();
         }
-        setCuboidRegion(null);
-        setRegion(null);
-        this.cuboidRegion = null;
-        this.region = null;
-        dataBlock.remove();
+
+//        Gson gson = new Gson();
+//        String fileName = getMineOwner().toString() + ".json";
+//        File minesDirectory = privateMines.getMinesDirectory();
+//        File jsonFile = new File(minesDirectory, fileName);
+//        Reader reader;
+//        WorldEditMine worldEditMine;
+//
+//        try {
+//            reader = Files.newBufferedReader(Paths.get(jsonFile.toURI()));
+//            worldEditMine = gson.fromJson(reader, WorldEditMine.class);
+//
+//            privateMines.getLogger().info("delete reader: " + reader.toString());
+//            privateMines.getLogger().info("delete worldEditMine: " + worldEditMine);
+//        } catch (IOException ioException) {
+//            ioException.printStackTrace();
+//        }
+
+
+//        int minX = getDataBlock().getInt("minX");
+//        int minY = getDataBlock().getInt("minY");
+//        int minZ = getDataBlock().getInt("minZ");
+//
+//        int maxX = getDataBlock().getInt("maxX");
+//        int maXY = getDataBlock().getInt("maxY");
+//        int maxZ = getDataBlock().getInt("maxZ");
+//
+//        BlockVector3 min = BlockVector3.at(minX, minY, minZ);
+//        BlockVector3 max = BlockVector3.at(maxX, maXY, maxZ);
+//
+//        final var cuboidRegion = new CuboidRegion(min, max);
+//
+//        final var air = utils.bukkitToBlockType(Material.AIR);
+//        final var dataBlock = getDataBlock();
+//        final var cuboid = new CuboidRegion(min, max);
+//
+//
+//        // Creates edit session, sets the blocks and flushes it!
+//        try (final var session = WorldEdit.getInstance()
+//                .newEditSession(BukkitAdapter.adapt(world))) {
+//            session.setBlocks(cuboid, utils.getBlockState(air));
+////            session.setBlocks(region, utils.getBlockState(air));
+//        } catch (MaxChangedBlocksException exception) {
+//            exception.printStackTrace();
+//        }
+//        setCuboidRegion(null);
+//        setRegion(null);
+//        this.cuboidRegion = null;
+//        this.region = null;
+//        dataBlock.remove();
     }
 
     public void upgrade() {

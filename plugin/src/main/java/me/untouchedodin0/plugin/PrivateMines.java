@@ -192,6 +192,16 @@ public class PrivateMines extends JavaPlugin {
                         privateMines.getLogger().info("max y: " + worldEditMineData.getMaxY());
                         privateMines.getLogger().info("max z: " + worldEditMineData.getMaxZ());
 
+                        privateMines.getLogger().info("region: " + worldEditMineData.getRegion());
+
+                        privateMines.getLogger().info("region min x: " + worldEditMineData.getRegionMinX());
+                        privateMines.getLogger().info("region min y: " + worldEditMineData.getRegionMinY());
+                        privateMines.getLogger().info("region min z: " + worldEditMineData.getRegionMinZ());
+
+                        privateMines.getLogger().info("region max x: " + worldEditMineData.getRegionMaxX());
+                        privateMines.getLogger().info("region max y: " + worldEditMineData.getRegionMaxY());
+                        privateMines.getLogger().info("region max z: " + worldEditMineData.getRegionMaxZ());
+
                         privateMines.getLogger().info("world Name: " + worldEditMineData.getWorldName());
 
 

@@ -78,21 +78,23 @@ public class PrivateMinesCommand {
     public void delete(CommandSender commandSender, Player target) {
         Player player = (Player) commandSender;
         UUID uuid = target.getUniqueId();
+
         String targetDoesNotOwnMine = "targetDoesNotOwnMine";
         String deletedPlayersMine = "deletedPlayersMine";
         String yourMineHasBeenDeleted = "deletedMine";
 
         String doesntOwnMine = Messages.msg(targetDoesNotOwnMine);
+        String deletedMine = Messages.msg(deletedPlayersMine);
+        String yourMineDeleted = Messages.msg(yourMineHasBeenDeleted);
 
         if (!privateMines.getMineStorage().hasWorldEditMine(uuid)) {
-            commandSender.sendMessage(ChatColor.RED + "Target doesn't own a mine!");
-//            utils.sendMessage(commandSender, doesntOwnMine);
+            player.sendMessage(doesntOwnMine);
         } else {
             WorldEditMine worldEditMine = privateMines.getMineStorage().getWorldEditMine(uuid);
             worldEditMine.delete();
             privateMines.getMineStorage().removeWorldEditMine(uuid);
-            commandSender.sendMessage(ChatColor.GREEN + "You have deleted " + target.getName() + "'s private mine!");
-//            utils.sendMessage(commandSender, deletedPlayersMine);
+            utils.sendMessage(player, deletedMine);
+            utils.sendMessage(target, yourMineDeleted);
         }
     }
 
@@ -109,7 +111,6 @@ public class PrivateMinesCommand {
             WorldEditMine worldEditMine = mineStorage.getWorldEditMine(uuid);
             worldEditMine.reset();
             commandSender.sendMessage(mineReset);
-//            utils.sendMessage(commandSender, mineReset);
             worldEditMine.teleport(player);
         }
 
@@ -142,6 +143,7 @@ public class PrivateMinesCommand {
         Player player = (Player) commandSender;
         UUID uuid = player.getUniqueId();
         String doNotOwnMine = Messages.msg("doNotOwnMine");
+        String teleportedToMine = Messages.msg("teleportedToMine");
 
         if (!mineStorage.hasWorldEditMine(uuid)) {
             utils.sendMessage(player, doNotOwnMine);
@@ -153,6 +155,7 @@ public class PrivateMinesCommand {
 //        }
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(uuid);
         worldEditMine.teleport(player);
+        utils.sendMessage(player, teleportedToMine);
 
 //        utils.sendMessage(commandSender, "teleportedToMine");
 //        Mine mine = mineStorage.getMine(player.getUniqueId());

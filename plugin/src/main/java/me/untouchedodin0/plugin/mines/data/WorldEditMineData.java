@@ -1,6 +1,7 @@
 package me.untouchedodin0.plugin.mines.data;
 
 import com.sk89q.worldedit.regions.CuboidRegion;
+import com.sk89q.worldedit.regions.Region;
 import org.bukkit.Material;
 import org.bukkit.World;
 
@@ -22,6 +23,15 @@ public class WorldEditMineData {
     int maxY;
     int maxZ;
 
+    int regionMinX;
+    int regionMinY;
+    int regionMinZ;
+
+    int regionMaxX;
+    int regionMaxY;
+    int regionMaxZ;
+
+    Region region;
     CuboidRegion cuboidRegion;
     String worldName;
     String material;
@@ -104,6 +114,62 @@ public class WorldEditMineData {
 
     public void setMaxZ(int maxZ) {
         this.maxZ = maxZ;
+    }
+
+    public int getRegionMinX() {
+        return regionMinX;
+    }
+
+    public void setRegionMinX(int regionMinX) {
+        this.regionMinX = regionMinX;
+    }
+
+    public int getRegionMinY() {
+        return regionMinY;
+    }
+
+    public void setRegionMinY(int regionMinY) {
+        this.regionMinY = regionMinY;
+    }
+
+    public int getRegionMinZ() {
+        return regionMinZ;
+    }
+
+    public void setRegionMinZ(int regionMinZ) {
+        this.regionMinZ = regionMinZ;
+    }
+
+    public int getRegionMaxX() {
+        return regionMaxX;
+    }
+
+    public void setRegionMaxX(int regionMaxX) {
+        this.regionMaxX = regionMaxX;
+    }
+
+    public int getRegionMaxY() {
+        return regionMaxY;
+    }
+
+    public void setRegionMaxY(int regionMaxY) {
+        this.regionMaxY = regionMaxY;
+    }
+
+    public int getRegionMaxZ() {
+        return regionMaxZ;
+    }
+
+    public void setRegionMaxZ(int regionMaxZ) {
+        this.regionMaxZ = regionMaxZ;
+    }
+
+    public Region getRegion() {
+        return region;
+    }
+
+    public void setRegion(Region region) {
+        this.region = region;
     }
 
     public CuboidRegion getCuboidRegion() {

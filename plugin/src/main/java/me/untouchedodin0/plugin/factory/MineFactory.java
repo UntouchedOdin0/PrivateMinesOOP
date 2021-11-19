@@ -54,8 +54,6 @@ import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.misc.LocationUtils;
 
 import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -157,8 +155,6 @@ public class MineFactory {
         String worldName = Objects.requireNonNull(location.getWorld()).getName();
         WorldEditMineType worldEditMineType = worldEditMine.getWorldEditMineType();
 
-        Material material = worldEditMine.getMaterial();
-
         DataBlock dataBlock = blockDataManager.getDataBlock(block);
 
         int corner1X = worldEditMine.getCuboidRegion().getMinimumPoint().getBlockX();
@@ -203,8 +199,6 @@ public class MineFactory {
         dataBlock.set("location", LocationUtils.toString(location));
         dataBlock.set("spawnLocation", LocationUtils.toString(spawnLocation));
 
-//        dataBlock.set("schematic", worldEditMine.getSchematicFile());
-//        dataBlock.set("worldEditMine", worldEditMine);
         return dataBlock;
     }
 
@@ -254,8 +248,6 @@ public class MineFactory {
         }
         return null;
     }
-
-    //TODO Store the data from here into the datablock things and see if that works with loading?
 
     public WorldEditMine createMine(Player player, Location location, WorldEditMineType worldEditMineType) {
         Clipboard clipboard;
@@ -341,9 +333,7 @@ public class MineFactory {
                         worldEditMine.setWorld(spawnLocation.getWorld());
                         worldEditMine.setMaterial(worldEditMineType.getMaterial());
                         worldEditMine.setWorldEditMineType(worldEditMineType);
-//                        worldEditMine.reset();
-//                        worldEditMine.teleport(player);
-
+                        worldEditMine.setMineOwner(player.getUniqueId());
 
                         worldEditMineData.setMineOwner(uuid);
                         worldEditMineData.setSpawnX(spawnLocation.getBlockX());
@@ -358,6 +348,14 @@ public class MineFactory {
                         worldEditMineData.setMaxY(corner1.getBlockY());
                         worldEditMineData.setMaxZ(corner1.getBlockZ());
 
+                        worldEditMineData.setRegionMinX(region.getMinimumPoint().getBlockX());
+                        worldEditMineData.setRegionMinY(region.getMinimumPoint().getBlockY());
+                        worldEditMineData.setRegionMinZ(region.getMinimumPoint().getBlockZ());
+
+                        worldEditMineData.setRegionMaxX(region.getMaximumPoint().getBlockX());
+                        worldEditMineData.setRegionMaxY(region.getMaximumPoint().getBlockY());
+                        worldEditMineData.setRegionMaxZ(region.getMaximumPoint().getBlockZ());
+
                         if (world != null) {
                             worldEditMineData.setWorldName(world.getName());
                         }
@@ -366,28 +364,13 @@ public class MineFactory {
                             worldEditMineData.setMaterial(worldEditMineType.getMaterial().toString());
                         }
 
-//                        worldEditMineData.setWorld(world);
-
-
                         File minesDirectory = privateMines.getMinesDirectory();
 
                         GsonBuilder gsonBuilder = new GsonBuilder();
                         Gson gson = gsonBuilder.create();
-//                        privateMines.getLogger().info("json: " + gson.toJson(worldEditMineData));
                         String fileName = player.getUniqueId() + ".json";
 
                         File jsonFile = new File(minesDirectory, fileName);
-
-
-//                        String fileName = player.getUniqueId() + ".json";
-//                        privateMines.getLogger().info("fileName: " + fileName);
-//                        File jsonFile = new File(minesDirectory, fileName);
-//
-//                        try (FileWriter fileWriter = new FileWriter(jsonFile)) {
-//                            gson.toJson(worldEditMine, fileWriter);
-//                        } catch (IOException ioException) {
-//                            ioException.printStackTrace();
-//                        }
 
                         Writer fileWriter = new FileWriter(jsonFile);
                         fileWriter.write(gson.toJson(worldEditMineData));
@@ -398,6 +381,7 @@ public class MineFactory {
                         worldEditMine.setWorldEditMineData(worldEditMineData);
                         worldEditMine.setDataBlock(dataBlock);
                         worldEditMine.reset();
+
                         // Tell the player it's been created and teleport them
                         player.sendMessage(toSend);
                         player.teleport(spawnLocation);
@@ -405,11 +389,6 @@ public class MineFactory {
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
                     }
-
-//            WorldEditMine worldEditMine = new WorldEditMine(privateMines);
-//            worldEditMine.setWorldEditMineType(worldEditMineType);
-//            worldEditMine.paste(location);
-//            worldEditMine.teleport(player);
                 }
             }
         }
