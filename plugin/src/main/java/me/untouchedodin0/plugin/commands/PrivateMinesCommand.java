@@ -84,17 +84,15 @@ public class PrivateMinesCommand {
         String yourMineHasBeenDeleted = "deletedMine";
 
         String doesntOwnMine = Messages.msg(targetDoesNotOwnMine);
-        String deletedMine = Messages.msg(deletedPlayersMine);
-        String yourMineDeleted = Messages.msg(yourMineHasBeenDeleted);
 
         if (!privateMines.getMineStorage().hasWorldEditMine(uuid)) {
-            player.sendMessage(doesntOwnMine);
+            utils.sendMessage(commandSender, doesntOwnMine);
         } else {
             WorldEditMine worldEditMine = privateMines.getMineStorage().getWorldEditMine(uuid);
             worldEditMine.delete();
             privateMines.getMineStorage().removeWorldEditMine(uuid);
-            utils.sendMessage(player, deletedMine);
-            utils.sendMessage(target, yourMineDeleted);
+            utils.sendMessage(player, deletedPlayersMine);
+            utils.sendMessage(target, yourMineHasBeenDeleted);
         }
     }
 
