@@ -25,6 +25,7 @@ import redempt.redlib.multiblock.MultiBlockStructure;
 import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -88,12 +89,22 @@ public class PrivateMinesCommand {
 
         String doesntOwnMine = Messages.msg(targetDoesNotOwnMine);
 
+        File minesDirectory = privateMines.getMinesDirectory();
+        String fileName = target.getUniqueId() + ".json";
+        File jsonFile = new File(minesDirectory, fileName);
+
         if (!privateMines.getMineStorage().hasWorldEditMine(uuid)) {
             utils.sendMessage(commandSender, doesntOwnMine);
         } else {
             WorldEditMine worldEditMine = privateMines.getMineStorage().getWorldEditMine(uuid);
             worldEditMine.delete();
             privateMines.getMineStorage().removeWorldEditMine(uuid);
+            if (jsonFile.exists()) {
+                boolean deleted = jsonFile.delete();
+                if (deleted) {
+                    privateMines.getLogger().info("The file has been deleted!");
+                }
+            }
             utils.sendMessage(player, deletedPlayersMine);
             utils.sendMessage(target, yourMineHasBeenDeleted);
         }

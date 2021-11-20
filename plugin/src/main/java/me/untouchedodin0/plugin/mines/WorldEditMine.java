@@ -16,6 +16,7 @@ import com.sk89q.worldedit.world.block.BlockTypes;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.factory.PasteFactory;
 import me.untouchedodin0.plugin.mines.data.WorldEditMineData;
+import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.util.worldedit.Adapter;
 import org.bukkit.Bukkit;
@@ -192,6 +193,8 @@ public class WorldEditMine {
 
         CuboidRegion cuboidRegion = new CuboidRegion(min, max);
 
+        MineStorage mineStorage = privateMines.getMineStorage();
+
         if (world == null) {
             privateMines.getLogger().warning("Failed to delete the mine due to the world being null");
         }
@@ -206,6 +209,8 @@ public class WorldEditMine {
         } catch (MaxChangedBlocksException e) {
             e.printStackTrace();
         }
+
+        mineStorage.removeWorldEditMine(getMineOwner());
 
 //        Gson gson = new Gson();
 //        String fileName = getMineOwner().toString() + ".json";
