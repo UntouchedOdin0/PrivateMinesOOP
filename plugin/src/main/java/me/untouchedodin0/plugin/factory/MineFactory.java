@@ -329,6 +329,7 @@ public class MineFactory {
                         worldEditMine.setRegion(region);
                         worldEditMine.setMin(region.getMinimumPoint());
                         worldEditMine.setMax(region.getMaximumPoint());
+                        worldEditMine.setLocation(location);
                         worldEditMine.setSpawnLocation(spawnLocation);
                         worldEditMine.setWorld(spawnLocation.getWorld());
                         worldEditMine.setMaterial(worldEditMineType.getMaterial());

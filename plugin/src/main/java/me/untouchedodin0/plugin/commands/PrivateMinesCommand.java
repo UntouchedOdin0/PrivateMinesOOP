@@ -5,6 +5,7 @@ import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.WorldEditMine;
+import me.untouchedodin0.plugin.mines.WorldEditMineType;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.world.MineWorldManager;
@@ -29,6 +30,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Objects;
+import java.util.TreeMap;
 import java.util.UUID;
 
 public class PrivateMinesCommand {
@@ -187,14 +190,34 @@ public class PrivateMinesCommand {
         String targetDoesNotOwnMine = Messages.msg("targetDoesNotOwnMine");
         String attemptingMineUpgrade = Messages.msg("attemptingMineUpgrade");
 
+        TreeMap<String, WorldEditMineType> worldEditMineTypeTreeMap =  privateMines.getWorldEditMineTypeTreeMap();
+
         if (!mineStorage.hasWorldEditMine(target.getUniqueId())) {
             utils.sendMessage(commandSender, targetDoesNotOwnMine);
             return;
         }
 
+        Player player = (Player) commandSender;
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(target.getUniqueId());
+        WorldEditMineType worldEditMineType = worldEditMine.getWorldEditMineType();
+        String worldEditMineTypeName = worldEditMineType.getName();
 
-//        Mine mine = mineStorage.getMine(target.getUniqueId());
+        player.sendMessage("upgrade worldEditMine: " + worldEditMine);
+        player.sendMessage("upgrade worldEditMineType before: " + worldEditMineType);
+        player.sendMessage("upgrade worldEditMineTypeName before: " + worldEditMineTypeName);
+
+        if (Objects.equals(worldEditMineTypeTreeMap.lastKey(), worldEditMineTypeName)) {
+            player.sendMessage("You're already at the highest tier!!!!!!");
+        } else {
+            String upgradeTypeString = worldEditMineTypeTreeMap.higherKey(worldEditMineTypeName);
+            WorldEditMineType upgradeType = privateMines.getWorldEditMineTypeTreeMap().get(upgradeTypeString);
+            player.sendMessage("upgradeType: " + upgradeType);
+            player.sendMessage("upgrade type name: " + upgradeType.getName());
+            worldEditMine.setWorldEditMineType(upgradeType);
+            worldEditMine.upgrade();
+        }
+
+//        Mine mine = mineStorage.getMine(target.getUniqueId());r
 //        utils.sendMessage(commandSender, attemptingMineUpgrade);
 //        mine.upgrade();
     }

@@ -2,8 +2,6 @@ package me.untouchedodin0.plugin.mines.data;
 
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
-import org.bukkit.Material;
-import org.bukkit.World;
 
 import java.util.UUID;
 

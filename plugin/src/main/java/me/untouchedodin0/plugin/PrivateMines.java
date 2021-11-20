@@ -581,4 +581,12 @@ public class PrivateMines extends JavaPlugin {
     public File getMinesDirectory() {
         return minesDirectory;
     }
+
+    public TreeMap<String, MineType> getMineTypeTreeMap() {
+        return mineTypeTreeMap;
+    }
+
+    public TreeMap<String, WorldEditMineType> getWorldEditMineTypeTreeMap() {
+        return worldEditMineTypeTreeMap;
+    }
 }
