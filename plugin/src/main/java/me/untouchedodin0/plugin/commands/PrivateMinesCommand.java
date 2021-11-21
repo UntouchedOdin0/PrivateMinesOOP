@@ -124,28 +124,6 @@ public class PrivateMinesCommand {
             worldEditMine.teleport(player);
             utils.sendMessage(player, teleportedToMine);
         }
-
-//        boolean hasMine = mineStorage.hasMine(uuid);
-//        if (!hasMine) return;
-
-//        Mine mine = mineStorage.getMine(uuid);
-//        WorldEditMine worldEditMine = mineStorage.getWorldEditMine(uuid);
-
-//        if (mine == null) return;
-//        if (worldEditMine == null) return;
-
-
-//        MineType mineType = mine.getMineType();
-
-//        if (mineType.getWeightedRandom().getWeights().isEmpty()) {
-//            privateMines.getLogger().warning("There were no materials in the weighted random!");
-//            return;
-//        }
-
-//        mine.reset();
-//        mine.reset(mine.getWorldEditCube());
-//        CuboidRegion cuboidRegion = mine.getCuboidRegion();
-//        cuboidRegion.forEachBlock(block -> block.setType(mineType.getWeightedRandom().roll(), false));
     }
 
 
