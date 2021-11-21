@@ -249,7 +249,6 @@ public class PrivateMinesCommand {
     @CommandHook("setblocks")
     public void setBlocks(CommandSender commandSender, Player target, Material[] materials) {
         Player player = (Player) commandSender;
-        ArgType<Material> materialArgType = ArgType.of("material", Material.class);
         WeightedRandom<Material> weightedRandom = new WeightedRandom<>();
         Mine mine;
         String targetDoesNotOwnMine = Messages.msg("targetDoesNotOwnMine");
