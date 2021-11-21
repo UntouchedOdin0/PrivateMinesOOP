@@ -244,30 +244,6 @@ public class PrivateMinesCommand {
                 ioException.printStackTrace();
             }
         }
-
-//        try {
-//            if (selectionWorld == null) throw new IncompleteRegionException();
-//            region = localSession.getSelection(selectionWorld);
-//
-//            minimum = region.getMinimumPoint();
-//            maximum = region.getMaximumPoint();
-//            minimumBukkit = utils.blockVector3toBukkit(BukkitAdapter.adapt(selectionWorld), minimum);
-//            maximumBukkit = utils.blockVector3toBukkit(BukkitAdapter.adapt(selectionWorld), maximum);
-//
-//            // Credits to redempt for this part
-//            multiBlockStructure = MultiBlockStructure.stringify(minimumBukkit, maximumBukkit);
-//            try {
-//                path = Paths.get("plugins/PrivateMines/").resolve(name + ".dat");
-//                player.sendMessage(ChatColor.YELLOW + "Attempting to write the file, " + name + ".dat...");
-//                Files.write(path, multiBlockStructure.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-//            } catch (IOException ioException) {
-//                ioException.printStackTrace();
-//            }
-//            player.sendMessage(ChatColor.GREEN + "Successfully created the file " + path.getFileName());
-//        } catch (IncompleteRegionException incompleteRegionException) {
-//            player.sendMessage("Please make a full selection!");
-//            Messages.msg("pleaseMakeFullSelection");
-//        }
     }
 
     @CommandHook("setblocks")
