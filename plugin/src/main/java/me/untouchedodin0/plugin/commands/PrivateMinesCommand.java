@@ -91,7 +91,6 @@ public class PrivateMinesCommand {
 
         if (!privateMines.getMineStorage().hasWorldEditMine(uuid)) {
             player.sendMessage(ChatColor.RED + "Player doesn't own a mine!");
-//            utils.sendMessage(commandSender, doesntOwnMine);
         } else {
             WorldEditMine worldEditMine = privateMines.getMineStorage().getWorldEditMine(uuid);
             worldEditMine.delete();
@@ -148,7 +147,6 @@ public class PrivateMinesCommand {
     public void teleportOther(CommandSender commandSender, Player target) {
         UUID uuid = target.getUniqueId();
         String targetDoesNotOwnMine = Messages.msg("targetDoesNotOwnMine");
-        String teleportedToTargetsMine = Messages.msg("teleportedToTargetsMine");
 
         if (!mineStorage.hasWorldEditMine(uuid)) {
             utils.sendMessage(commandSender, targetDoesNotOwnMine);
@@ -167,7 +165,6 @@ public class PrivateMinesCommand {
     @CommandHook("upgrade")
     public void upgrade(CommandSender commandSender, Player target) {
         String targetDoesNotOwnMine = Messages.msg("targetDoesNotOwnMine");
-        String attemptingMineUpgrade = Messages.msg("attemptingMineUpgrade");
 
         TreeMap<String, WorldEditMineType> worldEditMineTypeTreeMap =  privateMines.getWorldEditMineTypeTreeMap();
 
@@ -195,10 +192,6 @@ public class PrivateMinesCommand {
             worldEditMine.setWorldEditMineType(upgradeType);
             worldEditMine.upgrade();
         }
-
-//        Mine mine = mineStorage.getMine(target.getUniqueId());r
-//        utils.sendMessage(commandSender, attemptingMineUpgrade);
-//        mine.upgrade();
     }
 
     // Add 1 to whatever args you put so if you wanna expand by one do /pmine expand 2
