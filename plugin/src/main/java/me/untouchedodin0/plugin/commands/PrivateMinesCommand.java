@@ -157,9 +157,6 @@ public class PrivateMinesCommand {
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(uuid);
         worldEditMine.teleport(player);
         commandSender.sendMessage(ChatColor.GREEN + "Teleporting to " + target.getName() + " a private mine!");
-
-//        Mine mine = mineStorage.getMine(target.getUniqueId());
-//        mine.teleportPlayer(player);
     }
 
     @CommandHook("upgrade")
