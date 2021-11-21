@@ -58,7 +58,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 
@@ -151,91 +154,88 @@ public class PrivateMines extends JavaPlugin {
                         String.valueOf(loaded)));
 
         if (useWorldEdit) {
-            getLogger().info("using w/e instead!");
-
             files = minesDirectory.listFiles();
+            if (files != null) {
+                Arrays.stream(files).forEach(file -> {
+                    BufferedReader bufferedReader;
+                    if (file.getName().matches(String.valueOf(filePattern))) {
+                        getLogger().info("Found file: " + file + " using regex pattern: " + filePattern);
+                        try {
+                            bufferedReader = Files.newBufferedReader(file.toPath());
+                            WorldEditMine worldEditMine = new WorldEditMine(this);
 
-            getLogger().info("files: " + Arrays.toString(files));
+                            WorldEditMineData worldEditMineData = gson.fromJson(bufferedReader, WorldEditMineData.class);
+                            if (XMaterial.matchXMaterial(worldEditMineData.getMaterial()).isPresent()) {
+                                material = XMaterial.matchXMaterial(worldEditMineData.getMaterial()).get().parseMaterial();
+                            }
 
-            Arrays.stream(files).forEach(file -> {
-                BufferedReader bufferedReader;
-                if (file.getName().matches(String.valueOf(filePattern))) {
-                    getLogger().info("Found file: " + file + " using regex pattern: " + filePattern);
-                    try {
-                        bufferedReader = Files.newBufferedReader(file.toPath());
-                        WorldEditMine worldEditMine = new WorldEditMine(this);
+                            int minX = worldEditMineData.getMinX();
+                            int minY = worldEditMineData.getMinY();
+                            int minZ = worldEditMineData.getMinZ();
+                            int maxX = worldEditMineData.getMaxX();
+                            int maxY = worldEditMineData.getMaxY();
+                            int maxZ = worldEditMineData.getMaxZ();
 
-                        WorldEditMineData worldEditMineData = gson.fromJson(bufferedReader, WorldEditMineData.class);
-                        if (XMaterial.matchXMaterial(worldEditMineData.getMaterial()).isPresent()) {
-                            material = XMaterial.matchXMaterial(worldEditMineData.getMaterial()).get().parseMaterial();
+
+                            privateMines.getLogger().info("worldEditMineData: " + worldEditMineData);
+                            privateMines.getLogger().info("mineOwner: " + worldEditMineData.getMineOwner());
+                            privateMines.getLogger().info("spawn x: " + worldEditMineData.getSpawnX());
+                            privateMines.getLogger().info("spawn y: " + worldEditMineData.getSpawnY());
+                            privateMines.getLogger().info("spawn z: " + worldEditMineData.getSpawnZ());
+
+                            privateMines.getLogger().info("min x: " + worldEditMineData.getMinX());
+                            privateMines.getLogger().info("min y: " + worldEditMineData.getMinY());
+                            privateMines.getLogger().info("min z: " + worldEditMineData.getMinZ());
+
+                            privateMines.getLogger().info("max x: " + worldEditMineData.getMaxX());
+                            privateMines.getLogger().info("max y: " + worldEditMineData.getMaxY());
+                            privateMines.getLogger().info("max z: " + worldEditMineData.getMaxZ());
+
+                            privateMines.getLogger().info("region: " + worldEditMineData.getRegion());
+
+                            privateMines.getLogger().info("region min x: " + worldEditMineData.getRegionMinX());
+                            privateMines.getLogger().info("region min y: " + worldEditMineData.getRegionMinY());
+                            privateMines.getLogger().info("region min z: " + worldEditMineData.getRegionMinZ());
+
+                            privateMines.getLogger().info("region max x: " + worldEditMineData.getRegionMaxX());
+                            privateMines.getLogger().info("region max y: " + worldEditMineData.getRegionMaxY());
+                            privateMines.getLogger().info("region max z: " + worldEditMineData.getRegionMaxZ());
+
+                            privateMines.getLogger().info("world Name: " + worldEditMineData.getWorldName());
+
+
+    //                        privateMines.getLogger().info("material: " + worldEditMineData.getMaterial());
+
+                            privateMines.getLogger().info("material: " + material.name());
+
+                            Location spawn = new Location(Bukkit.getWorld(worldEditMineData.getWorldName()),
+                                                          worldEditMineData.getSpawnX(), worldEditMineData.getSpawnY(), worldEditMineData.getSpawnZ());
+
+                            BlockVector3 min = BlockVector3.at(minX, minY, minZ);
+                            BlockVector3 max = BlockVector3.at(maxX, maxY, maxZ);
+
+                            privateMines.getLogger().info("min: " + min);
+                            privateMines.getLogger().info("max: " + max);
+
+                            CuboidRegion cuboidRegion = new CuboidRegion(min, max);
+                            privateMines.getLogger().info("spawn: " + spawn);
+                            privateMines.getLogger().info("cuboidRegion: " + cuboidRegion);
+
+                            worldEditMine.setSpawnLocation(spawn);
+                            worldEditMine.setCuboidRegion(cuboidRegion);
+                            worldEditMine.setWorldEditMineData(worldEditMineData);
+                            worldEditMine.setMaterial(material);
+
+                            mineStorage.addWorldEditMine(worldEditMineData.getMineOwner(), worldEditMine);
+
+                            privateMines.getLogger().info("worldEditMine get data: " + worldEditMine.getWorldEditMineData());
+                            privateMines.getLogger().info("mineStorage: " + mineStorage.getWorldEditMines());
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-
-                        int minX = worldEditMineData.getMinX();
-                        int minY = worldEditMineData.getMinY();
-                        int minZ = worldEditMineData.getMinZ();
-                        int maxX = worldEditMineData.getMaxX();
-                        int maxY = worldEditMineData.getMaxY();
-                        int maxZ = worldEditMineData.getMaxZ();
-
-
-                        privateMines.getLogger().info("worldEditMineData: " + worldEditMineData);
-                        privateMines.getLogger().info("mineOwner: " + worldEditMineData.getMineOwner());
-                        privateMines.getLogger().info("spawn x: " + worldEditMineData.getSpawnX());
-                        privateMines.getLogger().info("spawn y: " + worldEditMineData.getSpawnY());
-                        privateMines.getLogger().info("spawn z: " + worldEditMineData.getSpawnZ());
-
-                        privateMines.getLogger().info("min x: " + worldEditMineData.getMinX());
-                        privateMines.getLogger().info("min y: " + worldEditMineData.getMinY());
-                        privateMines.getLogger().info("min z: " + worldEditMineData.getMinZ());
-
-                        privateMines.getLogger().info("max x: " + worldEditMineData.getMaxX());
-                        privateMines.getLogger().info("max y: " + worldEditMineData.getMaxY());
-                        privateMines.getLogger().info("max z: " + worldEditMineData.getMaxZ());
-
-                        privateMines.getLogger().info("region: " + worldEditMineData.getRegion());
-
-                        privateMines.getLogger().info("region min x: " + worldEditMineData.getRegionMinX());
-                        privateMines.getLogger().info("region min y: " + worldEditMineData.getRegionMinY());
-                        privateMines.getLogger().info("region min z: " + worldEditMineData.getRegionMinZ());
-
-                        privateMines.getLogger().info("region max x: " + worldEditMineData.getRegionMaxX());
-                        privateMines.getLogger().info("region max y: " + worldEditMineData.getRegionMaxY());
-                        privateMines.getLogger().info("region max z: " + worldEditMineData.getRegionMaxZ());
-
-                        privateMines.getLogger().info("world Name: " + worldEditMineData.getWorldName());
-
-
-//                        privateMines.getLogger().info("material: " + worldEditMineData.getMaterial());
-
-                        privateMines.getLogger().info("material: " + material.name());
-
-                        Location spawn = new Location(Bukkit.getWorld(worldEditMineData.getWorldName()),
-                                                      worldEditMineData.getSpawnX(), worldEditMineData.getSpawnY(), worldEditMineData.getSpawnZ());
-
-                        BlockVector3 min = BlockVector3.at(minX, minY, minZ);
-                        BlockVector3 max = BlockVector3.at(maxX, maxY, maxZ);
-
-                        privateMines.getLogger().info("min: " + min);
-                        privateMines.getLogger().info("max: " + max);
-
-                        CuboidRegion cuboidRegion = new CuboidRegion(min, max);
-                        privateMines.getLogger().info("spawn: " + spawn);
-                        privateMines.getLogger().info("cuboidRegion: " + cuboidRegion);
-
-                        worldEditMine.setSpawnLocation(spawn);
-                        worldEditMine.setCuboidRegion(cuboidRegion);
-                        worldEditMine.setWorldEditMineData(worldEditMineData);
-                        worldEditMine.setMaterial(material);
-
-                        mineStorage.addWorldEditMine(worldEditMineData.getMineOwner(), worldEditMine);
-
-                        privateMines.getLogger().info("worldEditMine get data: " + worldEditMine.getWorldEditMineData());
-                        privateMines.getLogger().info("mineStorage: " + mineStorage.getWorldEditMines());
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
-                }
-            });
+                });
+            }
 
 
 //            blockDataManager.getAll().forEach(dataBlock -> {
