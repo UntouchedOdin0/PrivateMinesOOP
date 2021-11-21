@@ -138,17 +138,10 @@ public class PrivateMinesCommand {
             utils.sendMessage(player, doNotOwnMine);
             return;
         }
-//        if (!mineStorage.hasMine(player.getUniqueId()) || !mineStorage.hasWorldEditMine(player.getUniqueId())) {
-//            Messages.msg("doNotOwnMine");
-//            return;
-//        }
+
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(uuid);
         worldEditMine.teleport(player);
         utils.sendMessage(player, teleportedToMine);
-
-//        utils.sendMessage(commandSender, "teleportedToMine");
-//        Mine mine = mineStorage.getMine(player.getUniqueId());
-//        mine.teleportPlayer(player);
     }
 
     @CommandHook("teleportOther")
