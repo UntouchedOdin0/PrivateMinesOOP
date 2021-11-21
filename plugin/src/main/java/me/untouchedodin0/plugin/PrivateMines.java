@@ -176,7 +176,6 @@ public class PrivateMines extends JavaPlugin {
                             int maxY = worldEditMineData.getMaxY();
                             int maxZ = worldEditMineData.getMaxZ();
 
-
                             privateMines.getLogger().info("worldEditMineData: " + worldEditMineData);
                             privateMines.getLogger().info("mineOwner: " + worldEditMineData.getMineOwner());
                             privateMines.getLogger().info("spawn x: " + worldEditMineData.getSpawnX());
@@ -400,6 +399,7 @@ public class PrivateMines extends JavaPlugin {
         Gets a map of all the MineData types
      */
 
+    @SuppressWarnings("unused")
     public Map<String, MineType> getMineDataMap() {
         return mineDataMap;
     }
@@ -479,6 +479,7 @@ public class PrivateMines extends JavaPlugin {
         Gets the next MineData from the TreeMap using String
      */
 
+    @SuppressWarnings("unused")
     public MineType getNextMineType(String mineType) {
 
         MineType lastValue = mineTypeTreeMap.lastEntry().getValue();
@@ -580,10 +581,6 @@ public class PrivateMines extends JavaPlugin {
 
     public File getMinesDirectory() {
         return minesDirectory;
-    }
-
-    public TreeMap<String, MineType> getMineTypeTreeMap() {
-        return mineTypeTreeMap;
     }
 
     public TreeMap<String, WorldEditMineType> getWorldEditMineTypeTreeMap() {
