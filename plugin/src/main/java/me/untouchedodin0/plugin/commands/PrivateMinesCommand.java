@@ -17,7 +17,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.blockdata.DataBlock;
-import redempt.redlib.commandmanager.ArgType;
 import redempt.redlib.commandmanager.CommandHook;
 import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.misc.WeightedRandom;
@@ -188,7 +187,7 @@ public class PrivateMinesCommand {
         }
     }
 
-    // Add 1 to whatever args you put so if you wanna expand by one do /pmine expand 2
+    // Add 1 to whatever args you put so if you want to expand by one do /pmine expand 2
 
     @CommandHook("expand")
     public void expand(CommandSender commandSender, Player target, int amount) {
