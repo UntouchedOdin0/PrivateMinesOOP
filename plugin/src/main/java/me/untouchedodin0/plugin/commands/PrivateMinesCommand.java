@@ -64,13 +64,9 @@ public class PrivateMinesCommand {
                 return;
             }
             commandSender.sendMessage(ChatColor.GREEN + "Giving " + target.getName() + " a private mine!");
-            Mine mine;
             Location location = mineWorldManager.getNextFreeLocation();
-
-//            mine = mineFactory.createMine(target, mineWorldManager.getNextFreeLocation());
-//            mine.teleportPlayer(target);
-
             if (privateMines.isWorldEditEnabled()) {
+                @SuppressWarnings("unused")
                 WorldEditMine worldEditMine = mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType());
             }
         } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException) {
@@ -94,7 +90,8 @@ public class PrivateMinesCommand {
         File jsonFile = new File(minesDirectory, fileName);
 
         if (!privateMines.getMineStorage().hasWorldEditMine(uuid)) {
-            utils.sendMessage(commandSender, doesntOwnMine);
+            player.sendMessage(ChatColor.RED + "Player doesn't own a mine!");
+//            utils.sendMessage(commandSender, doesntOwnMine);
         } else {
             WorldEditMine worldEditMine = privateMines.getMineStorage().getWorldEditMine(uuid);
             worldEditMine.delete();
