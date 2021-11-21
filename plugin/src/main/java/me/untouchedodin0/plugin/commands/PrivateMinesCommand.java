@@ -79,11 +79,8 @@ public class PrivateMinesCommand {
         Player player = (Player) commandSender;
         UUID uuid = target.getUniqueId();
 
-        String targetDoesNotOwnMine = "targetDoesNotOwnMine";
         String deletedPlayersMine = "deletedPlayersMine";
         String yourMineHasBeenDeleted = "deletedMine";
-
-        String doesntOwnMine = Messages.msg(targetDoesNotOwnMine);
 
         File minesDirectory = privateMines.getMinesDirectory();
         String fileName = target.getUniqueId() + ".json";
