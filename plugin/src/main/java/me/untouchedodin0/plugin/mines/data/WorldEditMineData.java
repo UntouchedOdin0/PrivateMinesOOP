@@ -33,6 +33,9 @@ public class WorldEditMineData {
     CuboidRegion cuboidRegion;
     String worldName;
     String material;
+    String mineType;
+
+    boolean isOpen;
 
     public UUID getMineOwner() {
         return mineOwner;
@@ -192,5 +195,21 @@ public class WorldEditMineData {
 
     public void setMaterial(String material) {
         this.material = material;
+    }
+
+    public String getMineType() {
+        return mineType;
+    }
+
+    public void setMineType(String mineType) {
+        this.mineType = mineType;
+    }
+
+    public boolean isOpen() {
+        return isOpen;
+    }
+
+    public void setOpen(boolean open) {
+        this.isOpen = open;
     }
 }

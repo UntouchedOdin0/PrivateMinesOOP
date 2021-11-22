@@ -153,6 +153,9 @@ public class PrivateMines extends JavaPlugin {
                 .replace("{loaded}",
                         String.valueOf(loaded)));
 
+        getLogger().info("bukkit version: " + Bukkit.getVersion());
+        getLogger().info("bukkit getbukkit version: " + Bukkit.getBukkitVersion());
+
         if (useWorldEdit) {
             files = minesDirectory.listFiles();
             if (files != null) {

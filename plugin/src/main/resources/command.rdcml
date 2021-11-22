@@ -1,86 +1,101 @@
 privatemine,privatemines,pmine {
+    hook main
 
     give player:target {
         hook give
         help Gives a private mine to a player
         permission privatemines.give
+        user player
     }
 
     delete,del player:target {
         hook delete
         help Deletes a players private mine
         permission privatemines.delete
+        user player
     }
 
     reset {
         hook reset
         help Resets your private mine
         permission privatemines.reset
+        user player
     }
 
     teleport,tp,home {
         hook teleport
         help Teleport to your own mine
         permission privatemines.teleport
+        user player
     }
 
     teleport,tp player:target {
         hook teleportOther
         help Teleport to another users mine
         permission privatemines.teleport.other
+        user player
     }
 
     upgrade player:target {
         hook upgrade
         help Upgrade a users private mine
         permission: privatemines.upgrade
+        user player
     }
 
     create string:name {
         hook create
         help Creates a mine structure with the set name
         permission: privatemines.create
+        user player
     }
 
     setblocks player:target material[]:materials {
         hook setblocks
         help Sets the blocks in the mine
         permission privatemines.setblocks
+        user player
     }
 
     settype player:target string:type {
         hook settype
         help Sets the mine type
         permission privatemines.settype
+        user player
     }
 
     open {
         hook open
         help Opens your private mine for others to come and join you!
         permission: privatemines.open
+        user player
     }
 
     close {
         hook close
         help Closes your mine so nobody else can come mine at your mine
         permission: privatemines.close
+        user player
     }
 
     whitelist player:target {
         hook whitelist
         help Whitelists a player to come to your mine even when closed
         permission: privatemines.whitelist
+        user player
     }
 
     unwhitelist player:target {
         hook unwhitelist
         help Removes a player from your mines whitelist
         permission: privatemines.unwhitelist
+        user player
     }
 
     expand player:target int:amount {
         hook expand
         help Expands a players mine by a certain amount
         permission: privatemines.expand
+        user player
     }
 }

@@ -45,6 +45,7 @@ public class PasteFactory {
 
         // Try and make a new edit session with the world to do stuff
         try (EditSession editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
+
             // If the location isn't null then set the center vector to the location
             if (location != null) {
                 centerVector = BlockVector3.at(location.getX(), location.getY(), location.getZ());

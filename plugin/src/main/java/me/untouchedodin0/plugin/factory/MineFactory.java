@@ -363,6 +363,10 @@ public class MineFactory {
                             worldEditMineData.setMaterial(worldEditMineType.getMaterial().toString());
                         }
 
+                        if (worldEditMineType.getName() != null) {
+                            worldEditMineData.setMineType(worldEditMineType.getName());
+                        }
+
                         File minesDirectory = privateMines.getMinesDirectory();
 
                         GsonBuilder gsonBuilder = new GsonBuilder();
