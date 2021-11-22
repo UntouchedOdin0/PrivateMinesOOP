@@ -55,6 +55,7 @@ public class PrivateMinesCommand {
     @CommandHook("main")
     public void mainHook(Player player) {
         player.sendMessage("please open gui now?!");
+        //todo https://github.com/Redempt/RedLib/wiki/InventoryGUI
     }
 
     @CommandHook("give")
