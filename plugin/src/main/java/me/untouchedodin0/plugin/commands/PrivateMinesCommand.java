@@ -211,7 +211,9 @@ public class PrivateMinesCommand {
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(target.getUniqueId());
 //        Mine mine = mineStorage.getMine(target.getUniqueId());
         player.sendMessage("attempting to expand your mine");
-        worldEditMine.expand(amount);
+        if (worldEditMine.canExpand(amount)) {
+            worldEditMine.expand(amount);
+        }
         mineStorage.replaceMine(player.getUniqueId(), worldEditMine);
     }
 

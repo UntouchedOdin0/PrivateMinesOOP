@@ -10,6 +10,7 @@ import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.regions.RegionOperationException;
 import com.sk89q.worldedit.world.block.BlockState;
 import com.sk89q.worldedit.world.block.BlockType;
 import com.sk89q.worldedit.world.block.BlockTypes;
@@ -23,6 +24,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.DataBlock;
 
@@ -388,7 +390,25 @@ public class WorldEditMine {
         return EXPANSION_VECTORS.stream().map(it -> it.divide(amount)).toArray(BlockVector3[]::new);
     }
 
-    public int canExpand(final int amount) {
+    public boolean canExpand(final int amount) {
+        this.world = privateMines.getMineWorldManager().getMinesWorld();
+
+        final var mine = getCuboidRegion();
+        final var walls = Adapter.walls(getCuboidRegion());
+        try {
+            walls.expand(expansionVectors(amount));
+        } catch (RegionOperationException e) {
+            e.printStackTrace();
+        }
+
+        walls.iterator().forEachRemaining(blockVector3 -> {
+            int x = blockVector3.getBlockX();
+            int y = blockVector3.getBlockY();
+            int z = blockVector3.getBlockZ();
+            Block block = world.getBlockAt(x, y, z);
+            if (block.isEmpty() || block.getType().equals(Material.BEDROCK)) return;
+            privateMines.getLogger().info("can expand loop type: " + block.getType().name());
+        });
 
         // for here + 1; < amount
         // if block is expected theme
@@ -399,7 +419,8 @@ public class WorldEditMine {
 
         // expand (returned amount) -> update theme -> expand the rest
 
-        return -1;
+        return false;
+//        return -1;
     }
 
     public void expand(final int amount) {
