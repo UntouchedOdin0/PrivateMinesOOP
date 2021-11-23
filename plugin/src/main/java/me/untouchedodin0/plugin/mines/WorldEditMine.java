@@ -425,31 +425,36 @@ public class WorldEditMine {
     public void expand(final int amount) {
 
         this.world = privateMines.getMineWorldManager().getMinesWorld();
+        boolean canExpand = canExpand(amount);
 
         if (world == null) {
             privateMines.getLogger().warning("Failed to expand the mine due to the world being null!");
         }
 
-        final var fillType = BlockTypes.DIAMOND_BLOCK;
-        final var wallType = BlockTypes.BEDROCK;
+        if (!canExpand) {
+            privateMines.getLogger().info("The private mine can't expand anymore!");
+        } else {
+            final var fillType = BlockTypes.DIAMOND_BLOCK;
+            final var wallType = BlockTypes.BEDROCK;
 
-        if (fillType == null || wallType == null) return;
+            if (fillType == null || wallType == null) return;
 
-        final var mine = getCuboidRegion();
-        final var walls = getCuboidRegion();
+            final var mine = getCuboidRegion();
+            final var walls = getCuboidRegion();
 
-        mine.expand(expansionVectors(amount));
-        walls.expand(expansionVectors(amount));
+            mine.expand(expansionVectors(amount));
+            walls.expand(expansionVectors(amount));
 
-        try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
-            session.setBlocks(mine, fillType.getDefaultState());
-            session.setBlocks(Adapter.walls(walls), wallType.getDefaultState());
-        } catch (MaxChangedBlocksException exception) {
-            exception.printStackTrace();
+            try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
+                session.setBlocks(mine, fillType.getDefaultState());
+                session.setBlocks(Adapter.walls(walls), wallType.getDefaultState());
+            } catch (MaxChangedBlocksException exception) {
+                exception.printStackTrace();
+            }
+
+            mine.contract(expansionVectors(amount));
+            setCuboidRegion(mine);
         }
-
-        mine.contract(expansionVectors(amount));
-        setCuboidRegion(mine);
     }
 
 
