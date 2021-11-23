@@ -38,7 +38,7 @@ import java.util.UUID;
 public class WorldEditMine {
 
     public static final List<BlockVector3> EXPANSION_VECTORS = List.of(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X,
-            BlockVector3.UNIT_Z, BlockVector3.UNIT_MINUS_Z);
+                                                                       BlockVector3.UNIT_Z, BlockVector3.UNIT_MINUS_Z);
     public static final BlockVector3 positiveY = BlockVector3.UNIT_Y;
 
     final Utils utils;
@@ -53,6 +53,7 @@ public class WorldEditMine {
     private Material material;
     private DataBlock dataBlock;
     private WorldEditMineData worldEditMineData;
+    private boolean canExpand = true;
 
     public WorldEditMine(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -392,22 +393,21 @@ public class WorldEditMine {
 
     public boolean canExpand(final int amount) {
         this.world = privateMines.getMineWorldManager().getMinesWorld();
-
         final var mine = getCuboidRegion();
-        final var walls = Adapter.walls(getCuboidRegion());
-        try {
-            walls.expand(expansionVectors(amount));
-        } catch (RegionOperationException e) {
-            e.printStackTrace();
-        }
 
-        walls.iterator().forEachRemaining(blockVector3 -> {
-            int x = blockVector3.getBlockX();
-            int y = blockVector3.getBlockY();
-            int z = blockVector3.getBlockZ();
-            Block block = world.getBlockAt(x, y, z);
-            if (block.isEmpty() || block.getType().equals(Material.BEDROCK)) return;
-            privateMines.getLogger().info("can expand loop type: " + block.getType().name());
+        mine.expand(expansionVectors(amount));
+        CuboidRegion cuboidRegion = CuboidRegion.makeCuboid(mine);
+
+        cuboidRegion.expand(expansionVectors(1));
+
+        cuboidRegion.forEach(blockVector3 -> {
+            Location location = utils.blockVector3toBukkit(world, blockVector3);
+            if (location.getBlock().getType().equals(Material.OBSIDIAN)) {
+                privateMines.getLogger().info("Found obsidian at " + location);
+                canExpand = false;
+            } else {
+                canExpand = true;
+            }
         });
 
         // for here + 1; < amount
@@ -416,10 +416,9 @@ public class WorldEditMine {
         // else
         // return amount - expected theme
 
-
         // expand (returned amount) -> update theme -> expand the rest
 
-        return false;
+        return canExpand;
 //        return -1;
     }
 

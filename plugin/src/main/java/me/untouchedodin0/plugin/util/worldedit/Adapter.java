@@ -37,5 +37,4 @@ public enum Adapter {
                 // Project to the X-Z plane
                 new CuboidRegion(pos1.withY(min.getY()), pos2.withY(min.getY())));
     }
-
 }
