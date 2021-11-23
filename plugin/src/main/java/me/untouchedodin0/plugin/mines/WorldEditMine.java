@@ -10,7 +10,6 @@ import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
-import com.sk89q.worldedit.regions.RegionOperationException;
 import com.sk89q.worldedit.world.block.BlockState;
 import com.sk89q.worldedit.world.block.BlockType;
 import com.sk89q.worldedit.world.block.BlockTypes;
@@ -24,7 +23,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.DataBlock;
 
@@ -53,7 +51,7 @@ public class WorldEditMine {
     private Material material;
     private DataBlock dataBlock;
     private WorldEditMineData worldEditMineData;
-    private boolean canExpand = true;
+    private boolean canExpand;
 
     public WorldEditMine(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -421,6 +419,32 @@ public class WorldEditMine {
         return canExpand;
 //        return -1;
     }
+
+//    public boolean canExpand(final int amount) {
+//        this.world = privateMines.getMineWorldManager().getMinesWorld();
+//        final var mine = getCuboidRegion();
+////        mine.expand(expansionVectors(amount));
+//        CuboidRegion cuboidRegion = CuboidRegion.makeCuboid(mine);
+//
+//        cuboidRegion.expand(expansionVectors(amount));
+//
+//        cuboidRegion.forEach(blockVector3 -> {
+//            Location location = utils.blockVector3toBukkit(world, blockVector3);
+//            this.canExpand = !location.getBlock().getType().equals(Material.OBSIDIAN);
+//            privateMines.getLogger().info("canExpand?: " + canExpand);
+//        });
+//
+//        // for here + 1; < amount
+//        // if block is expected theme
+//        // return -1;
+//        // else
+//        // return amount - expected theme
+//
+//        // expand (returned amount) -> update theme -> expand the rest
+//
+//        return canExpand;
+////        return -1;
+//    }
 
     public void expand(final int amount) {
 
