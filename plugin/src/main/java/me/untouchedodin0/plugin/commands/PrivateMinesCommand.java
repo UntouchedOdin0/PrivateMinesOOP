@@ -11,6 +11,7 @@ import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -20,6 +21,7 @@ import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.commandmanager.CommandHook;
 import redempt.redlib.commandmanager.Messages;
+import redempt.redlib.inventorygui.InventoryGUI;
 import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.MultiBlockStructure;
 import redempt.redlib.multiblock.Structure;
@@ -55,6 +57,8 @@ public class PrivateMinesCommand {
     @CommandHook("main")
     public void mainHook(Player player) {
         player.sendMessage("please open gui now?!");
+        InventoryGUI gui = new InventoryGUI(Bukkit.createInventory(null, 9, "take the L"));
+        gui.open(player);
         //todo https://github.com/Redempt/RedLib/wiki/InventoryGUI
     }
 
