@@ -51,7 +51,7 @@ public class WorldEditMine {
     private Material material;
     private DataBlock dataBlock;
     private WorldEditMineData worldEditMineData;
-    private boolean canExpand;
+    private boolean canExpand = true;
 
     public WorldEditMine(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -392,10 +392,8 @@ public class WorldEditMine {
     public boolean canExpand(final int amount) {
         this.world = privateMines.getMineWorldManager().getMinesWorld();
         final var mine = getCuboidRegion();
-
         mine.expand(expansionVectors(amount));
         CuboidRegion cuboidRegion = CuboidRegion.makeCuboid(mine);
-
         cuboidRegion.expand(expansionVectors(1));
 
         cuboidRegion.forEach(blockVector3 -> {
@@ -407,17 +405,7 @@ public class WorldEditMine {
                 canExpand = true;
             }
         });
-
-        // for here + 1; < amount
-        // if block is expected theme
-        // return -1;
-        // else
-        // return amount - expected theme
-
-        // expand (returned amount) -> update theme -> expand the rest
-
         return canExpand;
-//        return -1;
     }
 
 //    public boolean canExpand(final int amount) {
@@ -446,10 +434,13 @@ public class WorldEditMine {
 ////        return -1;
 //    }
 
+    // don't fuck this up anymore it bloody works and it took ages to make it work!!!!!!
+
     public void expand(final int amount) {
 
         this.world = privateMines.getMineWorldManager().getMinesWorld();
         boolean canExpand = canExpand(amount);
+        privateMines.getLogger().info("canExpand?: " + canExpand);
 
         if (world == null) {
             privateMines.getLogger().warning("Failed to expand the mine due to the world being null!");
