@@ -25,6 +25,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.DataBlock;
+import redempt.redlib.misc.Task;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,6 +33,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class WorldEditMine {
 
@@ -401,12 +403,7 @@ public class WorldEditMine {
         cuboidRegion.expand(expansionVectors(1));
         cuboidRegion.forEach(blockVector3 -> {
             Location location = utils.blockVector3toBukkit(world, blockVector3);
-            if (location.getBlock().getType().equals(Material.OBSIDIAN)) {
-                privateMines.getLogger().info("Found obsidian at " + location);
-                canExpand = false;
-            } else {
-                canExpand = true;
-            }
+            canExpand = location.getBlock().getType() != Material.OBSIDIAN;
         });
         return canExpand;
     }
@@ -449,6 +446,11 @@ public class WorldEditMine {
         if (!canExpand) {
             privateMines.getLogger().info("The private mine can't expand anymore!");
             Bukkit.broadcastMessage("Mine can't expand anymore!");
+            Bukkit.broadcastMessage("Calling upgrade method...");
+            Task.asyncDelayed(task -> {
+                Bukkit.broadcastMessage("hi, i'm an upgrade thing!");
+            }, TimeUnit.SECONDS.toMillis(1));
+
         } else {
             final var fillType = BlockTypes.DIAMOND_BLOCK;
             final var wallType = BlockTypes.BEDROCK;
