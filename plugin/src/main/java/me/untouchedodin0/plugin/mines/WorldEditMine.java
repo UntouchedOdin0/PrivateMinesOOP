@@ -389,9 +389,13 @@ public class WorldEditMine {
         return EXPANSION_VECTORS.stream().map(it -> it.divide(amount)).toArray(BlockVector3[]::new);
     }
 
+    // No touch!!
     public boolean canExpand(final int amount) {
         this.world = privateMines.getMineWorldManager().getMinesWorld();
         final var mine = getCuboidRegion();
+
+        if (!canExpand) return false;
+
         mine.expand(expansionVectors(amount));
         CuboidRegion cuboidRegion = CuboidRegion.makeCuboid(mine);
         cuboidRegion.expand(expansionVectors(1));
@@ -444,6 +448,7 @@ public class WorldEditMine {
 
         if (!canExpand) {
             privateMines.getLogger().info("The private mine can't expand anymore!");
+            Bukkit.broadcastMessage("Mine can't expand anymore!");
         } else {
             final var fillType = BlockTypes.DIAMOND_BLOCK;
             final var wallType = BlockTypes.BEDROCK;
