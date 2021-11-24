@@ -395,7 +395,6 @@ public class WorldEditMine {
         mine.expand(expansionVectors(amount));
         CuboidRegion cuboidRegion = CuboidRegion.makeCuboid(mine);
         cuboidRegion.expand(expansionVectors(1));
-
         cuboidRegion.forEach(blockVector3 -> {
             Location location = utils.blockVector3toBukkit(world, blockVector3);
             if (location.getBlock().getType().equals(Material.OBSIDIAN)) {
@@ -434,13 +433,10 @@ public class WorldEditMine {
 ////        return -1;
 //    }
 
-    // don't fuck this up anymore it bloody works and it took ages to make it work!!!!!!
-
     public void expand(final int amount) {
 
         this.world = privateMines.getMineWorldManager().getMinesWorld();
         boolean canExpand = canExpand(amount);
-        privateMines.getLogger().info("canExpand?: " + canExpand);
 
         if (world == null) {
             privateMines.getLogger().warning("Failed to expand the mine due to the world being null!");
