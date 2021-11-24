@@ -1,5 +1,7 @@
 package me.untouchedodin0.plugin.mines;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -27,9 +29,7 @@ import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.misc.Task;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -438,6 +438,12 @@ public class WorldEditMine {
 
         this.world = privateMines.getMineWorldManager().getMinesWorld();
         boolean canExpand = canExpand(amount);
+        MineStorage mineStorage = privateMines.getMineStorage();
+        File minesDirectory = privateMines.getMinesDirectory();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        Gson gson = gsonBuilder.create();
+        String fileName = getMineOwner() + ".json";
+        File jsonFile = new File(minesDirectory, fileName);
 
         if (world == null) {
             privateMines.getLogger().warning("Failed to expand the mine due to the world being null!");
@@ -466,13 +472,49 @@ public class WorldEditMine {
             try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
                 session.setBlocks(mine, fillType.getDefaultState());
                 session.setBlocks(Adapter.walls(walls), wallType.getDefaultState());
+
+                Bukkit.broadcastMessage("mine: " + mine);
+                mine.contract(expansionVectors(1));
+                Bukkit.broadcastMessage("mine contracted: " + mine);
+
+                BlockVector3 min = mine.getMinimumPoint();
+                BlockVector3 max = mine.getMaximumPoint();
+
+                worldEditMineData.setMinX(min.getBlockX());
+                worldEditMineData.setMinY(min.getBlockY());
+                worldEditMineData.setMinZ(min.getBlockZ());
+
+                worldEditMineData.setMaxX(max.getBlockX());
+                worldEditMineData.setMaxY(max.getBlockY());
+                worldEditMineData.setMaxZ(max.getBlockZ());
+
+                Bukkit.broadcastMessage("min: " + min);
+                Bukkit.broadcastMessage("max: " + max);
+
             } catch (MaxChangedBlocksException exception) {
                 exception.printStackTrace();
             }
+            worldEditMineData.setMineOwner(getMineOwner());
+            worldEditMineData.setSpawnX(spawnLocation.getBlockX());
+            worldEditMineData.setSpawnY(spawnLocation.getBlockY());
+            worldEditMineData.setSpawnZ(spawnLocation.getBlockZ());
 
-            mine.contract(expansionVectors(amount));
+            try {
+                Writer writer = new FileWriter(jsonFile);
+                writer.write(gson.toJson(worldEditMineData));
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            setCuboidRegion(null);
             setCuboidRegion(mine);
+            privateMines.getLogger().info("cuboid region mine: " + mine);
+            privateMines.getMineStorage().replaceMine(getMineOwner(), this);
+//            mineStorage.replaceMine(getMineOwner(), this);
+//            mine.contract(expansionVectors(amount));
         }
+        mineStorage.replaceMine(getMineOwner(), this);
     }
 
 
