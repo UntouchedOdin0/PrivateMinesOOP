@@ -173,4 +173,14 @@ public class Utils {
     public String getMineFileName(UUID uuid) {
         return String.format("mine-%s.json", uuid);
     }
+
+    public CuboidRegion worldEditRegionToRedLibRegion(com.sk89q.worldedit.regions.CuboidRegion cuboidRegion) {
+        BlockVector3 min = cuboidRegion.getMinimumPoint();
+        BlockVector3 max = cuboidRegion.getMaximumPoint();
+        World world = privateMines.getMineWorldManager().getMinesWorld();
+        privateMines.getLogger().info("world: " + world);
+        Location minLoc = blockVector3toBukkit(world, min);
+        Location maxLoc = blockVector3toBukkit(world, max);
+        return new CuboidRegion(minLoc, maxLoc);
+    }
 }

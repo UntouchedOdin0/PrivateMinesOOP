@@ -25,6 +25,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.misc.Task;
@@ -53,7 +54,6 @@ public class WorldEditMine {
     private Material material;
     private DataBlock dataBlock;
     private WorldEditMineData worldEditMineData;
-    private boolean canExpand = true;
 
     public WorldEditMine(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -392,20 +392,65 @@ public class WorldEditMine {
     }
 
     // No touch!!
+
+//    public boolean canExpand(final int amount) {
+//        this.world = privateMines.getMineWorldManager().getMinesWorld();
+//        final var mine = getCuboidRegion();
+//
+//        mine.expand(expansionVectors(amount));
+//        CuboidRegion cuboidRegion = CuboidRegion.makeCuboid(mine);
+//
+////        cuboidRegion.expand(expansionVectors(1));
+//
+//        mine.forEach(blockVector3 -> {
+//            Location location = utils.blockVector3toBukkit(world, blockVector3);
+//            if (location.getBlock().getType().equals(Material.OBSIDIAN)) {
+//                privateMines.getLogger().info("Found obsidian at " + location);
+//                canExpand = false;
+//            } else {
+//                canExpand = true;
+//            }
+//        });
+//
+//        // for here + 1; < amount
+//        // if block is expected theme
+//        // return -1;
+//        // else
+//        // return amount - expected theme
+//
+//        // expand (returned amount) -> update theme -> expand the rest
+//
+//        return canExpand;
+////        return -1;
+//    }
+
     public boolean canExpand(final int amount) {
         this.world = privateMines.getMineWorldManager().getMinesWorld();
         final var mine = getCuboidRegion();
+        privateMines.getLogger().info("canExpand mine: " + mine);
+        BlockVector3 min  = region.getMinimumPoint();
+        BlockVector3 max = region.getMaximumPoint();
+        CuboidRegion test = new CuboidRegion(min, max);
 
-        if (!canExpand) return false;
+        redempt.redlib.region.CuboidRegion cuboidRegion = utils.worldEditRegionToRedLibRegion(test);
+        cuboidRegion.expand(1, 0, 1, 0, 1, 0);
+        privateMines.getLogger().info("cuboidRegion: " + cuboidRegion);
 
-        mine.expand(expansionVectors(amount));
-        CuboidRegion cuboidRegion = CuboidRegion.makeCuboid(mine);
-        cuboidRegion.expand(expansionVectors(1));
-        cuboidRegion.forEach(blockVector3 -> {
-            Location location = utils.blockVector3toBukkit(world, blockVector3);
-            canExpand = location.getBlock().getType() != Material.OBSIDIAN;
+        return cuboidRegion.stream().noneMatch(block -> {
+            privateMines.getLogger().info("block type: " + block.getType());
+            block.getType().equals(Material.OBSIDIAN);
+            return false;
         });
-        return canExpand;
+
+//        if (!canExpand) return false;
+
+//        mine.expand(expansionVectors(amount));
+////        cuboidRegion.expand(expansionVectors(1));
+//        mine.forEach(blockVector3 -> {
+//            Location location = utils.blockVector3toBukkit(world, blockVector3);
+//            canExpand =
+//            return location.getBlock().getType() == Material.OBSIDIAN;
+//        });
     }
 
 //    public boolean canExpand(final int amount) {
@@ -449,6 +494,8 @@ public class WorldEditMine {
             privateMines.getLogger().warning("Failed to expand the mine due to the world being null!");
         }
 
+        Bukkit.broadcastMessage("CAN EXPAND: " + canExpand);
+
         if (!canExpand) {
             privateMines.getLogger().info("The private mine can't expand anymore!");
             Bukkit.broadcastMessage("Mine can't expand anymore!");
@@ -456,7 +503,6 @@ public class WorldEditMine {
             Task.asyncDelayed(task -> {
                 Bukkit.broadcastMessage("hi, i'm an upgrade thing!");
             }, TimeUnit.SECONDS.toMillis(1));
-
         } else {
             final var fillType = BlockTypes.DIAMOND_BLOCK;
             final var wallType = BlockTypes.BEDROCK;
