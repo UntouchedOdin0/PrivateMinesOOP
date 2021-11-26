@@ -439,7 +439,6 @@ public class WorldEditMine {
         return cuboidRegion.stream().noneMatch(block -> {
             privateMines.getLogger().info("block type: " + block.getType());
             return block.getType() == Material.OBSIDIAN;
-//            return block.getType().equals(Material.OBSIDIAN);
         });
     }
 
