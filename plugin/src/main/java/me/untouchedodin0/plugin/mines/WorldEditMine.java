@@ -438,19 +438,9 @@ public class WorldEditMine {
 
         return cuboidRegion.stream().noneMatch(block -> {
             privateMines.getLogger().info("block type: " + block.getType());
-            block.getType().equals(Material.OBSIDIAN);
-            return false;
+            return block.getType() == Material.OBSIDIAN;
+//            return block.getType().equals(Material.OBSIDIAN);
         });
-
-//        if (!canExpand) return false;
-
-//        mine.expand(expansionVectors(amount));
-////        cuboidRegion.expand(expansionVectors(1));
-//        mine.forEach(blockVector3 -> {
-//            Location location = utils.blockVector3toBukkit(world, blockVector3);
-//            canExpand =
-//            return location.getBlock().getType() == Material.OBSIDIAN;
-//        });
     }
 
 //    public boolean canExpand(final int amount) {

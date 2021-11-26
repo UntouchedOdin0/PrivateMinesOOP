@@ -24,13 +24,19 @@ import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class Utils {
 
     private final PrivateMines privateMines;
     private final boolean debugMode;
+    private final Pattern schemFilePattern = Pattern.compile("[a-zA-Z]\\.(schem)"); //Pattern.compile("(.*?)\\.(schem)");
 
     public Utils(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -182,5 +188,29 @@ public class Utils {
         Location minLoc = blockVector3toBukkit(world, min);
         Location maxLoc = blockVector3toBukkit(world, max);
         return new CuboidRegion(minLoc, maxLoc);
+    }
+
+    public void moveSchematicFiles(File[] files) {
+        File directory = privateMines.getSchematicsDirectory();
+        File[] directoryFiles = directory.listFiles();
+
+        if (files != null && directoryFiles != null) {
+            for (File file : files) {
+                if (file.toPath().endsWith(".schem")) {
+                    for (File check : directoryFiles) {
+                        if (check == file) {
+                            privateMines.getLogger().info("The file " + file + " already exists so not moving!");
+                        } else {
+                            try {
+                                privateMines.getLogger().info("Moving file " + file);
+                                Files.move(Paths.get(file.toURI()), directory.toPath());
+                            } catch (IOException ioException) {
+                                ioException.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

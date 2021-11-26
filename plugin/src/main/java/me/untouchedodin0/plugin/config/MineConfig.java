@@ -110,7 +110,7 @@ public class MineConfig {
 
         if (privateMines.useWorldEdit()) {
             privateMines.getLogger().info("Creating worldedit mine types...");
-            this.path = privateMines.getDataFolder().toPath().resolve(file);
+            this.path = privateMines.getSchematicsDirectory().toPath().resolve(file);
             File file = path.toFile();
 
             WorldEditMineType worldEditMineType = new WorldEditMineType(privateMines, file);

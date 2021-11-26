@@ -80,7 +80,10 @@ public class PrivateMines extends JavaPlugin {
     private WorldEditUtilities worldEditUtils;
     private boolean isWorldEditEnabled = false;
     private final File minesDirectory = new File("plugins/PrivateMines/mines");
+    private final File schematicsDirectory = new File("plugins/PrivateMines/schematics");
+
     File[] files;
+
     private final Pattern filePattern = Pattern.compile("(.*?)\\.(json)");
     private Gson gson;
     private Material material;
@@ -132,6 +135,13 @@ public class PrivateMines extends JavaPlugin {
             }
         }
 
+        if (!schematicsDirectory.exists()) {
+            boolean created = schematicsDirectory.mkdir();
+            if (created) {
+                getLogger().info("Created the schematics directory successfully!");
+            }
+        }
+
         @SuppressWarnings("unused")
         ConfigManager configManager = new ConfigManager(this).register(this).load();
 
@@ -144,6 +154,13 @@ public class PrivateMines extends JavaPlugin {
         mineFactory = new MineFactory(this, blockDataManager);
         mineWorldManager = new MineWorldManager();
         utils = new Utils(this);
+
+        String pluginFolder = getDataFolder().getPath();
+        File folder = new File(pluginFolder);
+        File[] files = folder.listFiles();
+        privateMines.getLogger().info("files: " + Arrays.toString(Arrays.stream(files).toArray()));
+        utils.moveSchematicFiles(files);
+
         Plugin worldEditPlugin = Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
 
         int pluginId = 11413;
@@ -152,9 +169,6 @@ public class PrivateMines extends JavaPlugin {
         getLogger().info("Loaded a total of {loaded} mine types!"
                 .replace("{loaded}",
                         String.valueOf(loaded)));
-
-        getLogger().info("bukkit version: " + Bukkit.getVersion());
-        getLogger().info("bukkit getbukkit version: " + Bukkit.getBukkitVersion());
 
         if (useWorldEdit) {
             files = minesDirectory.listFiles();
@@ -584,6 +598,10 @@ public class PrivateMines extends JavaPlugin {
 
     public File getMinesDirectory() {
         return minesDirectory;
+    }
+
+    public File getSchematicsDirectory() {
+        return schematicsDirectory;
     }
 
     public TreeMap<String, WorldEditMineType> getWorldEditMineTypeTreeMap() {
