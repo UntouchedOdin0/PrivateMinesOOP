@@ -424,16 +424,17 @@ public class WorldEditMine {
 ////        return -1;
 //    }
 
+    // WORKING, DON'T FUCK WITH THIS ANYMORE!
     public boolean canExpand(final int amount) {
         this.world = privateMines.getMineWorldManager().getMinesWorld();
         final var mine = getCuboidRegion();
         privateMines.getLogger().info("canExpand mine: " + mine);
-        BlockVector3 min  = region.getMinimumPoint();
-        BlockVector3 max = region.getMaximumPoint();
+        BlockVector3 min  = mine.getMinimumPoint();
+        BlockVector3 max = mine.getMaximumPoint();
         CuboidRegion test = new CuboidRegion(min, max);
 
         redempt.redlib.region.CuboidRegion cuboidRegion = utils.worldEditRegionToRedLibRegion(test);
-        cuboidRegion.expand(1, 0, 1, 0, 1, 0);
+        cuboidRegion.expand(3, 0, 3, 0, 3, 0);
         privateMines.getLogger().info("cuboidRegion: " + cuboidRegion);
 
         return cuboidRegion.stream().noneMatch(block -> {
