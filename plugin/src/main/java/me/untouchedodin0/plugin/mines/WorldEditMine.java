@@ -25,7 +25,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.misc.Task;
@@ -34,7 +33,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 public class WorldEditMine {
 
@@ -428,14 +426,14 @@ public class WorldEditMine {
     public boolean canExpand(final int amount) {
         this.world = privateMines.getMineWorldManager().getMinesWorld();
         final var mine = getCuboidRegion();
-        privateMines.getLogger().info("canExpand mine: " + mine);
+        final int toCheck = 3 + amount;
+
         BlockVector3 min  = mine.getMinimumPoint();
         BlockVector3 max = mine.getMaximumPoint();
         CuboidRegion test = new CuboidRegion(min, max);
 
         redempt.redlib.region.CuboidRegion cuboidRegion = utils.worldEditRegionToRedLibRegion(test);
         cuboidRegion.expand(3, 0, 3, 0, 3, 0);
-        privateMines.getLogger().info("cuboidRegion: " + cuboidRegion);
 
         return cuboidRegion.stream().noneMatch(block -> {
             privateMines.getLogger().info("block type: " + block.getType());
@@ -484,16 +482,14 @@ public class WorldEditMine {
             privateMines.getLogger().warning("Failed to expand the mine due to the world being null!");
         }
 
-        Bukkit.broadcastMessage("CAN EXPAND: " + canExpand);
-
         if (!canExpand) {
             privateMines.getLogger().info("The private mine can't expand anymore!");
             Bukkit.broadcastMessage("Mine can't expand anymore!");
-            Bukkit.broadcastMessage("Calling upgrade method...");
             Task.asyncDelayed(task -> {
                 Bukkit.broadcastMessage("hi, i'm an upgrade thing!");
-            }, TimeUnit.SECONDS.toMillis(1));
+            }, utils.secondsToBukkit(5));
         } else {
+
             final var fillType = BlockTypes.DIAMOND_BLOCK;
             final var wallType = BlockTypes.BEDROCK;
 
@@ -508,10 +504,7 @@ public class WorldEditMine {
             try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
                 session.setBlocks(mine, fillType.getDefaultState());
                 session.setBlocks(Adapter.walls(walls), wallType.getDefaultState());
-
-                Bukkit.broadcastMessage("mine: " + mine);
                 mine.contract(expansionVectors(1));
-                Bukkit.broadcastMessage("mine contracted: " + mine);
 
                 BlockVector3 min = mine.getMinimumPoint();
                 BlockVector3 max = mine.getMaximumPoint();

@@ -213,4 +213,8 @@ public class Utils {
             }
         }
     }
+
+    public long secondsToBukkit(int seconds) {
+        return 20L * seconds;
+    }
 }
