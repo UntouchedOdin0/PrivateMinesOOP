@@ -54,8 +54,6 @@ public class WorldEditMine {
     private Material material;
     private DataBlock dataBlock;
     private WorldEditMineData worldEditMineData;
-    boolean canExpand = true;
-
 
     public WorldEditMine(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -426,23 +424,22 @@ public class WorldEditMine {
 ////        return -1;
 //    }
 
-    // We no touchy ye?
     public boolean canExpand(final int amount) {
         this.world = privateMines.getMineWorldManager().getMinesWorld();
         final var mine = getCuboidRegion();
-        BlockVector3 min  = mine.getMinimumPoint();
-        BlockVector3 max = mine.getMaximumPoint();
+        privateMines.getLogger().info("canExpand mine: " + mine);
+        BlockVector3 min  = region.getMinimumPoint();
+        BlockVector3 max = region.getMaximumPoint();
         CuboidRegion test = new CuboidRegion(min, max);
 
         redempt.redlib.region.CuboidRegion cuboidRegion = utils.worldEditRegionToRedLibRegion(test);
         cuboidRegion.expand(1, 0, 1, 0, 1, 0);
-        cuboidRegion.forEachBlock(block -> {
-            privateMines.getLogger().info(block.getType().name());
-            if (block.getType() == Material.OBSIDIAN) {
-                privateMines.getLogger().info("Found obsidian at " + block.getLocation());
-            }
+        privateMines.getLogger().info("cuboidRegion: " + cuboidRegion);
+
+        return cuboidRegion.stream().noneMatch(block -> {
+            privateMines.getLogger().info("block type: " + block.getType());
+            return block.getType() == Material.OBSIDIAN;
         });
-        return cuboidRegion.stream().anyMatch(block -> block.getType() == Material.OBSIDIAN);
     }
 
 //    public boolean canExpand(final int amount) {
