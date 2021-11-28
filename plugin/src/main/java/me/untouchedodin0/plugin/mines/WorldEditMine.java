@@ -238,12 +238,7 @@ public class WorldEditMine {
             privateMines.getLogger().warning("Failed to upgrade the mine due to the world being null");
         }
 
-        privateMines.getLogger().info("upgrade cuboidRegion: " + cuboidRegion);
-        privateMines.getLogger().info("upgrade region: " + worldEditMineData.getRegion());
-        privateMines.getLogger().info("upgrade current world edit type: " + currentWorldEditMineType);
-
         try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
-            privateMines.getLogger().info("upgrade session: " + session);
             session.setBlocks(cuboidRegion, utils.getBlockState(air));
         } catch (MaxChangedBlocksException exception) {
             exception.printStackTrace();
@@ -254,18 +249,10 @@ public class WorldEditMine {
         ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(schematicFile);
         Player player = Bukkit.getPlayer(getMineOwner());
 
-        privateMines.getLogger().info("upgrade worldEditMineType: " + worldEditMineType);
-        privateMines.getLogger().info("upgrade schematicFile: " + schematicFile);
-        privateMines.getLogger().info("upgrade clipboardFormat: " + clipboardFormat);
-
-
         if (clipboardFormat != null) {
             try (ClipboardReader clipboardReader = clipboardFormat.getReader(new FileInputStream(schematicFile))) {
                 clipboard = clipboardReader.read();
                 Region region = pasteFactory.paste(clipboard, location);
-
-                privateMines.getLogger().info("upgrade clipboard: " + clipboardFormat);
-                privateMines.getLogger().info("upgrade region: " + clipboardFormat);
 
                 region.iterator().forEachRemaining(blockVector3 -> {
                     if (world != null) {
@@ -274,10 +261,8 @@ public class WorldEditMine {
 
                         if (bukkitMaterial == Material.CHEST) {
                             this.spawnLocation = utils.blockVector3toBukkit(world, blockVector3);
-                            privateMines.getLogger().info("upgrade spawnLocation: " + spawnLocation);
                         } else if (bukkitMaterial == Material.POWERED_RAIL) {
                             corners.add(bukkitLocation);
-                            privateMines.getLogger().info("upgrade corners: " + corners);
                         }
                     }
                 });
@@ -285,10 +270,6 @@ public class WorldEditMine {
                 // Gets the corner locations
                 Location corner1 = corners.get(0);
                 Location corner2 = corners.get(1);
-
-                privateMines.getLogger().info("upgrade corner1: " + corner1);
-                privateMines.getLogger().info("upgrade corner2: " + corner2);
-
 
                 // Makes the block vector 3 corner locations
 
@@ -304,17 +285,11 @@ public class WorldEditMine {
                         corner2.getBlockZ()
                 );
 
-                privateMines.getLogger().info("upgrade blockVectorCorner1: " + blockVectorCorner1);
-                privateMines.getLogger().info("upgrade blockVectorCorner2: " + blockVectorCorner2);
-
-
                 // Makes the cuboid region to fill with blocks
 
                 CuboidRegion fillCuboidRegion = new CuboidRegion(blockVectorCorner1, blockVectorCorner2);
                 setCuboidRegion(fillCuboidRegion);
 
-                privateMines.getLogger().info("upgrade fillCuboidRegion: " + blockVectorCorner2);
-                privateMines.getLogger().info("upgrade getCuboidRegion(): " + getCuboidRegion());
                 spawnLocation.getBlock().setType(Material.AIR);
                 reset();
                 if (player != null) {
@@ -383,7 +358,6 @@ public class WorldEditMine {
 
         if (!canExpand) {
             privateMines.getLogger().info("The private mine can't expand anymore!");
-            Bukkit.broadcastMessage("Mine can't expand anymore!");
             Task.asyncDelayed(task -> {
                 Bukkit.broadcastMessage("hi, i'm an upgrade thing!");
             }, utils.secondsToBukkit(5));
@@ -415,10 +389,6 @@ public class WorldEditMine {
                 worldEditMineData.setMaxX(max.getBlockX());
                 worldEditMineData.setMaxY(max.getBlockY());
                 worldEditMineData.setMaxZ(max.getBlockZ());
-
-                Bukkit.broadcastMessage("min: " + min);
-                Bukkit.broadcastMessage("max: " + max);
-
             } catch (MaxChangedBlocksException exception) {
                 exception.printStackTrace();
             }
@@ -437,12 +407,12 @@ public class WorldEditMine {
 
             setCuboidRegion(null);
             setCuboidRegion(mine);
-            privateMines.getLogger().info("cuboid region mine: " + mine);
             privateMines.getMineStorage().replaceMine(getMineOwner(), this);
         }
         mineStorage.replaceMine(getMineOwner(), this);
     }
 
+    // fuck sake idk if i should remove this or not, advice?
 
 //    public void expand(final int amount) {
 //        final var fillType = BlockTypes.DIAMOND_BLOCK;

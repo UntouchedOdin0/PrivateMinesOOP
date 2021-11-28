@@ -5,6 +5,7 @@ import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.world.block.BlockState;
 import com.sk89q.worldedit.world.block.BlockType;
+import jdk.incubator.foreign.CLinker;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
@@ -25,10 +26,15 @@ import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -216,5 +222,57 @@ public class Utils {
 
     public long secondsToBukkit(int seconds) {
         return 20L * seconds;
+    }
+
+    // Returns an arraylist of class names in a JarInputStream
+    private ArrayList<String> getClassNamesFromJar(JarInputStream jarFile) throws Exception {
+        ArrayList<String> classNames = new ArrayList<>();
+        try {
+            //JarInputStream jarFile = new JarInputStream(jarFileStream);
+            JarEntry jar;
+
+            //Iterate through the contents of the jar file
+            while (true) {
+                jar = jarFile.getNextJarEntry();
+                if (jar == null) {
+                    break;
+                }
+                //Pick file that has the extension of .class
+                if ((jar.getName().endsWith(".class"))) {
+                    String className = jar.getName().replaceAll("/", "\\.");
+                    String myClass = className.substring(0, className.lastIndexOf('.'));
+                    classNames.add(myClass);
+                }
+            }
+        } catch (Exception e) {
+            throw new Exception("Error while getting class names from jar", e);
+        }
+        return classNames;
+    }
+
+    // Returns an arraylist of class names in a JarInputStream
+    // Calls the above function by converting the jar path to a stream
+    private ArrayList<String> getClassNamesFromJar(String jarPath) throws Exception {
+        return getClassNamesFromJar(new JarInputStream(new FileInputStream(jarPath)));
+    }
+
+    // https://techitmore.com/java/dynamically-loading-classes-in-a-jar-file/
+    private ArrayList<Class> loadJarFile(String filePath) throws Exception {
+
+        ArrayList<Class> availableClasses = new ArrayList<>();
+
+        ArrayList<String> classNames = getClassNamesFromJar(filePath);
+        File f = new File(filePath);
+
+        URLClassLoader classLoader = new URLClassLoader(new URL[]{f.toURI().toURL()});
+        for (String className : classNames) {
+            try {
+                Class cc = classLoader.loadClass(className);
+                availableClasses.add(cc);
+            } catch (ClassNotFoundException e) {
+                privateMines.getLogger().warning("Class " + className + " was not found");
+            }
+        }
+        return availableClasses;
     }
 }

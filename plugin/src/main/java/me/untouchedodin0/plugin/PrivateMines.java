@@ -57,6 +57,9 @@ import redempt.redlib.configmanager.annotations.ConfigValue;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -80,10 +83,13 @@ public class PrivateMines extends JavaPlugin {
     private boolean isWorldEditEnabled = false;
     private final File minesDirectory = new File("plugins/PrivateMines/mines");
     private final File schematicsDirectory = new File("plugins/PrivateMines/schematics");
+    private final File addonsDirectory = new File("plugins/PrivateMines/addons");
 
     File[] files;
 
     private final Pattern filePattern = Pattern.compile("(.*?)\\.(json)");
+    private final Pattern jarPattern = Pattern.compile("(.*?)\\.(jar)");
+
     private Gson gson;
     private Material material;
 
@@ -141,6 +147,13 @@ public class PrivateMines extends JavaPlugin {
             }
         }
 
+        if (!addonsDirectory.exists()) {
+            boolean created = addonsDirectory.mkdir();
+            if (created) {
+                getLogger().info("Created addons directory successfully!");
+            }
+        }
+
         @SuppressWarnings("unused")
         ConfigManager configManager = new ConfigManager(this).register(this).load();
 
@@ -159,6 +172,8 @@ public class PrivateMines extends JavaPlugin {
         File[] files = folder.listFiles();
         privateMines.getLogger().info("files: " + Arrays.toString(Arrays.stream(files).toArray()));
         utils.moveSchematicFiles(files);
+
+        File[] addons = addonsDirectory.listFiles();
 
         Plugin worldEditPlugin = Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
 
@@ -378,6 +393,15 @@ public class PrivateMines extends JavaPlugin {
             if (useWorldEdit) {
                 isWorldEditEnabled = true;
             }
+        }
+
+        //TODO FIX THIS
+        if (addons != null) {
+            Arrays.stream(addons).forEach(file -> {
+                if (file.getName().matches(String.valueOf(jarPattern))) {
+                    privateMines.getLogger().info("found addon file: " + file);
+                }
+            });
         }
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
