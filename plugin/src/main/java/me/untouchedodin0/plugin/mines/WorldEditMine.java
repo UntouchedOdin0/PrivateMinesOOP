@@ -209,56 +209,6 @@ public class WorldEditMine {
         }
 
         mineStorage.removeWorldEditMine(getMineOwner());
-
-//        Gson gson = new Gson();
-//        String fileName = getMineOwner().toString() + ".json";
-//        File minesDirectory = privateMines.getMinesDirectory();
-//        File jsonFile = new File(minesDirectory, fileName);
-//        Reader reader;
-//        WorldEditMine worldEditMine;
-//
-//        try {
-//            reader = Files.newBufferedReader(Paths.get(jsonFile.toURI()));
-//            worldEditMine = gson.fromJson(reader, WorldEditMine.class);
-//
-//            privateMines.getLogger().info("delete reader: " + reader.toString());
-//            privateMines.getLogger().info("delete worldEditMine: " + worldEditMine);
-//        } catch (IOException ioException) {
-//            ioException.printStackTrace();
-//        }
-
-
-//        int minX = getDataBlock().getInt("minX");
-//        int minY = getDataBlock().getInt("minY");
-//        int minZ = getDataBlock().getInt("minZ");
-//
-//        int maxX = getDataBlock().getInt("maxX");
-//        int maXY = getDataBlock().getInt("maxY");
-//        int maxZ = getDataBlock().getInt("maxZ");
-//
-//        BlockVector3 min = BlockVector3.at(minX, minY, minZ);
-//        BlockVector3 max = BlockVector3.at(maxX, maXY, maxZ);
-//
-//        final var cuboidRegion = new CuboidRegion(min, max);
-//
-//        final var air = utils.bukkitToBlockType(Material.AIR);
-//        final var dataBlock = getDataBlock();
-//        final var cuboid = new CuboidRegion(min, max);
-//
-//
-//        // Creates edit session, sets the blocks and flushes it!
-//        try (final var session = WorldEdit.getInstance()
-//                .newEditSession(BukkitAdapter.adapt(world))) {
-//            session.setBlocks(cuboid, utils.getBlockState(air));
-////            session.setBlocks(region, utils.getBlockState(air));
-//        } catch (MaxChangedBlocksException exception) {
-//            exception.printStackTrace();
-//        }
-//        setCuboidRegion(null);
-//        setRegion(null);
-//        this.cuboidRegion = null;
-//        this.region = null;
-//        dataBlock.remove();
     }
 
     public void upgrade() {
@@ -384,38 +334,18 @@ public class WorldEditMine {
         return EXPANSION_VECTORS.stream().map(it -> it.divide(amount)).toArray(BlockVector3[]::new);
     }
 
-    // No touch!!
+    /*
+      for here + 1; < amount
+      if block is expected theme
+      return -1;
+      else
+      return amount - expected theme
 
-//    public boolean canExpand(final int amount) {
-//        this.world = privateMines.getMineWorldManager().getMinesWorld();
-//        final var mine = getCuboidRegion();
-//
-//        mine.expand(expansionVectors(amount));
-//        CuboidRegion cuboidRegion = CuboidRegion.makeCuboid(mine);
-//
-////        cuboidRegion.expand(expansionVectors(1));
-//
-//        mine.forEach(blockVector3 -> {
-//            Location location = utils.blockVector3toBukkit(world, blockVector3);
-//            if (location.getBlock().getType().equals(Material.OBSIDIAN)) {
-//                privateMines.getLogger().info("Found obsidian at " + location);
-//                canExpand = false;
-//            } else {
-//                canExpand = true;
-//            }
-//        });
-//
-//        // for here + 1; < amount
-//        // if block is expected theme
-//        // return -1;
-//        // else
-//        // return amount - expected theme
-//
-//        // expand (returned amount) -> update theme -> expand the rest
-//
-//        return canExpand;
-////        return -1;
-//    }
+      expand (returned amount) -> update theme -> expand the rest
+
+     return canExpand;
+     return -1;
+     */
 
     // WORKING, DON'T FUCK WITH THIS ANYMORE!
     public boolean canExpand(final int amount) {
@@ -425,9 +355,9 @@ public class WorldEditMine {
 
         BlockVector3 min  = mine.getMinimumPoint();
         BlockVector3 max = mine.getMaximumPoint();
-        CuboidRegion test = new CuboidRegion(min, max);
+        CuboidRegion minMaxCuboid = new CuboidRegion(min, max);
 
-        redempt.redlib.region.CuboidRegion cuboidRegion = utils.worldEditRegionToRedLibRegion(test);
+        redempt.redlib.region.CuboidRegion cuboidRegion = utils.worldEditRegionToRedLibRegion(minMaxCuboid);
         cuboidRegion.expand(3, 0, 3, 0, 3, 0);
 
         return cuboidRegion.stream().noneMatch(block -> {
@@ -435,32 +365,6 @@ public class WorldEditMine {
             return block.getType() == Material.OBSIDIAN;
         });
     }
-
-//    public boolean canExpand(final int amount) {
-//        this.world = privateMines.getMineWorldManager().getMinesWorld();
-//        final var mine = getCuboidRegion();
-////        mine.expand(expansionVectors(amount));
-//        CuboidRegion cuboidRegion = CuboidRegion.makeCuboid(mine);
-//
-//        cuboidRegion.expand(expansionVectors(amount));
-//
-//        cuboidRegion.forEach(blockVector3 -> {
-//            Location location = utils.blockVector3toBukkit(world, blockVector3);
-//            this.canExpand = !location.getBlock().getType().equals(Material.OBSIDIAN);
-//            privateMines.getLogger().info("canExpand?: " + canExpand);
-//        });
-//
-//        // for here + 1; < amount
-//        // if block is expected theme
-//        // return -1;
-//        // else
-//        // return amount - expected theme
-//
-//        // expand (returned amount) -> update theme -> expand the rest
-//
-//        return canExpand;
-////        return -1;
-//    }
 
     public void expand(final int amount) {
 
@@ -535,8 +439,6 @@ public class WorldEditMine {
             setCuboidRegion(mine);
             privateMines.getLogger().info("cuboid region mine: " + mine);
             privateMines.getMineStorage().replaceMine(getMineOwner(), this);
-//            mineStorage.replaceMine(getMineOwner(), this);
-//            mine.contract(expansionVectors(amount));
         }
         mineStorage.replaceMine(getMineOwner(), this);
     }
