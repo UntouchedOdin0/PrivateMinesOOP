@@ -202,12 +202,7 @@ public class WorldEditMine {
             privateMines.getLogger().warning("Failed to delete the mine due to the world being null");
         }
 
-        privateMines.getLogger().info("cuboidRegion: " + cuboidRegion);
-
-        privateMines.getLogger().info("region: " + worldEditMineData.getRegion());
-
         try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
-            privateMines.getLogger().info("delete session: " + session);
             session.setBlocks(cuboidRegion, utils.getBlockState(air));
         } catch (MaxChangedBlocksException e) {
             e.printStackTrace();
