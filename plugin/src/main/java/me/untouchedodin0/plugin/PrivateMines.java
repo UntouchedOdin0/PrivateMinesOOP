@@ -39,6 +39,7 @@ import me.untouchedodin0.plugin.mines.data.WorldEditMineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Metrics;
 import me.untouchedodin0.plugin.util.Utils;
+import me.untouchedodin0.plugin.util.addons.AddonLoader;
 import me.untouchedodin0.plugin.util.placeholderapi.PrivateMinesExpansion;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
@@ -46,6 +47,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.commandmanager.ArgType;
@@ -57,9 +59,6 @@ import redempt.redlib.configmanager.annotations.ConfigValue;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -79,6 +78,8 @@ public class PrivateMines extends JavaPlugin {
     private MineStorage mineStorage;
     private BlockDataManager blockDataManager;
     private Utils utils;
+    private PluginManager pluginManager;
+    private AddonLoader addonLoader;
     private WorldEditUtilities worldEditUtils;
     private boolean isWorldEditEnabled = false;
     private final File minesDirectory = new File("plugins/PrivateMines/mines");
@@ -166,6 +167,8 @@ public class PrivateMines extends JavaPlugin {
         mineFactory = new MineFactory(this, blockDataManager);
         mineWorldManager = new MineWorldManager();
         utils = new Utils(this);
+        pluginManager = Bukkit.getServer().getPluginManager();
+        addonLoader = new AddonLoader(this, pluginManager);
 
         String pluginFolder = getDataFolder().getPath();
         File folder = new File(pluginFolder);
@@ -400,6 +403,7 @@ public class PrivateMines extends JavaPlugin {
             Arrays.stream(addons).forEach(file -> {
                 if (file.getName().matches(String.valueOf(jarPattern))) {
                     privateMines.getLogger().info("found addon file: " + file);
+                    addonLoader.load(file);
                 }
             });
         }
