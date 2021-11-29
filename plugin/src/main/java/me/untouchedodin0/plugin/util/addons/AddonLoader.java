@@ -24,12 +24,27 @@ public class AddonLoader {
             try {
                 Plugin plugin = pluginManager.loadPlugin(file);
                 if (plugin != null) {
-                    privateMines.getLogger().info("Loading plugin... " + plugin.getName());
+                    privateMines.getLogger().info("Loading addon... " + plugin.getName());
                 } else {
                     privateMines.getLogger().warning("Failed to load file: " + file);
                 }
             } catch (InvalidPluginException | InvalidDescriptionException e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    public void unload(String name) {
+        if (pluginManager != null) {
+            boolean isEnabled = pluginManager.isPluginEnabled(name);
+            if (!isEnabled) {
+                privateMines.getLogger().warning("The plugin " + name + " wasn't enabled!");
+            } else {
+                Plugin plugin = pluginManager.getPlugin(name);
+                privateMines.getLogger().info("Unloading plugin " + name);
+                if (plugin != null) {
+                    pluginManager.disablePlugin(plugin);
+                }
             }
         }
     }
