@@ -50,6 +50,7 @@ public class WorldEditMine {
     private World world;
     private Location location;
     private Material material;
+    private Material[] materials;
     private DataBlock dataBlock;
     private WorldEditMineData worldEditMineData;
 
@@ -129,6 +130,14 @@ public class WorldEditMine {
         this.material = material;
     }
 
+    public Material[] getMaterials() {
+        return materials;
+    }
+
+    public void setMaterials(Material[] materials) {
+        this.materials = materials;
+    }
+
     public DataBlock getDataBlock() {
         return dataBlock;
     }
@@ -140,6 +149,18 @@ public class WorldEditMine {
     public BlockState getFillState() {
         final BlockType blockType = utils.bukkitToBlockType(getMaterial());
         return utils.getBlockState(blockType);
+    }
+
+    public List<BlockState> getMultipleFillState() {
+        Material[] materials = getMaterials();
+        List<BlockState> blockStates = new ArrayList<>();
+
+        for (Material material : materials) {
+            BlockType blockType = utils.bukkitToBlockType(material);
+            BlockState blockState = utils.getBlockState(blockType);
+            blockStates.add(blockState);
+        }
+        return blockStates;
     }
 
     public File getSchematicFile() {
@@ -336,7 +357,6 @@ public class WorldEditMine {
         cuboidRegion.expand(3, 0, 3, 0, 3, 0);
 
         return cuboidRegion.stream().noneMatch(block -> {
-            privateMines.getLogger().info("block type: " + block.getType());
             return block.getType() == Material.OBSIDIAN;
         });
     }
