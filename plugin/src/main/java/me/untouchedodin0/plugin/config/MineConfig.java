@@ -119,10 +119,6 @@ public class MineConfig {
             worldEditMineType.setResetTime(getResetTime());
             worldEditMineType.setMaterial(getMaterial());
             privateMines.addType(getName(), worldEditMineType);
-
-            privateMines.getLogger().info("path: " + path);
-            privateMines.getLogger().info("file: " + file);
-
         } else {
             privateMines.getLogger().info("Creating redlib mine types...");
 
