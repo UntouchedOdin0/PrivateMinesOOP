@@ -184,8 +184,7 @@ public class PrivateMines extends JavaPlugin {
 
         int loaded = mineTypes.size();
         getLogger().info("Loaded a total of {loaded} mine types!"
-                .replace("{loaded}",
-                        String.valueOf(loaded)));
+                   .replace("{loaded}", String.valueOf(loaded)));
 
         if (useWorldEdit) {
             files = minesDirectory.listFiles();
@@ -206,6 +205,7 @@ public class PrivateMines extends JavaPlugin {
                             int minX = worldEditMineData.getMinX();
                             int minY = worldEditMineData.getMinY();
                             int minZ = worldEditMineData.getMinZ();
+
                             int maxX = worldEditMineData.getMaxX();
                             int maxY = worldEditMineData.getMaxY();
                             int maxZ = worldEditMineData.getMaxZ();
@@ -454,11 +454,10 @@ public class PrivateMines extends JavaPlugin {
 
     public MineType getDefaultMineType() {
         if (mineTypeTreeMap.isEmpty()) {
-            Bukkit.getLogger().info("No default mine type was found!");
-            Bukkit.getLogger().info("Create a mine type in the mineTypes");
-            Bukkit.getLogger().info("section of the config.yml");
-            Bukkit.getLogger().info("Please ask in the discord server" +
-                    " if you need help");
+            Bukkit.getLogger().info(""" No default mine type was found! \n
+                                        Create a mine type in the mine types section of the config.yml. \n
+                                        Please ask in the discord server if you need help!"""
+                                    );
             return null;
         }
         return mineTypeTreeMap.firstEntry().getValue();
@@ -470,11 +469,11 @@ public class PrivateMines extends JavaPlugin {
 
     public WorldEditMineType getDefaultWorldEditMineType() {
         if (worldEditMineTypeTreeMap.isEmpty()) {
-            Bukkit.getLogger().info("No default world edit mine type was found!");
-            Bukkit.getLogger().info("Create a mine type in the mineTypes");
-            Bukkit.getLogger().info("section of the config.yml");
-            Bukkit.getLogger().info("Please ask in the discord server" +
-                                            " if you need help");
+            Bukkit.getLogger().info(""" No default world edit mine type was found!  \n
+                                        Create a mine type in the mineTypes         \n
+                                        section of the config.yml                   \n
+                                        Please ask in the discord server if you need help!"""
+                                    );
             return null;
         }
         return worldEditMineTypeTreeMap.firstEntry().getValue();
