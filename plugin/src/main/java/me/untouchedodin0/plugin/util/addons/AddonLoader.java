@@ -19,6 +19,8 @@ public class AddonLoader {
         this.pluginManager = pluginManager;
     }
 
+    // Load the addons from the addons folder
+
     public void load(File file) {
         if (pluginManager != null) {
             try {
@@ -33,6 +35,8 @@ public class AddonLoader {
             }
         }
     }
+
+    // Unload a specific addon via it's name.
 
     public void unload(String name) {
         if (pluginManager != null) {
