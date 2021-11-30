@@ -54,8 +54,11 @@ public class PasteFactory {
             if (clipboard != null) {
                 operation = new ClipboardHolder(clipboard).createPaste(editSession).to(centerVector).ignoreAirBlocks(true).build();
                 try {
+                    // Complete the paste
                     Operations.complete(operation);
+                    // Set the region to the clipboard region
                     region = clipboard.getRegion();
+                    // Check if the center vector isn't null and if it's not then set it to the Origin - centerVector.
                     if (centerVector != null) {
                         region.shift(centerVector.subtract(clipboard.getOrigin()));
                         return region;
