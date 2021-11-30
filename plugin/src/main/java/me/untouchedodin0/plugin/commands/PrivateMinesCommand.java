@@ -56,8 +56,7 @@ public class PrivateMinesCommand {
 
     @CommandHook("main")
     public void mainHook(Player player) {
-        player.sendMessage("please open gui now?!");
-        InventoryGUI gui = new InventoryGUI(Bukkit.createInventory(null, 9, "take the L"));
+        InventoryGUI gui = new InventoryGUI(Bukkit.createInventory(null, 9, "Coming Soon."));
         gui.open(player);
         //todo https://github.com/Redempt/RedLib/wiki/InventoryGUI
     }
@@ -181,17 +180,11 @@ public class PrivateMinesCommand {
         WorldEditMineType worldEditMineType = worldEditMine.getWorldEditMineType();
         String worldEditMineTypeName = worldEditMineType.getName();
 
-        player.sendMessage("upgrade worldEditMine: " + worldEditMine);
-        player.sendMessage("upgrade worldEditMineType before: " + worldEditMineType);
-        player.sendMessage("upgrade worldEditMineTypeName before: " + worldEditMineTypeName);
-
         if (Objects.equals(worldEditMineTypeTreeMap.lastKey(), worldEditMineTypeName)) {
-            player.sendMessage("You're already at the highest tier!!!!!!");
+            player.sendMessage("You're already at the highest tier!");
         } else {
             String upgradeTypeString = worldEditMineTypeTreeMap.higherKey(worldEditMineTypeName);
             WorldEditMineType upgradeType = privateMines.getWorldEditMineTypeTreeMap().get(upgradeTypeString);
-            player.sendMessage("upgradeType: " + upgradeType);
-            player.sendMessage("upgrade type name: " + upgradeType.getName());
             worldEditMine.setWorldEditMineType(upgradeType);
             worldEditMine.upgrade();
         }
@@ -210,7 +203,6 @@ public class PrivateMinesCommand {
         }
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(target.getUniqueId());
 //        Mine mine = mineStorage.getMine(target.getUniqueId());
-        player.sendMessage("attempting to expand your mine");
         worldEditMine.expand(amount);
         mineStorage.replaceMine(player.getUniqueId(), worldEditMine);
     }
@@ -227,12 +219,8 @@ public class PrivateMinesCommand {
         worldEditUtilities = privateMines.getWorldEditUtils();
         cuboidRegion = worldEditUtilities.getCuboidRegion(player);
 
-        player.sendMessage("region: " + worldEditUtilities.getCuboidRegion(player));
-        player.sendMessage("cuboid region: " + cuboidRegion);
         minimum = cuboidRegion.getStart();
         maximum = cuboidRegion.getEnd();
-        player.sendMessage("cuboid region minimum: " + minimum);
-        player.sendMessage("cuboid region maximum: " + maximum);
 
         worldEditUtilities.createMultiBlockStructure(player, name);
 
@@ -322,18 +310,12 @@ public class PrivateMinesCommand {
 
         if (isOpen) {
             player.sendMessage(mineAlreadyOpen);
-            player.sendMessage("Your mine is already open bud!!!!!");
-//            utils.sendMessage(player, mineAlreadyOpen);
         } else {
             worldEditMineData.setOpen(true);
             worldEditMine.setWorldEditMineData(worldEditMineData);
             privateMines.getMineStorage().replaceMine(uuid, worldEditMine);
             player.sendMessage(mineOpened);
-//            utils.sendMessage(player, mineOpened);
         }
-
-        player.sendMessage("is open?: " + worldEditMineData.isOpen());
-
 //        if (mine.isOpen()) {
 //            player.sendMessage(mineAlreadyOpen);
 //        } else if (!mine.isOpen()) {
@@ -362,18 +344,13 @@ public class PrivateMinesCommand {
         boolean isOpen = worldEditMineData.isOpen();
 
         if (!isOpen) {
-//            utils.sendMessage(player, mineAlreadyOpen);
             player.sendMessage(mineAlreadyClosed);
-            player.sendMessage("can't close, mine isn't open lol");
         } else {
             worldEditMineData.setOpen(false);
             worldEditMine.setWorldEditMineData(worldEditMineData);
             privateMines.getMineStorage().replaceMine(uuid, worldEditMine);
             player.sendMessage(mineClosed);
-//            utils.sendMessage(player, mineOpened);
         }
-
-        player.sendMessage("is open?: " + worldEditMineData.isOpen());
 
 //        if (mine.isOpen()) {
 //            player.sendMessage(mineAlreadyOpen);
@@ -394,7 +371,6 @@ public class PrivateMinesCommand {
             player.sendMessage(doNotOwnMine);
         }
         mine = mineStorage.getMine(uuid);
-        player.sendMessage("whitelist mine: " + mine);
     }
 
     @CommandHook("unwhitelist")
@@ -408,6 +384,5 @@ public class PrivateMinesCommand {
             player.sendMessage(doNotOwnMine);
         }
         mine = mineStorage.getMine(uuid);
-        player.sendMessage("un-whitelist mine: " + mine);
     }
 }
