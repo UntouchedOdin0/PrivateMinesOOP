@@ -131,6 +131,20 @@ public class Utils {
         return 20L * 60L * minutes;
     }
 
+    public IWrappedRegion createWorldGuardRegion(Player player, World world, com.sk89q.worldedit.regions.CuboidRegion cuboidRegion) {
+        IWrappedRegion iWrappedRegion = WorldGuardWrapper.getInstance().addCuboidRegion(
+                "test",
+                blockVector3toBukkit(world,
+                                     cuboidRegion.getMinimumPoint()),
+                blockVector3toBukkit(world,
+                                     cuboidRegion.getMaximumPoint())).orElseThrow(() -> new RuntimeException(""));
+        setMineFlags(Optional.ofNullable(iWrappedRegion));
+        privateMines.getLogger().info("Created worldguard region for " + player);
+        privateMines.getLogger().info("cuboidRegion: " + cuboidRegion);
+        privateMines.getLogger().info("iWrappedRegion: " + iWrappedRegion);
+        return iWrappedRegion;
+    }
+
     public void setMineFlags(Optional<IWrappedRegion> region) {
         final WorldGuardWrapper w = WorldGuardWrapper.getInstance();
 

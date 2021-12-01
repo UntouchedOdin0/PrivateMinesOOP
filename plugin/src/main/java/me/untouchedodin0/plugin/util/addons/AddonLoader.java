@@ -7,11 +7,14 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddonLoader {
 
     PrivateMines privateMines;
     PluginManager pluginManager;
+    private final List<String> addons = new ArrayList<>();
 
     public AddonLoader(PrivateMines privateMines,
                        PluginManager pluginManager) {
@@ -27,6 +30,7 @@ public class AddonLoader {
                 Plugin plugin = pluginManager.loadPlugin(file);
                 if (plugin != null) {
                     privateMines.getLogger().info("Loading addon... " + plugin.getName());
+                    addons.add(plugin.getName());
                 } else {
                     privateMines.getLogger().warning("Failed to load file: " + file);
                 }
@@ -42,14 +46,18 @@ public class AddonLoader {
         if (pluginManager != null) {
             boolean isEnabled = pluginManager.isPluginEnabled(name);
             if (!isEnabled) {
-                privateMines.getLogger().warning("The plugin " + name + " wasn't enabled!");
+                privateMines.getLogger().warning("The addon " + name + " wasn't enabled!");
             } else {
                 Plugin plugin = pluginManager.getPlugin(name);
-                privateMines.getLogger().info("Unloading plugin " + name);
+                privateMines.getLogger().info("Unloading addon " + name);
                 if (plugin != null) {
                     pluginManager.disablePlugin(plugin);
                 }
             }
         }
+    }
+
+    public List<String> getAddons() {
+        return addons;
     }
 }

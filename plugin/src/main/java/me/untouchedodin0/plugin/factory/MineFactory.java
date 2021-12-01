@@ -48,6 +48,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.codemc.worldguardwrapper.WorldGuardWrapper;
+import org.codemc.worldguardwrapper.region.IWrappedRegion;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.commandmanager.Messages;
@@ -389,6 +390,9 @@ public class MineFactory {
                         player.sendMessage(toSend);
                         player.teleport(spawnLocation);
                         mineStorage.addWorldEditMine(uuid, worldEditMine);
+
+                        IWrappedRegion iWrappedRegion = utils.createWorldGuardRegion(player, world, cuboidRegion);
+                        utils.setMineFlags(java.util.Optional.ofNullable(iWrappedRegion));
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
                     }

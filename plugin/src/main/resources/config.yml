@@ -29,3 +29,14 @@ mineTypes:
     materials:
       STONE: 0.9
       COBBLESTONE: 0.1
+
+inventory:
+  Item1:
+    name: "Hi"
+    lore:
+      - "Hi 1"
+      - "Hi 2"
+      - "Hi 3"
+    type: STONE
+    slot: 0
+    action: "teleportToMine"

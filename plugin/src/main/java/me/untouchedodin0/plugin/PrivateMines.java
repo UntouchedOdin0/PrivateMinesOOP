@@ -30,6 +30,7 @@ import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import me.untouchedodin0.plugin.commands.PrivateMinesCommand;
+import me.untouchedodin0.plugin.config.MenuConfig;
 import me.untouchedodin0.plugin.config.MineConfig;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.mines.MineType;
@@ -86,8 +87,6 @@ public class PrivateMines extends JavaPlugin {
     private final File schematicsDirectory = new File("plugins/PrivateMines/schematics");
     private final File addonsDirectory = new File("plugins/PrivateMines/addons");
 
-    File[] files;
-
     private final Pattern filePattern = Pattern.compile("(.*?)\\.(json)");
     private final Pattern jarPattern = Pattern.compile("(.*?)\\.(jar)");
 
@@ -114,6 +113,9 @@ public class PrivateMines extends JavaPlugin {
 
     @ConfigValue
     private Map<String, MineConfig> mineTypes = ConfigManager.map(MineConfig.class);
+
+    @ConfigValue
+    private Map<String, MenuConfig> inventory = ConfigManager.map(MenuConfig.class);
 
     public static PrivateMines getPrivateMines() {
         return privateMines;
@@ -173,7 +175,6 @@ public class PrivateMines extends JavaPlugin {
         String pluginFolder = getDataFolder().getPath();
         File folder = new File(pluginFolder);
         File[] files = folder.listFiles();
-        privateMines.getLogger().info("files: " + Arrays.toString(Arrays.stream(files).toArray()));
         utils.moveSchematicFiles(files);
 
         File[] addons = addonsDirectory.listFiles();
@@ -186,6 +187,16 @@ public class PrivateMines extends JavaPlugin {
         getLogger().info("Loaded a total of {loaded} mine types!"
                 .replace("{loaded}",
                         String.valueOf(loaded)));
+
+        inventory.forEach((string, menuConfig) -> {
+            getLogger().info("Menu Config string: " + string);
+            getLogger().info("Menu Config menuConfig: " + menuConfig);
+            getLogger().info("Menu Config name: " + menuConfig.getName());
+            getLogger().info("Menu Config lore: " + menuConfig.getLore());
+            getLogger().info("Menu Config type: " + menuConfig.getType());
+            getLogger().info("Menu Config slot: " + menuConfig.getSlot());
+            getLogger().info("Menu Config action: " + menuConfig.getAction());
+        });
 
         if (useWorldEdit) {
             files = minesDirectory.listFiles();
@@ -374,7 +385,6 @@ public class PrivateMines extends JavaPlugin {
         } else {
             getLogger().info("PlaceholderAPI was not present, not able to establish a hook!");
         }
-        getLogger().info("upgradeMaterial: " + getUpgradeMaterial());
     }
 
     @Override
@@ -384,6 +394,10 @@ public class PrivateMines extends JavaPlugin {
         getLogger().info("Saving and closing the BlockDataManager...");
         blockDataManager.getAll().forEach(dataBlock -> Bukkit.getLogger().info("Saving data block: " + dataBlock));
         blockDataManager.saveAndClose();
+
+        addonLoader.getAddons().forEach(addon -> {
+            addonLoader.unload(addon);
+        });
     }
 
     /*
