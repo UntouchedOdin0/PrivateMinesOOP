@@ -79,7 +79,6 @@ public class PrivateMines extends JavaPlugin {
     private MineStorage mineStorage;
     private BlockDataManager blockDataManager;
     private Utils utils;
-    private PluginManager pluginManager;
     private AddonLoader addonLoader;
     private WorldEditUtilities worldEditUtils;
     private boolean isWorldEditEnabled = false;
@@ -92,6 +91,8 @@ public class PrivateMines extends JavaPlugin {
 
     private Gson gson;
     private Material material;
+
+    private Map<Material, Double> materials = new HashMap<>();
 
     @ConfigValue
     private String spawnPoint;
@@ -169,7 +170,7 @@ public class PrivateMines extends JavaPlugin {
         mineFactory = new MineFactory(this, blockDataManager);
         mineWorldManager = new MineWorldManager();
         utils = new Utils(this);
-        pluginManager = Bukkit.getServer().getPluginManager();
+        PluginManager pluginManager = Bukkit.getServer().getPluginManager();
         addonLoader = new AddonLoader(this, pluginManager);
 
         String pluginFolder = getDataFolder().getPath();
@@ -228,11 +229,16 @@ public class PrivateMines extends JavaPlugin {
 
                             CuboidRegion cuboidRegion = new CuboidRegion(min, max);
 
+                            materials.put(Material.STONE, 50.0);
+                            materials.put(Material.COBBLESTONE, 50.0);
+
                             worldEditMine.setSpawnLocation(spawn);
                             worldEditMine.setCuboidRegion(cuboidRegion);
                             worldEditMine.setWorldEditMineData(worldEditMineData);
-                            worldEditMine.setMaterial(material);
+//                            worldEditMine.setMaterial(material);
+                            worldEditMine.setMaterials(materials);
 
+                            getLogger().info("worldEditMine materials: " + materials);
                             mineStorage.addWorldEditMine(worldEditMineData.getMineOwner(), worldEditMine);
                         } catch (IOException e) {
                             e.printStackTrace();

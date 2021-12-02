@@ -2,7 +2,10 @@ package me.untouchedodin0.plugin.mines.data;
 
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
+import org.bukkit.Material;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class WorldEditMineData {
@@ -36,6 +39,8 @@ public class WorldEditMineData {
     String mineType;
 
     boolean isOpen;
+
+    Map<Material, Double> materials = new HashMap<>();
 
     public UUID getMineOwner() {
         return mineOwner;
@@ -211,5 +216,13 @@ public class WorldEditMineData {
 
     public void setOpen(boolean open) {
         this.isOpen = open;
+    }
+
+    public void setMaterials(Map<Material, Double> materials) {
+        this.materials = materials;
+    }
+
+    public Map<Material, Double> getMaterials() {
+        return materials;
     }
 }

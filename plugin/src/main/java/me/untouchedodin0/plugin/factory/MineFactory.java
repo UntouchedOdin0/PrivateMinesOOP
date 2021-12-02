@@ -55,10 +55,7 @@ import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.misc.LocationUtils;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class MineFactory {
 
@@ -331,7 +328,8 @@ public class MineFactory {
                         worldEditMine.setLocation(location);
                         worldEditMine.setSpawnLocation(spawnLocation);
                         worldEditMine.setWorld(spawnLocation.getWorld());
-                        worldEditMine.setMaterial(worldEditMineType.getMaterial());
+//                        worldEditMine.setMaterials(worldEditMineType.getMaterials());
+//                        worldEditMine.setMaterial(worldEditMineType.getMaterial());
                         worldEditMine.setWorldEditMineType(worldEditMineType);
                         worldEditMine.setMineOwner(player.getUniqueId());
 
@@ -367,6 +365,8 @@ public class MineFactory {
                         if (worldEditMineType.getName() != null) {
                             worldEditMineData.setMineType(worldEditMineType.getName());
                         }
+
+                        worldEditMineData.setMaterials(worldEditMineType.getMaterials());
 
                         File minesDirectory = privateMines.getMinesDirectory();
 

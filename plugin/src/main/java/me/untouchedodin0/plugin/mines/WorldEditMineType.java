@@ -6,6 +6,8 @@ import me.untouchedodin0.plugin.PrivateMines;
 import org.bukkit.Material;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -18,6 +20,7 @@ public class WorldEditMineType {
     private int mineTier = 1;
     private int resetTime = 1;
     private Material material = Material.STONE;
+    private Map<Material, Double> materials = new HashMap<>();
 
     public WorldEditMineType(PrivateMines privateMines, File schematic) {
         this.privateMines = privateMines;
@@ -58,5 +61,13 @@ public class WorldEditMineType {
 
     public Material getMaterial() {
         return material;
+    }
+
+    public void setMaterials(Map<Material, Double> materials) {
+        this.materials = materials;
+    }
+
+    public Map<Material, Double> getMaterials() {
+        return materials;
     }
 }

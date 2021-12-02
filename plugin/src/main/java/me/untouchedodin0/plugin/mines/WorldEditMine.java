@@ -9,14 +9,14 @@ import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
+import com.sk89q.worldedit.function.pattern.Pattern;
+import com.sk89q.worldedit.function.pattern.RandomPattern;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.world.block.BlockState;
 import com.sk89q.worldedit.world.block.BlockType;
 import com.sk89q.worldedit.world.block.BlockTypes;
-import lombok.Getter;
-import lombok.Setter;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.factory.PasteFactory;
 import me.untouchedodin0.plugin.mines.data.WorldEditMineData;
@@ -28,13 +28,12 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.misc.Task;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class WorldEditMine {
 
@@ -61,7 +60,8 @@ public class WorldEditMine {
 
     private Material material;
 
-    private Material[] materials;
+    private Map<Material, Double> materials = new HashMap<>();
+
     private DataBlock dataBlock;
     private WorldEditMineData worldEditMineData;
 
@@ -141,11 +141,11 @@ public class WorldEditMine {
         this.material = material;
     }
 
-    public Material[] getMaterials() {
+    public Map<Material, Double> getMaterials() {
         return materials;
     }
 
-    public void setMaterials(Material[] materials) {
+    public void setMaterials(Map<Material, Double> materials) {
         this.materials = materials;
     }
 
@@ -162,17 +162,17 @@ public class WorldEditMine {
         return utils.getBlockState(blockType);
     }
 
-    public List<BlockState> getMultipleFillState() {
-        Material[] materials = getMaterials();
-        List<BlockState> blockStates = new ArrayList<>();
-
-        for (Material material : materials) {
-            BlockType blockType = utils.bukkitToBlockType(material);
-            BlockState blockState = utils.getBlockState(blockType);
-            blockStates.add(blockState);
-        }
-        return blockStates;
-    }
+//    public List<BlockState> getMultipleFillState() {
+//        Material[] materials = getMaterials();
+//        List<BlockState> blockStates = new ArrayList<>();
+//
+//        for (Material material : materials) {
+//            BlockType blockType = utils.bukkitToBlockType(material);
+//            BlockState blockState = utils.getBlockState(blockType);
+//            blockStates.add(blockState);
+//        }
+//        return blockStates;
+//    }
 
     public File getSchematicFile() {
         return worldEditMineType.getSchematicFile();
@@ -187,9 +187,23 @@ public class WorldEditMine {
     }
 
     // Resets the mine
+
+    /*
     public void reset() {
 
         final var fillType = utils.bukkitToBlockType(material);
+
+        final RandomPattern randomPattern = new RandomPattern();
+        final Map<Material, Double> materials = worldEditMineData.getMaterials();
+
+        privateMines.getLogger().info("reset debug");
+        privateMines.getLogger().info("materials: " + materials);
+        privateMines.getLogger().info("randomPattern: " + randomPattern);
+
+//        materials.forEach((material, percentage) -> {
+//            Pattern pattern = BukkitAdapter.adapt(material.createBlockData());
+//            randomPattern.add(pattern, percentage);
+//        });
 
         this.world = privateMines.getMineWorldManager().getMinesWorld();
 
@@ -203,10 +217,31 @@ public class WorldEditMine {
             // Creates edit session, sets the blocks and flushes it!
             try (final var session = WorldEdit.getInstance()
                     .newEditSession(BukkitAdapter.adapt(world))) {
-                session.setBlocks(getCuboidRegion(), getFillState());
+                session.setBlocks(getCuboidRegion(), (Pattern) fillType);
             } catch (MaxChangedBlocksException e) {
                 e.printStackTrace();
             }
+        }
+    }
+     */
+
+    public void reset() {
+
+        Map<Material, Double> materials = new HashMap<>();
+
+        materials.put(Material.STONE, 0.5);
+        materials.put(Material.COBBLESTONE, 0.5);
+
+        try (final var session = WorldEdit.getInstance()
+                .newEditSession(BukkitAdapter.adapt(world))) {
+            final RandomPattern pattern = new RandomPattern();
+            materials.forEach((material1, aDouble) -> {
+                Pattern blockPattern = BukkitAdapter.adapt(material1.createBlockData());
+                pattern.add(blockPattern, aDouble);
+            });
+            session.setBlocks(getCuboidRegion(), pattern);
+        } catch (MaxChangedBlocksException e) {
+            e.printStackTrace();
         }
     }
 
