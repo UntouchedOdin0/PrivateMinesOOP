@@ -178,7 +178,7 @@ public class PrivateMinesCommand {
         Player player = (Player) commandSender;
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(target.getUniqueId());
         WorldEditMineType worldEditMineType = worldEditMine.getWorldEditMineType();
-        String worldEditMineTypeName = worldEditMineType.getName();
+        String worldEditMineTypeName = worldEditMineType.toString();
 
         if (Objects.equals(worldEditMineTypeTreeMap.lastKey(), worldEditMineTypeName)) {
             player.sendMessage("You're already at the highest tier!");

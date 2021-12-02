@@ -1,13 +1,18 @@
 package me.untouchedodin0.plugin.mines;
 
+import lombok.Getter;
+import lombok.Setter;
 import me.untouchedodin0.plugin.PrivateMines;
 import org.bukkit.Material;
 
 import java.io.File;
 
+@Getter
+@Setter
 public class WorldEditMineType {
 
     PrivateMines privateMines;
+
     private String name;
     private final File schematicFile;
     private int mineTier = 1;
