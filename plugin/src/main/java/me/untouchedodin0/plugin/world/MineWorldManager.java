@@ -39,7 +39,7 @@ public class MineWorldManager {
     private final int borderDistance;
     private int distance = 0;
     private Direction direction;
-    private World minesWorld;
+    private final World minesWorld;
 
     public MineWorldManager() {
         minesWorld = Bukkit.createWorld(
