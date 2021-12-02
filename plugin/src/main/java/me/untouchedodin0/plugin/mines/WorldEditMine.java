@@ -227,18 +227,24 @@ public class WorldEditMine {
 
     public void reset() {
 
+        final RandomPattern pattern = new RandomPattern();
         Map<Material, Double> materials = new HashMap<>();
+        Map<Material, Double> mineDataMaterials = worldEditMineData.getMaterials();
 
         materials.put(Material.STONE, 0.5);
         materials.put(Material.COBBLESTONE, 0.5);
 
+        privateMines.getLogger().info("reset mineDataMaterials: " + mineDataMaterials);
+
+        materials.forEach((material1, aDouble) -> {
+            Pattern blockPattern = BukkitAdapter.adapt(material1.createBlockData());
+            pattern.add(blockPattern, aDouble);
+        });
+
+        privateMines.getLogger().info("set blocks pattern: " + pattern.toString());
+
         try (final var session = WorldEdit.getInstance()
                 .newEditSession(BukkitAdapter.adapt(world))) {
-            final RandomPattern pattern = new RandomPattern();
-            materials.forEach((material1, aDouble) -> {
-                Pattern blockPattern = BukkitAdapter.adapt(material1.createBlockData());
-                pattern.add(blockPattern, aDouble);
-            });
             session.setBlocks(getCuboidRegion(), pattern);
         } catch (MaxChangedBlocksException e) {
             e.printStackTrace();

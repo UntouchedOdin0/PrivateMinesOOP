@@ -232,13 +232,14 @@ public class PrivateMines extends JavaPlugin {
                             materials.put(Material.STONE, 50.0);
                             materials.put(Material.COBBLESTONE, 50.0);
 
+                            worldEditMineData.setMaterials(materials);
+
                             worldEditMine.setSpawnLocation(spawn);
                             worldEditMine.setCuboidRegion(cuboidRegion);
                             worldEditMine.setWorldEditMineData(worldEditMineData);
 //                            worldEditMine.setMaterial(material);
-                            worldEditMine.setMaterials(materials);
 
-                            getLogger().info("worldEditMine materials: " + materials);
+                            getLogger().info("worldEditMineData materials: " + worldEditMineData.getMaterials());
                             mineStorage.addWorldEditMine(worldEditMineData.getMineOwner(), worldEditMine);
                         } catch (IOException e) {
                             e.printStackTrace();
