@@ -73,49 +73,6 @@ public class WorldEditMine {
         this.worldEditMineData = worldEditMineData;
     }
 
-
-    /*
-    public Region getRegion() {
-        return region;
-    }
-
-    public void setRegion(Region region) {
-        this.region = region;
-    }
-
-    public Location getSpawnLocation() {
-        return spawnLocation;
-    }
-
-    public void setSpawnLocation(Location spawnLocation) {
-        this.spawnLocation = spawnLocation;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-    public Material getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(Material material) {
-        this.material = material;
-    }
-
-    public Material[] getMaterials() {
-        return materials;
-    }
-
-    public void setMaterials(Material[] materials) {
-        this.materials = materials;
-    }
-     */
-
     public BlockState getFillState() {
         final BlockType blockType = utils.bukkitToBlockType(getMaterial());
         return utils.getBlockState(blockType);
