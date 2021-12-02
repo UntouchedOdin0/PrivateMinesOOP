@@ -92,6 +92,11 @@ task copyTo1_12Server(type: Copy) {
     into "E:/Coding/Spigot Test Servers/1.12.2 Private Mines/plugins"
 }
 
+task copyTo1_16Server(type: Copy) {
+    from shadowJar
+    into "E:/Coding/Spigot Test Servers/1.16.5 Paper/plugins"
+}
+
 task copyTo1_17Server(type: Copy) {
     from shadowJar
     into "E:/Coding/Spigot Test Servers/1.17 - Paper (pmines rewrite)/plugins"
@@ -105,5 +110,6 @@ task updateJars {
 
     dependsOn copyTo1_8Server
     dependsOn copyTo1_12Server
+    dependsOn copyTo1_16Server
     dependsOn copyTo1_17Server
 }
