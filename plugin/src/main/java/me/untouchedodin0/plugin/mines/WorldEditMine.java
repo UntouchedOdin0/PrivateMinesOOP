@@ -15,6 +15,8 @@ import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.world.block.BlockState;
 import com.sk89q.worldedit.world.block.BlockType;
 import com.sk89q.worldedit.world.block.BlockTypes;
+import lombok.Getter;
+import lombok.Setter;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.factory.PasteFactory;
 import me.untouchedodin0.plugin.mines.data.WorldEditMineData;
@@ -34,6 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Getter
+@Setter
 public class WorldEditMine {
 
     public static final List<BlockVector3> EXPANSION_VECTORS = List.of(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X,
@@ -42,6 +46,8 @@ public class WorldEditMine {
 
     final Utils utils;
     private final PrivateMines privateMines;
+
+
     private WorldEditMineType worldEditMineType;
     private UUID mineOwner;
     private CuboidRegion cuboidRegion;
@@ -67,37 +73,8 @@ public class WorldEditMine {
         this.worldEditMineData = worldEditMineData;
     }
 
-    public UUID getMineOwner() {
-        return mineOwner;
-    }
 
-    public void setMineOwner(UUID mineOwner) {
-        this.mineOwner = mineOwner;
-    }
-
-    public WorldEditMineType getWorldEditMineType() {
-        return worldEditMineType;
-    }
-
-    public void setWorldEditMineType(WorldEditMineType worldEditMineType) {
-        this.worldEditMineType = worldEditMineType;
-    }
-
-    public CuboidRegion getCuboidRegion() {
-        return cuboidRegion;
-    }
-
-    public void setCuboidRegion(CuboidRegion cuboidRegion) {
-        this.cuboidRegion = cuboidRegion;
-    }
-
-    public Region getBedrockCubeRegion() {
-        return region;
-    }
-
-    public void setBedrockCubeRegion(Region region) {
-    }
-
+    /*
     public Region getRegion() {
         return region;
     }
@@ -137,14 +114,7 @@ public class WorldEditMine {
     public void setMaterials(Material[] materials) {
         this.materials = materials;
     }
-
-    public DataBlock getDataBlock() {
-        return dataBlock;
-    }
-
-    public void setDataBlock(DataBlock dataBlock) {
-        this.dataBlock = dataBlock;
-    }
+     */
 
     public BlockState getFillState() {
         final BlockType blockType = utils.bukkitToBlockType(getMaterial());
