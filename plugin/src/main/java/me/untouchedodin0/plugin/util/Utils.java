@@ -10,6 +10,7 @@ import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.WorldEditMine;
 import me.untouchedodin0.plugin.mines.WorldEditMineType;
+import me.untouchedodin0.plugin.mines.data.WorldEditMineData;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -292,6 +293,7 @@ public class Utils {
 
     public void doAction(Player player, WorldEditMine worldEditMine, String action) {
         if (worldEditMine != null) {
+            WorldEditMineData worldEditMineData = worldEditMine.getWorldEditMineData();
             player.sendMessage("Doing action... " + action);
             switch (action.toLowerCase()) {
                 case "reset":
@@ -306,9 +308,8 @@ public class Utils {
         return ChatColor.translateAlternateColorCodes('&', string);
     }
 
-    public List<String> color(@NotNull List<String> toConvert) {
-        List<String> colored = new ArrayList<>();
-        toConvert.forEach(string -> colored.add(ChatColor.translateAlternateColorCodes('&', string)));
-        return colored;
+    // Credits to CapOfCave#5962 for this
+    public List<String> color(@NotNull Collection<String> toConvert) {
+        return toConvert.stream().map(this::color).toList();
     }
 }

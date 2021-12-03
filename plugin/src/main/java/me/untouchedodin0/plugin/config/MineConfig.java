@@ -117,7 +117,8 @@ public class MineConfig {
             worldEditMineType.setName(getName());
             worldEditMineType.setMineTier(getPriority());
             worldEditMineType.setResetTime(getResetTime());
-            worldEditMineType.setMaterial(getMaterial());
+//            worldEditMineType.setMaterial(getMaterial());
+            worldEditMineType.setMaterials(getMaterials());
             privateMines.addType(getName(), worldEditMineType);
         } else {
             privateMines.getLogger().info("Creating redlib mine types...");

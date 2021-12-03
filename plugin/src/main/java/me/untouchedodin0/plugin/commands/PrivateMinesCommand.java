@@ -189,10 +189,15 @@ public class PrivateMinesCommand {
             utils.sendMessage(player, doNotOwnMine);
         } else {
             WorldEditMine worldEditMine = mineStorage.getWorldEditMine(uuid);
+            WorldEditMineData worldEditMineData = worldEditMine.getWorldEditMineData();
+            Map<Material, Double> map = worldEditMineData.getMaterials();
+//            worldEditMine.fill(worldEditMineData.getMaterials());
             worldEditMine.reset();
             utils.sendMessage(player, mineReset);
             worldEditMine.teleport(player);
             utils.sendMessage(player, teleportedToMine);
+            player.sendMessage("" + worldEditMineData.getMaterials());
+            player.sendMessage("map: " + map);
         }
     }
 

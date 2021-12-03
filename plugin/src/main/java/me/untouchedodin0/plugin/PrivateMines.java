@@ -237,6 +237,8 @@ public class PrivateMines extends JavaPlugin {
                             worldEditMine.setSpawnLocation(spawn);
                             worldEditMine.setCuboidRegion(cuboidRegion);
                             worldEditMine.setWorldEditMineData(worldEditMineData);
+                            worldEditMine.setMaterials(worldEditMineData.getMaterials());
+
 //                            worldEditMine.setMaterial(material);
 
                             getLogger().info("worldEditMineData materials: " + worldEditMineData.getMaterials());
