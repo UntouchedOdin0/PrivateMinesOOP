@@ -1,6 +1,7 @@
 package me.untouchedodin0.plugin.commands;
 
 import me.untouchedodin0.plugin.PrivateMines;
+import me.untouchedodin0.plugin.config.MenuConfig;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
@@ -16,12 +17,15 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.commandmanager.CommandHook;
 import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.inventorygui.InventoryGUI;
+import redempt.redlib.inventorygui.ItemButton;
+import redempt.redlib.itemutils.ItemBuilder;
 import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.MultiBlockStructure;
 import redempt.redlib.multiblock.Structure;
@@ -33,6 +37,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
 import java.util.UUID;
@@ -58,9 +63,25 @@ public class PrivateMinesCommand {
     public void mainHook(Player player) {
         InventoryGUI gui = new InventoryGUI(Bukkit.createInventory(null, 9, "Coming Soon."));
         gui.open(player);
+        Map<String, MenuConfig> menuConfig = privateMines.getInventory();
+        player.sendMessage(menuConfig.toString());
+        menuConfig.forEach((s, c) -> {
+
+            ItemButton button = ItemButton.create(new ItemBuilder(Material.EMERALD_BLOCK).setName("Click Me"), inventoryClickEvent -> {
+                HumanEntity humanEntity = inventoryClickEvent.getWhoClicked();
+                if (!(humanEntity instanceof Player humanPlayer)) return; // makes sure the entity who clicked is a player idk how something else could click it
+                privateMines.getLogger().info("item: " + c.getItem());
+                privateMines.getLogger().info("lore: " + c.getLore());
+                privateMines.getLogger().info("type: " + c.getType());
+                privateMines.getLogger().info("slot: " + c.getSlot());
+                privateMines.getLogger().info("action: " + c.getAction());
+            });
+            player.sendMessage("button: " + button);
+            gui.addButton(c.getSlot(), button);
+        });
         //todo https://github.com/Redempt/RedLib/wiki/InventoryGUI
     }
-
+    
     @CommandHook("give")
     public void give(CommandSender commandSender, Player target) {
 

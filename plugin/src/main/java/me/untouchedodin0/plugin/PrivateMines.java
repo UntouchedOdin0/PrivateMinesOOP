@@ -615,4 +615,8 @@ public class PrivateMines extends JavaPlugin {
     public TreeMap<String, WorldEditMineType> getWorldEditMineTypeTreeMap() {
         return worldEditMineTypeTreeMap;
     }
+
+    public Map<String, MenuConfig> getInventory() {
+        return inventory;
+    }
 }
