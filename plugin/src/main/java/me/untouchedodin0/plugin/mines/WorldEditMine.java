@@ -268,21 +268,9 @@ public class WorldEditMine {
 
     // Ignore the Casting 'BukkitAdapter.adapt(...)' to 'Pattern' is redundant warning it makes the code work lol
     public void reset() {
-
-        final RandomPattern pattern = new RandomPattern();
-        Map<Material, Double> mineDataMaterials = worldEditMineData.getMaterials();
-
-        mineDataMaterials.forEach((material, aDouble) -> {
-            Pattern blockPattern = (Pattern) BukkitAdapter.adapt(material.createBlockData());
-            pattern.add(blockPattern, aDouble);
-        });
-
-        try (final var session = WorldEdit.getInstance()
-                .newEditSession(BukkitAdapter.adapt(world))) {
-            session.setBlocks(getCuboidRegion(), pattern);
-        } catch (MaxChangedBlocksException e) {
-            e.printStackTrace();
-        }
+        String mineType = worldEditMineData.getMineType();
+        WorldEditMineType worldEditMineType = privateMines.getWorldEditMineType(mineType);
+        fill(worldEditMineType.getMaterials());
     }
 
     public void reset(WorldEditMineType worldEditMineType) {
