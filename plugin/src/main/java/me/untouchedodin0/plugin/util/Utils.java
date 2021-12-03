@@ -10,6 +10,7 @@ import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.WorldEditMine;
 import me.untouchedodin0.plugin.mines.WorldEditMineType;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -149,15 +150,15 @@ public class Utils {
         final WorldGuardWrapper w = WorldGuardWrapper.getInstance();
 
         Stream.of(
-                w.getFlag("block-place", WrappedState.class),
-                w.getFlag("block-break", WrappedState.class)
-        ).filter(Optional::isPresent)
+                        w.getFlag("block-place", WrappedState.class),
+                        w.getFlag("block-break", WrappedState.class)
+                ).filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(flag -> region.ifPresent(iWrappedRegion -> iWrappedRegion.setFlag(flag, WrappedState.ALLOW)));
 
         Stream.of(
-                w.getFlag("mob-spawning", WrappedState.class)
-        ).filter(Optional::isPresent)
+                        w.getFlag("mob-spawning", WrappedState.class)
+                ).filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(flag -> region.ifPresent(iWrappedRegion -> iWrappedRegion.setFlag(flag, WrappedState.DENY)));
     }
@@ -287,5 +288,21 @@ public class Utils {
             }
         }
         return availableClasses;
+    }
+
+    public void doAction(Player player, WorldEditMine worldEditMine, String action) {
+        if (worldEditMine != null) {
+            player.sendMessage("Doing action... " + action);
+            switch (action.toLowerCase()) {
+                case "reset":
+                    worldEditMine.reset();
+                case "teleporttomine":
+                    worldEditMine.teleport(player);
+            }
+        }
+    }
+
+    public String color(String string) {
+        return ChatColor.translateAlternateColorCodes('&', string);
     }
 }

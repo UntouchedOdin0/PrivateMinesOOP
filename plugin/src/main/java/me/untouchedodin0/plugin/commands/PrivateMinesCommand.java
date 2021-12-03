@@ -17,15 +17,15 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.commandmanager.CommandHook;
 import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.inventorygui.InventoryGUI;
 import redempt.redlib.inventorygui.ItemButton;
-import redempt.redlib.itemutils.ItemBuilder;
 import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.MultiBlockStructure;
 import redempt.redlib.multiblock.Structure;
@@ -62,36 +62,67 @@ public class PrivateMinesCommand {
     @CommandHook("main")
     public void mainHook(Player player) {
         InventoryGUI gui = new InventoryGUI(Bukkit.createInventory(null, 9, "Coming Soon."));
-        gui.open(player);
         Map<String, MenuConfig> menuConfig = privateMines.getInventory();
         player.sendMessage(menuConfig.toString());
-        menuConfig.forEach((s, c) -> {
+        WorldEditMine worldEditMine = mineStorage.getWorldEditMine(player.getUniqueId());
 
-            ItemButton button = ItemButton.create(new ItemBuilder(Material.EMERALD_BLOCK).setName("Click Me"), inventoryClickEvent -> {
-                HumanEntity humanEntity = inventoryClickEvent.getWhoClicked();
-                if (!(humanEntity instanceof Player)) return; // makes sure the entity who clicked is a player idk how something else could click it
-                String action = c.getAction().toLowerCase();
-                switch (action) {
-                    case "teleporttomine":
-                        player.sendMessage("switch case teleport to mine!!! yay!!!?");
-                    case "reset":
-                        player.sendMessage("switch case reset mine.... yay?");
-                    case "lock":
-                        player.sendMessage("locking pmine lol");
-                    case "unlock":
-                        player.sendMessage("unlocking pmine");
-                    case "whitelistedplayers":
-                        player.sendMessage("opening whitelisted players gui");
-                }
-//                privateMines.getLogger().info("item: " + c.getItem());
-//                privateMines.getLogger().info("lore: " + c.getLore());
-//                privateMines.getLogger().info("type: " + c.getType());
-//                privateMines.getLogger().info("slot: " + c.getSlot());
-//                privateMines.getLogger().info("action: " + c.getAction());
+        menuConfig.forEach((s, c) -> {
+            String name = utils.color(c.getName());
+            int slot = c.getSlot();
+
+            ItemStack itemStack = new ItemStack(c.getType());
+            ItemMeta itemMeta = itemStack.getItemMeta();
+
+            if (itemMeta != null) {
+                itemMeta.setDisplayName(name);
+            }
+
+            itemStack.setItemMeta(itemMeta);
+
+            ItemButton itemButton = ItemButton.create(itemStack, inventoryClickEvent -> {
+               if (c.getSlot() == inventoryClickEvent.getSlot()) {
+                   String action = c.getAction();
+                   player.sendMessage("action: " + action);
+                   utils.doAction(player, worldEditMine, action);
+               }
             });
-            player.sendMessage("button: " + button);
-            gui.addButton(c.getSlot(), button);
+            gui.addButton(slot, itemButton);
         });
+
+        gui.open(player);
+//        menuConfig.forEach((s, c) -> {
+//
+//            ItemButton button = ItemButton.create(new ItemBuilder(Material.EMERALD_BLOCK).setName("Click Me"), inventoryClickEvent -> {
+//                HumanEntity humanEntity = inventoryClickEvent.getWhoClicked();
+//                if (!(humanEntity instanceof Player)) return; // makes sure the entity who clicked is a player idk how something else could click it
+//                String action = c.getAction();
+//
+//
+//                switch (action) {
+//                    case "teleporttomine":
+//                        player.sendMessage("switch case teleport to mine!!! yay!!!?");
+//                    case "reset":
+//                        player.sendMessage("switch case reset mine.... yay?");
+//                    case "lock":
+//                        player.sendMessage("locking pmine lol");
+//                    case "unlock":
+//                        player.sendMessage("unlocking pmine");
+//                    case "whitelistedplayers":
+//                        player.sendMessage("opening whitelisted players gui");
+//                    case "publicmines":
+//                        player.sendMessage("lets see who has their mine open");
+//                }
+//
+////                privateMines.getLogger().info("item: " + c.getItem());
+////                privateMines.getLogger().info("lore: " + c.getLore());
+////                privateMines.getLogger().info("type: " + c.getType());
+////                privateMines.getLogger().info("slot: " + c.getSlot());
+//                privateMines.getLogger().info("action: " + c.getAction());
+//            });
+//
+//            player.sendMessage("button: " + button);
+//            gui.addButton(c.getSlot(), button);
+//        });
         //todo https://github.com/Redempt/RedLib/wiki/InventoryGUI
     }
 
