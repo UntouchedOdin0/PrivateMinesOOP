@@ -271,9 +271,9 @@ public class Utils {
     }
 
     // https://techitmore.com/java/dynamically-loading-classes-in-a-jar-file/
-    private ArrayList<Class> loadJarFile(String filePath) throws Exception {
+    private ArrayList<Class<?>> loadJarFile(String filePath) throws Exception {
 
-        ArrayList<Class> availableClasses = new ArrayList<>();
+        ArrayList<Class<?>> availableClasses = new ArrayList<>();
 
         ArrayList<String> classNames = getClassNamesFromJar(filePath);
         File f = new File(filePath);
@@ -281,7 +281,7 @@ public class Utils {
         URLClassLoader classLoader = new URLClassLoader(new URL[]{f.toURI().toURL()});
         for (String className : classNames) {
             try {
-                Class cc = classLoader.loadClass(className);
+                Class<?> cc = classLoader.loadClass(className);
                 availableClasses.add(cc);
             } catch (ClassNotFoundException e) {
                 privateMines.getLogger().warning("Class " + className + " was not found");
@@ -306,7 +306,7 @@ public class Utils {
         return ChatColor.translateAlternateColorCodes('&', string);
     }
 
-    public List<String> color(List<String> toConvert) {
+    public List<String> color(@NotNull List<String> toConvert) {
         List<String> colored = new ArrayList<>();
         toConvert.forEach(string -> colored.add(ChatColor.translateAlternateColorCodes('&', string)));
         return colored;
