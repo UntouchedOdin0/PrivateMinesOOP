@@ -305,4 +305,10 @@ public class Utils {
     public String color(String string) {
         return ChatColor.translateAlternateColorCodes('&', string);
     }
+
+    public List<String> color(List<String> toConvert) {
+        List<String> colored = new ArrayList<>();
+        toConvert.forEach(string -> colored.add(ChatColor.translateAlternateColorCodes('&', string)));
+        return colored;
+    }
 }

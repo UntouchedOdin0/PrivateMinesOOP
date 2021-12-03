@@ -37,10 +37,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Map;
-import java.util.Objects;
-import java.util.TreeMap;
-import java.util.UUID;
+import java.util.*;
 
 public class PrivateMinesCommand {
 
@@ -68,6 +65,8 @@ public class PrivateMinesCommand {
 
         menuConfig.forEach((s, c) -> {
             String name = utils.color(c.getName());
+            List<String> lore = utils.color(c.getLore());
+
             int slot = c.getSlot();
 
             ItemStack itemStack = new ItemStack(c.getType());
@@ -75,6 +74,7 @@ public class PrivateMinesCommand {
 
             if (itemMeta != null) {
                 itemMeta.setDisplayName(name);
+                itemMeta.setLore(lore);
             }
 
             itemStack.setItemMeta(itemMeta);
