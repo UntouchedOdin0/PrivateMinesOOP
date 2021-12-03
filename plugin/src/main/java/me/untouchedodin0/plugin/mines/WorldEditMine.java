@@ -253,14 +253,14 @@ public class WorldEditMine {
 
         try (final var session = WorldEdit.getInstance()
                 .newEditSession(BukkitAdapter.adapt(world))) {
-            final RandomPattern pattern = new RandomPattern();
+            final RandomPattern randomPattern = new RandomPattern();
 
             blocks.forEach((material1, aDouble) -> {
-                Pattern pat = (Pattern) BukkitAdapter.adapt(material1.createBlockData());
-                pattern.add(pat, 1.0);
+                Pattern pattern = (Pattern) BukkitAdapter.adapt(material1.createBlockData());
+                randomPattern.add(pattern, 1.0);
             });
 
-            session.setBlocks(getCuboidRegion(), pattern);
+            session.setBlocks(getCuboidRegion(), randomPattern);
         } catch (MaxChangedBlocksException e) {
             e.printStackTrace();
         }
@@ -272,17 +272,10 @@ public class WorldEditMine {
         final RandomPattern pattern = new RandomPattern();
         Map<Material, Double> mineDataMaterials = worldEditMineData.getMaterials();
 
-        Map<Material, Double> materials = new HashMap<>();
-
-        privateMines.getLogger().info("reset mineDataMaterials: " + mineDataMaterials);
-
-        mineDataMaterials.forEach((material1, aDouble) -> {
-            privateMines.getLogger().info("blockData: " + material1.createBlockData());
-            Pattern blockPattern = (Pattern) BukkitAdapter.adapt(material1.createBlockData());
+        mineDataMaterials.forEach((material, aDouble) -> {
+            Pattern blockPattern = (Pattern) BukkitAdapter.adapt(material.createBlockData());
             pattern.add(blockPattern, aDouble);
         });
-
-        privateMines.getLogger().info("set blocks pattern: " + pattern);
 
         try (final var session = WorldEdit.getInstance()
                 .newEditSession(BukkitAdapter.adapt(world))) {
