@@ -230,14 +230,12 @@ public class PrivateMines extends JavaPlugin {
                             CuboidRegion cuboidRegion = new CuboidRegion(min, max);
 
                             materials.put(Material.STONE, 50.0);
-                            materials.put(Material.COBBLESTONE, 50.0);
-
-                            worldEditMineData.setMaterials(materials);
+                            materials.put(Material.EMERALD_BLOCK, 50.0);
 
                             worldEditMine.setSpawnLocation(spawn);
                             worldEditMine.setCuboidRegion(cuboidRegion);
                             worldEditMine.setWorldEditMineData(worldEditMineData);
-                            worldEditMine.setMaterials(worldEditMineData.getMaterials());
+                            worldEditMine.setMaterials(materials);
 
 //                            worldEditMine.setMaterial(material);
 
@@ -500,6 +498,10 @@ public class PrivateMines extends JavaPlugin {
         MineType newType = mineTypeTreeMap.get(mineType);
         Bukkit.broadcastMessage("new type: " + newType);
         return newType;
+    }
+
+    public WorldEditMineType getWorldEditMineType(String mineType) {
+        return worldEditMineTypeTreeMap.get(mineType);
     }
 
     /*

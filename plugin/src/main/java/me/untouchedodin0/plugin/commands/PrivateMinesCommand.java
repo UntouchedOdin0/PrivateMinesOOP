@@ -191,13 +191,21 @@ public class PrivateMinesCommand {
             WorldEditMine worldEditMine = mineStorage.getWorldEditMine(uuid);
             WorldEditMineData worldEditMineData = worldEditMine.getWorldEditMineData();
             Map<Material, Double> map = worldEditMineData.getMaterials();
+            String mineType = worldEditMineData.getMineType();
+            player.sendMessage("type: " + mineType);
+            WorldEditMineType worldEditMineType = privateMines.getWorldEditMineType(mineType);
+            player.sendMessage("worldEdit Mine type: " + worldEditMineType);
+            player.sendMessage("worldEdit Mine type materials: " + worldEditMineType.getMaterials());
+
+            worldEditMine.fill(worldEditMineType.getMaterials());
 //            worldEditMine.fill(worldEditMineData.getMaterials());
-            worldEditMine.reset();
+//            worldEditMine.reset();
             utils.sendMessage(player, mineReset);
             worldEditMine.teleport(player);
             utils.sendMessage(player, teleportedToMine);
             player.sendMessage("" + worldEditMineData.getMaterials());
             player.sendMessage("map: " + map);
+            player.sendMessage("type map: " + worldEditMineType.getMaterials());
         }
     }
 
