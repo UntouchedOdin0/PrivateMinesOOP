@@ -251,9 +251,6 @@ public class WorldEditMine {
 
         World world = privateMines.getMineWorldManager().getMinesWorld();
 
-        privateMines.getLogger().info("blocks: " + blocks);
-        privateMines.getLogger().info("world: " + world);
-
         try (final var session = WorldEdit.getInstance()
                 .newEditSession(BukkitAdapter.adapt(world))) {
             final RandomPattern pattern = new RandomPattern();
