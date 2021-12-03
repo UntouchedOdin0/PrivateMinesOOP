@@ -264,7 +264,6 @@ public class WorldEditMine {
     }
 
     // Ignore the Casting 'BukkitAdapter.adapt(...)' to 'Pattern' is redundant warning it makes the code work lol
-
     public void reset() {
 
         final RandomPattern pattern = new RandomPattern();
