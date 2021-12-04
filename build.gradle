@@ -104,7 +104,7 @@ task copyTo1_17Server(type: Copy) {
 
 task copyTo_18Server(type: Copy) {
     from shadowJar
-    into "E:\\Coding\\Spigot Test Servers\\1.18 Spigot\\plugins"
+    into "E:/Coding/Spigot Test Servers/1.18 Spigot/plugins"
 }
 
 
