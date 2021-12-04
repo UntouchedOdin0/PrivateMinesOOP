@@ -117,5 +117,5 @@ task updateJars {
     dependsOn copyTo1_12Server
     dependsOn copyTo1_16Server
     dependsOn copyTo1_17Server
-    dependsOn copyTo1_8Server
+    dependsOn copyTo_18Server
 }
