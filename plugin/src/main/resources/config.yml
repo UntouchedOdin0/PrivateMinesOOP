@@ -3,6 +3,7 @@ spawnPoint: "CHEST"
 mineCorner: "POWERED_RAIL"
 sellNpc: "WHITE_WOOL"
 upgradeMaterial: "OBSIDIAN"
+mainMenuTitle: "Private Mines"
 
 debugMode: false
 useWorldEdit: false
@@ -32,11 +33,11 @@ mineTypes:
 
 inventory:
   Item1:
-    name: "Hi"
+    name: "&7Hi"
     lore:
-      - "Hi 1"
-      - "Hi 2"
-      - "Hi 3"
+      - "&aHi 1"
+      - "&bHi 2"
+      - "&cHi 3"
     type: STONE
     slot: 0
-    action: "teleportToMine"
+    action: "teleporttomine"

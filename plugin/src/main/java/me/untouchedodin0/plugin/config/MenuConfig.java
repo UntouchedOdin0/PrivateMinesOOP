@@ -35,6 +35,9 @@ import java.util.List;
 @ConfigMappable
 public class MenuConfig {
 
+    @ConfigValue
+    private String title = "Private Mines";
+
     @ConfigPath
     private final String item = "Default";
 
@@ -52,6 +55,10 @@ public class MenuConfig {
 
     @ConfigValue
     private String action = "action";
+
+    public String getTitle() {
+        return title;
+    }
 
     public String getItem() {
         return item;

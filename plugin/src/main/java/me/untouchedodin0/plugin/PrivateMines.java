@@ -107,6 +107,9 @@ public class PrivateMines extends JavaPlugin {
     private String upgradeMaterial;
 
     @ConfigValue
+    private String mainMenuTitle;
+
+    @ConfigValue
     private boolean debugMode = false;
 
     @ConfigValue
@@ -491,6 +494,14 @@ public class PrivateMines extends JavaPlugin {
 
     public String getUpgradeMaterial() {
         return upgradeMaterial;
+    }
+
+    /*
+        Gets the main menu title
+     */
+
+    public String getMainMenuTitle() {
+        return mainMenuTitle;
     }
 
 
