@@ -275,15 +275,7 @@ public class PrivateMinesCommand {
 
         Player player = (Player) commandSender;
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(target.getUniqueId());
-        WorldEditMineType worldEditMineType = worldEditMine.getWorldEditMineType();
-        WorldEditMineType worldEditMineHigherType = privateMines.getNextMineType(worldEditMineType);
-
-        String currentType = worldEditMineType.getName();
-        String nextType = worldEditMineHigherType.getName();
-
-        player.sendMessage("name: " + currentType);
-        player.sendMessage("next type: " + nextType);
-
+        worldEditMine.upgrade(player);
 //        player.sendMessage("treeMap: " + worldEditMineTypeTreeMap);
 //        player.sendMessage("treeMap set: " + worldEditMineTypeTreeMap.entrySet());
 

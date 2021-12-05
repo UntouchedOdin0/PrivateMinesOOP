@@ -355,6 +355,44 @@ public class WorldEditMine {
         mineStorage.removeWorldEditMine(getMineOwner());
     }
 
+    //todo remove the player passthrough thing once it's working only keep for debug
+
+    public void upgrade(Player player) {
+        WorldEditMineType worldEditMineType = getWorldEditMineType();
+        WorldEditMineType worldeditMineHigherType = privateMines.getNextMineType(worldEditMineType);
+
+        String currentType = worldEditMineType.getName();
+        String nextType = worldeditMineHigherType.getName();
+
+        player.sendMessage("---------");
+        player.sendMessage("currentType: " + currentType);
+        player.sendMessage("nextType: " + nextType);
+
+        setWorldEditMineType(worldeditMineHigherType);
+
+        this.world = privateMines.getMineWorldManager().getMinesWorld();
+        final BlockType air = utils.bukkitToBlockType(Material.AIR);
+
+        int minX = worldEditMineData.getRegionMinX();
+        int minY = worldEditMineData.getRegionMinY();
+        int minZ = worldEditMineData.getRegionMinZ();
+
+        int maxX = worldEditMineData.getRegionMaxX();
+        int maxY = worldEditMineData.getRegionMaxY();
+        int maxZ = worldEditMineData.getRegionMaxZ();
+
+        player.sendMessage("world: " + world);
+        player.sendMessage("blockType: " + air);
+        player.sendMessage("minX: " + minX);
+        player.sendMessage("minY: " + minY);
+        player.sendMessage("minZ: " + minZ);
+
+        player.sendMessage("maxX: " + maxX);
+        player.sendMessage("maxY: " + maxY);
+        player.sendMessage("maxZ: " + maxZ);
+    }
+
+    /*
     public void upgrade() {
 
         this.world = privateMines.getMineWorldManager().getMinesWorld();
@@ -444,6 +482,7 @@ public class WorldEditMine {
             }
         }
     }
+     */
 
     private BlockVector3[] expansionVectors(final int amount) {
         return EXPANSION_VECTORS.stream().map(it -> it.multiply(amount)).toArray(BlockVector3[]::new);
