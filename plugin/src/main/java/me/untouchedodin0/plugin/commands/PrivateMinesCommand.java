@@ -276,16 +276,25 @@ public class PrivateMinesCommand {
         Player player = (Player) commandSender;
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(target.getUniqueId());
         WorldEditMineType worldEditMineType = worldEditMine.getWorldEditMineType();
-        String worldEditMineTypeName = worldEditMineType.toString();
+        WorldEditMineType worldEditMineHigherType = privateMines.getNextMineType(worldEditMineType);
 
-        if (Objects.equals(worldEditMineTypeTreeMap.lastKey(), worldEditMineTypeName)) {
-            player.sendMessage("You're already at the highest tier!");
-        } else {
-            String upgradeTypeString = worldEditMineTypeTreeMap.higherKey(worldEditMineTypeName);
-            WorldEditMineType upgradeType = privateMines.getWorldEditMineTypeTreeMap().get(upgradeTypeString);
-            worldEditMine.setWorldEditMineType(upgradeType);
-            worldEditMine.upgrade();
-        }
+        String currentType = worldEditMineType.getName();
+        String nextType = worldEditMineHigherType.getName();
+
+        player.sendMessage("name: " + currentType);
+        player.sendMessage("next type: " + nextType);
+
+//        player.sendMessage("treeMap: " + worldEditMineTypeTreeMap);
+//        player.sendMessage("treeMap set: " + worldEditMineTypeTreeMap.entrySet());
+
+//        if (Objects.equals(worldEditMineTypeTreeMap.lastKey(), worldEditMineTypeName)) {
+//            player.sendMessage("You're already at the highest tier!");
+//        } else {
+//            String upgradeTypeString = worldEditMineTypeTreeMap.higherKey(worldEditMineTypeName);
+//            WorldEditMineType upgradeType = privateMines.getWorldEditMineTypeTreeMap().get(upgradeTypeString);
+//            worldEditMine.setWorldEditMineType(upgradeType);
+//            worldEditMine.upgrade();
+//        }
     }
 
     // Add 1 to whatever args you put so if you want to expand by one do /pmine expand 2
