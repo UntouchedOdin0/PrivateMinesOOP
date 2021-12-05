@@ -360,42 +360,13 @@ public class WorldEditMine {
     }
 
     public void upgrade(Player player) {
-
         WorldEditMineType worldEditMineType = getWorldEditMineType();
         WorldEditMineType worldeditMineHigherType = privateMines.getNextMineType(worldEditMineType);
-
-        String currentType = worldEditMineType.getName();
-        String nextType = worldeditMineHigherType.getName();
-
-        player.sendMessage("currentType: " + currentType);
-        player.sendMessage("nextType: " + nextType);
-
         setWorldEditMineType(worldeditMineHigherType);
-
+        player.sendMessage("name: " + worldeditMineHigherType.getName());
+        player.sendMessage("material: " + worldeditMineHigherType.getMaterial());
         this.world = privateMines.getMineWorldManager().getMinesWorld();
-        final BlockType air = utils.bukkitToBlockType(Material.AIR);
-
-        int minX = worldEditMineData.getRegionMinX();
-        int minY = worldEditMineData.getRegionMinY();
-        int minZ = worldEditMineData.getRegionMinZ();
-
-        int maxX = worldEditMineData.getRegionMaxX();
-        int maxY = worldEditMineData.getRegionMaxY();
-        int maxZ = worldEditMineData.getRegionMaxZ();
-
-        player.sendMessage("world: " + world);
-        player.sendMessage("blockType: " + air);
-        player.sendMessage("minX: " + minX);
-        player.sendMessage("minY: " + minY);
-        player.sendMessage("minZ: " + minZ);
-
-        player.sendMessage("maxX: " + maxX);
-        player.sendMessage("maxY: " + maxY);
-        player.sendMessage("maxZ: " + maxZ);
-
-        player.sendMessage("storage worldedit mines before: " + privateMines.getMineStorage().getWorldEditMines());
         mineFactory.createMine(player, getLocation(), worldeditMineHigherType, true);
-        player.sendMessage("storage worldedit mines after: " + privateMines.getMineStorage().getWorldEditMines());
     }
 
     /*
