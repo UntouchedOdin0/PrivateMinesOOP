@@ -29,10 +29,6 @@ import com.google.gson.GsonBuilder;
 import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.extent.clipboard.Clipboard;
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
 import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.function.pattern.RandomPattern;
 import com.sk89q.worldedit.math.BlockVector3;
@@ -42,7 +38,7 @@ import com.sk89q.worldedit.world.block.BlockState;
 import com.sk89q.worldedit.world.block.BlockType;
 import com.sk89q.worldedit.world.block.BlockTypes;
 import me.untouchedodin0.plugin.PrivateMines;
-import me.untouchedodin0.plugin.factory.PasteFactory;
+import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.mines.data.WorldEditMineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
@@ -55,8 +51,14 @@ import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.misc.Task;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class WorldEditMine {
 
@@ -87,10 +89,12 @@ public class WorldEditMine {
 
     private DataBlock dataBlock;
     private WorldEditMineData worldEditMineData;
+    private MineFactory mineFactory;
 
     public WorldEditMine(PrivateMines privateMines) {
         this.privateMines = privateMines;
         this.utils = new Utils(privateMines);
+        this.mineFactory = privateMines.getMineFactory();
     }
 
     public WorldEditMineData getWorldEditMineData() {
@@ -355,16 +359,14 @@ public class WorldEditMine {
         mineStorage.removeWorldEditMine(getMineOwner());
     }
 
-    //todo remove the player passthrough thing once it's working only keep for debug
-
     public void upgrade(Player player) {
+
         WorldEditMineType worldEditMineType = getWorldEditMineType();
         WorldEditMineType worldeditMineHigherType = privateMines.getNextMineType(worldEditMineType);
 
         String currentType = worldEditMineType.getName();
         String nextType = worldeditMineHigherType.getName();
 
-        player.sendMessage("---------");
         player.sendMessage("currentType: " + currentType);
         player.sendMessage("nextType: " + nextType);
 
@@ -390,6 +392,10 @@ public class WorldEditMine {
         player.sendMessage("maxX: " + maxX);
         player.sendMessage("maxY: " + maxY);
         player.sendMessage("maxZ: " + maxZ);
+
+        player.sendMessage("storage worldedit mines before: " + privateMines.getMineStorage().getWorldEditMines());
+        mineFactory.createMine(player, getLocation(), worldeditMineHigherType, true);
+        player.sendMessage("storage worldedit mines after: " + privateMines.getMineStorage().getWorldEditMines());
     }
 
     /*

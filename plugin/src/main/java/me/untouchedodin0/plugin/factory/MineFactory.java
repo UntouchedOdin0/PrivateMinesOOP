@@ -247,7 +247,7 @@ public class MineFactory {
         return null;
     }
 
-    public WorldEditMine createMine(Player player, Location location, WorldEditMineType worldEditMineType) {
+    public WorldEditMine createMine(Player player, Location location, WorldEditMineType worldEditMineType, boolean replaceOld) {
         Clipboard clipboard;
         Utils utils = new Utils(privateMines);
         World world;
@@ -390,7 +390,12 @@ public class MineFactory {
                         // Tell the player it's been created and teleport them
                         player.sendMessage(toSend);
                         player.teleport(spawnLocation);
-                        mineStorage.addWorldEditMine(uuid, worldEditMine);
+
+                        if (replaceOld) {
+                            mineStorage.replaceMine(uuid, worldEditMine);
+                        } else {
+                            mineStorage.addWorldEditMine(uuid, worldEditMine);
+                        }
 
                         IWrappedRegion iWrappedRegion = utils.createWorldGuardRegion(player, world, cuboidRegion);
                         utils.setMineFlags(java.util.Optional.ofNullable(iWrappedRegion));

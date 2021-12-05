@@ -171,7 +171,7 @@ public class PrivateMinesCommand {
             Location location = mineWorldManager.getNextFreeLocation();
             if (privateMines.isWorldEditEnabled()) {
                 @SuppressWarnings("unused")
-                WorldEditMine worldEditMine = mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType());
+                WorldEditMine worldEditMine = mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType(), false);
             }
         } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException) {
             arrayIndexOutOfBoundsException.printStackTrace();
