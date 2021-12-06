@@ -457,26 +457,28 @@ public class PrivateMinesCommand {
     @CommandHook("whitelist")
     public void whitelist(CommandSender commandSender, Player target) {
         Player player = (Player) commandSender;
-        Mine mine;
+        WorldEditMine worldEditMine;
         UUID uuid = player.getUniqueId();
         String doNotOwnMine = Messages.msg("doNotOwnMine");
 
-        if (!mineStorage.hasMine(uuid)) {
+        if (!mineStorage.hasWorldEditMine(uuid)) {
             player.sendMessage(doNotOwnMine);
         }
-        mine = mineStorage.getMine(uuid);
+        worldEditMine = mineStorage.getWorldEditMine(uuid);
+        player.sendMessage("whitelist worldedit mine: " + worldEditMine);
     }
 
     @CommandHook("unwhitelist")
     public void unWhitelist(CommandSender commandSender, Player target) {
         Player player = (Player) commandSender;
-        Mine mine;
+        WorldEditMine worldEditMine;
         UUID uuid = player.getUniqueId();
         String doNotOwnMine = Messages.msg("doNotOwnMine");
 
-        if (!mineStorage.hasMine(uuid)) {
+        if (!mineStorage.hasWorldEditMine(uuid)) {
             player.sendMessage(doNotOwnMine);
         }
-        mine = mineStorage.getMine(uuid);
+        worldEditMine = mineStorage.getWorldEditMine(uuid);
+        player.sendMessage("unwhitelist world edit mine " + worldEditMine);
     }
 }
