@@ -86,9 +86,6 @@ public class PrivateMinesCommand {
         String inventoryTitle = privateMines.getMainMenuTitle();
         String inventoryTitleColored = utils.color(inventoryTitle);
 
-        player.sendMessage("title: " + inventoryTitle);
-        player.sendMessage("title colored: " + inventoryTitleColored);
-
         InventoryGUI gui = new InventoryGUI(Bukkit.createInventory(null, 9, inventoryTitleColored));
         player.sendMessage(menuConfig.toString());
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(player.getUniqueId());
