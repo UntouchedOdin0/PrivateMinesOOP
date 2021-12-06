@@ -276,25 +276,12 @@ public class PrivateMinesCommand {
         WorldEditMineType worldEditMineType = worldEditMine.getWorldEditMineType();
         WorldEditMineType nextWorldEditMineType = worldEditMineTypeTreeMap.higherEntry(worldEditMineType.getName()).getValue();
 
-        player.sendMessage("next type: " + nextWorldEditMineType.getName());
-
-        worldEditMine.upgrade(player, nextWorldEditMineType);
-
-//        worldEditMine.upgrade(player);
-
-        player.sendMessage(worldEditMineTypeTreeMap.toString());
-
-//        player.sendMessage("treeMap: " + worldEditMineTypeTreeMap);
-//        player.sendMessage("treeMap set: " + worldEditMineTypeTreeMap.entrySet());
-
-//        if (Objects.equals(worldEditMineTypeTreeMap.lastKey(), worldEditMineTypeName)) {
-//            player.sendMessage("You're already at the highest tier!");
-//        } else {
-//            String upgradeTypeString = worldEditMineTypeTreeMap.higherKey(worldEditMineTypeName);
-//            WorldEditMineType upgradeType = privateMines.getWorldEditMineTypeTreeMap().get(upgradeTypeString);
-//            worldEditMine.setWorldEditMineType(upgradeType);
-//            worldEditMine.upgrade();
-//        }
+        if (nextWorldEditMineType == null) {
+            privateMines.getLogger().info("Failed to upgrade players mine as they're at max type!");
+        } else {
+            player.sendMessage("next type: " + nextWorldEditMineType.getName());
+            worldEditMine.upgrade(player, nextWorldEditMineType);
+        }
     }
 
     // Add 1 to whatever args you put so if you want to expand by one do /pmine expand 2
