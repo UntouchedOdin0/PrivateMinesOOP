@@ -334,8 +334,6 @@ public class MineFactory {
                         worldEditMine.setSpawnLocation(spawnLocation);
                         worldEditMine.setWorld(spawnLocation.getWorld());
                         worldEditMine.setMaterials(worldEditMineType.getMaterials());
-//                        worldEditMine.setMaterials(worldEditMineType.getMaterials());
-//                        worldEditMine.setMaterial(worldEditMineType.getMaterial());
                         worldEditMine.setWorldEditMineType(worldEditMineType);
                         worldEditMine.setMineOwner(player.getUniqueId());
 
