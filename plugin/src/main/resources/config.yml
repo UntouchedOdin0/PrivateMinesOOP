@@ -10,22 +10,22 @@ useWorldEdit: false
 
 mineTypes:
   Test:
-    file: "structure.dat"
+    file: "debugschem.schem"
     priority: 1
     resetTime: 5
     materials:
       STONE: 0.9
       COBBLESTONE: 0.1
   Test2:
-    file: "diamond.dat"
+    file: "debugschem.schem"
     priority: 2
     resetTime: 5
     materials:
       STONE: 0.9
       COBBLESTONE: 0.1
   Test3:
-    file: "emerald.dat"
-    priority: 3
+    file: "debugschem.schem"
+    priority: 2
     resetTime: 5
     materials:
       STONE: 0.9
