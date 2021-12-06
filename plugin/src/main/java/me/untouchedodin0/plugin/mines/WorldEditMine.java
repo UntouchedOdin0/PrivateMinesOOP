@@ -359,14 +359,10 @@ public class WorldEditMine {
         mineStorage.removeWorldEditMine(getMineOwner());
     }
 
-    public void upgrade(Player player) {
-        WorldEditMineType worldEditMineType = getWorldEditMineType();
-        WorldEditMineType worldeditMineHigherType = privateMines.getNextMineType(worldEditMineType);
-        setWorldEditMineType(worldeditMineHigherType);
-        player.sendMessage("name: " + worldeditMineHigherType.getName());
-        player.sendMessage("material: " + worldeditMineHigherType.getMaterial());
+    public void upgrade(Player player, WorldEditMineType worldEditMineType) {
+        setWorldEditMineType(worldEditMineType);
         this.world = privateMines.getMineWorldManager().getMinesWorld();
-        mineFactory.createMine(player, getLocation(), worldeditMineHigherType, true);
+        mineFactory.createMine(player, getLocation(), worldEditMineType, true);
     }
 
     /*
