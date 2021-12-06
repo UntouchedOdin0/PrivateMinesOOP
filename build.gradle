@@ -107,6 +107,11 @@ task copyTo_18Server(type: Copy) {
     into "E:/Coding/Spigot Test Servers/1.18 Spigot/plugins"
 }
 
+task copyTo_DevServer(type: Copy) {
+    from shadowJar
+    into "E:/Coding/Spigot Projects/PrivateMinesOOP/server/plugins"
+}
+
 
 task updateJars {
     if (!new File("E:/Coding").exists()) {
@@ -118,4 +123,5 @@ task updateJars {
     dependsOn copyTo1_16Server
     dependsOn copyTo1_17Server
     dependsOn copyTo_18Server
+    dependsOn copyTo_DevServer
 }

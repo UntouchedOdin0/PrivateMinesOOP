@@ -120,6 +120,7 @@ public class PrivateMinesCommand {
         });
 
         gui.open(player);
+
 //        menuConfig.forEach((s, c) -> {
 //
 //            ItemButton button = ItemButton.create(new ItemBuilder(Material.EMERALD_BLOCK).setName("Click Me"), inventoryClickEvent -> {

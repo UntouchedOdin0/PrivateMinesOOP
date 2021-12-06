@@ -7,7 +7,7 @@
 /build/libs/PrivateMinesOOP-1.0-SNAPSHOT-all.jar
 /build/resources/
 /build/tmp/
-/devserver/
+/server/
 /gradle/
 
 # Ignore Gradle project-specific cache directory

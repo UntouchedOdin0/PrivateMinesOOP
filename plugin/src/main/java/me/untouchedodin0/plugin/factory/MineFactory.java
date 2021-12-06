@@ -273,6 +273,11 @@ public class MineFactory {
 
                 ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(file);
 
+                if (!file.exists()) {
+                    privateMines.getLogger().warning("File doesn't exist, can't create mine!");
+                    return null;
+                }
+
                 if (clipboardFormat != null) {
                     try (ClipboardReader clipboardReader = clipboardFormat.getReader(new FileInputStream(file))) {
                         clipboard = clipboardReader.read();
