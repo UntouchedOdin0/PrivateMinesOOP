@@ -410,12 +410,6 @@ public class PrivateMinesCommand {
             privateMines.getMineStorage().replaceMine(uuid, worldEditMine);
             player.sendMessage(mineOpened);
         }
-//        if (mine.isOpen()) {
-//            player.sendMessage(mineAlreadyOpen);
-//        } else if (!mine.isOpen()) {
-//            mine.setIsOpen(true);
-//            Messages.msg(mineOpened);
-//        }
     }
 
 
