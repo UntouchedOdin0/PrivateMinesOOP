@@ -69,6 +69,8 @@ subprojects {
         implementation 'org.codemc.worldguardwrapper:worldguardwrapper:1.2.0-SNAPSHOT'
         implementation 'com.github.CryptoMorin:XSeries:v8.4.0'
         implementation 'com.github.Redempt:RedLib:6.0.9.1'
+        implementation 'com.github.untouchedOdin0:privateMinesoop:master-SNAPSHOT'
+
 
         compileOnly 'org.projectlombok:lombok:1.18.22'
     }

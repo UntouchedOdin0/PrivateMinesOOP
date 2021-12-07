@@ -5,7 +5,6 @@ privatemine,privatemines,pmine {
         hook give
         help Gives a private mine to a player
         permission privatemines.give
-        user player
     }
 
     delete,del player:target {
