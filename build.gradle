@@ -39,20 +39,15 @@ allprojects {
         testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
     }
 
-
     test {
         useJUnitPlatform()
     }
-
 
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
 
         sourceCompatibility = JavaVersion.VERSION_16
         targetCompatibility = JavaVersion.VERSION_16
-
-//        sourceCompatibility = JavaVersion.VERSION_11
-//        targetCompatibility = JavaVersion.VERSION_11
     }
 }
 
@@ -69,8 +64,6 @@ subprojects {
         implementation 'org.codemc.worldguardwrapper:worldguardwrapper:1.2.0-SNAPSHOT'
         implementation 'com.github.CryptoMorin:XSeries:v8.4.0'
         implementation 'com.github.Redempt:RedLib:6.0.9.1'
-        implementation 'com.github.untouchedOdin0:privateMinesoop:master-SNAPSHOT'
-
 
         compileOnly 'org.projectlombok:lombok:1.18.22'
     }
