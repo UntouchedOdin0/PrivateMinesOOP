@@ -258,25 +258,18 @@ public class PrivateMinesCommand {
         List<UUID> whitelistedPlayers = worldEditMine.getWhitelistedPlayers();
         boolean isOpen = worldEditMineData.isOpen();
 
-        if (whitelistedPlayers.contains(uuid)) {
-            player.sendMessage("you're on the whitelist");
-        } else {
-            player.sendMessage("you're not on the whitelist..");
-        }
-
-        if (!isOpen) {
-            player.sendMessage("not open test");
-        } else {
+        if (isOpen) {
             worldEditMine.teleport(player);
+        } else {
+            if (whitelistedPlayers.contains(uuid)) {
+                player.sendMessage("you're on the whitelist");
+                worldEditMine.teleport(player);
+            } else {
+                player.sendMessage(ChatColor.RED + "You're not whitelisted at this mine!");
+                //todo add this message back
+//                utils.sendMessage(player, notWhitelisted);
+            }
         }
-
-//        if (!whitelistedPlayers.contains(uuid) && !isOpen) {
-//            player.sendMessage("you're not motivated smh");
-//        } else if (isOpen) {
-//            worldEditMine.teleport(player);
-//            player.sendMessage(ChatColor.GREEN + "Teleporting to " + target.getName() + " a private mine!");
-//            player.sendMessage("whitelisted players: " + worldEditMine.getWhitelistedPlayers());
-//        }
     }
 
     @CommandHook("upgrade")
