@@ -11,7 +11,6 @@ privatemine,privatemines,pmine {
         hook delete
         help Deletes a players private mine
         permission privatemines.delete
-        user player
     }
 
     reset {
@@ -39,7 +38,6 @@ privatemine,privatemines,pmine {
         hook upgrade
         help Upgrade a users private mine
         permission: privatemines.upgrade
-        user player
     }
 
     create string:name {
@@ -53,14 +51,12 @@ privatemine,privatemines,pmine {
         hook setblocks
         help Sets the blocks in the mine
         permission privatemines.setblocks
-        user player
     }
 
     settype player:target string:type {
         hook settype
         help Sets the mine type
         permission privatemines.settype
-        user player
     }
 
     open {
@@ -95,6 +91,5 @@ privatemine,privatemines,pmine {
         hook expand
         help Expands a players mine by a certain amount
         permission: privatemines.expand
-        user player
     }
 }

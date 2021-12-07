@@ -240,9 +240,6 @@ public class PrivateMines extends JavaPlugin {
                             worldEditMine.setWorldEditMineData(worldEditMineData);
                             worldEditMine.setMaterials(materials);
 
-//                            worldEditMine.setMaterial(material);
-
-                            getLogger().info("worldEditMineData materials: " + worldEditMineData.getMaterials());
                             mineStorage.addWorldEditMine(worldEditMineData.getMineOwner(), worldEditMine);
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -366,6 +363,7 @@ public class PrivateMines extends JavaPlugin {
                 .parse()
                 .register("privatemines",
                         new PrivateMinesCommand(this));
+
         Messages.load(this);
         Metrics metrics = new Metrics(this, pluginId);
         metrics.addCustomChart(new Metrics.SingleLineChart("mines", MineStorage::getLoadedMineSize));

@@ -14,3 +14,4 @@ mineOpened: &7Your mine is now &aopen&7!
 mineClosed: &7Your mine is now &cclosed&7!
 invalidMineType: &cInvalid mine type!
 pleaseMakeFullSelection: &cPlease make a full selection!
+notWhitelisted: &cYou're not whitelisted in this mine!

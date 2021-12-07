@@ -55,10 +55,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class WorldEditMine {
 
@@ -86,6 +83,8 @@ public class WorldEditMine {
     private Material material;
 
     private Map<Material, Double> materials = new HashMap<>();
+
+    private List<UUID> whitelistedPlayers = new ArrayList<>();
 
     private DataBlock dataBlock;
     private WorldEditMineData worldEditMineData;
@@ -167,6 +166,31 @@ public class WorldEditMine {
 
     public void setMaterials(Map<Material, Double> materials) {
         this.materials = materials;
+    }
+
+    public List<UUID> getWhitelistedPlayers() {
+        return whitelistedPlayers;
+    }
+
+    public void addToWhitelist(Player player, UUID uuid) {
+        Player bukkitPlayer = Bukkit.getPlayer(uuid);
+
+        if (!whitelistedPlayers.contains(uuid)) {
+            player.sendMessage("Adding " + bukkitPlayer + " to the whitelist");
+            whitelistedPlayers.add(uuid);
+        } else {
+            player.sendMessage("Player was already on the whitelist!");
+        }
+    }
+
+    public void removeFromWhiteList(Player player, UUID uuid) {
+        Player bukkitPlayer = Bukkit.getPlayer(uuid);
+        if (!whitelistedPlayers.contains(uuid)) {
+            player.sendMessage("Player " + bukkitPlayer + " wasn't even whitelisted!");
+        } else {
+            player.sendMessage("Removing " + bukkitPlayer + " from the whitelist!");
+            whitelistedPlayers.remove(uuid);
+        }
     }
 
     public DataBlock getDataBlock() {

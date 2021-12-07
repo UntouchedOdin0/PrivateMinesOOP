@@ -178,7 +178,6 @@ public class PrivateMinesCommand {
 
     @CommandHook("delete")
     public void delete(CommandSender commandSender, Player target) {
-        Player player = (Player) commandSender;
         UUID uuid = target.getUniqueId();
 
         String deletedPlayersMine = "deletedPlayersMine";
@@ -189,7 +188,7 @@ public class PrivateMinesCommand {
         File jsonFile = new File(minesDirectory, fileName);
 
         if (!privateMines.getMineStorage().hasWorldEditMine(uuid)) {
-            player.sendMessage(ChatColor.RED + "Player doesn't own a mine!");
+            commandSender.sendMessage(ChatColor.RED + "Player doesn't own a mine!");
         } else {
             WorldEditMine worldEditMine = privateMines.getMineStorage().getWorldEditMine(uuid);
             worldEditMine.delete();
@@ -200,14 +199,13 @@ public class PrivateMinesCommand {
                     privateMines.getLogger().info("The file has been deleted!");
                 }
             }
-            utils.sendMessage(player, deletedPlayersMine);
+            utils.sendMessage(commandSender, deletedPlayersMine);
             utils.sendMessage(target, yourMineHasBeenDeleted);
         }
     }
 
     @CommandHook("reset")
-    public void reset(CommandSender commandSender) {
-        Player player = (Player) commandSender;
+    public void reset(Player player) {
         UUID uuid = player.getUniqueId();
         String doNotOwnMine = "doNotOwnMine";
         String mineReset = "mineReset";
@@ -228,8 +226,7 @@ public class PrivateMinesCommand {
     }
 
     @CommandHook("teleport")
-    public void teleport(CommandSender commandSender) {
-        Player player = (Player) commandSender;
+    public void teleport(Player player) {
         UUID uuid = player.getUniqueId();
         String doNotOwnMine = "doNotOwnMine";
         String teleportedToMine = "teleportedToMine";
@@ -245,33 +242,43 @@ public class PrivateMinesCommand {
     }
 
     @CommandHook("teleportOther")
-    public void teleportOther(CommandSender commandSender, Player target) {
+    public void teleportOther(Player player, Player target) {
         UUID uuid = target.getUniqueId();
         String targetDoesNotOwnMine = Messages.msg("targetDoesNotOwnMine");
+        String notWhitelisted = Messages.msg("notWhitelisted");
 
         if (!mineStorage.hasWorldEditMine(uuid)) {
-            utils.sendMessage(commandSender, targetDoesNotOwnMine);
+            utils.sendMessage(player, targetDoesNotOwnMine);
             return;
         }
 
-        Player player = (Player) commandSender;
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(uuid);
-        worldEditMine.teleport(player);
-        commandSender.sendMessage(ChatColor.GREEN + "Teleporting to " + target.getName() + " a private mine!");
+        WorldEditMineData worldEditMineData = worldEditMine.getWorldEditMineData();
+
+        List<UUID> whitelistedPlayers = worldEditMine.getWhitelistedPlayers();
+        boolean isOpen = worldEditMineData.isOpen();
+
+        if (!whitelistedPlayers.contains(uuid) && !isOpen) {
+            player.sendMessage("you're not motivated smh");
+        } else if (isOpen) {
+            worldEditMine.teleport(player);
+            player.sendMessage(ChatColor.GREEN + "Teleporting to " + target.getName() + " a private mine!");
+            player.sendMessage("whitelisted players: " + worldEditMine.getWhitelistedPlayers());
+        }
     }
 
     @CommandHook("upgrade")
     public void upgrade(CommandSender commandSender, Player target) {
+        Player player = (Player) commandSender;
         String targetDoesNotOwnMine = Messages.msg("targetDoesNotOwnMine");
 
         TreeMap<String, WorldEditMineType> worldEditMineTypeTreeMap = privateMines.getWorldEditMineTypeTreeMap();
 
         if (!mineStorage.hasWorldEditMine(target.getUniqueId())) {
-            utils.sendMessage(commandSender, targetDoesNotOwnMine);
+            utils.sendMessage(player, targetDoesNotOwnMine);
             return;
         }
 
-        Player player = (Player) commandSender;
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(target.getUniqueId());
         WorldEditMineType worldEditMineType = worldEditMine.getWorldEditMineType();
         WorldEditMineType nextWorldEditMineType = worldEditMineTypeTreeMap.higherEntry(worldEditMineType.getName()).getValue();
@@ -302,8 +309,7 @@ public class PrivateMinesCommand {
     }
 
     @CommandHook("create")
-    public void create(CommandSender commandSender, String name) {
-        Player player = (Player) commandSender;
+    public void create(Player player, String name) {
         CuboidRegion cuboidRegion;
         Location minimum;
         Location maximum;
@@ -442,10 +448,11 @@ public class PrivateMinesCommand {
     }
 
     @CommandHook("whitelist")
-    public void whitelist(CommandSender commandSender, Player target) {
-        Player player = (Player) commandSender;
+    public void whitelist(Player player, Player target) {
         WorldEditMine worldEditMine;
         UUID uuid = player.getUniqueId();
+        UUID targetUUID = target.getUniqueId();
+
         String doNotOwnMine = Messages.msg("doNotOwnMine");
 
         if (!mineStorage.hasWorldEditMine(uuid)) {
@@ -453,13 +460,15 @@ public class PrivateMinesCommand {
         }
         worldEditMine = mineStorage.getWorldEditMine(uuid);
         player.sendMessage("whitelist worldedit mine: " + worldEditMine);
+        worldEditMine.addToWhitelist(player, targetUUID);
     }
 
     @CommandHook("unwhitelist")
-    public void unWhitelist(CommandSender commandSender, Player target) {
-        Player player = (Player) commandSender;
+    public void unWhitelist(Player player, Player target) {
         WorldEditMine worldEditMine;
         UUID uuid = player.getUniqueId();
+        UUID targetUUID = target.getUniqueId();
+
         String doNotOwnMine = Messages.msg("doNotOwnMine");
 
         if (!mineStorage.hasWorldEditMine(uuid)) {
@@ -467,5 +476,7 @@ public class PrivateMinesCommand {
         }
         worldEditMine = mineStorage.getWorldEditMine(uuid);
         player.sendMessage("unwhitelist world edit mine " + worldEditMine);
+        worldEditMine.reset();
+        worldEditMine.removeFromWhiteList(player, targetUUID);
     }
 }
