@@ -223,7 +223,19 @@ public class WorldEditMine {
     }
 
     public void teleport(Player player) {
-        player.teleport(getSpawnLocation());
+        UUID uuid = player.getUniqueId();
+
+        boolean isOpen = worldEditMineData.isOpen();
+
+        if (isOpen) {
+            player.teleport(getLocation());
+        } else {
+            if (!whitelistedPlayers.contains(uuid)) {
+                player.sendMessage("You're not whitelisted..........");
+            } else {
+                player.teleport(getSpawnLocation());
+            }
+        }
     }
 
     public void setWorld(World world) {

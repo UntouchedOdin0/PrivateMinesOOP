@@ -71,6 +71,7 @@ public class PrivateMinesCommand {
     private final PrivateMines privateMines;
     Utils utils;
     Path path;
+    List<UUID> whitelistedPlayers;
 
     public PrivateMinesCommand(PrivateMines privateMine) {
         this.privateMines = privateMine;
@@ -107,11 +108,11 @@ public class PrivateMinesCommand {
             itemStack.setItemMeta(itemMeta);
 
             ItemButton itemButton = ItemButton.create(itemStack, inventoryClickEvent -> {
-               if (c.getSlot() == inventoryClickEvent.getSlot()) {
-                   String action = c.getAction();
-                   player.sendMessage("action: " + action);
-                   utils.doAction(player, worldEditMine, action);
-               }
+                if (c.getSlot() == inventoryClickEvent.getSlot()) {
+                    String action = c.getAction();
+                    player.sendMessage("action: " + action);
+                    utils.doAction(player, worldEditMine, action);
+                }
             });
             gui.addButton(slot, itemButton);
         });
@@ -258,18 +259,42 @@ public class PrivateMinesCommand {
         List<UUID> whitelistedPlayers = worldEditMine.getWhitelistedPlayers();
         boolean isOpen = worldEditMineData.isOpen();
 
-        if (isOpen) {
-            worldEditMine.teleport(player);
-        } else {
-            if (whitelistedPlayers.contains(uuid)) {
-                player.sendMessage("you're on the whitelist");
-                worldEditMine.teleport(player);
-            } else {
-                player.sendMessage(ChatColor.RED + "You're not whitelisted at this mine!");
-                //todo add this message back
-//                utils.sendMessage(player, notWhitelisted);
-            }
-        }
+        worldEditMine.teleport(player);
+
+//        if (isOpen) {
+//            worldEditMine.teleport(player);
+//        } else {
+//            player.sendMessage(whitelistedPlayers.toString());
+//            player.sendMessage("your uuid: " + player.getUniqueId());
+//
+//            player.sendMessage("" + worldEditMine.getWhitelistedPlayers().contains(uuid));
+//
+////            for (UUID toCheck : whitelistedPlayers) {
+////                player.sendMessage(toCheck.toString());
+////                if (toCheck == player.getUniqueId()) {
+////                    player.sendMessage("you're whitelisted lol");
+////                }
+////            }
+////            if (whitelistedPlayers.contains(uuid)) {
+////                player.sendMessage("you're on the whitelist");
+////                worldEditMine.teleport(player);
+////            } else {
+////                player.sendMessage(ChatColor.RED + "You're not whitelisted at this mine!");
+////            }
+//        }
+
+//        if (isOpen) {
+//            worldEditMine.teleport(player);
+//        } else {
+//            if (whitelistedPlayers.contains(uuid)) {
+//                player.sendMessage("you're on the whitelist");
+//                worldEditMine.teleport(player);
+//            } else {
+//                player.sendMessage(ChatColor.RED + "You're not whitelisted at this mine!");
+//                //todo add this message back
+////                utils.sendMessage(player, notWhitelisted);
+//            }
+//        }
     }
 
     @CommandHook("upgrade")
@@ -464,8 +489,9 @@ public class PrivateMinesCommand {
             player.sendMessage(doNotOwnMine);
         }
         worldEditMine = mineStorage.getWorldEditMine(uuid);
-        player.sendMessage("whitelist worldedit mine: " + worldEditMine);
+//        player.sendMessage("whitelist worldedit mine: " + worldEditMine);
         worldEditMine.addToWhitelist(player, targetUUID);
+        mineStorage.replaceMine(uuid, worldEditMine);
     }
 
     @CommandHook("unwhitelist")
@@ -483,5 +509,6 @@ public class PrivateMinesCommand {
         player.sendMessage("unwhitelist world edit mine " + worldEditMine);
         worldEditMine.reset();
         worldEditMine.removeFromWhiteList(player, targetUUID);
+        mineStorage.replaceMine(uuid, worldEditMine);
     }
 }
