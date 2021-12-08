@@ -29,6 +29,7 @@ import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.world.block.BlockState;
 import com.sk89q.worldedit.world.block.BlockType;
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
@@ -335,5 +336,9 @@ public class Utils {
     // Credits to CapOfCave#5962 for this
     public List<String> color(@NotNull Collection<String> toConvert) {
         return toConvert.stream().map(this::color).toList();
+    }
+
+    public String convertPAPI(Player player, String message) {
+        return PlaceholderAPI.setPlaceholders(player, message);
     }
 }

@@ -484,6 +484,12 @@ public class PrivateMinesCommand {
         UUID targetUUID = target.getUniqueId();
 
         String doNotOwnMine = Messages.msg("doNotOwnMine");
+        String youHaveBeenWhitelisted = Messages.msg("youHaveBeenWhitelistedAtMine");
+        String youHaveAddedPlayerToYourMine = Messages.msg("youHaveAddedPlayerToYourMine");
+
+        String replacedAdded = youHaveAddedPlayerToYourMine.replace("%name%", target.getName());
+        String addedPlayerReplaced = replacedAdded.replace("%name%", player.getName());
+        String addedReplaced = youHaveBeenWhitelisted.replace("%owner%", player.getName());
 
         if (!mineStorage.hasWorldEditMine(uuid)) {
             player.sendMessage(doNotOwnMine);
@@ -491,6 +497,8 @@ public class PrivateMinesCommand {
         worldEditMine = mineStorage.getWorldEditMine(uuid);
 //        player.sendMessage("whitelist worldedit mine: " + worldEditMine);
         worldEditMine.addToWhitelist(player, targetUUID);
+        player.sendMessage(addedPlayerReplaced);
+        target.sendMessage(addedReplaced);
         mineStorage.replaceMine(uuid, worldEditMine);
     }
 
@@ -501,12 +509,22 @@ public class PrivateMinesCommand {
         UUID targetUUID = target.getUniqueId();
 
         String doNotOwnMine = Messages.msg("doNotOwnMine");
+        String youHaveBeenUnWhitelisted = Messages.msg("youHaveBeenUnWhitelistedFromUsersMine");
+        String youHaveRemovedPlayerFromYourMine = Messages.msg("youHaveAddedPlayerToYourMine");
+
+        String replacedYouHaveBeenUnwhitelisted = youHaveBeenUnWhitelisted.replace("%name%", target.getName());
+        String YouHaveBeenUnwhitelistedPlayerReplaced = replacedYouHaveBeenUnwhitelisted.replace("%name%", player.getName());
+
+        String replacedYouHaveRemoved = youHaveRemovedPlayerFromYourMine.replace("%name%", target.getName());
+        String YouHaveRemovedPlayerReplaced = replacedYouHaveRemoved.replace("%name%", player.getName());
 
         if (!mineStorage.hasWorldEditMine(uuid)) {
             player.sendMessage(doNotOwnMine);
         }
         worldEditMine = mineStorage.getWorldEditMine(uuid);
-        player.sendMessage("unwhitelist world edit mine " + worldEditMine);
+        target.sendMessage(YouHaveBeenUnwhitelistedPlayerReplaced);
+        player.sendMessage(YouHaveRemovedPlayerReplaced);
+
         worldEditMine.reset();
         worldEditMine.removeFromWhiteList(player, targetUUID);
         mineStorage.replaceMine(uuid, worldEditMine);

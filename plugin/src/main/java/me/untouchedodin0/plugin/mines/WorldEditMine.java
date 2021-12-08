@@ -49,6 +49,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.DataBlock;
+import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.misc.Task;
 
 import java.io.File;
@@ -174,19 +175,30 @@ public class WorldEditMine {
 
     public void addToWhitelist(Player player, UUID uuid) {
         Player bukkitPlayer = Bukkit.getPlayer(uuid);
+        Player mineOwner = Bukkit.getPlayer(getMineOwner());
+
+        String playerAlreadyWhitelisted = Messages.msg("playerAlreadyWhitelisted");
 
         if (!whitelistedPlayers.contains(uuid)) {
-            player.sendMessage("Adding " + bukkitPlayer + " to the whitelist");
-            whitelistedPlayers.add(uuid);
-        } else {
-            player.sendMessage("Player was already on the whitelist!");
+            if (mineOwner != null && bukkitPlayer != null) {
+                whitelistedPlayers.add(uuid);
+            } else {
+                if (bukkitPlayer != null) {
+                    String replacedAlreadyWhitelisted = playerAlreadyWhitelisted.replace("%name%", bukkitPlayer.getName());
+                    player.sendMessage(replacedAlreadyWhitelisted);
+                }
+            }
         }
     }
 
     public void removeFromWhiteList(Player player, UUID uuid) {
         Player bukkitPlayer = Bukkit.getPlayer(uuid);
+        String playerNotWhitelisted = Messages.msg("playerWasNotWhitelisted");
+
         if (!whitelistedPlayers.contains(uuid)) {
-            player.sendMessage("Player " + bukkitPlayer + " wasn't even whitelisted!");
+            if (bukkitPlayer != null) {
+                player.sendMessage(playerNotWhitelisted.replace("%name%", bukkitPlayer.getName()));
+            }
         } else {
             player.sendMessage("Removing " + bukkitPlayer + " from the whitelist!");
             whitelistedPlayers.remove(uuid);
@@ -224,14 +236,14 @@ public class WorldEditMine {
 
     public void teleport(Player player) {
         UUID uuid = player.getUniqueId();
-
         boolean isOpen = worldEditMineData.isOpen();
+        String notWhitelisted = Messages.msg("notWhitelisted");
 
         if (isOpen) {
             player.teleport(getLocation());
         } else {
             if (!whitelistedPlayers.contains(uuid)) {
-                player.sendMessage("You're not whitelisted..........");
+                player.sendMessage(notWhitelisted);
             } else {
                 player.teleport(getSpawnLocation());
             }
@@ -520,7 +532,7 @@ public class WorldEditMine {
         final var mine = getCuboidRegion();
         final int toCheck = 3 + amount;
 
-        BlockVector3 min  = mine.getMinimumPoint();
+        BlockVector3 min = mine.getMinimumPoint();
         BlockVector3 max = mine.getMaximumPoint();
         CuboidRegion minMaxCuboid = new CuboidRegion(min, max);
 

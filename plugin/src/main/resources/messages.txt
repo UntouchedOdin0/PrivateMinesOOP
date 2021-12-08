@@ -15,3 +15,9 @@ mineClosed: &7Your mine is now &cclosed&7!
 invalidMineType: &cInvalid mine type!
 pleaseMakeFullSelection: &cPlease make a full selection!
 notWhitelisted: &cYou're not whitelisted in this mine!
+youHaveBeenWhitelistedAtMine: &aYou've been whitelisted at %owner%'s mine!
+youHaveAddedPlayerToYourMine: &aYou've whitelisted %name% to your mine!
+youHaveUnWhitelistedPlayerFromYourMine: &aYou've un-whitelisted %name% from your mine!
+youHaveBeenUnWhitelistedFromUsersMine: &aYou've been un-whitelisted from %name%'s mine!
+playerAlreadyWhitelisted: &cThis player was already whitelisted!
+playerWasNotWhitelisted: &c%name% was not whitelisted!
