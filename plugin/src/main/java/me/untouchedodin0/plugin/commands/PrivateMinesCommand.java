@@ -495,7 +495,6 @@ public class PrivateMinesCommand {
             player.sendMessage(doNotOwnMine);
         }
         worldEditMine = mineStorage.getWorldEditMine(uuid);
-//        player.sendMessage("whitelist worldedit mine: " + worldEditMine);
         worldEditMine.addToWhitelist(player, targetUUID);
         player.sendMessage(addedPlayerReplaced);
         target.sendMessage(addedReplaced);
