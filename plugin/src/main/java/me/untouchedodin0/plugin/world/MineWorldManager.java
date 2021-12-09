@@ -24,6 +24,7 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin.world;
 
+import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.world.utils.Direction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -41,12 +42,12 @@ public class MineWorldManager {
     private Direction direction;
     private final World minesWorld;
 
-    public MineWorldManager() {
+    public MineWorldManager(PrivateMines privateMines) {
         minesWorld = Bukkit.createWorld(
                 new WorldCreator("privatemines")
                         .type(WorldType.FLAT)
                         .generator(new EmptyWorldGenerator()));
-        this.borderDistance = 150;
+        this.borderDistance = privateMines.getMineDistance();
         this.direction = NORTH;
         defaultLocation = new Location(minesWorld, 0, 50, 0); // may need to raise the Y sometime?
     }

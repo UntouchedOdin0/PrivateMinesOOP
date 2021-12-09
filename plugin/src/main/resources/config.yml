@@ -7,6 +7,7 @@ mainMenuTitle: "Private Mines"
 
 debugMode: false
 useWorldEdit: false
+mineDistance: 150
 
 mineTypes:
   Test:

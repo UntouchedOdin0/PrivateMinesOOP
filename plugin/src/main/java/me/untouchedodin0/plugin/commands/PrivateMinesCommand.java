@@ -81,6 +81,10 @@ public class PrivateMinesCommand {
         this.utils = privateMine.getUtils();
     }
 
+    public void hi(Player player) {
+        player.sendMessage("hi");
+    }
+
     @CommandHook("main")
     public void mainHook(Player player) {
         Map<String, MenuConfig> menuConfig = privateMines.getInventory();

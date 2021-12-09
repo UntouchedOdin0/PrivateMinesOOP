@@ -116,6 +116,9 @@ public class PrivateMines extends JavaPlugin {
     private boolean useWorldEdit = false;
 
     @ConfigValue
+    private int mineDistance = 150;
+
+    @ConfigValue
     private Map<String, MineConfig> mineTypes = ConfigManager.map(MineConfig.class);
 
     @ConfigValue
@@ -171,7 +174,7 @@ public class PrivateMines extends JavaPlugin {
 
         mineStorage = new MineStorage();
         mineFactory = new MineFactory(this, blockDataManager);
-        mineWorldManager = new MineWorldManager();
+        mineWorldManager = new MineWorldManager(this);
         utils = new Utils(this);
         PluginManager pluginManager = Bukkit.getServer().getPluginManager();
         addonLoader = new AddonLoader(this, pluginManager);
@@ -603,6 +606,10 @@ public class PrivateMines extends JavaPlugin {
 
     public boolean useWorldEdit() {
         return useWorldEdit;
+    }
+
+    public int getMineDistance() {
+        return mineDistance;
     }
 
     public MineWorldManager getMineWorldManager() {
