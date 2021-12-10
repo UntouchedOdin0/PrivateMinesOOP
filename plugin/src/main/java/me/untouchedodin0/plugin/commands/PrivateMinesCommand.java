@@ -307,7 +307,6 @@ public class PrivateMinesCommand {
             return;
         }
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(target.getUniqueId());
-//        Mine mine = mineStorage.getMine(target.getUniqueId());
         worldEditMine.expand(amount);
         mineStorage.replaceMine(player.getUniqueId(), worldEditMine);
     }
