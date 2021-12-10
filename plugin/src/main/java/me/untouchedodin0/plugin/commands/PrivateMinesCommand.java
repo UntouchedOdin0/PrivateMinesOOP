@@ -68,7 +68,6 @@ public class PrivateMinesCommand {
     private final PrivateMines privateMines;
     Utils utils;
     Path path;
-    List<UUID> whitelistedPlayers;
 
     public PrivateMinesCommand(PrivateMines privateMine) {
         this.privateMines = privateMine;
