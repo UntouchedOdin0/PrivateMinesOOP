@@ -43,6 +43,7 @@ import me.untouchedodin0.plugin.mines.data.WorldEditMineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.util.worldedit.Adapter;
+import me.untouchedodin0.plugin.world.MineWorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -50,6 +51,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.commandmanager.Messages;
+import redempt.redlib.misc.LocationUtils;
 import redempt.redlib.misc.Task;
 
 import java.io.File;
@@ -183,12 +185,13 @@ public class WorldEditMine {
             if (mineOwner != null && bukkitPlayer != null) {
                 whitelistedPlayers.add(uuid);
             } else {
-                if (bukkitPlayer != null) {
+                if (bukkitPlayer != null && whitelistedPlayers.contains(uuid)) {
                     String replacedAlreadyWhitelisted = playerAlreadyWhitelisted.replace("%name%", bukkitPlayer.getName());
                     player.sendMessage(replacedAlreadyWhitelisted);
                 }
             }
         }
+        player.sendMessage(whitelistedPlayers.toString());
     }
 
     public void removeFromWhiteList(Player player, UUID uuid) {
@@ -238,23 +241,23 @@ public class WorldEditMine {
         UUID uuid = player.getUniqueId();
         boolean isOpen = worldEditMineData.isOpen();
         String notWhitelisted = Messages.msg("notWhitelisted");
+        WorldEditMineData worldEditMineData = getWorldEditMineData();
+        MineWorldManager mineWorldManager = privateMines.getMineWorldManager();
+        World world = mineWorldManager.getMinesWorld();
 
-        if (isOpen) {
-            player.teleport(getLocation());
-        } else {
-            if (!whitelistedPlayers.contains(uuid)) {
-                player.sendMessage(notWhitelisted);
-            } else {
-                player.teleport(getSpawnLocation());
-            }
-        }
+        int spawnX = worldEditMineData.getSpawnX();
+        int spawnY = worldEditMineData.getSpawnY();
+        int spawnZ = worldEditMineData.getSpawnZ();
+        Location location = new Location(world, spawnX, spawnY, spawnZ);
+        player.teleport(location);
     }
+
 
     public void setWorld(World world) {
         this.world = world;
     }
 
-    // Resets the mine
+// Resets the mine
 
     /*
     public void reset() {

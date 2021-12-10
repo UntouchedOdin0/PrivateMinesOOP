@@ -36,10 +36,7 @@ import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -242,8 +239,25 @@ public class PrivateMinesCommand {
         }
 
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(uuid);
+        WorldEditMineData worldEditMineData = worldEditMine.getWorldEditMineData();
+
+        player.sendMessage("worldEditMine: " + worldEditMine.getMineOwner());
+        player.sendMessage("worldEditMineData: " + worldEditMineData);
+
+        int spawnX = worldEditMineData.getSpawnX();
+        int spawnY = worldEditMineData.getSpawnY();
+        int spawnZ = worldEditMineData.getSpawnZ();
+
+        World world = mineWorldManager.getMinesWorld();
+        Location location = new Location(world, spawnX, spawnY, spawnZ);
+
+        player.sendMessage("spawnX: " + spawnX);
+        player.sendMessage("spawnY: " + spawnY);
+        player.sendMessage("spawnZ: " + spawnZ);
         worldEditMine.teleport(player);
-        utils.sendMessage(player, teleportedToMine);
+
+//        worldEditMine.teleport(player);
+//        utils.sendMessage(player, teleportedToMine);
     }
 
     @CommandHook("teleportOther")
@@ -260,10 +274,25 @@ public class PrivateMinesCommand {
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(uuid);
         WorldEditMineData worldEditMineData = worldEditMine.getWorldEditMineData();
 
-        List<UUID> whitelistedPlayers = worldEditMine.getWhitelistedPlayers();
+        List<UUID> whitelistedPlayers = worldEditMineData.getWhitelistedPlayers();
         boolean isOpen = worldEditMineData.isOpen();
 
-        worldEditMine.teleport(player);
+        player.sendMessage(whitelistedPlayers.toString());
+        player.sendMessage("is open?: " + isOpen);
+
+        if (!isOpen) {
+            player.sendMessage("hey that mines not open lets check if you're on the whitelist");
+            player.sendMessage("" + whitelistedPlayers);
+            boolean isWhitelisted = whitelistedPlayers.contains(player.getUniqueId());
+            player.sendMessage("are you?: " + isWhitelisted);
+
+//            boolean isWhitelisted = whitelistedPlayers.contains(player.getUniqueId());
+//            player.sendMessage("isWhitelisted: " + isWhitelisted);
+        } else {
+            player.sendMessage("it's open pog pog");
+        }
+
+//        worldEditMine.teleport(player);
 
 //        if (isOpen) {
 //            worldEditMine.teleport(player);
@@ -484,6 +513,7 @@ public class PrivateMinesCommand {
     @CommandHook("whitelist")
     public void whitelist(Player player, Player target) {
         WorldEditMine worldEditMine;
+        WorldEditMineData worldEditMineData;
         UUID uuid = player.getUniqueId();
         UUID targetUUID = target.getUniqueId();
 
@@ -495,25 +525,32 @@ public class PrivateMinesCommand {
         String addedPlayerReplaced = replacedAdded.replace("%name%", player.getName());
         String addedReplaced = youHaveBeenWhitelisted.replace("%owner%", player.getName());
 
-        if (!mineStorage.hasWorldEditMine(uuid)) {
+        if (!privateMines.getMineStorage().hasWorldEditMine(uuid)) {
             player.sendMessage(doNotOwnMine);
         }
-        worldEditMine = mineStorage.getWorldEditMine(uuid);
-        worldEditMine.addToWhitelist(player, targetUUID);
+        worldEditMine = privateMines.getMineStorage().getWorldEditMine(uuid);
+        worldEditMineData = worldEditMine.getWorldEditMineData();
+        worldEditMineData.addWhitelistedPlayer(targetUUID);
+        player.sendMessage("adder user " + targetUUID);
+        target.sendMessage("you've been added to a mine ig..");
         player.sendMessage(addedPlayerReplaced);
         target.sendMessage(addedReplaced);
-        mineStorage.replaceMine(uuid, worldEditMine);
+
+        worldEditMine.setWorldEditMineData(worldEditMineData);
+        privateMines.getMineStorage().replaceMine(uuid, worldEditMine);
+        player.sendMessage("" + worldEditMineData.getWhitelistedPlayers());
     }
 
     @CommandHook("unwhitelist")
     public void unWhitelist(Player player, Player target) {
         WorldEditMine worldEditMine;
+        WorldEditMineData worldEditMineData;
         UUID uuid = player.getUniqueId();
         UUID targetUUID = target.getUniqueId();
 
         String doNotOwnMine = Messages.msg("doNotOwnMine");
         String youHaveBeenUnWhitelisted = Messages.msg("youHaveBeenUnWhitelistedFromUsersMine");
-        String youHaveRemovedPlayerFromYourMine = Messages.msg("youHaveAddedPlayerToYourMine");
+        String youHaveRemovedPlayerFromYourMine = Messages.msg("youHaveUnWhitelistedPlayerFromYourMine");
 
         String replacedYouHaveBeenUnwhitelisted = youHaveBeenUnWhitelisted.replace("%name%", target.getName());
         String YouHaveBeenUnwhitelistedPlayerReplaced = replacedYouHaveBeenUnwhitelisted.replace("%name%", player.getName());
@@ -521,15 +558,25 @@ public class PrivateMinesCommand {
         String replacedYouHaveRemoved = youHaveRemovedPlayerFromYourMine.replace("%name%", target.getName());
         String YouHaveRemovedPlayerReplaced = replacedYouHaveRemoved.replace("%name%", player.getName());
 
-        if (!mineStorage.hasWorldEditMine(uuid)) {
+        if (!privateMines.getMineStorage().hasWorldEditMine(uuid)) {
             player.sendMessage(doNotOwnMine);
         }
-        worldEditMine = mineStorage.getWorldEditMine(uuid);
-        target.sendMessage(YouHaveBeenUnwhitelistedPlayerReplaced);
+        worldEditMine = privateMines.getMineStorage().getWorldEditMine(uuid);
+        worldEditMineData = worldEditMine.getWorldEditMineData();
+        worldEditMineData.removeWhitelistedPlayer(targetUUID);
         player.sendMessage(YouHaveRemovedPlayerReplaced);
-
-        worldEditMine.reset();
-        worldEditMine.removeFromWhiteList(player, targetUUID);
-        mineStorage.replaceMine(uuid, worldEditMine);
+        target.sendMessage(YouHaveBeenUnwhitelistedPlayerReplaced);
+        worldEditMine.setWorldEditMineData(worldEditMineData);
+        privateMines.getMineStorage().replaceMine(uuid, worldEditMine);
+        player.sendMessage("" + worldEditMineData.getWhitelistedPlayers());
     }
+
+//        worldEditMine = mineStorage.getWorldEditMine(uuid);
+//        target.sendMessage(YouHaveBeenUnwhitelistedPlayerReplaced);
+//        player.sendMessage(YouHaveRemovedPlayerReplaced);
+//
+//        worldEditMine.reset();
+//        worldEditMine.removeFromWhiteList(player, targetUUID);
+//        mineStorage.replaceMine(uuid, worldEditMine);
 }
+

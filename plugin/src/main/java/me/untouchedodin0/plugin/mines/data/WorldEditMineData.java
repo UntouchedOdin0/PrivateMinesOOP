@@ -28,9 +28,7 @@ import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
 import org.bukkit.Material;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class WorldEditMineData {
 
@@ -65,6 +63,7 @@ public class WorldEditMineData {
     boolean isOpen;
 
     Map<Material, Double> materials = new HashMap<>();
+    List<UUID> whitelistedPlayers = new ArrayList<>();
 
     public UUID getMineOwner() {
         return mineOwner;
@@ -242,11 +241,24 @@ public class WorldEditMineData {
         this.isOpen = open;
     }
 
+    public Map<Material, Double> getMaterials() {
+        return materials;
+    }
+
     public void setMaterials(Map<Material, Double> materials) {
         this.materials = materials;
     }
 
-    public Map<Material, Double> getMaterials() {
-        return materials;
+    public void addWhitelistedPlayer(UUID uuid) {
+        if (whitelistedPlayers.contains(uuid)) return;
+        whitelistedPlayers.add(uuid);
+    }
+
+    public void removeWhitelistedPlayer(UUID uuid) {
+        whitelistedPlayers.remove(uuid);
+    }
+
+    public List<UUID> getWhitelistedPlayers() {
+        return whitelistedPlayers;
     }
 }
