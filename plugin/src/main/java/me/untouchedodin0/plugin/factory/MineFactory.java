@@ -79,6 +79,7 @@ public class MineFactory {
     }
 
 
+    @SuppressWarnings("unused")
     public Mine createMine(Player player, Location location) {
         if (defaultMineType == null) {
             privateMines.getLogger().warning("Failed to create mine due to defaultMineData being null");
