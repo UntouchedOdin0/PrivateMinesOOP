@@ -271,8 +271,6 @@ public class PrivateMinesCommand {
             worldEditMine.teleport(player);
         }
 
-//        worldEditMine.teleport(player);
-
 //        if (isOpen) {
 //            worldEditMine.teleport(player);
 //        } else {
