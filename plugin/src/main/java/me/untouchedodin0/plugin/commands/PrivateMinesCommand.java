@@ -274,28 +274,6 @@ public class PrivateMinesCommand {
 //        if (isOpen) {
 //            worldEditMine.teleport(player);
 //        } else {
-//            player.sendMessage(whitelistedPlayers.toString());
-//            player.sendMessage("your uuid: " + player.getUniqueId());
-//
-//            player.sendMessage("" + worldEditMine.getWhitelistedPlayers().contains(uuid));
-//
-////            for (UUID toCheck : whitelistedPlayers) {
-////                player.sendMessage(toCheck.toString());
-////                if (toCheck == player.getUniqueId()) {
-////                    player.sendMessage("you're whitelisted lol");
-////                }
-////            }
-////            if (whitelistedPlayers.contains(uuid)) {
-////                player.sendMessage("you're on the whitelist");
-////                worldEditMine.teleport(player);
-////            } else {
-////                player.sendMessage(ChatColor.RED + "You're not whitelisted at this mine!");
-////            }
-//        }
-
-//        if (isOpen) {
-//            worldEditMine.teleport(player);
-//        } else {
 //            if (whitelistedPlayers.contains(uuid)) {
 //                player.sendMessage("you're on the whitelist");
 //                worldEditMine.teleport(player);
