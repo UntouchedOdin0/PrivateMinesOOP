@@ -244,10 +244,6 @@ public class PrivateMinesCommand {
         player.sendMessage("worldEditMine: " + worldEditMine.getMineOwner());
         player.sendMessage("worldEditMineData: " + worldEditMineData);
 
-        int spawnX = worldEditMineData.getSpawnX();
-        int spawnY = worldEditMineData.getSpawnY();
-        int spawnZ = worldEditMineData.getSpawnZ();
-
         worldEditMine.teleport(player);
         player.sendMessage(teleportedToMine);
     }
