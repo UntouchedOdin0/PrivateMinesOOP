@@ -248,12 +248,6 @@ public class PrivateMinesCommand {
         int spawnY = worldEditMineData.getSpawnY();
         int spawnZ = worldEditMineData.getSpawnZ();
 
-        World world = mineWorldManager.getMinesWorld();
-        Location location = new Location(world, spawnX, spawnY, spawnZ);
-
-        player.sendMessage("spawnX: " + spawnX);
-        player.sendMessage("spawnY: " + spawnY);
-        player.sendMessage("spawnZ: " + spawnZ);
         worldEditMine.teleport(player);
         player.sendMessage(teleportedToMine);
     }
