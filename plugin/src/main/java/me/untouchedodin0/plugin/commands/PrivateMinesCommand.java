@@ -291,7 +291,6 @@ public class PrivateMinesCommand {
         if (nextWorldEditMineType == null) {
             privateMines.getLogger().info("Failed to upgrade players mine as they're at max type!");
         } else {
-            player.sendMessage("next type: " + nextWorldEditMineType.getName());
             worldEditMine.upgrade(player, nextWorldEditMineType);
         }
     }
