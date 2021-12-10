@@ -231,7 +231,7 @@ public class PrivateMinesCommand {
     public void teleport(Player player) {
         UUID uuid = player.getUniqueId();
         String doNotOwnMine = "doNotOwnMine";
-        String teleportedToMine = "teleportedToMine";
+        String teleportedToMine = Messages.msg("teleportedToMine");
 
         if (!mineStorage.hasWorldEditMine(uuid)) {
             utils.sendMessage(player, doNotOwnMine);
@@ -255,9 +255,7 @@ public class PrivateMinesCommand {
         player.sendMessage("spawnY: " + spawnY);
         player.sendMessage("spawnZ: " + spawnZ);
         worldEditMine.teleport(player);
-
-//        worldEditMine.teleport(player);
-//        utils.sendMessage(player, teleportedToMine);
+        player.sendMessage(teleportedToMine);
     }
 
     @CommandHook("teleportOther")
@@ -281,15 +279,14 @@ public class PrivateMinesCommand {
         player.sendMessage("is open?: " + isOpen);
 
         if (!isOpen) {
-            player.sendMessage("hey that mines not open lets check if you're on the whitelist");
-            player.sendMessage("" + whitelistedPlayers);
             boolean isWhitelisted = whitelistedPlayers.contains(player.getUniqueId());
-            player.sendMessage("are you?: " + isWhitelisted);
-
-//            boolean isWhitelisted = whitelistedPlayers.contains(player.getUniqueId());
-//            player.sendMessage("isWhitelisted: " + isWhitelisted);
+            if (isWhitelisted) {
+                worldEditMine.teleport(player);
+            } else {
+                player.sendMessage(notWhitelisted);
+            }
         } else {
-            player.sendMessage("it's open pog pog");
+            worldEditMine.teleport(player);
         }
 
 //        worldEditMine.teleport(player);
