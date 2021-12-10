@@ -260,9 +260,6 @@ public class PrivateMinesCommand {
         List<UUID> whitelistedPlayers = worldEditMineData.getWhitelistedPlayers();
         boolean isOpen = worldEditMineData.isOpen();
 
-        player.sendMessage(whitelistedPlayers.toString());
-        player.sendMessage("is open?: " + isOpen);
-
         if (!isOpen) {
             boolean isWhitelisted = whitelistedPlayers.contains(player.getUniqueId());
             if (isWhitelisted) {
