@@ -239,11 +239,6 @@ public class PrivateMinesCommand {
         }
 
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(uuid);
-        WorldEditMineData worldEditMineData = worldEditMine.getWorldEditMineData();
-
-        player.sendMessage("worldEditMine: " + worldEditMine.getMineOwner());
-        player.sendMessage("worldEditMineData: " + worldEditMineData);
-
         worldEditMine.teleport(player);
         player.sendMessage(teleportedToMine);
     }
