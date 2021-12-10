@@ -566,13 +566,5 @@ public class PrivateMinesCommand {
         worldEditMine.setWorldEditMineData(worldEditMineData);
         privateMines.getMineStorage().replaceMine(uuid, worldEditMine);
     }
-
-//        worldEditMine = mineStorage.getWorldEditMine(uuid);
-//        target.sendMessage(YouHaveBeenUnwhitelistedPlayerReplaced);
-//        player.sendMessage(YouHaveRemovedPlayerReplaced);
-//
-//        worldEditMine.reset();
-//        worldEditMine.removeFromWhiteList(player, targetUUID);
-//        mineStorage.replaceMine(uuid, worldEditMine);
 }
 
