@@ -531,14 +531,11 @@ public class PrivateMinesCommand {
         worldEditMine = privateMines.getMineStorage().getWorldEditMine(uuid);
         worldEditMineData = worldEditMine.getWorldEditMineData();
         worldEditMineData.addWhitelistedPlayer(targetUUID);
-        player.sendMessage("adder user " + targetUUID);
-        target.sendMessage("you've been added to a mine ig..");
         player.sendMessage(addedPlayerReplaced);
         target.sendMessage(addedReplaced);
 
         worldEditMine.setWorldEditMineData(worldEditMineData);
         privateMines.getMineStorage().replaceMine(uuid, worldEditMine);
-        player.sendMessage("" + worldEditMineData.getWhitelistedPlayers());
     }
 
     @CommandHook("unwhitelist")
@@ -568,7 +565,6 @@ public class PrivateMinesCommand {
         target.sendMessage(YouHaveBeenUnwhitelistedPlayerReplaced);
         worldEditMine.setWorldEditMineData(worldEditMineData);
         privateMines.getMineStorage().replaceMine(uuid, worldEditMine);
-        player.sendMessage("" + worldEditMineData.getWhitelistedPlayers());
     }
 
 //        worldEditMine = mineStorage.getWorldEditMine(uuid);
