@@ -238,6 +238,8 @@ public class PrivateMinesCommand {
         player.sendMessage(teleportedToMine);
     }
 
+    //todo this should really be tidied up into its own simple method somewhere lol.
+
     @CommandHook("teleportOther")
     public void teleportOther(Player player, Player target) {
         UUID uuid = target.getUniqueId();
