@@ -47,6 +47,7 @@ import redempt.redlib.commandmanager.CommandHook;
 import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.inventorygui.InventoryGUI;
 import redempt.redlib.inventorygui.ItemButton;
+import redempt.redlib.itemutils.ItemBuilder;
 import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.MultiBlockStructure;
 import redempt.redlib.multiblock.Structure;
@@ -82,8 +83,10 @@ public class PrivateMinesCommand {
         Map<String, MenuConfig> menuConfig = privateMines.getInventory();
         String inventoryTitle = privateMines.getMainMenuTitle();
         String inventoryTitleColored = utils.color(inventoryTitle);
+        ItemStack filler = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
 
-        InventoryGUI gui = new InventoryGUI(Bukkit.createInventory(null, 9, inventoryTitleColored));
+        InventoryGUI gui = new InventoryGUI(Bukkit.createInventory(null, 27, inventoryTitleColored));
+
         player.sendMessage(menuConfig.toString());
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(player.getUniqueId());
 
@@ -110,6 +113,7 @@ public class PrivateMinesCommand {
                     utils.doAction(player, worldEditMine, action);
                 }
             });
+            privateMines.getLogger().info("s: " + s);
             gui.addButton(slot, itemButton);
         });
 

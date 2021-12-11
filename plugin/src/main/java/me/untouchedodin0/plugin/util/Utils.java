@@ -319,12 +319,19 @@ public class Utils {
     public void doAction(Player player, WorldEditMine worldEditMine, String action) {
         if (worldEditMine != null) {
             WorldEditMineData worldEditMineData = worldEditMine.getWorldEditMineData();
+            List<UUID> whitelistedPlayers = worldEditMineData.getWhitelistedPlayers();
+
             player.sendMessage("Doing action... " + action);
+
             switch (action.toLowerCase()) {
                 case "reset":
                     worldEditMine.reset();
                 case "teleporttomine":
                     worldEditMine.teleport(player);
+                case "whitelistedplayers":
+                    whitelistedPlayers.forEach(uuid -> {
+                        player.sendMessage(String.valueOf(uuid));
+                    });
             }
         }
     }

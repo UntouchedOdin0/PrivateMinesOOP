@@ -34,11 +34,29 @@ mineTypes:
 
 inventory:
   Item1:
-    name: "&7Hi"
+    name: "Reset"
     lore:
       - "&aHi 1"
       - "&bHi 2"
       - "&cHi 3"
     type: STONE
     slot: 0
+    action: "reset"
+  Item2:
+    name: "Teleport"
+    lore:
+      - "&aHi 1"
+      - "&bHi 2"
+      - "&cHi 3"
+    type: STONE
+    slot: 1
     action: "teleporttomine"
+  Item3:
+    name: "&7Whitelisted"
+    lore:
+      - "&aHi 1"
+      - "&bHi 2"
+      - "&cHi 3"
+    type: STONE
+    slot: 2
+    action: "whitelistedplayers"

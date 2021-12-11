@@ -167,6 +167,7 @@ public class PrivateMines extends JavaPlugin {
         @SuppressWarnings("unused")
         ConfigManager configManager = new ConfigManager(this).register(this).load();
 
+
         blockDataManager = new BlockDataManager(
                 getDataFolder()
                         .toPath()
