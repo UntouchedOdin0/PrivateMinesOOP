@@ -159,8 +159,11 @@ public class Utils {
     }
 
     public IWrappedRegion createWorldGuardRegion(Player player, World world, com.sk89q.worldedit.regions.CuboidRegion cuboidRegion) {
+        UUID uuid = player.getUniqueId();
+        String regionName = String.format("mine-%s", uuid);
+
         IWrappedRegion iWrappedRegion = WorldGuardWrapper.getInstance().addCuboidRegion(
-                "test",
+                regionName,
                 blockVector3toBukkit(world,
                                      cuboidRegion.getMinimumPoint()),
                 blockVector3toBukkit(world,
