@@ -340,6 +340,10 @@ public class Utils {
         if (worldEditMine != null) {
             WorldEditMineData worldEditMineData = worldEditMine.getWorldEditMineData();
             List<UUID> whitelistedPlayers = worldEditMineData.getWhitelistedPlayers();
+            List<UUID> bannedPlayers = worldEditMineData.getBannedPlayers();
+            List<UUID> priorityPlayers = worldEditMineData.getPriorityPlayers();
+            UUID coowner = worldEditMineData.getCoOwner();
+            String notSetCoOwner = Messages.msg("youHaveNotSetACoOwner");
 
             player.sendMessage("Doing action... " + action);
 
@@ -353,17 +357,22 @@ public class Utils {
                 case "settax" ->
                         player.sendMessage("Set tax time!");
                 case "minesize" ->
-                        player.sendMessage("Mine Size time!");
+                        player.sendMessage("Your mine size is -x-");
                 case "reset" ->
-                        player.sendMessage("Reset time!");
+                        worldEditMine.reset();
                 case "whitelistedplayers" ->
-                        player.sendMessage("whitelisted players!");
+                        player.sendMessage(String.valueOf(whitelistedPlayers));
                 case "bannedplayers" ->
-                        player.sendMessage("banned players!");
+                        player.sendMessage(String.valueOf(bannedPlayers));
                 case "priorityplayers" ->
-                        player.sendMessage("priority players!");
-                case "coowner" ->
-                        player.sendMessage("co owner!");
+                        player.sendMessage(String.valueOf(priorityPlayers));
+                case "coowner" -> {
+                    if (coowner == null) {
+                        player.sendMessage(notSetCoOwner);
+                    } else {
+                        player.sendMessage("[DEBUG] Your co-owner is set to " + worldEditMineData.getCoOwner());
+                    }
+                }
 
 
 //                case "reset":

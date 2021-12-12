@@ -258,12 +258,18 @@ public class PrivateMinesCommand {
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(uuid);
         WorldEditMineData worldEditMineData = worldEditMine.getWorldEditMineData();
 
+        UUID coowner = worldEditMineData.getCoOwner();
+        boolean isCoOwner = coowner.equals(player.getUniqueId());
+
         List<UUID> whitelistedPlayers = worldEditMineData.getWhitelistedPlayers();
         boolean isOpen = worldEditMineData.isOpen();
 
         if (!isOpen) {
             boolean isWhitelisted = whitelistedPlayers.contains(player.getUniqueId());
-            if (isWhitelisted) {
+
+            // If they're whitelisted, or they're co-owner they can enter.
+
+            if (isWhitelisted || isCoOwner) {
                 worldEditMine.teleport(player);
             } else {
                 player.sendMessage(notWhitelisted);
@@ -504,6 +510,37 @@ public class PrivateMinesCommand {
         worldEditMineData.removeWhitelistedPlayer(targetUUID);
         player.sendMessage(YouHaveRemovedPlayerReplaced);
         target.sendMessage(YouHaveBeenUnwhitelistedPlayerReplaced);
+        worldEditMine.setWorldEditMineData(worldEditMineData);
+        privateMines.getMineStorage().replaceMine(uuid, worldEditMine);
+    }
+
+    @CommandHook("coowner")
+    public void coOwner(Player player, Player target) {
+        WorldEditMine worldEditMine;
+        WorldEditMineData worldEditMineData;
+        UUID uuid = player.getUniqueId();
+        UUID targetUUID = target.getUniqueId();
+
+        String doNotOwnMine = Messages.msg("doNotOwnMine");
+
+        String youHaveSetUserAsCoOwner = Messages.msg("youHaveSetUserAsCoOwner");
+        String youHaveBeenSetAsACoOwnerAtMine = Messages.msg("youHaveBeenSetAsACoOwnerAtMine");
+
+        String replacedYouHaveSetUserAsCoOwner = youHaveSetUserAsCoOwner.replace("%name%", target.getName());
+        String replacedYouHaveBeenSetAsCoOwner = youHaveBeenSetAsACoOwnerAtMine.replace("%name%", player.getName());
+
+        String replacedYouHaveSetUser = replacedYouHaveSetUserAsCoOwner.replace("%name%", player.getName());
+        String replacedYouHaveBeenSet = replacedYouHaveBeenSetAsCoOwner.replace("%name%", target.getName());
+
+        if (!privateMines.getMineStorage().hasWorldEditMine(uuid)) {
+            player.sendMessage(doNotOwnMine);
+        }
+
+        worldEditMine = privateMines.getMineStorage().getWorldEditMine(uuid);
+        worldEditMineData = worldEditMine.getWorldEditMineData();
+        worldEditMineData.setCoOwner(targetUUID);
+        player.sendMessage(replacedYouHaveSetUser);
+        target.sendMessage(replacedYouHaveBeenSet);
         worldEditMine.setWorldEditMineData(worldEditMineData);
         privateMines.getMineStorage().replaceMine(uuid, worldEditMine);
     }

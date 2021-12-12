@@ -33,6 +33,7 @@ import java.util.*;
 public class WorldEditMineData {
 
     UUID mineOwner;
+    UUID coOwner;
 
     int spawnX;
     int spawnY;
@@ -64,6 +65,8 @@ public class WorldEditMineData {
 
     Map<Material, Double> materials = new HashMap<>();
     List<UUID> whitelistedPlayers = new ArrayList<>();
+    List<UUID> bannedPlayers = new ArrayList<>();
+    List<UUID> priorityPlayers = new ArrayList<>();
 
     public UUID getMineOwner() {
         return mineOwner;
@@ -71,6 +74,14 @@ public class WorldEditMineData {
 
     public void setMineOwner(UUID mineOwner) {
         this.mineOwner = mineOwner;
+    }
+
+    public UUID getCoOwner() {
+        return coOwner;
+    }
+
+    public void setCoOwner(UUID coOwner) {
+        this.coOwner = coOwner;
     }
 
     public int getSpawnX() {
@@ -260,5 +271,31 @@ public class WorldEditMineData {
 
     public List<UUID> getWhitelistedPlayers() {
         return whitelistedPlayers;
+    }
+
+    public void addBannedPlayer(UUID uuid) {
+        if (bannedPlayers.contains(uuid)) return;
+        bannedPlayers.add(uuid);
+    }
+
+    public void removeBannedPlayer(UUID uuid) {
+        bannedPlayers.remove(uuid);
+    }
+
+    public List<UUID> getBannedPlayers() {
+        return bannedPlayers;
+    }
+
+    public void addPriorityPlayer(UUID uuid) {
+        if (priorityPlayers.contains(uuid)) return;
+        priorityPlayers.add(uuid);
+    }
+
+    public void removePriorityPlayer(UUID uuid) {
+        priorityPlayers.remove(uuid);
+    }
+
+    public List<UUID> getPriorityPlayers() {
+        return priorityPlayers;
     }
 }
