@@ -174,6 +174,11 @@ public class Utils {
         return iWrappedRegion;
     }
 
+    public void deleteWorldGuardRegion(IWrappedRegion iWrappedRegion) {
+        World world = privateMines.getMineWorldManager().getMinesWorld();
+        WorldGuardWrapper.getInstance().removeRegion(world, iWrappedRegion.getId());
+    }
+
     public void setMineFlags(WorldEditMine worldEditMine) {
         final WorldGuardWrapper worldGuardWrapper = WorldGuardWrapper.getInstance();
         IWrappedRegion iWrappedRegion = worldEditMine.getiWrappedRegion();
