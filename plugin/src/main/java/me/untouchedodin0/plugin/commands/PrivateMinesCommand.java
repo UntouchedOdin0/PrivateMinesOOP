@@ -87,7 +87,6 @@ public class PrivateMinesCommand {
 
         InventoryGUI gui = new InventoryGUI(Bukkit.createInventory(null, 27, inventoryTitleColored));
 
-        player.sendMessage(menuConfig.toString());
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(player.getUniqueId());
 
         menuConfig.forEach((s, c) -> {
@@ -111,6 +110,7 @@ public class PrivateMinesCommand {
                     String action = c.getAction();
                     player.sendMessage("action: " + action);
                     utils.doAction(player, worldEditMine, action);
+                    player.closeInventory();
                 }
             });
             privateMines.getLogger().info("s: " + s);
