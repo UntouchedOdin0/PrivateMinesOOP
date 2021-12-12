@@ -402,7 +402,9 @@ public class MineFactory {
                         }
 
                         IWrappedRegion iWrappedRegion = utils.createWorldGuardRegion(player, world, cuboidRegion);
-                        utils.setMineFlags(java.util.Optional.ofNullable(iWrappedRegion));
+                        worldEditMine.setIWrappedRegion(iWrappedRegion);
+                        utils.setMineFlags(worldEditMine);
+//                        utils.setMineFlags(java.util.Optional.ofNullable(iWrappedRegion));
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
                     }

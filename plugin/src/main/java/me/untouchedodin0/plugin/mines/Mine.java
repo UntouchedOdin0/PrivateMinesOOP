@@ -425,7 +425,7 @@ public class Mine {
         mine.contract(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X, BlockVector3.UNIT_MINUS_Y, BlockVector3.UNIT_Z, BlockVector3.UNIT_MINUS_Z);
 
         iWrappedRegion = WorldGuardWrapper.getInstance().addCuboidRegion(regionName, cuboidRegion.getStart(), cuboidRegion.getEnd());
-        utils.setMineFlags(iWrappedRegion);
+//        utils.setMineFlags(iWrappedRegion);
 
         if (airMaterial != null) {
             spawnLocation.getBlock().setType(airMaterial, false);
@@ -643,7 +643,7 @@ public class Mine {
             Location start = mine.getCorner1();
             Location end = mine.getCorner2();
             iWrappedRegion = WorldGuardWrapper.getInstance().addCuboidRegion(regionName, start, end);
-            utils.setMineFlags(iWrappedRegion);
+//            utils.setMineFlags(iWrappedRegion);
         }
     }
 

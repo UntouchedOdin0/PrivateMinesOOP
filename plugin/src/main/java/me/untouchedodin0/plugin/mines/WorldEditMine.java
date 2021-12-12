@@ -49,6 +49,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.codemc.worldguardwrapper.region.IWrappedRegion;
 import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.misc.Task;
@@ -73,6 +74,7 @@ public class WorldEditMine {
     private UUID mineOwner;
 
     private CuboidRegion cuboidRegion;
+    private IWrappedRegion iWrappedRegion;
 
     private Region region;
 
@@ -128,6 +130,14 @@ public class WorldEditMine {
 
     public void setCuboidRegion(CuboidRegion cuboidRegion) {
         this.cuboidRegion = cuboidRegion;
+    }
+
+    public IWrappedRegion getiWrappedRegion() {
+        return iWrappedRegion;
+    }
+
+    public void setIWrappedRegion(IWrappedRegion iWrappedRegion) {
+        this.iWrappedRegion = iWrappedRegion;
     }
 
     public Region getRegion() {

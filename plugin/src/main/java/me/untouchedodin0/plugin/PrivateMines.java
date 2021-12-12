@@ -47,9 +47,12 @@ import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.codemc.worldguardwrapper.WorldGuardWrapper;
+import org.codemc.worldguardwrapper.region.IWrappedRegion;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.commandmanager.ArgType;
 import redempt.redlib.commandmanager.CommandParser;
@@ -61,10 +64,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class PrivateMines extends JavaPlugin {
@@ -91,6 +91,7 @@ public class PrivateMines extends JavaPlugin {
 
     private Gson gson;
     private Material material;
+    IWrappedRegion globalRegion;
 
     private Map<Material, Double> materials = new HashMap<>();
 
@@ -396,6 +397,17 @@ public class PrivateMines extends JavaPlugin {
             new PrivateMinesExpansion().register();
         } else {
             getLogger().info("PlaceholderAPI was not present, not able to establish a hook!");
+        }
+
+        World world = getMineWorldManager().getMinesWorld();
+        if (WorldGuardWrapper.getInstance().getRegion(world, "__global__").isPresent()) {
+            globalRegion = WorldGuardWrapper.getInstance().getRegion(world, "__global__").get();
+            getLogger().info("global region: " + globalRegion);
+            getLogger().info("global region toString: " + globalRegion.toString());
+            utils.setGlobalFlags(globalRegion);
+            getLogger().info("global flags: " + globalRegion.getFlags());
+        } else {
+            privateMines.getLogger().warning("The global region was somehow null. This should be impossible.");
         }
     }
 

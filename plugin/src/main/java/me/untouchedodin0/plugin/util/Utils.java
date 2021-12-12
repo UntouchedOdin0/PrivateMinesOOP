@@ -168,28 +168,40 @@ public class Utils {
                                      cuboidRegion.getMinimumPoint()),
                 blockVector3toBukkit(world,
                                      cuboidRegion.getMaximumPoint())).orElseThrow(() -> new RuntimeException(""));
-        setMineFlags(Optional.ofNullable(iWrappedRegion));
         privateMines.getLogger().info("Created worldguard region for " + player);
         privateMines.getLogger().info("cuboidRegion: " + cuboidRegion);
         privateMines.getLogger().info("iWrappedRegion: " + iWrappedRegion);
         return iWrappedRegion;
     }
 
-    public void setMineFlags(Optional<IWrappedRegion> region) {
-        final WorldGuardWrapper w = WorldGuardWrapper.getInstance();
+    public void setMineFlags(WorldEditMine worldEditMine) {
+        final WorldGuardWrapper worldGuardWrapper = WorldGuardWrapper.getInstance();
+        IWrappedRegion iWrappedRegion = worldEditMine.getiWrappedRegion();
 
         Stream.of(
-                        w.getFlag("block-place", WrappedState.class),
-                        w.getFlag("block-break", WrappedState.class)
+                        worldGuardWrapper.getFlag("block-place", WrappedState.class),
+                        worldGuardWrapper.getFlag("block-break", WrappedState.class)
                 ).filter(Optional::isPresent)
                 .map(Optional::get)
-                .forEach(flag -> region.ifPresent(iWrappedRegion -> iWrappedRegion.setFlag(flag, WrappedState.ALLOW)));
+                .forEach(flag -> iWrappedRegion.setFlag(flag, WrappedState.ALLOW));
 
         Stream.of(
-                        w.getFlag("mob-spawning", WrappedState.class)
+                        worldGuardWrapper.getFlag("mob-spawning", WrappedState.class)
                 ).filter(Optional::isPresent)
                 .map(Optional::get)
-                .forEach(flag -> region.ifPresent(iWrappedRegion -> iWrappedRegion.setFlag(flag, WrappedState.DENY)));
+                .forEach(flag -> iWrappedRegion.setFlag(flag, WrappedState.DENY));
+    }
+
+    public void setGlobalFlags(IWrappedRegion iWrappedRegion) {
+        final WorldGuardWrapper worldGuardWrapper = WorldGuardWrapper.getInstance();
+
+        Stream.of(
+            worldGuardWrapper.getFlag("build", WrappedState.class),
+            worldGuardWrapper.getFlag("interact", WrappedState.class),
+            worldGuardWrapper.getFlag("use", WrappedState.class)
+        ).filter(Optional::isPresent)
+                .map(Optional::get)
+                .forEach(flag -> iWrappedRegion.setFlag(flag, WrappedState.DENY));
     }
 
     // Converts a bukkit material to a world edit block type
