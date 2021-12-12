@@ -391,14 +391,14 @@ public class MineFactory {
                         worldEditMine.setDataBlock(dataBlock);
                         worldEditMine.reset();
 
-                        // Tell the player it's been created and teleport them
-                        player.sendMessage(toSend);
-                        player.teleport(spawnLocation);
-
                         if (replaceOld) {
                             mineStorage.replaceMine(uuid, worldEditMine);
+                            player.teleport(spawnLocation);
                         } else {
                             mineStorage.addWorldEditMine(uuid, worldEditMine);
+                            // Tell the player it's been created and teleport them
+                            player.sendMessage(toSend);
+                            player.teleport(spawnLocation);
                         }
 
                         IWrappedRegion iWrappedRegion = utils.createWorldGuardRegion(player, world, cuboidRegion);

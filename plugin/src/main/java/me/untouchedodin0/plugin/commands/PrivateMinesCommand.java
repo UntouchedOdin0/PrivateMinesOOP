@@ -292,7 +292,18 @@ public class PrivateMinesCommand {
         }
 
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(target.getUniqueId());
-        worldEditMine.upgrade();
+        WorldEditMineType worldEditMineType = worldEditMine.getWorldEditMineType();
+        if (worldEditMineTypeTreeMap.lastEntry().getValue() == worldEditMineType) {
+            privateMines.getLogger().info("The mine is already at the highest level!");
+            return;
+        }
+        WorldEditMineType nextWorldEditMineType = worldEditMineTypeTreeMap.higherEntry(worldEditMineType.getName()).getValue();
+
+        if (nextWorldEditMineType == null) {
+            privateMines.getLogger().info("Failed to upgrade players mine as they're at max type!");
+        } else {
+            worldEditMine.upgrade(player, nextWorldEditMineType);
+        }
 
         WorldEditMineData worldEditMineData = worldEditMine.getWorldEditMineData();
 
