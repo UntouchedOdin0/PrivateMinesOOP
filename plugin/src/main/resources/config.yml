@@ -6,8 +6,7 @@ upgradeMaterial: "OBSIDIAN"
 mainMenuTitle: "Private Mines"
 
 debugMode: false
-useWorldEdit: false
-mineDistance: 150
+useWorldEdit: true
 
 mineTypes:
   Test:
@@ -32,31 +31,83 @@ mineTypes:
       STONE: 0.9
       COBBLESTONE: 0.1
 
+# teleport - done
+# status - done
+# set tax - done
+# mine size - done
+# reset mine - done
+# whitelisted
+# banned
+# priority
+# co owner
+
 inventory:
   Item1:
-    name: "Reset"
+    name: "&cTeleport"
     lore:
-      - "&aHi 1"
-      - "&bHi 2"
-      - "&cHi 3"
-    type: STONE
-    slot: 0
-    action: "reset"
+      - "&aClick to teleport"
+      - "&eTo your mine!"
+    type: GOLDEN_BOOTS
+    slot: 9
+    action: "teleport"
   Item2:
-    name: "Teleport"
+    name: "&cStatus"
     lore:
-      - "&aHi 1"
-      - "&bHi 2"
-      - "&cHi 3"
-    type: STONE
-    slot: 1
-    action: "teleporttomine"
+      - ""
+    type: RED_WOOL
+    slot: 10
+    action: "status"
   Item3:
-    name: "&7Whitelisted"
+    name: "&cSet Tax"
     lore:
-      - "&aHi 1"
-      - "&bHi 2"
-      - "&cHi 3"
-    type: STONE
-    slot: 2
+      - "&aClick me to set your tax"
+      - "&7Soon! &c<3"
+    type: OAK_SIGN
+    slot: 11
+    action: "settax"
+  Item4:
+    name: "&4Mine Size"
+    lore:
+      - "&7Your mine size is &a1&7x&a1"
+      - "&7Soon!"
+    type: LAVA_BUCKET
+    slot: 12
+    action: "minesize"
+  Item5:
+    name: "&cReset Mine"
+    lore:
+      - "&7Click me to reset &ayour &7mine!"
+    type: MINECART
+    slot: 13
+    action: "reset"
+  Item6:
+    name: "&fWhitelisted Players"
+    lore:
+      - "&7Click me to edit your"
+      - "&7Whitelisted players"
+    type: WATER_BUCKET
+    slot: 14
     action: "whitelistedplayers"
+  Item7:
+    name: "&4Banned Players"
+    lore:
+      - "&7Click me to edit your"
+      - "&7Banned players"
+    type: LAVA_BUCKET
+    slot: 15
+    action: "bannedplayers"
+  Item8:
+    name: "&ePriority Players"
+    lore:
+      - "&7Click me to edit your"
+      - "&7Priority players"
+    type: EMERALD
+    slot: 16
+    action: "priorityplayers"
+  Item9:
+    name: "&dCo Owner"
+    lore:
+      - "&7Your co-owner is currently &a{name}"
+    type: DRAGON_EGG
+    slot: 17
+    action: "coowner"

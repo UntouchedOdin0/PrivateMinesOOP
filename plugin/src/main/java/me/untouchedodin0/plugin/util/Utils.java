@@ -36,10 +36,7 @@ import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.WorldEditMine;
 import me.untouchedodin0.plugin.mines.WorldEditMineType;
 import me.untouchedodin0.plugin.mines.data.WorldEditMineData;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -161,17 +158,12 @@ public class Utils {
     public IWrappedRegion createWorldGuardRegion(Player player, World world, com.sk89q.worldedit.regions.CuboidRegion cuboidRegion) {
         UUID uuid = player.getUniqueId();
         String regionName = String.format("mine-%s", uuid);
-
-        IWrappedRegion iWrappedRegion = WorldGuardWrapper.getInstance().addCuboidRegion(
+        return WorldGuardWrapper.getInstance().addCuboidRegion(
                 regionName,
                 blockVector3toBukkit(world,
                                      cuboidRegion.getMinimumPoint()),
                 blockVector3toBukkit(world,
                                      cuboidRegion.getMaximumPoint())).orElseThrow(() -> new RuntimeException(""));
-        privateMines.getLogger().info("Created worldguard region for " + player);
-        privateMines.getLogger().info("cuboidRegion: " + cuboidRegion);
-        privateMines.getLogger().info("iWrappedRegion: " + iWrappedRegion);
-        return iWrappedRegion;
     }
 
     public void deleteWorldGuardRegion(IWrappedRegion iWrappedRegion) {
@@ -344,33 +336,36 @@ public class Utils {
             List<UUID> priorityPlayers = worldEditMineData.getPriorityPlayers();
             UUID coowner = worldEditMineData.getCoOwner();
             String notSetCoOwner = Messages.msg("youHaveNotSetACoOwner");
-
-            player.sendMessage("Doing action... " + action);
+            String nextUpdate = "Next Update! <3";
 
             switch (action.toLowerCase()) {
                 case "teleport" -> {
-                    player.sendMessage("Teleport time");
                     worldEditMine.teleport(player);
                 }
                 case "status" ->
-                        player.sendMessage("Status button time!");
+                        player.sendMessage(nextUpdate);
                 case "settax" ->
-                        player.sendMessage("Set tax time!");
+                        player.sendMessage(nextUpdate);
                 case "minesize" ->
-                        player.sendMessage("Your mine size is -x-");
+                        player.sendMessage("Next Update! <3");
                 case "reset" ->
                         worldEditMine.reset();
-                case "whitelistedplayers" ->
-                        player.sendMessage(String.valueOf(whitelistedPlayers));
-                case "bannedplayers" ->
-                        player.sendMessage(String.valueOf(bannedPlayers));
+                case "whitelistedplayers" -> {
+                    player.sendMessage(ChatColor.GOLD + "Whitelisted Players:");
+                    whitelistedPlayers.forEach(uuid -> player.sendMessage(ChatColor.YELLOW + "- " + Objects.requireNonNull(Bukkit.getPlayer(uuid)).getName()));
+                }
+                case "bannedplayers" -> {
+                    player.sendMessage(ChatColor.GOLD + "Banned Players:");
+                    bannedPlayers.forEach(uuid -> player.sendMessage(ChatColor.YELLOW + "- " + Objects.requireNonNull(Bukkit.getPlayer(uuid)).getName()));
+                }
                 case "priorityplayers" ->
                         player.sendMessage(String.valueOf(priorityPlayers));
                 case "coowner" -> {
                     if (coowner == null) {
                         player.sendMessage(notSetCoOwner);
                     } else {
-                        player.sendMessage("[DEBUG] Your co-owner is set to " + worldEditMineData.getCoOwner());
+                        player.sendMessage(ChatColor.GREEN + "Your co-owner is set to " +
+                                                   Objects.requireNonNull(Bukkit.getPlayer(worldEditMineData.getCoOwner())).getName());
                     }
                 }
 

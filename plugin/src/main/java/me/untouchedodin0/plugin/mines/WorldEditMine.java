@@ -424,10 +424,28 @@ public class WorldEditMine {
         utils.deleteWorldGuardRegion(iWrappedRegion);
     }
 
-    public void upgrade(Player player, WorldEditMineType worldEditMineType) {
-        setWorldEditMineType(worldEditMineType);
-        this.world = privateMines.getMineWorldManager().getMinesWorld();
-        mineFactory.createMine(player, getLocation(), worldEditMineType, true);
+    public void upgrade() {
+
+        TreeMap<String, WorldEditMineType> worldEditMineTypeTreeMap = privateMines.getWorldEditMineTypeTreeMap();
+        privateMines.getLogger().info(worldEditMineTypeTreeMap.toString());
+
+        WorldEditMineData worldEditMineData = getWorldEditMineData();
+        if (worldEditMineTypeTreeMap.higherEntry(worldEditMineData.getMineType()) == null) {
+            privateMines.getLogger().info("Mine already maxed!");
+            Bukkit.broadcastMessage("mine maxed message.");
+        } else {
+            String currentType = worldEditMineData.getMineType();
+            privateMines.getLogger().info("currentType: " + currentType);
+
+            String nextType = worldEditMineTypeTreeMap.higherKey(currentType);
+            worldEditMineData.setMineType(nextType);
+            setWorldEditMineData(worldEditMineData);
+            privateMines.getMineStorage().replaceMine(getMineOwner(), this);
+            reset();
+            privateMines.getLogger().info("nextType: " + nextType);
+            privateMines.getLogger().info("worldEditMineData: " + worldEditMineData);
+            Bukkit.broadcastMessage("upgrade message");
+        }
     }
 
     /*

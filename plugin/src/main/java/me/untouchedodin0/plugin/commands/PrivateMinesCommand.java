@@ -108,7 +108,6 @@ public class PrivateMinesCommand {
             ItemButton itemButton = ItemButton.create(itemStack, inventoryClickEvent -> {
                 if (c.getSlot() == inventoryClickEvent.getSlot()) {
                     String action = c.getAction();
-                    player.sendMessage("action: " + action);
                     utils.doAction(player, worldEditMine, action);
                     player.closeInventory();
                 }
@@ -194,6 +193,7 @@ public class PrivateMinesCommand {
             WorldEditMine worldEditMine = privateMines.getMineStorage().getWorldEditMine(uuid);
             worldEditMine.delete();
             privateMines.getMineStorage().removeWorldEditMine(uuid);
+            privateMines.getLogger().info(privateMines.getMineStorage().getWorldEditMines().toString());
             if (jsonFile.exists()) {
                 boolean deleted = jsonFile.delete();
                 if (deleted) {
@@ -292,14 +292,32 @@ public class PrivateMinesCommand {
         }
 
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(target.getUniqueId());
-        WorldEditMineType worldEditMineType = worldEditMine.getWorldEditMineType();
-        WorldEditMineType nextWorldEditMineType = worldEditMineTypeTreeMap.higherEntry(worldEditMineType.getName()).getValue();
+        worldEditMine.upgrade();
 
-        if (nextWorldEditMineType == null) {
-            privateMines.getLogger().info("Failed to upgrade players mine as they're at max type!");
-        } else {
-            worldEditMine.upgrade(player, nextWorldEditMineType);
-        }
+        WorldEditMineData worldEditMineData = worldEditMine.getWorldEditMineData();
+
+//        if (worldEditMineTypeTreeMap.higherEntry(worldEditMineData.getMineType()) == null) {
+//            privateMines.getLogger().info("The mine is maxed out already!");
+//        } else {
+//
+//            WorldEditMineType nextWorldEditMineType = worldEditMineTypeTreeMap.higherEntry(worldEditMineData.getMineType()).getValue();
+//
+//            player.sendMessage("type: " + worldEditMineData.getMineType());
+//            player.sendMessage("next: " + worldEditMineTypeTreeMap.higherEntry(worldEditMineData.getMineType()));
+//
+//            worldEditMineData.setMineType(nextWorldEditMineType.getName());
+//            worldEditMine.setWorldEditMineData(worldEditMineData);
+//            privateMines.getMineStorage().replaceMine(target.getUniqueId(), worldEditMine);
+//
+////        WorldEditMineType worldEditMineType = worldEditMine.getWorldEditMineType();
+////        WorldEditMineType nextWorldEditMineType = worldEditMineTypeTreeMap.higherEntry(worldEditMineType.getName()).getValue();
+////
+////        if (nextWorldEditMineType == null) {
+////            privateMines.getLogger().info("Failed to upgrade players mine as they're at max type!");
+////        } else {
+////            worldEditMine.upgrade(player, nextWorldEditMineType);
+////        }
+//        }
     }
 
     // Add 1 to whatever args you put so if you want to expand by one do /pmine expand 2
