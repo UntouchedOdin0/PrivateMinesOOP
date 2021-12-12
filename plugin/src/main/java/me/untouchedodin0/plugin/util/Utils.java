@@ -344,14 +344,36 @@ public class Utils {
             player.sendMessage("Doing action... " + action);
 
             switch (action.toLowerCase()) {
-                case "reset":
-                    worldEditMine.reset();
-                case "teleporttomine":
+                case "teleport" -> {
+                    player.sendMessage("Teleport time");
                     worldEditMine.teleport(player);
-                case "whitelistedplayers":
-                    whitelistedPlayers.forEach(uuid -> {
-                        player.sendMessage(String.valueOf(uuid));
-                    });
+                }
+                case "status" ->
+                        player.sendMessage("Status button time!");
+                case "settax" ->
+                        player.sendMessage("Set tax time!");
+                case "minesize" ->
+                        player.sendMessage("Mine Size time!");
+                case "reset" ->
+                        player.sendMessage("Reset time!");
+                case "whitelistedplayers" ->
+                        player.sendMessage("whitelisted players!");
+                case "bannedplayers" ->
+                        player.sendMessage("banned players!");
+                case "priorityplayers" ->
+                        player.sendMessage("priority players!");
+                case "coowner" ->
+                        player.sendMessage("co owner!");
+
+
+//                case "reset":
+//                    worldEditMine.reset();
+//                case "teleporttomine":
+//                    worldEditMine.teleport(player);
+//                case "whitelistedplayers":
+//                    whitelistedPlayers.forEach(uuid -> {
+//                        player.sendMessage(String.valueOf(uuid));
+//                    });
             }
         }
     }
