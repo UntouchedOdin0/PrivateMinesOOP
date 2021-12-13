@@ -407,7 +407,7 @@ public class WorldEditMine {
 
         MineStorage mineStorage = privateMines.getMineStorage();
 
-        IWrappedRegion iWrappedRegion = getiWrappedRegion();
+//        IWrappedRegion iWrappedRegion = getiWrappedRegion();
 
         if (world == null) {
             privateMines.getLogger().warning("Failed to delete the mine due to the world being null");
@@ -419,9 +419,25 @@ public class WorldEditMine {
             e.printStackTrace();
         }
 
-        privateMines.getLogger().info("delete region: " + iWrappedRegion);
+//        privateMines.getLogger().info("delete region: " + iWrappedRegion);
         mineStorage.removeWorldEditMine(getMineOwner());
-        utils.deleteWorldGuardRegion(iWrappedRegion);
+//        utils.deleteWorldGuardRegion(iWrappedRegion);
+    }
+
+    public void upgrade() {
+        TreeMap<String, WorldEditMineType> worldEditMineTypeTreeMap = privateMines.getWorldEditMineTypeTreeMap();
+        WorldEditMineData worldEditMineData = getWorldEditMineData();
+        Player player = Bukkit.getPlayer(getMineOwner());
+
+        if (Objects.equals(privateMines.getWorldEditMineTypeTreeMap().lastEntry().getValue().getName(), worldEditMineData.getMineType())) {
+            privateMines.getLogger().info("Mine was already maxed!");
+        } else {
+            WorldEditMineType higherEntry = worldEditMineTypeTreeMap.higherEntry(worldEditMineData.getMineType()).getValue();
+            worldEditMineData.setMineType(higherEntry.getName());
+            if (player != null) {
+                mineFactory.createMine(player, getLocation(), higherEntry, true);
+            }
+        }
     }
 
     public void upgrade(Player player, WorldEditMineType worldEditMineType) {

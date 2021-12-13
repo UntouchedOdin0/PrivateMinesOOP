@@ -392,10 +392,10 @@ public class MineFactory {
                         worldEditMine.reset();
 
                         if (replaceOld) {
-                            mineStorage.replaceMine(uuid, worldEditMine);
+                            privateMines.getMineStorage().replaceMine(uuid, worldEditMine);
                             player.teleport(spawnLocation);
                         } else {
-                            mineStorage.addWorldEditMine(uuid, worldEditMine);
+                            privateMines.getMineStorage().addWorldEditMine(uuid, worldEditMine);
                             // Tell the player it's been created and teleport them
                             player.sendMessage(toSend);
                             player.teleport(spawnLocation);

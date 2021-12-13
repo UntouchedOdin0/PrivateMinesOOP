@@ -292,20 +292,33 @@ public class PrivateMinesCommand {
         }
 
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(target.getUniqueId());
-        WorldEditMineType worldEditMineType = worldEditMine.getWorldEditMineType();
-        if (worldEditMineTypeTreeMap.lastEntry().getValue() == worldEditMineType) {
-            privateMines.getLogger().info("The mine is already at the highest level!");
-            return;
-        }
-        WorldEditMineType nextWorldEditMineType = worldEditMineTypeTreeMap.higherEntry(worldEditMineType.getName()).getValue();
+        privateMines.getLogger().info("worldEditMine: " + worldEditMine);
+        worldEditMine.upgrade();
 
-        if (nextWorldEditMineType == null) {
-            privateMines.getLogger().info("Failed to upgrade players mine as they're at max type!");
-        } else {
-            worldEditMine.upgrade(player, nextWorldEditMineType);
-        }
+//        WorldEditMineData worldEditMineData = worldEditMine.getWorldEditMineData();
 
-        WorldEditMineData worldEditMineData = worldEditMine.getWorldEditMineData();
+//        privateMines.getLogger().info("worldEditMineData " + worldEditMineData);
+//        privateMines.getLogger().info("data mine type: " + worldEditMineData.getMineType());
+//
+//        WorldEditMineType higherEntry = worldEditMineTypeTreeMap.higherEntry(worldEditMineData.getMineType()).getValue();
+//
+//        if (higherEntry == null) {
+//            privateMines.getLogger().info("Already maxed!");
+//        }
+//        privateMines.getLogger().info("higher entry: " + higherEntry.getName());
+//        worldEditMine.upgrade(player, higherEntry);
+
+//        if (worldEditMineTypeTreeMap.lastEntry().getValue() == worldEditMineType) {
+//            privateMines.getLogger().info("The mine is already at the highest level!");
+//            return;
+//        }
+//        WorldEditMineType nextWorldEditMineType = worldEditMineTypeTreeMap.higherEntry(worldEditMineType.getName()).getValue();
+//
+//        if (nextWorldEditMineType == null) {
+//            privateMines.getLogger().info("Failed to upgrade players mine as they're at max type!");
+//        } else {
+//            worldEditMine.upgrade(player, nextWorldEditMineType);
+//        }
 
 //        if (worldEditMineTypeTreeMap.higherEntry(worldEditMineData.getMineType()) == null) {
 //            privateMines.getLogger().info("The mine is maxed out already!");
