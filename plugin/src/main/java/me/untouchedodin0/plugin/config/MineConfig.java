@@ -95,6 +95,8 @@ public class MineConfig {
         Contents: The contents of the the file e.g. 14x24x27;bedrock*9072;
      */
 
+    // This method also gets called when you type /privatemines reload
+
     @ConfigPostInit
     private void postInit() throws IOException {
         if (privateMines == null) {
@@ -109,7 +111,6 @@ public class MineConfig {
         }
 
         if (privateMines.useWorldEdit()) {
-            privateMines.getLogger().info("Creating worldedit mine types...");
             this.path = privateMines.getSchematicsDirectory().toPath().resolve(file);
             File file = path.toFile();
 
@@ -117,9 +118,9 @@ public class MineConfig {
             worldEditMineType.setName(getName());
             worldEditMineType.setMineTier(getPriority());
             worldEditMineType.setResetTime(getResetTime());
-//            worldEditMineType.setMaterial(getMaterial());
             worldEditMineType.setMaterials(getMaterials());
             privateMines.addType(getName(), worldEditMineType);
+            privateMines.getLogger().info("Loaded mine type: " + worldEditMineType.getName());
         } else {
             privateMines.getLogger().info("Creating redlib mine types...");
 
