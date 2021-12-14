@@ -350,6 +350,7 @@ public class WorldEditMine {
             });
 
             session.setBlocks(getCuboidRegion(), randomPattern);
+            // fix lighting ffs
         } catch (MaxChangedBlocksException e) {
             e.printStackTrace();
         }

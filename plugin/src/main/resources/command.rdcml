@@ -99,4 +99,10 @@ privatemine,privatemines,pmine {
         help Expands a players mine by a certain amount
         permission: privatemines.expand
     }
+
+    reload {
+        hook reload
+        help Reloads the config file
+        permission: privatemines.reload
+    }
 }

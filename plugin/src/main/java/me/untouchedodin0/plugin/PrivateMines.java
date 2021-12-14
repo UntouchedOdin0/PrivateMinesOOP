@@ -81,6 +81,7 @@ public class PrivateMines extends JavaPlugin {
     private Utils utils;
     private AddonLoader addonLoader;
     private WorldEditUtilities worldEditUtils;
+    private ConfigManager configManager;
     private boolean isWorldEditEnabled = false;
     private final File minesDirectory = new File("plugins/PrivateMines/mines");
     private final File schematicsDirectory = new File("plugins/PrivateMines/schematics");
@@ -165,10 +166,7 @@ public class PrivateMines extends JavaPlugin {
             }
         }
 
-        @SuppressWarnings("unused")
-        ConfigManager configManager = new ConfigManager(this).register(this).load();
-
-
+        configManager = new ConfigManager(this).register(this).load();
         blockDataManager = new BlockDataManager(
                 getDataFolder()
                         .toPath()
@@ -651,5 +649,9 @@ public class PrivateMines extends JavaPlugin {
 
     public Map<String, MenuConfig> getInventory() {
         return inventory;
+    }
+
+    public ConfigManager getConfigManager() {
+        return configManager;
     }
 }
