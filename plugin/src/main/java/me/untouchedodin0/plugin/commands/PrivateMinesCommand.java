@@ -172,7 +172,6 @@ public class PrivateMinesCommand {
                 @SuppressWarnings("unused")
                 WorldEditMine worldEditMine = mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType(), false);
             }
-            commandSender.sendMessage(privateMines.getMineStorage().getWorldEditMines().toString());
         } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException) {
             arrayIndexOutOfBoundsException.printStackTrace();
         }
