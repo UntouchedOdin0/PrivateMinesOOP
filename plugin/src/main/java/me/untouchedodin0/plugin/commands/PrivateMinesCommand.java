@@ -591,17 +591,6 @@ public class PrivateMinesCommand {
     public void reload(Player player) {
         ConfigManager configManager = privateMines.getConfigManager();
         configManager.load();
-        String titleDebug = configManager.getConfig().getString("mainMenuTitle");
-        Material spawnPoint = Material.getMaterial(Objects.requireNonNull(configManager.getConfig().getString("spawnPoint")));
-        Material mineCorner = Material.getMaterial(Objects.requireNonNull(configManager.getConfig().getString("mineCorner")));
-        Material sellNpc = Material.getMaterial(Objects.requireNonNull(configManager.getConfig().getString("sellNpc")));
-        Material upgradeMaterial = Material.getMaterial(Objects.requireNonNull(configManager.getConfig().getString("upgradeMaterial")));
-
-        player.sendMessage(titleDebug);
-        player.sendMessage(spawnPoint.name());
-        player.sendMessage(mineCorner.name());
-        player.sendMessage(sellNpc.name());
-        player.sendMessage(upgradeMaterial.name());
     }
 }
 
