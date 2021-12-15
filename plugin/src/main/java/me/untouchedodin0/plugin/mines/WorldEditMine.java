@@ -388,6 +388,23 @@ public class WorldEditMine {
         }
     }
 
+    //todo work out how to do this
+
+    public void getMineSize() {
+        this.world = privateMines.getMineWorldManager().getMinesWorld();
+
+        if (world == null) {
+            privateMines.getLogger().warning("Failed to delete the mine due to the world being null");
+        }
+
+        Player player = Bukkit.getPlayer(getMineOwner());
+        CuboidRegion cuboidRegion = getCuboidRegion();
+
+        cuboidRegion.asFlatRegion().iterator().forEachRemaining(blockVector2 -> {
+           player.sendMessage(String.valueOf(blockVector2));
+        });
+    }
+
     public void delete() {
 
         this.world = privateMines.getMineWorldManager().getMinesWorld();

@@ -113,7 +113,6 @@ public class PrivateMinesCommand {
                     player.closeInventory();
                 }
             });
-            privateMines.getLogger().info("s: " + s);
             gui.addButton(slot, itemButton);
         });
 

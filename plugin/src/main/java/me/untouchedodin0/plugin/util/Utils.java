@@ -347,7 +347,9 @@ public class Utils {
                 case "settax" ->
                         player.sendMessage(nextUpdate);
                 case "minesize" ->
-                        player.sendMessage("Next Update! <3");
+                        player.sendMessage(nextUpdate);
+//                        worldEditMine.getMineSize();
+//                        player.sendMessage(String.valueOf(worldEditMine.getMineSize()));
                 case "reset" ->
                         worldEditMine.reset();
                 case "whitelistedplayers" -> {
