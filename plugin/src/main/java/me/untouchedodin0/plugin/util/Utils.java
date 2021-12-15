@@ -193,10 +193,10 @@ public class Utils {
         final WorldGuardWrapper worldGuardWrapper = WorldGuardWrapper.getInstance();
 
         Stream.of(
-            worldGuardWrapper.getFlag("build", WrappedState.class),
-            worldGuardWrapper.getFlag("interact", WrappedState.class),
-            worldGuardWrapper.getFlag("use", WrappedState.class)
-        ).filter(Optional::isPresent)
+                        worldGuardWrapper.getFlag("build", WrappedState.class),
+                        worldGuardWrapper.getFlag("interact", WrappedState.class),
+                        worldGuardWrapper.getFlag("use", WrappedState.class)
+                ).filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(flag -> iWrappedRegion.setFlag(flag, WrappedState.DENY));
     }
@@ -342,16 +342,12 @@ public class Utils {
                 case "teleport" -> {
                     worldEditMine.teleport(player);
                 }
-                case "status" ->
-                        player.sendMessage(nextUpdate);
-                case "settax" ->
-                        player.sendMessage(nextUpdate);
-                case "minesize" ->
-                        player.sendMessage(nextUpdate);
+                case "status" -> player.sendMessage(nextUpdate);
+                case "settax" -> player.sendMessage(nextUpdate);
+                case "minesize" -> player.sendMessage(nextUpdate);
 //                        worldEditMine.getMineSize();
 //                        player.sendMessage(String.valueOf(worldEditMine.getMineSize()));
-                case "reset" ->
-                        worldEditMine.reset();
+                case "reset" -> worldEditMine.reset();
                 case "whitelistedplayers" -> {
                     player.sendMessage(ChatColor.GOLD + "Whitelisted Players:");
                     whitelistedPlayers.forEach(uuid -> player.sendMessage(ChatColor.YELLOW + "- " + Objects.requireNonNull(Bukkit.getPlayer(uuid)).getName()));
@@ -360,8 +356,10 @@ public class Utils {
                     player.sendMessage(ChatColor.GOLD + "Banned Players:");
                     bannedPlayers.forEach(uuid -> player.sendMessage(ChatColor.YELLOW + "- " + Objects.requireNonNull(Bukkit.getPlayer(uuid)).getName()));
                 }
-                case "priorityplayers" ->
-                        player.sendMessage(String.valueOf(priorityPlayers));
+                case "priorityplayers" -> {
+                    player.sendMessage(ChatColor.GOLD + "Priority Players:");
+                    priorityPlayers.forEach(uuid -> player.sendMessage(ChatColor.YELLOW + "- " + Objects.requireNonNull(Bukkit.getPlayer(uuid)).getName()));
+                }
                 case "coowner" -> {
                     if (coowner == null) {
                         player.sendMessage(notSetCoOwner);
