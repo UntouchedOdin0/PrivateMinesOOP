@@ -162,8 +162,8 @@ public class PrivateMinesCommand {
         String targetAlreadyOwnsAMine = Messages.msg(alreadyOwnsMine);
 
         try {
-            if (mineStorage.hasMine(target.getUniqueId())) {
-                utils.sendMessage(commandSender, targetAlreadyOwnsAMine);
+            if (privateMines.getMineStorage().hasWorldEditMine(target.getUniqueId())) {
+                commandSender.sendMessage(ChatColor.RED + "User already has a mine!");
                 return;
             }
             commandSender.sendMessage(ChatColor.GREEN + "Giving " + target.getName() + " a private mine!");
@@ -172,6 +172,7 @@ public class PrivateMinesCommand {
                 @SuppressWarnings("unused")
                 WorldEditMine worldEditMine = mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType(), false);
             }
+            commandSender.sendMessage(privateMines.getMineStorage().getWorldEditMines().toString());
         } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException) {
             arrayIndexOutOfBoundsException.printStackTrace();
         }
