@@ -281,13 +281,13 @@ public class PrivateMinesCommand {
 
     @CommandHook("upgrade")
     public void upgrade(CommandSender commandSender, Player target) {
-        Player player = (Player) commandSender;
+        //Player player = (Player) commandSender;
         String targetDoesNotOwnMine = Messages.msg("targetDoesNotOwnMine");
 
         TreeMap<String, WorldEditMineType> worldEditMineTypeTreeMap = privateMines.getWorldEditMineTypeTreeMap();
 
         if (!mineStorage.hasWorldEditMine(target.getUniqueId())) {
-            utils.sendMessage(player, targetDoesNotOwnMine);
+            utils.sendMessage(commandSender, targetDoesNotOwnMine);
             return;
         }
 

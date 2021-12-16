@@ -242,8 +242,20 @@ public class PrivateMines extends JavaPlugin {
                             worldEditMine.setCuboidRegion(cuboidRegion);
                             worldEditMine.setWorldEditMineData(worldEditMineData);
                             worldEditMine.setMaterials(materials);
-
+                            worldEditMine.setMineOwner(worldEditMineData.getMineOwner());
+                            String worldName = worldEditMineData.getWorldName();
+                            World world = Bukkit.getWorld(worldName);
+                            if (world != null) {
+                                worldEditMine.setWorld(world);
+                            } else {
+                                getLogger().severe("Warning: world " + worldName + " was deleted.");
+                            }
+                            worldEditMine.setLocation(new Location(world,
+                                    worldEditMineData.getRegionMaxX()+1, // why is this one max? hell if i know
+                                    worldEditMineData.getRegionMinY()-3,
+                                    worldEditMineData.getRegionMinZ())); // only pain and despair
                             mineStorage.addWorldEditMine(worldEditMineData.getMineOwner(), worldEditMine);
+                            mineWorldManager.getNextFreeLocation();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
