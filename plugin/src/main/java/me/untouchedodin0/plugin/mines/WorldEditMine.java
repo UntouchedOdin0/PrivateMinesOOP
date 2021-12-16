@@ -52,7 +52,6 @@ import org.bukkit.entity.Player;
 import org.codemc.worldguardwrapper.region.IWrappedRegion;
 import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.commandmanager.Messages;
-import redempt.redlib.misc.Task;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -258,7 +257,7 @@ public class WorldEditMine {
         int spawnX = worldEditMineData.getSpawnX();
         int spawnY = worldEditMineData.getSpawnY();
         int spawnZ = worldEditMineData.getSpawnZ();
-        Location location = new Location(world, spawnX, spawnY, spawnZ);
+        Location location = new Location(world, spawnX+0.5, spawnY, spawnZ+0.5);
         player.teleport(location);
     }
 
@@ -630,9 +629,6 @@ public class WorldEditMine {
 
         if (!canExpand) {
             privateMines.getLogger().info("The private mine can't expand anymore!");
-            Task.asyncDelayed(task -> {
-                Bukkit.broadcastMessage("hi, i'm an upgrade thing!");
-            }, utils.secondsToBukkit(5));
         } else {
 
             final var fillType = BlockTypes.DIAMOND_BLOCK;
