@@ -43,13 +43,13 @@ public class QueueSystem {
     public void startUpgradeQueueSystem() {
         this.upgradeQueueTask = Task.syncDelayed(task1 -> {
             WorldEditMine worldEditMine = worldEditUpgradeMineQueue.poll();
-            Bukkit.broadcastMessage("Found mine: " + worldEditMine + " in the queue to be upgraded!");
+            //Bukkit.broadcastMessage("Found mine: " + worldEditMine + " in the queue to be upgraded!");
         }, TimeUnit.SECONDS.toMillis(5));
     }
 
     public void addToUpgradeQueue(WorldEditMine worldEditMine) {
         if (worldEditUpgradeMineQueue.contains(worldEditMine)) {
-            Bukkit.broadcastMessage("The queue already contained this mine!");
+            //Bukkit.broadcastMessage("The queue already contained this mine!");
         } else {
             worldEditUpgradeMineQueue.offer(worldEditMine);
         }
@@ -58,13 +58,13 @@ public class QueueSystem {
     public void startExpandQueueSystem() {
         this.expandQueueTask = Task.syncDelayed(task1 -> {
             WorldEditMine worldEditMine = worldEditExpandMineQueue.poll();
-            Bukkit.broadcastMessage("Found mine: " + worldEditMine + " in the queue to be upgraded!");
+            //Bukkit.broadcastMessage("Found mine: " + worldEditMine + " in the queue to be upgraded!");
         }, TimeUnit.SECONDS.toMillis(5));
     }
 
     public void addToExpandQueue(WorldEditMine worldEditMine) {
         if (worldEditExpandMineQueue.contains(worldEditMine)) {
-            Bukkit.broadcastMessage("The queue already contained this mine!");
+            //Bukkit.broadcastMessage("The queue already contained this mine!");
         } else {
             worldEditExpandMineQueue.offer(worldEditMine);
         }

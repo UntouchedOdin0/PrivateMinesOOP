@@ -524,8 +524,8 @@ public class Mine {
         final var worldEditCube = Adapter.adapt(cuboidRegion);
         final var mineArea = Adapter.adapt(getCuboidRegion());
 
-        Bukkit.broadcastMessage("corner1: " + worldEditCube.getPos1());
-        Bukkit.broadcastMessage("corner2: " + worldEditCube.getPos2());
+        //Bukkit.broadcastMessage("corner1: " + worldEditCube.getPos1());
+        //Bukkit.broadcastMessage("corner2: " + worldEditCube.getPos2());
 
 
         /*
@@ -721,7 +721,7 @@ public class Mine {
         outsideEnd = bedrockCube.getEnd().getBlock().getRelative(BlockFace.SOUTH).getType();
 
         if (outsideStart.equals(expandMaterial) || outsideEnd.equals(expandMaterial)) {
-            Bukkit.broadcastMessage("Upgrading the mine...");
+            //Bukkit.broadcastMessage("Upgrading the mine...");
         } else {
             mineCube.expand(amount, amount, 0, 0, amount, amount); // We no touch Y levels!
             bedrockCube.expand(amount, amount, 0, 0, amount, amount); // We no touch Y levels!
