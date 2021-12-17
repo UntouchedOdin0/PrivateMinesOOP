@@ -242,13 +242,15 @@ public class PrivateMines extends JavaPlugin {
                             worldEditMine.setCuboidRegion(cuboidRegion);
                             worldEditMine.setWorldEditMineData(worldEditMineData);
                             worldEditMine.setMaterials(materials);
+                            worldEditMine.setWorldEditMineType(worldEditMineTypeTreeMap.get(worldEditMineData.getMineType()));
+                            worldEditMine.setCuboidRegion(worldEditMineData.getCuboidRegion());
                             worldEditMine.setMineOwner(worldEditMineData.getMineOwner());
                             String worldName = worldEditMineData.getWorldName();
                             World world = Bukkit.getWorld(worldName);
                             if (world != null) {
                                 worldEditMine.setWorld(world);
                             } else {
-                                getLogger().severe("Warning: world " + worldName + " was deleted.");
+                                getLogger().severe("World " + worldName + " was deleted.");
                             }
                             worldEditMine.setLocation(new Location(world,
                                     worldEditMineData.getRegionMaxX()+1, // why is this one max? hell if i know
@@ -531,7 +533,6 @@ public class PrivateMines extends JavaPlugin {
 
     public MineType getMineType(String mineType) {
         MineType newType = mineTypeTreeMap.get(mineType);
-        Bukkit.broadcastMessage("new type: " + newType);
         return newType;
     }
 
