@@ -372,6 +372,7 @@ public class MineFactory {
                         }
 
                         worldEditMineData.setMaterials(worldEditMineType.getMaterials());
+                        worldEditMineData.setCuboidRegion(cuboidRegion);
 
                         File minesDirectory = privateMines.getMinesDirectory();
 
