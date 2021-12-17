@@ -618,6 +618,18 @@ public class WorldEditMine {
 
     public void expand(final int amount) {
 
+        // upgrade before expanding
+        if (privateMines.getConfig().getBoolean("autoUpgrade.enabled")) {
+            // compare x blindly assuming mine is square
+            int currentSize = getCuboidRegion().getMaximumPoint().getBlockX() - getCuboidRegion().getMinimumPoint().getBlockX();
+            int startingSize = privateMines.getConfig().getInt("autoUpgrade.startingSize");
+            int expansionIncrement = privateMines.getConfig().getInt("autoUpgrade.everyXthExpansion");
+            int newSize = currentSize + amount*2;
+            if ((newSize - startingSize) % (expansionIncrement * 2) == 0) {
+                this.upgrade();
+            }
+        }
+
         this.world = privateMines.getMineWorldManager().getMinesWorld();
         boolean canExpand = canExpand(amount);
         MineStorage mineStorage = privateMines.getMineStorage();

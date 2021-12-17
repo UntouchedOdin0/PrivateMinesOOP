@@ -7,6 +7,10 @@ mainMenuTitle: "Private Mines"
 
 debugMode: false
 useWorldEdit: true
+autoUpgrade:
+  enabled: false
+  everyXthExpansion: 4
+  startingSize: 48
 
 mineTypes:
   Test:
