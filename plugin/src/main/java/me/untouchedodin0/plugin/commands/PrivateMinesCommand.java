@@ -292,7 +292,6 @@ public class PrivateMinesCommand {
         }
 
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(target.getUniqueId());
-        privateMines.getLogger().info("worldEditMine: " + worldEditMine);
         worldEditMine.upgrade();
 
 //        WorldEditMineData worldEditMineData = worldEditMine.getWorldEditMineData();
