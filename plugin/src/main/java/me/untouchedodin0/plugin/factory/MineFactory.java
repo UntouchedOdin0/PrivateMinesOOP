@@ -305,6 +305,7 @@ public class MineFactory {
                             }
                         });
 
+                        privateMines.getLogger().info("corners: " + corners);
                         // Gets the corner locations
                         Location corner1 = corners.get(0);
                         Location corner2 = corners.get(1);
