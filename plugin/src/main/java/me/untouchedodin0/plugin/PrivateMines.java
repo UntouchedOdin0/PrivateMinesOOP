@@ -166,7 +166,7 @@ public class PrivateMines extends JavaPlugin {
             }
         }
 
-        configManager = new ConfigManager(this).register(this).load();
+        configManager = new ConfigManager(this).register(this, WorldEditMine.class).load();
         blockDataManager = new BlockDataManager(
                 getDataFolder()
                         .toPath()

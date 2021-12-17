@@ -52,6 +52,7 @@ import org.bukkit.entity.Player;
 import org.codemc.worldguardwrapper.region.IWrappedRegion;
 import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.commandmanager.Messages;
+import redempt.redlib.configmanager.annotations.ConfigValue;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -616,14 +617,21 @@ public class WorldEditMine {
         });
     }
 
+    @ConfigValue ("autoUpgrade.enabled")
+    private static boolean autoUpgrade = false;
+
+    @ConfigValue ("autoUpgrade.startingSize")
+    private static int startingSize = 48;
+
+    @ConfigValue ("autoUpgrade.everyXthExpansion")
+    private static int expansionIncrement = 4;
+
     public void expand(final int amount) {
 
         // upgrade before expanding
-        if (privateMines.getConfig().getBoolean("autoUpgrade.enabled")) {
+        if (autoUpgrade) {
             // compare x blindly assuming mine is square
             int currentSize = getCuboidRegion().getMaximumPoint().getBlockX() - getCuboidRegion().getMinimumPoint().getBlockX();
-            int startingSize = privateMines.getConfig().getInt("autoUpgrade.startingSize");
-            int expansionIncrement = privateMines.getConfig().getInt("autoUpgrade.everyXthExpansion");
             int newSize = currentSize + amount*2;
             if ((newSize - startingSize) % (expansionIncrement * 2) == 0) {
                 this.upgrade();
