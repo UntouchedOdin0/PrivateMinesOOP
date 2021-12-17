@@ -344,7 +344,7 @@ public class WorldEditMine {
             final RandomPattern randomPattern = new RandomPattern();
 
             blocks.forEach((material1, aDouble) -> {
-                Pattern pattern = (Pattern) BukkitAdapter.adapt(material1.createBlockData());
+                Pattern pattern = BukkitAdapter.adapt(material1.createBlockData());
                 randomPattern.add(pattern, 1.0);
             });
 
@@ -452,7 +452,8 @@ public class WorldEditMine {
             WorldEditMineType higherEntry = worldEditMineTypeTreeMap.higherEntry(worldEditMineData.getMineType()).getValue();
             worldEditMineData.setMineType(higherEntry.getName());
             if (player != null) {
-                mineFactory.createMine(player, getLocation(), higherEntry, true);
+                this.expand(0);
+                this.expand(1);
             }
         }
     }
@@ -596,6 +597,9 @@ public class WorldEditMine {
 
     // WORKING, DON'T FUCK WITH THIS ANYMORE!
     public boolean canExpand(final int amount) {
+        if (amount <= 0) {
+            return true;
+        }
         this.world = privateMines.getMineWorldManager().getMinesWorld();
         final var mine = getCuboidRegion();
         final int toCheck = 3 + amount;
@@ -630,8 +634,8 @@ public class WorldEditMine {
         if (!canExpand) {
             privateMines.getLogger().info("The private mine can't expand anymore!");
         } else {
-
-            final var fillType = BlockTypes.DIAMOND_BLOCK;
+            WorldEditMineType type = PrivateMines.getPrivateMines().getWorldEditMineType(worldEditMineData.getMineType());
+            final var fillType = BlockTypes.get(type.getMaterials().keySet().stream().findFirst().get().getKey().toString());
             final var wallType = BlockTypes.BEDROCK;
 
             if (fillType == null || wallType == null) return;
@@ -660,6 +664,7 @@ public class WorldEditMine {
             } catch (MaxChangedBlocksException exception) {
                 exception.printStackTrace();
             }
+            worldEditMineData.setCuboidRegion(mine);
             worldEditMineData.setMineOwner(getMineOwner());
             worldEditMineData.setSpawnX(spawnLocation.getBlockX());
             worldEditMineData.setSpawnY(spawnLocation.getBlockY());
