@@ -38,6 +38,7 @@ import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -281,18 +282,41 @@ public class PrivateMinesCommand {
 
     @CommandHook("upgrade")
     public void upgrade(CommandSender commandSender, Player target) {
-        //Player player = (Player) commandSender;
-        String targetDoesNotOwnMine = Messages.msg("targetDoesNotOwnMine");
 
-        TreeMap<String, WorldEditMineType> worldEditMineTypeTreeMap = privateMines.getWorldEditMineTypeTreeMap();
+        boolean checkIsConsole = true;
 
-        if (!mineStorage.hasWorldEditMine(target.getUniqueId())) {
-            utils.sendMessage(commandSender, targetDoesNotOwnMine);
-            return;
+        if (checkIsConsole) {
+            if (commandSender instanceof ConsoleCommandSender) {
+                String targetDoesNotOwnMine = Messages.msg("targetDoesNotOwnMine");
+
+                TreeMap<String, WorldEditMineType> worldEditMineTypeTreeMap = privateMines.getWorldEditMineTypeTreeMap();
+
+                if (!mineStorage.hasWorldEditMine(target.getUniqueId())) {
+                    utils.sendMessage(commandSender, targetDoesNotOwnMine);
+                    return;
+                }
+
+                WorldEditMine worldEditMine = mineStorage.getWorldEditMine(target.getUniqueId());
+                worldEditMine.upgrade();
+            } else {
+                return;
+            }
+        } else {
+            String targetDoesNotOwnMine = Messages.msg("targetDoesNotOwnMine");
+
+            TreeMap<String, WorldEditMineType> worldEditMineTypeTreeMap = privateMines.getWorldEditMineTypeTreeMap();
+
+            if (!mineStorage.hasWorldEditMine(target.getUniqueId())) {
+                utils.sendMessage(commandSender, targetDoesNotOwnMine);
+                return;
+            }
+
+            WorldEditMine worldEditMine = mineStorage.getWorldEditMine(target.getUniqueId());
+            worldEditMine.upgrade();
         }
 
-        WorldEditMine worldEditMine = mineStorage.getWorldEditMine(target.getUniqueId());
-        worldEditMine.upgrade();
+        //Player player = (Player) commandSender;
+
 
 //        WorldEditMineData worldEditMineData = worldEditMine.getWorldEditMineData();
 
