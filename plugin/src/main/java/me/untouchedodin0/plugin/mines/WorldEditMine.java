@@ -672,8 +672,6 @@ public class WorldEditMine {
             mine.expand(expansionVectors(amount));
             walls.expand(expansionVectors(amount));
 
-            privateMines.getLogger().info(fillType.toString());
-
             try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
                 session.setBlocks(mine, fillType.getDefaultState());
                 session.setBlocks(Adapter.walls(walls), wallType.getDefaultState());
