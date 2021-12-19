@@ -612,7 +612,9 @@ public class WorldEditMine {
         redempt.redlib.region.CuboidRegion cuboidRegion = utils.worldEditRegionToRedLibRegion(minMaxCuboid);
         cuboidRegion.expand(3, 0, 3, 0, 3, 0);
 
-        return cuboidRegion.stream().noneMatch(block -> block.getType().equals(Material.OBSIDIAN));
+        return cuboidRegion.stream().noneMatch(block -> {
+            return block.getType() == Material.OBSIDIAN;
+        });
     }
 
     @ConfigValue ("autoUpgrade.enabled")
