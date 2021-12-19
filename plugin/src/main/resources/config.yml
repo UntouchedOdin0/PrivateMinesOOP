@@ -7,8 +7,10 @@ mainMenuTitle: "Private Mines"
 
 debugMode: false
 useWorldEdit: true
+upgradeCommandConsoleOnly: false
+
 autoUpgrade:
-  enabled: false
+  enabled: true
   everyXthExpansion: 4
   startingSize: 48
 

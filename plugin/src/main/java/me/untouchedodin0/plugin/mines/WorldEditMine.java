@@ -628,11 +628,17 @@ public class WorldEditMine {
 
     public void expand(final int amount) {
 
+        privateMines.getLogger().info(Boolean.toString(autoUpgrade));
+
         // upgrade before expanding
         if (autoUpgrade) {
             // compare x blindly assuming mine is square
             int currentSize = getCuboidRegion().getMaximumPoint().getBlockX() - getCuboidRegion().getMinimumPoint().getBlockX();
             int newSize = currentSize + amount*2;
+
+            Bukkit.broadcastMessage("currentSize: " + currentSize);
+            Bukkit.broadcastMessage("newSize: " + newSize);
+
             if ((newSize - startingSize) % (expansionIncrement * 2) == 0) {
                 this.upgrade();
             }
@@ -665,6 +671,8 @@ public class WorldEditMine {
 
             mine.expand(expansionVectors(amount));
             walls.expand(expansionVectors(amount));
+
+            privateMines.getLogger().info(fillType.toString());
 
             try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
                 session.setBlocks(mine, fillType.getDefaultState());
@@ -700,6 +708,7 @@ public class WorldEditMine {
 
             setCuboidRegion(null);
             setCuboidRegion(mine);
+            setWorldEditMineData(worldEditMineData);
             privateMines.getMineStorage().replaceMine(getMineOwner(), this);
         }
         mineStorage.replaceMine(getMineOwner(), this);

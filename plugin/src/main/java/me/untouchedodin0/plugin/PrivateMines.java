@@ -118,6 +118,9 @@ public class PrivateMines extends JavaPlugin {
     private boolean useWorldEdit = false;
 
     @ConfigValue
+    private boolean upgradeCommandConsoleOnly = false;
+
+    @ConfigValue
     private int mineDistance = 150;
 
     @ConfigValue
@@ -630,6 +633,10 @@ public class PrivateMines extends JavaPlugin {
 
     public boolean useWorldEdit() {
         return useWorldEdit;
+    }
+
+    public boolean isUpgradeCommandConsoleOnly() {
+        return upgradeCommandConsoleOnly;
     }
 
     public int getMineDistance() {

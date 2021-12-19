@@ -36,7 +36,10 @@ import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -49,7 +52,6 @@ import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.inventorygui.InventoryGUI;
 import redempt.redlib.inventorygui.ItemButton;
-import redempt.redlib.itemutils.ItemBuilder;
 import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.MultiBlockStructure;
 import redempt.redlib.multiblock.Structure;
@@ -61,7 +63,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.UUID;
 
 public class PrivateMinesCommand {
 
@@ -283,7 +288,7 @@ public class PrivateMinesCommand {
     @CommandHook("upgrade")
     public void upgrade(CommandSender commandSender, Player target) {
 
-        boolean checkIsConsole = true;
+        boolean checkIsConsole = privateMines.isUpgradeCommandConsoleOnly();
 
         if (checkIsConsole) {
             if (commandSender instanceof ConsoleCommandSender) {
@@ -292,14 +297,14 @@ public class PrivateMinesCommand {
                 TreeMap<String, WorldEditMineType> worldEditMineTypeTreeMap = privateMines.getWorldEditMineTypeTreeMap();
 
                 if (!mineStorage.hasWorldEditMine(target.getUniqueId())) {
-                    utils.sendMessage(commandSender, targetDoesNotOwnMine);
+                    commandSender.sendMessage(ChatColor.RED + "Target doesn't own a mine");
                     return;
                 }
 
                 WorldEditMine worldEditMine = mineStorage.getWorldEditMine(target.getUniqueId());
                 worldEditMine.upgrade();
             } else {
-                return;
+                privateMines.getLogger().info("Sender wasn't console!");
             }
         } else {
             String targetDoesNotOwnMine = Messages.msg("targetDoesNotOwnMine");
