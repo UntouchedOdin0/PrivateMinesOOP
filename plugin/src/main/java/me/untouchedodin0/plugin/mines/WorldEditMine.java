@@ -787,7 +787,3 @@ public class WorldEditMine {
 //    }
 }
 
-//    public void teleport(Player player) {
-//        player.teleport(location);
-//    }
-
