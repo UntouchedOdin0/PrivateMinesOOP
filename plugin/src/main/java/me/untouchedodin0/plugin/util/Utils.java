@@ -242,6 +242,7 @@ public class Utils {
         BlockVector3 min = cuboidRegion.getMinimumPoint();
         BlockVector3 max = cuboidRegion.getMaximumPoint();
         World world = privateMines.getMineWorldManager().getMinesWorld();
+        privateMines.getLogger().info("world: " + world);
         Location minLoc = blockVector3toBukkit(world, min);
         Location maxLoc = blockVector3toBukkit(world, max);
         return new CuboidRegion(minLoc, maxLoc);

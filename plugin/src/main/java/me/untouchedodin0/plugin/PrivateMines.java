@@ -118,9 +118,6 @@ public class PrivateMines extends JavaPlugin {
     private boolean useWorldEdit = false;
 
     @ConfigValue
-    private boolean upgradeCommandConsoleOnly = false;
-
-    @ConfigValue
     private int mineDistance = 150;
 
     @ConfigValue
@@ -246,7 +243,6 @@ public class PrivateMines extends JavaPlugin {
                             worldEditMine.setWorldEditMineData(worldEditMineData);
                             worldEditMine.setMaterials(materials);
                             worldEditMine.setWorldEditMineType(worldEditMineTypeTreeMap.get(worldEditMineData.getMineType()));
-                            worldEditMine.setCuboidRegion(worldEditMineData.getCuboidRegion());
                             worldEditMine.setMineOwner(worldEditMineData.getMineOwner());
                             String worldName = worldEditMineData.getWorldName();
                             World world = Bukkit.getWorld(worldName);
@@ -633,10 +629,6 @@ public class PrivateMines extends JavaPlugin {
 
     public boolean useWorldEdit() {
         return useWorldEdit;
-    }
-
-    public boolean isUpgradeCommandConsoleOnly() {
-        return upgradeCommandConsoleOnly;
     }
 
     public int getMineDistance() {

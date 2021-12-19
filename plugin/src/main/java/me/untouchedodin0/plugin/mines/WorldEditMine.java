@@ -628,17 +628,11 @@ public class WorldEditMine {
 
     public void expand(final int amount) {
 
-        privateMines.getLogger().info(Boolean.toString(autoUpgrade));
-
         // upgrade before expanding
         if (autoUpgrade) {
             // compare x blindly assuming mine is square
             int currentSize = getCuboidRegion().getMaximumPoint().getBlockX() - getCuboidRegion().getMinimumPoint().getBlockX();
             int newSize = currentSize + amount*2;
-
-            Bukkit.broadcastMessage("currentSize: " + currentSize);
-            Bukkit.broadcastMessage("newSize: " + newSize);
-
             if ((newSize - startingSize) % (expansionIncrement * 2) == 0) {
                 this.upgrade();
             }
@@ -661,14 +655,7 @@ public class WorldEditMine {
             privateMines.getLogger().info("The private mine can't expand anymore!");
         } else {
             WorldEditMineType type = PrivateMines.getPrivateMines().getWorldEditMineType(worldEditMineData.getMineType());
-
-            final var fillType = BlockTypes.get(type.getMaterials()
-                                                        .keySet()
-                                                        .stream()
-                                                        .findFirst()
-                                                        .orElse(Material.STONE)
-                                                        .getKey()
-                                                        .toString());
+            final var fillType = BlockTypes.get(type.getMaterials().keySet().stream().findFirst().get().getKey().toString());
             final var wallType = BlockTypes.BEDROCK;
 
             if (fillType == null || wallType == null) return;
@@ -713,10 +700,85 @@ public class WorldEditMine {
 
             setCuboidRegion(null);
             setCuboidRegion(mine);
-            setWorldEditMineData(worldEditMineData);
             privateMines.getMineStorage().replaceMine(getMineOwner(), this);
         }
         mineStorage.replaceMine(getMineOwner(), this);
     }
+
+    // fuck sake idk if i should remove this or not, advice?
+
+//    public void expand(final int amount) {
+//        final var fillType = BlockTypes.DIAMOND_BLOCK;
+//        final var wallType = BlockTypes.BEDROCK;
+//        final var min = getCuboidRegion().getMinimumPoint();
+//        final var max = getCuboidRegion().getMaximumPoint();
+//
+//        if (fillType == null || wallType == null) {
+//            return;
+//        }
+//
+//        final var mine = getCuboidRegion(); //Adapter.adapt(getCuboidRegion());
+//        privateMines.getLogger().info("expand mine cuboid : " + mine);
+//
+//        try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
+//            mine.expand(expansionVectors(amount));
+//            setCuboidRegion(null);
+//            setCuboidRegion(mine);
+////            this.cuboidRegion = mine;
+//
+//            session.setBlocks(mine, fillType.getDefaultState());
+//            session.setBlocks(Adapter.walls(mine), wallType.getDefaultState());
+//
+//        } catch (MaxChangedBlocksException ex) {
+//            ex.printStackTrace();
+//        }
+//
+//        privateMines.getLogger().info("expand min: " + min);
+//        privateMines.getLogger().info("expand max: " + max);
+//
+//        final var stupidWallCuboid = Adapter.walls(mine);
+//
+////        final var stupidWallCuboid = new CuboidRegion(BukkitAdapter.adapt(world, mine.getMinimumPoint()),
+////                BukkitAdapter.adapt(world, mine.getMaximumPoint()));
+//
+//        privateMines.getLogger().info("expand mine min: " + mine.getMinimumPoint());
+//        privateMines.getLogger().info("expand mine max: " + mine.getMaximumPoint());
+//
+////        privateMines.getLogger().info("expand stupidWallCuboid: " + stupidWallCuboid);
+//
+//        setBedrockCubeRegion(stupidWallCuboid);
+//    }
+
+//    public void expand(final int amount) {
+//        final var fillType = BlockTypes.DIAMOND_BLOCK;
+//        final var wallType = BlockTypes.BEDROCK;
+//
+//        if (fillType == null || wallType == null) {
+//            return;
+//        }
+//
+//        final var mine = getCuboidRegion();
+//        final var fillCuboid = mine.clone();
+//
+//        try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
+//
+//            mine.expand(expansionVectors(amount));
+//
+//            session.setBlocks(mine, fillType.getDefaultState());
+//            session.setBlocks(Adapter.walls(mine), wallType.getDefaultState());
+//        } catch (MaxChangedBlocksException ex) {
+//            ex.printStackTrace();
+//        }
+//
+//        final var stupidWallCuboid = new CuboidRegion(mine.getMinimumPoint(), mine.getMaximumPoint());
+//        setCuboidRegion(stupidWallCuboid);
+//        setBedrockCubeRegion(stupidWallCuboid);
+//
+////        setBedrockCubeRegion(stupidWallCuboid);
+//    }
 }
+
+//    public void teleport(Player player) {
+//        player.teleport(location);
+//    }
 
