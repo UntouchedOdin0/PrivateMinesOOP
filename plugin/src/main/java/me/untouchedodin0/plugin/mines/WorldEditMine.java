@@ -713,49 +713,5 @@ public class WorldEditMine {
         }
         mineStorage.replaceMine(getMineOwner(), this);
     }
-
-    // fuck sake idk if i should remove this or not, advice?
-
-//    public void expand(final int amount) {
-//        final var fillType = BlockTypes.DIAMOND_BLOCK;
-//        final var wallType = BlockTypes.BEDROCK;
-//        final var min = getCuboidRegion().getMinimumPoint();
-//        final var max = getCuboidRegion().getMaximumPoint();
-//
-//        if (fillType == null || wallType == null) {
-//            return;
-//        }
-//
-//        final var mine = getCuboidRegion(); //Adapter.adapt(getCuboidRegion());
-//        privateMines.getLogger().info("expand mine cuboid : " + mine);
-//
-//        try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
-//            mine.expand(expansionVectors(amount));
-//            setCuboidRegion(null);
-//            setCuboidRegion(mine);
-////            this.cuboidRegion = mine;
-//
-//            session.setBlocks(mine, fillType.getDefaultState());
-//            session.setBlocks(Adapter.walls(mine), wallType.getDefaultState());
-//
-//        } catch (MaxChangedBlocksException ex) {
-//            ex.printStackTrace();
-//        }
-//
-//        privateMines.getLogger().info("expand min: " + min);
-//        privateMines.getLogger().info("expand max: " + max);
-//
-//        final var stupidWallCuboid = Adapter.walls(mine);
-//
-////        final var stupidWallCuboid = new CuboidRegion(BukkitAdapter.adapt(world, mine.getMinimumPoint()),
-////                BukkitAdapter.adapt(world, mine.getMaximumPoint()));
-//
-//        privateMines.getLogger().info("expand mine min: " + mine.getMinimumPoint());
-//        privateMines.getLogger().info("expand mine max: " + mine.getMaximumPoint());
-//
-////        privateMines.getLogger().info("expand stupidWallCuboid: " + stupidWallCuboid);
-//
-//        setBedrockCubeRegion(stupidWallCuboid);
-//    }
 }
 
