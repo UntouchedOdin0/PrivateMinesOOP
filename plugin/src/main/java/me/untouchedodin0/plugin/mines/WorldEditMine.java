@@ -662,7 +662,13 @@ public class WorldEditMine {
         } else {
             WorldEditMineType type = PrivateMines.getPrivateMines().getWorldEditMineType(worldEditMineData.getMineType());
 
-            final var fillType = BlockTypes.get(type.getMaterials().keySet().stream().findFirst().orElse(Material.STONE).getKey().toString());
+            final var fillType = BlockTypes.get(type.getMaterials()
+                                                        .keySet()
+                                                        .stream()
+                                                        .findFirst()
+                                                        .orElse(Material.STONE)
+                                                        .getKey()
+                                                        .toString());
             final var wallType = BlockTypes.BEDROCK;
 
             if (fillType == null || wallType == null) return;
