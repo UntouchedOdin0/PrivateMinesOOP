@@ -757,33 +757,5 @@ public class WorldEditMine {
 //
 //        setBedrockCubeRegion(stupidWallCuboid);
 //    }
-
-//    public void expand(final int amount) {
-//        final var fillType = BlockTypes.DIAMOND_BLOCK;
-//        final var wallType = BlockTypes.BEDROCK;
-//
-//        if (fillType == null || wallType == null) {
-//            return;
-//        }
-//
-//        final var mine = getCuboidRegion();
-//        final var fillCuboid = mine.clone();
-//
-//        try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
-//
-//            mine.expand(expansionVectors(amount));
-//
-//            session.setBlocks(mine, fillType.getDefaultState());
-//            session.setBlocks(Adapter.walls(mine), wallType.getDefaultState());
-//        } catch (MaxChangedBlocksException ex) {
-//            ex.printStackTrace();
-//        }
-//
-//        final var stupidWallCuboid = new CuboidRegion(mine.getMinimumPoint(), mine.getMaximumPoint());
-//        setCuboidRegion(stupidWallCuboid);
-//        setBedrockCubeRegion(stupidWallCuboid);
-//
-////        setBedrockCubeRegion(stupidWallCuboid);
-//    }
 }
 
