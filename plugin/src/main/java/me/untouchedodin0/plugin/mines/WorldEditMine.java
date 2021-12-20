@@ -282,8 +282,6 @@ public class WorldEditMine {
             pattern.add(blockPattern, aDouble);
         });
 
-        privateMines.getLogger().info("set blocks pattern: " + pattern);
-
         try (final var session = WorldEdit.getInstance()
                 .newEditSession(BukkitAdapter.adapt(world))) {
             session.setBlocks(getCuboidRegion(), pattern);
