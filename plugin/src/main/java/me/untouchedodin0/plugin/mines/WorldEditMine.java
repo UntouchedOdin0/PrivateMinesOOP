@@ -64,30 +64,25 @@ public class WorldEditMine {
 
     public static final List<BlockVector3> EXPANSION_VECTORS = List.of(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X,
                                                                        BlockVector3.UNIT_Z, BlockVector3.UNIT_MINUS_Z);
+    @ConfigValue("autoUpgrade.enabled")
+    private static boolean autoUpgrade = false;
+    @ConfigValue("autoUpgrade.startingSize")
+    private static int startingSize = 48;
+    @ConfigValue("autoUpgrade.everyXthExpansion")
+    private static int expansionIncrement = 4;
     final Utils utils;
     private final PrivateMines privateMines;
-
     private WorldEditMineType worldEditMineType;
-
     private UUID mineOwner;
-
     private CuboidRegion cuboidRegion;
     private IWrappedRegion iWrappedRegion;
-
     private Region region;
-
     private Location spawnLocation;
-
     private World world;
-
     private Location location;
-
     private Material material;
-
     private Map<Material, Double> materials = new HashMap<>();
-
     private List<UUID> whitelistedPlayers = new ArrayList<>();
-
     private DataBlock dataBlock;
     private WorldEditMineData worldEditMineData;
     private MineFactory mineFactory;
@@ -235,14 +230,15 @@ public class WorldEditMine {
         int spawnX = worldEditMineData.getSpawnX();
         int spawnY = worldEditMineData.getSpawnY();
         int spawnZ = worldEditMineData.getSpawnZ();
-        Location location = new Location(world, spawnX+0.5, spawnY, spawnZ+0.5);
+        Location location = new Location(world, spawnX + 0.5, spawnY, spawnZ + 0.5);
         player.teleport(location);
     }
-
 
     public void setWorld(World world) {
         this.world = world;
     }
+
+    //todo work out how to do this
 
     public void fill(Map<Material, Double> blocks) {
 
@@ -290,8 +286,6 @@ public class WorldEditMine {
         }
     }
 
-    //todo work out how to do this
-
     public void getMineSize() {
         this.world = privateMines.getMineWorldManager().getMinesWorld();
 
@@ -303,7 +297,7 @@ public class WorldEditMine {
         CuboidRegion cuboidRegion = getCuboidRegion();
 
         cuboidRegion.asFlatRegion().iterator().forEachRemaining(blockVector2 -> {
-           player.sendMessage(String.valueOf(blockVector2));
+            player.sendMessage(String.valueOf(blockVector2));
         });
     }
 
@@ -357,6 +351,19 @@ public class WorldEditMine {
         }
     }
 
+    /*
+      for here + 1; < amount
+      if block is expected theme
+      return -1;
+      else
+      return amount - expected theme
+
+      expand (returned amount) -> update theme -> expand the rest
+
+     return canExpand;
+     return -1;
+     */
+
     public void upgrade(Player player, WorldEditMineType worldEditMineType) {
         setWorldEditMineType(worldEditMineType);
         this.world = privateMines.getMineWorldManager().getMinesWorld();
@@ -370,19 +377,6 @@ public class WorldEditMine {
     public BlockVector3[] divideVectors(final int amount) {
         return EXPANSION_VECTORS.stream().map(it -> it.divide(amount)).toArray(BlockVector3[]::new);
     }
-
-    /*
-      for here + 1; < amount
-      if block is expected theme
-      return -1;
-      else
-      return amount - expected theme
-
-      expand (returned amount) -> update theme -> expand the rest
-
-     return canExpand;
-     return -1;
-     */
 
     // WORKING, DON'T FUCK WITH THIS ANYMORE!
     public boolean canExpand(final int amount) {
@@ -405,22 +399,13 @@ public class WorldEditMine {
         });
     }
 
-    @ConfigValue ("autoUpgrade.enabled")
-    private static boolean autoUpgrade = false;
-
-    @ConfigValue ("autoUpgrade.startingSize")
-    private static int startingSize = 48;
-
-    @ConfigValue ("autoUpgrade.everyXthExpansion")
-    private static int expansionIncrement = 4;
-
     public void expand(final int amount) {
 
         // upgrade before expanding
         if (autoUpgrade) {
             // compare x blindly assuming mine is square
             int currentSize = getCuboidRegion().getMaximumPoint().getBlockX() - getCuboidRegion().getMinimumPoint().getBlockX();
-            int newSize = currentSize + amount*2;
+            int newSize = currentSize + amount * 2;
             if ((newSize - startingSize) % (expansionIncrement * 2) == 0) {
                 this.upgrade();
             }
@@ -448,53 +433,56 @@ public class WorldEditMine {
             privateMines.getLogger().info("The private mine can't expand anymore!");
         } else {
             WorldEditMineType type = PrivateMines.getPrivateMines().getWorldEditMineType(worldEditMineData.getMineType());
-            final var fillType = BlockTypes.get(type.getMaterials().keySet().stream().findFirst().get().getKey().toString());
-            final var wallType = BlockTypes.BEDROCK;
+            final BlockType fillType;
+            if (type.getMaterials().keySet().stream().findFirst().isPresent()) {
+                fillType = BlockTypes.get(type.getMaterials().keySet().stream().findFirst().get().getKey().toString());
+                final var wallType = BlockTypes.BEDROCK;
 
-            if (fillType == null || wallType == null) return;
+                if (fillType == null || wallType == null) return;
 
-            final var mine = getCuboidRegion();
-            final var walls = getCuboidRegion();
+                final var mine = getCuboidRegion();
+                final var walls = getCuboidRegion();
 
-            mine.expand(expansionVectors(amount));
-            walls.expand(expansionVectors(amount));
+                mine.expand(expansionVectors(amount));
+                walls.expand(expansionVectors(amount));
 
-            try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
-                session.setBlocks(mine, fillType.getDefaultState());
-                session.setBlocks(Adapter.walls(walls), wallType.getDefaultState());
-                mine.contract(expansionVectors(1));
+                try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
+                    session.setBlocks(mine, fillType.getDefaultState());
+                    session.setBlocks(Adapter.walls(walls), wallType.getDefaultState());
+                    mine.contract(expansionVectors(1));
 
-                BlockVector3 min = mine.getMinimumPoint();
-                BlockVector3 max = mine.getMaximumPoint();
+                    BlockVector3 min = mine.getMinimumPoint();
+                    BlockVector3 max = mine.getMaximumPoint();
 
-                worldEditMineData.setMinX(min.getBlockX());
-                worldEditMineData.setMinY(min.getBlockY());
-                worldEditMineData.setMinZ(min.getBlockZ());
+                    worldEditMineData.setMinX(min.getBlockX());
+                    worldEditMineData.setMinY(min.getBlockY());
+                    worldEditMineData.setMinZ(min.getBlockZ());
 
-                worldEditMineData.setMaxX(max.getBlockX());
-                worldEditMineData.setMaxY(max.getBlockY());
-                worldEditMineData.setMaxZ(max.getBlockZ());
-            } catch (MaxChangedBlocksException exception) {
-                exception.printStackTrace();
+                    worldEditMineData.setMaxX(max.getBlockX());
+                    worldEditMineData.setMaxY(max.getBlockY());
+                    worldEditMineData.setMaxZ(max.getBlockZ());
+                } catch (MaxChangedBlocksException exception) {
+                    exception.printStackTrace();
+                }
+
+                worldEditMineData.setMineOwner(getMineOwner());
+                worldEditMineData.setSpawnX(spawnLocation.getBlockX());
+                worldEditMineData.setSpawnY(spawnLocation.getBlockY());
+                worldEditMineData.setSpawnZ(spawnLocation.getBlockZ());
+
+                try {
+                    Writer writer = new FileWriter(jsonFile);
+                    writer.write(gson.toJson(worldEditMineData));
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                setCuboidRegion(null);
+                setCuboidRegion(mine);
+                setWorldEditMineData(worldEditMineData);
+                privateMines.getMineStorage().replaceMine(getMineOwner(), this);
             }
-
-            worldEditMineData.setMineOwner(getMineOwner());
-            worldEditMineData.setSpawnX(spawnLocation.getBlockX());
-            worldEditMineData.setSpawnY(spawnLocation.getBlockY());
-            worldEditMineData.setSpawnZ(spawnLocation.getBlockZ());
-
-            try {
-                Writer writer = new FileWriter(jsonFile);
-                writer.write(gson.toJson(worldEditMineData));
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            setCuboidRegion(null);
-            setCuboidRegion(mine);
-            setWorldEditMineData(worldEditMineData);
-            privateMines.getMineStorage().replaceMine(getMineOwner(), this);
         }
         mineStorage.replaceMine(getMineOwner(), this);
     }
