@@ -276,10 +276,6 @@ public class WorldEditMine {
         final RandomPattern pattern = new RandomPattern();
         Map<Material, Double> mineTypeMaterials = worldEditMineType.getMaterials();
 
-        Map<Material, Double> materials = new HashMap<>();
-
-        privateMines.getLogger().info("reset mineTypeMaterials: " + mineTypeMaterials);
-
         mineTypeMaterials.forEach((material1, aDouble) -> {
             privateMines.getLogger().info("blockData: " + material1.createBlockData());
             Pattern blockPattern = (Pattern) BukkitAdapter.adapt(material1.createBlockData());
