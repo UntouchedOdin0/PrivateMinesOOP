@@ -363,24 +363,6 @@ public class WorldEditMine {
         mineFactory.createMine(player, getLocation(), worldEditMineType, true);
     }
 
-//    public void upgrade() {
-//
-//        TreeMap<String, WorldEditMineType> worldEditMineTypeTreeMap = privateMines.getWorldEditMineTypeTreeMap();
-//        privateMines.getLogger().info(worldEditMineTypeTreeMap.toString());
-//
-//        WorldEditMineData worldEditMineData = getWorldEditMineData();
-//        if (worldEditMineTypeTreeMap.higherEntry(worldEditMineData.getMineType()) == null) {
-//            privateMines.getLogger().info("Mine already maxed!");
-//        } else {
-//            String currentType = worldEditMineData.getMineType();
-//            String nextType = worldEditMineTypeTreeMap.higherKey(currentType);
-//            worldEditMineData.setMineType(nextType);
-//            setWorldEditMineData(worldEditMineData);
-//            privateMines.getMineStorage().replaceMine(getMineOwner(), this);
-//            reset(getWorldEditMineType());
-//        }
-//    }
-
     /*
     public void upgrade() {
 
