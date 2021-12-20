@@ -327,8 +327,6 @@ public class WorldEditMine {
 
         MineStorage mineStorage = privateMines.getMineStorage();
 
-//        IWrappedRegion iWrappedRegion = getiWrappedRegion();
-
         if (world == null) {
             privateMines.getLogger().warning("Failed to delete the mine due to the world being null");
         }
@@ -339,9 +337,7 @@ public class WorldEditMine {
             e.printStackTrace();
         }
 
-//        privateMines.getLogger().info("delete region: " + iWrappedRegion);
         mineStorage.removeWorldEditMine(getMineOwner());
-//        utils.deleteWorldGuardRegion(iWrappedRegion);
     }
 
     public void upgrade() {
