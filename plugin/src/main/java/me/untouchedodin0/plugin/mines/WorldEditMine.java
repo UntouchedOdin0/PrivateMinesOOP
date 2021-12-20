@@ -467,12 +467,6 @@ public class WorldEditMine {
                 BlockVector3 min = mine.getMinimumPoint();
                 BlockVector3 max = mine.getMaximumPoint();
 
-                privateMines.getLogger().info("expand min: " + min);
-                privateMines.getLogger().info("expand max: " + max);
-
-                privateMines.getLogger().info(String.valueOf(min.getX()));
-                privateMines.getLogger().info(String.valueOf(min.getBlockX()));
-
                 worldEditMineData.setMinX(min.getBlockX());
                 worldEditMineData.setMinY(min.getBlockY());
                 worldEditMineData.setMinZ(min.getBlockZ());
@@ -483,7 +477,7 @@ public class WorldEditMine {
             } catch (MaxChangedBlocksException exception) {
                 exception.printStackTrace();
             }
-//            worldEditMineData.setCuboidRegion(mine);
+
             worldEditMineData.setMineOwner(getMineOwner());
             worldEditMineData.setSpawnX(spawnLocation.getBlockX());
             worldEditMineData.setSpawnY(spawnLocation.getBlockY());
