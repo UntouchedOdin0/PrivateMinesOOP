@@ -244,46 +244,6 @@ public class WorldEditMine {
         this.world = world;
     }
 
-// Resets the mine
-
-    /*
-    public void reset() {
-
-        final var fillType = utils.bukkitToBlockType(material);
-
-        final RandomPattern randomPattern = new RandomPattern();
-        final Map<Material, Double> materials = worldEditMineData.getMaterials();
-
-        privateMines.getLogger().info("reset debug");
-        privateMines.getLogger().info("materials: " + materials);
-        privateMines.getLogger().info("randomPattern: " + randomPattern);
-
-//        materials.forEach((material, percentage) -> {
-//            Pattern pattern = BukkitAdapter.adapt(material.createBlockData());
-//            randomPattern.add(pattern, percentage);
-//        });
-
-        this.world = privateMines.getMineWorldManager().getMinesWorld();
-
-        if (world == null) {
-            privateMines.getLogger().warning("Failed to reset due to the mine world being null");
-        }
-
-        // Makes sure everything isn't null
-        if (cuboidRegion != null && fillType != null) {
-
-            // Creates edit session, sets the blocks and flushes it!
-            try (final var session = WorldEdit.getInstance()
-                    .newEditSession(BukkitAdapter.adapt(world))) {
-                session.setBlocks(getCuboidRegion(), (Pattern) fillType);
-            } catch (MaxChangedBlocksException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-     */
-
-
 //    public void reset() {
 //
 //        final var fillType = utils.bukkitToBlockType(material);
