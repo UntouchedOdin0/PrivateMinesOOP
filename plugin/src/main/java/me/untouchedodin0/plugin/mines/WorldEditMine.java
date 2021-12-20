@@ -64,8 +64,6 @@ public class WorldEditMine {
 
     public static final List<BlockVector3> EXPANSION_VECTORS = List.of(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X,
                                                                        BlockVector3.UNIT_Z, BlockVector3.UNIT_MINUS_Z);
-    public static final BlockVector3 positiveY = BlockVector3.UNIT_Y;
-
     final Utils utils;
     private final PrivateMines privateMines;
 
