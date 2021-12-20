@@ -244,35 +244,6 @@ public class WorldEditMine {
         this.world = world;
     }
 
-//    public void reset() {
-//
-//        final var fillType = utils.bukkitToBlockType(material);
-//        Map<Material, Double> map = new HashMap<>();
-//        final RandomPattern pattern = new RandomPattern();
-//
-//        worldEditMineData.getMaterials().forEach((material1, aDouble) -> {
-//            privateMines.getLogger().info("adding material " + material1 + " with percentage " + aDouble);
-//            map.put(material1, aDouble);
-//        });
-//
-//        privateMines.getLogger().info("reset map: " + map);
-//
-//        privateMines.getLogger().info("pattern: " + pattern);
-//        try (final var session = WorldEdit.getInstance()
-//                .newEditSession(BukkitAdapter.adapt(world))) {
-//            map.forEach((itemStack, aDouble) -> {
-//                Pattern pat = BukkitAdapter.adapt(itemStack.createBlockData());
-//                privateMines.getLogger().info("pat: " + pat);
-//                pattern.add(pat, aDouble);
-//            });
-//
-//            privateMines.getLogger().info(pattern.toString());
-//            session.setBlocks(getCuboidRegion(), (Pattern) fillType);
-//        } catch (MaxChangedBlocksException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     public void fill(Map<Material, Double> blocks) {
 
         World world = privateMines.getMineWorldManager().getMinesWorld();
