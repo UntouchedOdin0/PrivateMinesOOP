@@ -645,6 +645,8 @@ public class WorldEditMine {
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();
         String fileName = getMineOwner() + ".json";
+        File oldFile = new File(minesDirectory, fileName);
+        oldFile.delete();
         File jsonFile = new File(minesDirectory, fileName);
 
         if (world == null) {
@@ -674,6 +676,12 @@ public class WorldEditMine {
                 BlockVector3 min = mine.getMinimumPoint();
                 BlockVector3 max = mine.getMaximumPoint();
 
+                privateMines.getLogger().info("expand min: " + min);
+                privateMines.getLogger().info("expand max: " + max);
+
+                privateMines.getLogger().info(String.valueOf(min.getX()));
+                privateMines.getLogger().info(String.valueOf(min.getBlockX()));
+
                 worldEditMineData.setMinX(min.getBlockX());
                 worldEditMineData.setMinY(min.getBlockY());
                 worldEditMineData.setMinZ(min.getBlockZ());
@@ -684,7 +692,7 @@ public class WorldEditMine {
             } catch (MaxChangedBlocksException exception) {
                 exception.printStackTrace();
             }
-            worldEditMineData.setCuboidRegion(mine);
+//            worldEditMineData.setCuboidRegion(mine);
             worldEditMineData.setMineOwner(getMineOwner());
             worldEditMineData.setSpawnX(spawnLocation.getBlockX());
             worldEditMineData.setSpawnY(spawnLocation.getBlockY());
@@ -700,6 +708,7 @@ public class WorldEditMine {
 
             setCuboidRegion(null);
             setCuboidRegion(mine);
+            setWorldEditMineData(worldEditMineData);
             privateMines.getMineStorage().replaceMine(getMineOwner(), this);
         }
         mineStorage.replaceMine(getMineOwner(), this);
