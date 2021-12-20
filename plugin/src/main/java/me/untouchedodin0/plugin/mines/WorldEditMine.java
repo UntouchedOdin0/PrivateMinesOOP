@@ -91,7 +91,6 @@ public class WorldEditMine {
     private DataBlock dataBlock;
     private WorldEditMineData worldEditMineData;
     private MineFactory mineFactory;
-    private IWrappedRegion mineRegion;
 
     public WorldEditMine(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -145,10 +144,6 @@ public class WorldEditMine {
 
     public void setRegion(Region region) {
         this.region = region;
-    }
-
-    public Location getSpawnLocation() {
-        return spawnLocation;
     }
 
     public void setSpawnLocation(Location spawnLocation) {
@@ -227,22 +222,6 @@ public class WorldEditMine {
     public BlockState getFillState() {
         final BlockType blockType = utils.bukkitToBlockType(getMaterial());
         return utils.getBlockState(blockType);
-    }
-
-//    public List<BlockState> getMultipleFillState() {
-//        Material[] materials = getMaterials();
-//        List<BlockState> blockStates = new ArrayList<>();
-//
-//        for (Material material : materials) {
-//            BlockType blockType = utils.bukkitToBlockType(material);
-//            BlockState blockState = utils.getBlockState(blockType);
-//            blockStates.add(blockState);
-//        }
-//        return blockStates;
-//    }
-
-    public File getSchematicFile() {
-        return worldEditMineType.getSchematicFile();
     }
 
     public void teleport(Player player) {
