@@ -646,7 +646,10 @@ public class WorldEditMine {
         Gson gson = gsonBuilder.create();
         String fileName = getMineOwner() + ".json";
         File oldFile = new File(minesDirectory, fileName);
-        oldFile.delete();
+        boolean deleted = oldFile.delete();
+        if (deleted) {
+            privateMines.getLogger().info("Deleted file to replace later!");
+        }
         File jsonFile = new File(minesDirectory, fileName);
 
         if (world == null) {
