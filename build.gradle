@@ -121,3 +121,19 @@ task updateJars {
     dependsOn copyTo_18Server
     dependsOn copyTo_DevServer
 }
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'org.company'
+            artifactId = 'sample'
+            version = "0.9-SNAPSHOT"
+            from components.java
+
+            pom {
+                name = 'My Library'
+                description = 'A description of my library'
+            }
+        }
+    }
+}
