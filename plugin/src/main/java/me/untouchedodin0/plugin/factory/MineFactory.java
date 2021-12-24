@@ -248,6 +248,8 @@ public class MineFactory {
         return null;
     }
 
+    //todo Create upc shops automatically with the format "mine-uuid" and set the prices from a pre-configured map in the config.yml
+
     public WorldEditMine createMine(Player player, Location location, WorldEditMineType worldEditMineType, boolean replaceOld) {
         Clipboard clipboard;
         Utils utils = new Utils(privateMines);
