@@ -1,6 +1,7 @@
 package me.untouchedodin0.privatemines.compat;
 
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
+import com.sk89q.worldedit.regions.Region;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -62,5 +63,7 @@ public abstract class WorldEditUtilities {
 
     public abstract void flushQueue();
 
-    public abstract Clipboard pasteSchematic(Location location, File file);
+    // This is the thing what should allow for world edit 6 & 7.
+
+    public abstract Region pasteSchematic(Location location, File file);
 }

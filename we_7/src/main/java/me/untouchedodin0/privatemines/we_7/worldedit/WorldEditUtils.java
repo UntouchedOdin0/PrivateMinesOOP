@@ -4,6 +4,9 @@ import com.sk89q.worldedit.*;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
 import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
@@ -21,6 +24,10 @@ import org.bukkit.plugin.Plugin;
 import redempt.redlib.region.CuboidRegion;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Objects;
 
 @SuppressWarnings("unused")
 public class WorldEditUtils extends WorldEditUtilities {
@@ -166,16 +173,58 @@ public class WorldEditUtils extends WorldEditUtilities {
     }
 
     @Override
-    public Clipboard pasteSchematic(Location location, File file) {
+    public Region pasteSchematic(Location location, File file) {
+        // fill this one
+        ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(file);
+        Clipboard clipboard;
+        BlockVector3 centerVector;
+        Operation operation;
+        Region region;
+        com.sk89q.worldedit.world.World world = BukkitAdapter.adapt(Objects.requireNonNull(location.getWorld()));
+
+        if (clipboardFormat != null) {
+            try (ClipboardReader clipboardReader = clipboardFormat.getReader(new FileInputStream(file))) {
+                clipboard = clipboardReader.read();
+                if (clipboard == null) {
+                    Bukkit.getLogger().info("Clipboard was null");
+                    return null;
+                }
+
+                try (EditSession editSession = WorldEdit.getInstance().newEditSession(world)) {
+                    centerVector = BlockVector3.at(location.getX(), location.getY(), location.getZ());
+
+                    // If the clipboard isn't null prepare to create a paste operation, complete it and set the region stuff.
+                        operation = new ClipboardHolder(clipboard)
+                                .createPaste(editSession)
+                                .to(centerVector)
+                                .ignoreAirBlocks(true)
+                                .build();
+                        try {
+                            Operations.complete(operation);
+                            region = clipboard.getRegion();
+
+                            if (centerVector != null) {
+                                region.shift(centerVector.subtract(clipboard.getOrigin()));
+                                return region;
+                            }
+                        } catch (WorldEditException worldEditException) {
+                            worldEditException.printStackTrace();
+                        }
+                    }
+
+                return null;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         return null;
     }
 
-
     public Region pasteSchematic(Location location, Clipboard clipboard) {
 
-        com.sk89q.worldedit.world.World world = BukkitAdapter.adapt(location.getWorld());
+        com.sk89q.worldedit.world.World world = BukkitAdapter.adapt(Objects.requireNonNull(location.getWorld()));
         Region region;
-        BlockVector3 centerVector = null;
+        BlockVector3 centerVector;
         Operation operation;
 
         // we 7 paste schem

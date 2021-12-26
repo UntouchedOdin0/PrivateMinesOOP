@@ -98,7 +98,7 @@ public class PasteFactory {
         return null;
     }
 
-    public Clipboard pasteSchematic(Location location, File file) {
+    public Region pasteSchematic(Location location, File file) {
         return WorldEditUtilities.getInstance().pasteSchematic(location, file);
     }
 }

@@ -7,6 +7,7 @@ import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.world.DataException;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.schematic.SchematicFormat;
@@ -107,7 +108,7 @@ public class WorldEditUtils extends WorldEditUtilities {
 
     // we 6 paste schem
     @Override
-    public Clipboard pasteSchematic(Location location, File file) {
+    public Region pasteSchematic(Location location, File file) {
         World bukkitWorld = location.getWorld();
         EditSession editSession = new EditSession(new BukkitWorld(bukkitWorld), -1);
         editSession.enableQueue();
@@ -117,7 +118,7 @@ public class WorldEditUtils extends WorldEditUtilities {
         try {
             cuboidClipboard = schematicFormat.load(file);
             cuboidClipboard.paste(editSession, BukkitUtil.toVector(location), true);
-            return (Clipboard) cuboidClipboard;
+            return (Region) cuboidClipboard;
         } catch (IOException | DataException | MaxChangedBlocksException e) {
             e.printStackTrace();
         }

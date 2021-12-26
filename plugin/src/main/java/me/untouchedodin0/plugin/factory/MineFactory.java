@@ -296,7 +296,19 @@ public class MineFactory {
 
                         // Pastes the schematic and loops the region finding blocks
 
-                        Region region = pasteFactory.paste(clipboard, location);
+                        privateMines.getLogger().info("location: " + location);
+
+                        Region region = worldEditUtilities.pasteSchematic(location, file);
+                        privateMines.getLogger().info("region " + region);
+
+//                        Clipboard clipboard1 = pasteFactory.pasteSchematic(location, file);
+
+//                        privateMines.getLogger().info(clipboard1.getRegion().toString());
+//                        Region pastedRegion = clipboard1.getRegion();
+//
+//                        privateMines.getLogger().info("pastedRegion: " + pastedRegion);
+
+//                        Region region = pasteFactory.paste(clipboard, location);
                         region.iterator().forEachRemaining(blockVector3 -> {
                             if (world != null) {
                                 Location bukkitLocation = utils.blockVector3toBukkit(world, blockVector3);
