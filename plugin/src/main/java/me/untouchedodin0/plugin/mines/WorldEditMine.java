@@ -27,14 +27,12 @@ package me.untouchedodin0.plugin.mines;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sk89q.worldedit.MaxChangedBlocksException;
-import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.function.pattern.RandomPattern;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
-import com.sk89q.worldedit.world.block.BlockState;
 import com.sk89q.worldedit.world.block.BlockType;
 import com.sk89q.worldedit.world.block.BlockTypes;
 import me.untouchedodin0.plugin.PrivateMines;
@@ -216,10 +214,10 @@ public class WorldEditMine {
         this.dataBlock = dataBlock;
     }
 
-    public BlockState getFillState() {
-        final BlockType blockType = utils.bukkitToBlockType(getMaterial());
-        return utils.getBlockState(blockType);
-    }
+//    public BlockState getFillState() {
+//        final BlockType blockType = utils.bukkitToBlockType(getMaterial());
+//        return utils.getBlockState(blockType);
+//    }
 
     public void teleport(Player player) {
         UUID uuid = player.getUniqueId();

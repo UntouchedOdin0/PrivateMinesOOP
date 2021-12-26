@@ -101,23 +101,20 @@ public class WorldEditUtils extends WorldEditUtilities {
 
     }
 
-    @Override
-    public void flushQueue() {
-
-    }
-
     // we 6 paste schem
+
     @Override
     public Region pasteSchematic(Location location, File file) {
         World bukkitWorld = location.getWorld();
         EditSession editSession = new EditSession(new BukkitWorld(bukkitWorld), -1);
         editSession.enableQueue();
-        CuboidClipboard cuboidClipboard = null;
+        CuboidClipboard cuboidClipboard;
 
         SchematicFormat schematicFormat = SchematicFormat.getFormat(file);
         try {
             cuboidClipboard = schematicFormat.load(file);
             cuboidClipboard.paste(editSession, BukkitUtil.toVector(location), true);
+            editSession.flushQueue();
             return (Region) cuboidClipboard;
         } catch (IOException | DataException | MaxChangedBlocksException e) {
             e.printStackTrace();

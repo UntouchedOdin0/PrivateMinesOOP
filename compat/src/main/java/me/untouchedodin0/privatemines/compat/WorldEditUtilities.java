@@ -61,8 +61,6 @@ public abstract class WorldEditUtilities {
 
     public abstract void setBlock(Location location, String blockType);
 
-    public abstract void flushQueue();
-
     // This is the thing what should allow for world edit 6 & 7.
 
     public abstract Region pasteSchematic(Location location, File file);

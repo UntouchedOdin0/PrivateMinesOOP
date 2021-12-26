@@ -25,7 +25,6 @@ import redempt.redlib.region.CuboidRegion;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -165,12 +164,8 @@ public class WorldEditUtils extends WorldEditUtilities {
 //            editSession.flushQueue();
 //            editSession.flushSession();
         }
-        flushQueue();
     }
 
-    public void flushQueue() {
-        editSession.flushSession();
-    }
 
     @Override
     public Region pasteSchematic(Location location, File file) {
