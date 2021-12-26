@@ -35,8 +35,11 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import me.untouchedodin0.plugin.PrivateMines;
+import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
 import org.bukkit.Location;
 import org.bukkit.World;
+
+import java.io.File;
 
 public class PasteFactory {
 
@@ -93,6 +96,10 @@ public class PasteFactory {
             }
         }
         return null;
+    }
+
+    public Clipboard pasteSchematic(Location location, File file) {
+        return WorldEditUtilities.getInstance().pasteSchematic(location, file);
     }
 }
 
