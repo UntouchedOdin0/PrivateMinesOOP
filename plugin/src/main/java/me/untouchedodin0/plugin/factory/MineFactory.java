@@ -42,6 +42,7 @@ import me.untouchedodin0.plugin.mines.WorldEditMineType;
 import me.untouchedodin0.plugin.mines.data.WorldEditMineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
+import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -94,7 +95,7 @@ public class MineFactory {
         mine.setMineLocation(location);
         mine.setMineType(defaultMineType);
         mine.setWeightedRandom(defaultMineType.getWeightedRandom());
-        mine.build();
+//        mine.build();
 
         mineStorage.addMine(player.getUniqueId(), mine);
 
@@ -218,7 +219,7 @@ public class MineFactory {
             mine.setMineLocation(location);
             mine.setMineType(mineType);
             mine.setWeightedRandom(mineType.getWeightedRandom());
-            mine.build();
+//            mine.build();
 
             Location corner1 = utils.getRelative(mine.getStructure(), mineType.getCorner1());
             Location corner2 = utils.getRelative(mine.getStructure(), mineType.getCorner2());
@@ -252,6 +253,7 @@ public class MineFactory {
 
     public WorldEditMine createMine(Player player, Location location, WorldEditMineType worldEditMineType, boolean replaceOld) {
         Clipboard clipboard;
+        WorldEditUtilities worldEditUtilities;
         Utils utils = new Utils(privateMines);
         World world;
         UUID uuid = player.getUniqueId();
@@ -290,6 +292,7 @@ public class MineFactory {
                         }
 
                         world = location.getWorld();
+                        worldEditUtilities = privateMines.getWorldEditUtils();
 
                         // Pastes the schematic and loops the region finding blocks
 

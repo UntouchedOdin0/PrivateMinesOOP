@@ -1,31 +1,26 @@
 package me.untouchedodin0.privatemines.we_7.worldedit;
 
-import com.fastasyncworldedit.core.FaweAPI;
-import com.fastasyncworldedit.core.util.EditSessionBuilder;
 import com.sk89q.worldedit.*;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
+import com.sk89q.worldedit.function.operation.Operation;
+import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.session.SessionManager;
 import com.sk89q.worldedit.world.block.BlockType;
 import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import redempt.redlib.multiblock.MultiBlockStructure;
 import redempt.redlib.region.CuboidRegion;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.io.File;
 
 @SuppressWarnings("unused")
 public class WorldEditUtils extends WorldEditUtilities {
@@ -65,6 +60,7 @@ public class WorldEditUtils extends WorldEditUtilities {
         return (WorldEditPlugin) plugin;
     }
 
+    /*
     @Override
     public void createMultiBlockStructure(Player player, String name) {
         LocalSession localSession = getWorldEdit().getSession(player);
@@ -99,6 +95,7 @@ public class WorldEditUtils extends WorldEditUtilities {
             player.sendMessage("Please make a full selection");
         }
     }
+     */
 
     @Override
     public void setBlocks(CuboidRegion cuboidRegion, String material) {
@@ -123,17 +120,17 @@ public class WorldEditUtils extends WorldEditUtilities {
             BlockType blockType = BlockType.REGISTRY.get(material.toLowerCase());
             Region cube = new com.sk89q.worldedit.regions.CuboidRegion(startVector3, endVector3);
 
-            EditSessionBuilder editSessionBuilder = FaweAPI.getEditSessionBuilder(FaweAPI.getWorld(world.getName()));
-            EditSession editSession = editSessionBuilder.build();
-
-//            EditSessionBuilder editSessionBuilder = FaweAPI.getEditSessionBuilder(FaweAPI.getWorld(worldName))
-//                    .limitUnlimited()
-//                    .allowedRegionsEverywhere()
-//                    .fastmode(true);
-
-            editSessionBuilder.fastmode(true);
-            editSession.setBlocks(cube, blockType);
-            editSession.flushQueue();
+//            EditSessionBuilder editSessionBuilder = FaweAPI.getEditSessionBuilder(FaweAPI.getWorld(world.getName()));
+//            EditSession editSession = editSessionBuilder.build();
+//
+////            EditSessionBuilder editSessionBuilder = FaweAPI.getEditSessionBuilder(FaweAPI.getWorld(worldName))
+////                    .limitUnlimited()
+////                    .allowedRegionsEverywhere()
+////                    .fastmode(true);
+//
+//            editSessionBuilder.fastmode(true);
+//            editSession.setBlocks(cube, blockType);
+//            editSession.flushQueue();
         }
     }
 
@@ -150,13 +147,13 @@ public class WorldEditUtils extends WorldEditUtilities {
             int z = location.getBlockZ();
 
 
-            EditSessionBuilder editSessionBuilder = FaweAPI.getEditSessionBuilder(FaweAPI.getWorld(worldName))
-                    .limitUnlimited()
-                    .allowedRegionsEverywhere()
-                    .fastmode(true);
-
-            editSession = editSessionBuilder.build();
-            editSession.setBlock(x, y, z, blockType);
+//            EditSessionBuilder editSessionBuilder = FaweAPI.getEditSessionBuilder(FaweAPI.getWorld(worldName))
+//                    .limitUnlimited()
+//                    .allowedRegionsEverywhere()
+//                    .fastmode(true);
+//
+//            editSession = editSessionBuilder.build();
+//            editSession.setBlock(x, y, z, blockType);
 
 //            editSession.flushQueue();
 //            editSession.flushSession();
@@ -165,6 +162,46 @@ public class WorldEditUtils extends WorldEditUtilities {
     }
 
     public void flushQueue() {
-        editSession.flushQueue();
+        editSession.flushSession();
+    }
+
+    @Override
+    public Clipboard pasteSchematic(Location location, File file) {
+        return null;
+    }
+
+
+    public Region pasteSchematic(Location location, Clipboard clipboard) {
+
+        com.sk89q.worldedit.world.World world = BukkitAdapter.adapt(location.getWorld());
+        Region region;
+        BlockVector3 centerVector = null;
+        Operation operation;
+
+        // we 7 paste schem
+        try (EditSession editSession = WorldEdit.getInstance().newEditSession(world)) {
+            centerVector = BlockVector3.at(location.getX(), location.getY(), location.getZ());
+
+            // If the clipboard isn't null prepare to create a paste operation, complete it and set the region stuff.
+            if (clipboard != null) {
+                operation = new ClipboardHolder(clipboard)
+                        .createPaste(editSession)
+                        .to(centerVector)
+                        .ignoreAirBlocks(true)
+                        .build();
+                try {
+                    Operations.complete(operation);
+                    region = clipboard.getRegion();
+
+                    if (centerVector != null) {
+                        region.shift(centerVector.subtract(clipboard.getOrigin()));
+                        return region;
+                    }
+                } catch (WorldEditException worldEditException) {
+                    worldEditException.printStackTrace();
+                }
+            }
+        }
+        return null;
     }
 }

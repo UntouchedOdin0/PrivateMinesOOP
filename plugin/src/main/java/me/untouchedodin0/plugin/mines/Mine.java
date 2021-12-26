@@ -285,158 +285,159 @@ public class Mine {
         The method for creating the structures into the world
      */
 
-    public void build() {
 
-
-        // Simple check to make sure the type isn't null
-
-        if (mineType == null) {
-            Bukkit.getLogger().info("Failed to build structure due to the mine type being null!");
-        }
-
-        // Get the main class
-        PrivateMines privateMines = PrivateMines.getPlugin(PrivateMines.class);
-
-        // Set the debugMode field to true or false
-        this.debugMode = privateMines.isDebugMode();
-
-        // Set to use world edit or not, makes it faster
-        boolean useWorldEdit = privateMines.isWorldEditEnabled();
-
-        // Initialise the util class
-        Utils utils = new Utils(privateMines);
-
-        // Print out more debug stuff if the mode is enabled
-        if (debugMode) {
-            privateMines.getLogger().info("MultiBlockStructure: " + mineType.getMultiBlockStructure());
-            privateMines.getLogger().info("Location " + mineLocation);
-            privateMines.getLogger().info("using worldedit?: " + useWorldEdit);
-        }
-
-        String userUUID = getMineOwner().toString();
-        String regionName = String.format("mine-%s", userUUID);
-
-        World world = mineLocation.getWorld();
-
-        // Paste the structure using the world edit
-
-        if (useWorldEdit) {
-            if (world != null) {
-
-                this.editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world));
-
-                File file = mineType.getFile();
-//                pasteSchematic(file, mineLocation);
-
-
-//                mineType.getMultiBlockStructure().forEachBlock(mineLocation, blockState -> {
-//                    Location location = blockState.getLocation();
+//    public void build() {
 //
-//                    try {
-//                        editSession.setBlock(BlockVector3.at(
-//                                                     location.getBlockX(),
-//                                                     location.getBlockY(),
-//                                                     location.getBlockZ()),
-//                                             BukkitAdapter.adapt(blockState.getBlockData()),
-//                                             EditSession.Stage.BEFORE_HISTORY);
-//                    } catch (WorldEditException e) {
-//                        e.printStackTrace();
-//                    }
-//                });
-//                editSession.close();
-            }
+//
+//        // Simple check to make sure the type isn't null
+//
+//        if (mineType == null) {
+//            Bukkit.getLogger().info("Failed to build structure due to the mine type being null!");
+//        }
+//
+//        // Get the main class
+//        PrivateMines privateMines = PrivateMines.getPlugin(PrivateMines.class);
+//
+//        // Set the debugMode field to true or false
+//        this.debugMode = privateMines.isDebugMode();
+//
+//        // Set to use world edit or not, makes it faster
+//        boolean useWorldEdit = privateMines.isWorldEditEnabled();
+//
+//        // Initialise the util class
+//        Utils utils = new Utils(privateMines);
+//
+//        // Print out more debug stuff if the mode is enabled
+//        if (debugMode) {
+//            privateMines.getLogger().info("MultiBlockStructure: " + mineType.getMultiBlockStructure());
+//            privateMines.getLogger().info("Location " + mineLocation);
+//            privateMines.getLogger().info("using worldedit?: " + useWorldEdit);
+//        }
+//
+//        String userUUID = getMineOwner().toString();
+//        String regionName = String.format("mine-%s", userUUID);
+//
+//        World world = mineLocation.getWorld();
+//
+//        // Paste the structure using the world edit
+//
+//        if (useWorldEdit) {
+//            if (world != null) {
+//                this.editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world));
+//
+//                File file = mineType.getFile();
+////                pasteSchematic(file, mineLocation);
+//
+//
+////                mineType.getMultiBlockStructure().forEachBlock(mineLocation, blockState -> {
+////                    Location location = blockState.getLocation();
+////
+////                    try {
+////                        editSession.setBlock(BlockVector3.at(
+////                                                     location.getBlockX(),
+////                                                     location.getBlockY(),
+////                                                     location.getBlockZ()),
+////                                             BukkitAdapter.adapt(blockState.getBlockData()),
+////                                             EditSession.Stage.BEFORE_HISTORY);
+////                    } catch (WorldEditException e) {
+////                        e.printStackTrace();
+////                    }
+////                });
+////                editSession.close();
+//            }
+//
+//            // Assume the structure is at the location
+//            this.structure = mineType.getMultiBlockStructure().assumeAt(mineLocation);
+//        } else {
+//
+//            // Paste the structure using redlib
+//            this.structure = mineType.getMultiBlockStructure().build(mineLocation);
+//        }
+//
+//        // Simple check to make sure the structure isn't null
+//
+//        if (this.structure == null) {
+//            Bukkit.getLogger().info("Structure is null");
+//        }
+//
+//        // Set the mines spawn and npc locations using the relative location from the mineType's
+//
+//        this.spawnLocation = utils.getRelative(structure, mineType.getSpawnLocation());
+//        this.npcLocation = utils.getRelative(structure, mineType.getNpcLocation());
+//        this.corner1 = utils.getRelative(structure, mineType.getCorner1());
+//        this.corner2 = utils.getRelative(structure, mineType.getCorner2());
+//        this.world = mineLocation.getWorld();
+//
+//        // Initialize the block manager
+//
+//        BlockDataManager blockDataManager = privateMines.getBlockDataManager();
+//
+//        // Initialize the data block
+//
+//        DataBlock dataBlock = blockDataManager.getDataBlock(mineLocation.getBlock());
+//
+//        /*
+//            Create a cuboid region with the two corners
+//            Expand the region (small fix for the mines not fully filling)
+//            Set the mines cuboid region with the created region
+//            set the spawn and npc location blocks to air
+//            Finally set and save the values into the block data manager
+//         */
+//
+//        CuboidRegion cuboidRegion = new CuboidRegion(corner1, corner2);
+////        cuboidRegion.expand(1, 0, 1, 0, 1, 0);
+//        setCuboidRegion(cuboidRegion);
+//
+//        final var mine = Adapter.adapt(getCuboidRegion());
+//        final var stupidWallCuboid = new CuboidRegion(BukkitAdapter.adapt(world, mine.getMinimumPoint()),
+//                                                      BukkitAdapter.adapt(world, mine.getMaximumPoint()));
+//
+//        int x1 = getCorner1().getBlockX();
+//        int x2 = getCorner2().getBlockX();
+//
+//        int y1 = getCorner1().getBlockY();
+//        int y2 = getCorner2().getBlockY();
+//
+//        int z1 = getCorner2().getBlockZ();
+//        int z2 = getCorner2().getBlockZ();
+//
+//        BlockVector3 vector1 = BlockVector3.at(x1, y1, z1);
+//        BlockVector3 vector2 = BlockVector3.at(x2, y2, z2);
+//
+//        this.cornerVector1 = vector1;
+//        this.cornerVector2 = vector2;
+//
+//        this.worldEditCube = new com.sk89q.worldedit.regions.CuboidRegion(
+//                BlockVector3.at(
+//                        cuboidRegion.getStart().getBlockX(),
+//                        cuboidRegion.getStart().getBlockY(),
+//                        cuboidRegion.getStart().getBlockZ()),
+//                BlockVector3.at(
+//                        cuboidRegion.getEnd().getBlockX(),
+//                        cuboidRegion.getEnd().getBlockY(),
+//                        cuboidRegion.getEnd().getBlockZ()));
+//        setWorldEditCube(worldEditCube);
+//        setBedrockCubeRegion(cuboidRegion);
+//
+//        this.editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world));
+//
+//        mine.expand(expansionVectors(1));
+//        mine.contract(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X, BlockVector3.UNIT_MINUS_Y, BlockVector3.UNIT_Z, BlockVector3.UNIT_MINUS_Z);
+//
+//        iWrappedRegion = WorldGuardWrapper.getInstance().addCuboidRegion(regionName, cuboidRegion.getStart(), cuboidRegion.getEnd());
+////        utils.setMineFlags(iWrappedRegion);
+//
+//        if (airMaterial != null) {
+//            spawnLocation.getBlock().setType(airMaterial, false);
+//            npcLocation.getBlock().setType(airMaterial, false);
+//
+//            dataBlock.set("owner", getMineOwner());
+//            dataBlock.set("type", getMineType().getName());
+////            dataBlock.set("weightedRandom", getMineType().getMaterials());
+//            blockDataManager.save();
+//        }
+//    }
 
-            // Assume the structure is at the location
-            this.structure = mineType.getMultiBlockStructure().assumeAt(mineLocation);
-        } else {
-
-            // Paste the structure using redlib
-            this.structure = mineType.getMultiBlockStructure().build(mineLocation);
-        }
-
-        // Simple check to make sure the structure isn't null
-
-        if (this.structure == null) {
-            Bukkit.getLogger().info("Structure is null");
-        }
-
-        // Set the mines spawn and npc locations using the relative location from the mineType's
-
-        this.spawnLocation = utils.getRelative(structure, mineType.getSpawnLocation());
-        this.npcLocation = utils.getRelative(structure, mineType.getNpcLocation());
-        this.corner1 = utils.getRelative(structure, mineType.getCorner1());
-        this.corner2 = utils.getRelative(structure, mineType.getCorner2());
-        this.world = mineLocation.getWorld();
-
-        // Initialize the block manager
-
-        BlockDataManager blockDataManager = privateMines.getBlockDataManager();
-
-        // Initialize the data block
-
-        DataBlock dataBlock = blockDataManager.getDataBlock(mineLocation.getBlock());
-
-        /*
-            Create a cuboid region with the two corners
-            Expand the region (small fix for the mines not fully filling)
-            Set the mines cuboid region with the created region
-            set the spawn and npc location blocks to air
-            Finally set and save the values into the block data manager
-         */
-
-        CuboidRegion cuboidRegion = new CuboidRegion(corner1, corner2);
-//        cuboidRegion.expand(1, 0, 1, 0, 1, 0);
-        setCuboidRegion(cuboidRegion);
-
-        final var mine = Adapter.adapt(getCuboidRegion());
-        final var stupidWallCuboid = new CuboidRegion(BukkitAdapter.adapt(world, mine.getMinimumPoint()),
-                                                      BukkitAdapter.adapt(world, mine.getMaximumPoint()));
-
-        int x1 = getCorner1().getBlockX();
-        int x2 = getCorner2().getBlockX();
-
-        int y1 = getCorner1().getBlockY();
-        int y2 = getCorner2().getBlockY();
-
-        int z1 = getCorner2().getBlockZ();
-        int z2 = getCorner2().getBlockZ();
-
-        BlockVector3 vector1 = BlockVector3.at(x1, y1, z1);
-        BlockVector3 vector2 = BlockVector3.at(x2, y2, z2);
-
-        this.cornerVector1 = vector1;
-        this.cornerVector2 = vector2;
-
-        this.worldEditCube = new com.sk89q.worldedit.regions.CuboidRegion(
-                BlockVector3.at(
-                        cuboidRegion.getStart().getBlockX(),
-                        cuboidRegion.getStart().getBlockY(),
-                        cuboidRegion.getStart().getBlockZ()),
-                BlockVector3.at(
-                        cuboidRegion.getEnd().getBlockX(),
-                        cuboidRegion.getEnd().getBlockY(),
-                        cuboidRegion.getEnd().getBlockZ()));
-        setWorldEditCube(worldEditCube);
-        setBedrockCubeRegion(cuboidRegion);
-
-        this.editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world));
-
-        mine.expand(expansionVectors(1));
-        mine.contract(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X, BlockVector3.UNIT_MINUS_Y, BlockVector3.UNIT_Z, BlockVector3.UNIT_MINUS_Z);
-
-        iWrappedRegion = WorldGuardWrapper.getInstance().addCuboidRegion(regionName, cuboidRegion.getStart(), cuboidRegion.getEnd());
-//        utils.setMineFlags(iWrappedRegion);
-
-        if (airMaterial != null) {
-            spawnLocation.getBlock().setType(airMaterial, false);
-            npcLocation.getBlock().setType(airMaterial, false);
-
-            dataBlock.set("owner", getMineOwner());
-            dataBlock.set("type", getMineType().getName());
-//            dataBlock.set("weightedRandom", getMineType().getMaterials());
-            blockDataManager.save();
-        }
-    }
 
     public void pasteSchematic(File file, Location location) {
         privateMines.getLogger().info("pasteSchematic file: " + file);
@@ -500,11 +501,11 @@ public class Mine {
 
             final var mine = Adapter.adapt(getCuboidRegion());
 
-            try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(Objects.requireNonNull(world)))) {
-                session.setBlocks(mine, air.getDefaultState());
-            } catch (MaxChangedBlocksException exception) {
-                exception.printStackTrace();
-            }
+//            try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(Objects.requireNonNull(world)))) {
+//                session.setBlocks(mine, air.getDefaultState());
+//            } catch (MaxChangedBlocksException exception) {
+//                exception.printStackTrace();
+//            }
 
 //            if (airMaterial != null) {
 //                structure.getRegion().forEachBlock(block -> block.setType(airMaterial, false));
@@ -549,14 +550,14 @@ public class Mine {
             return;
         }
 
-        try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(Objects.requireNonNull(world)))) {
-            if (emerald != null) {
-//                mineArea.contract(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X, BlockVector3.UNIT_MINUS_Y, BlockVector3.UNIT_Z, BlockVector3.UNIT_MINUS_Z);
-                session.setBlocks(mineArea, emerald.getDefaultState());
-            }
-        } catch (MaxChangedBlocksException exception) {
-            exception.printStackTrace();
-        }
+//        try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(Objects.requireNonNull(world)))) {
+//            if (emerald != null) {
+////                mineArea.contract(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X, BlockVector3.UNIT_MINUS_Y, BlockVector3.UNIT_Z, BlockVector3.UNIT_MINUS_Z);
+//                session.setBlocks(mineArea, emerald.getDefaultState());
+//            }
+//        } catch (MaxChangedBlocksException exception) {
+//            exception.printStackTrace();
+//        }
 
 //        Material material = mineType.getWeightedRandom().roll();
 //        String blockType = Objects.requireNonNull(BlockType.REGISTRY.get(material.name())).getId().toLowerCase();
@@ -680,14 +681,14 @@ public class Mine {
 
         final var mine = Adapter.adapt(getCuboidRegion());
 
-        try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
-            mine.expand(expansionVectors(amount));
-
-            session.setBlocks(mine, fillType.getDefaultState());
-            session.setBlocks(Adapter.walls(mine), wallType.getDefaultState());
-        } catch (MaxChangedBlocksException ex) {
-            ex.printStackTrace();
-        }
+//        try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
+//            mine.expand(expansionVectors(amount));
+//
+//            session.setBlocks(mine, fillType.getDefaultState());
+//            session.setBlocks(Adapter.walls(mine), wallType.getDefaultState());
+//        } catch (MaxChangedBlocksException ex) {
+//            ex.printStackTrace();
+//        }
 
         final var stupidWallCuboid = new CuboidRegion(BukkitAdapter.adapt(world, mine.getMinimumPoint()),
                                                       BukkitAdapter.adapt(world, mine.getMaximumPoint()));
@@ -711,7 +712,7 @@ public class Mine {
         CuboidRegion bedrockCube;
 
         bedrockCube = mineCube.clone();
-        this.editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world));
+//        this.editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world));
 
 
         Material outsideStart;

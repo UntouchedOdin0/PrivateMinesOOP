@@ -60,6 +60,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.*;
 
+import static com.sk89q.worldedit.WorldEdit.*;
+
 public class WorldEditMine {
 
     public static final List<BlockVector3> EXPANSION_VECTORS = List.of(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X,
@@ -244,7 +246,7 @@ public class WorldEditMine {
 
         World world = privateMines.getMineWorldManager().getMinesWorld();
 
-        try (final var session = WorldEdit.getInstance()
+        try (final var session = getInstance()
                 .newEditSession(BukkitAdapter.adapt(world))) {
             final RandomPattern randomPattern = new RandomPattern();
 
@@ -278,7 +280,7 @@ public class WorldEditMine {
             pattern.add(blockPattern, aDouble);
         });
 
-        try (final var session = WorldEdit.getInstance()
+        try (final var session = getInstance()
                 .newEditSession(BukkitAdapter.adapt(world))) {
             session.setBlocks(getCuboidRegion(), pattern);
         } catch (MaxChangedBlocksException e) {
@@ -325,7 +327,7 @@ public class WorldEditMine {
             privateMines.getLogger().warning("Failed to delete the mine due to the world being null");
         }
 
-        try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
+        try (final var session = getInstance().newEditSession(BukkitAdapter.adapt(world))) {
             session.setBlocks(cuboidRegion, utils.getBlockState(air));
         } catch (MaxChangedBlocksException e) {
             e.printStackTrace();
@@ -446,7 +448,7 @@ public class WorldEditMine {
                 mine.expand(expansionVectors(amount));
                 walls.expand(expansionVectors(amount));
 
-                try (final var session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
+                try (final var session = getInstance().newEditSession(BukkitAdapter.adapt(world))) {
                     session.setBlocks(mine, fillType.getDefaultState());
                     session.setBlocks(Adapter.walls(walls), wallType.getDefaultState());
                     mine.contract(expansionVectors(1));

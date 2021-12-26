@@ -374,7 +374,7 @@ public class PrivateMinesCommand {
         minimum = cuboidRegion.getStart();
         maximum = cuboidRegion.getEnd();
 
-        worldEditUtilities.createMultiBlockStructure(player, name);
+//        worldEditUtilities.createMultiBlockStructure(player, name);
 
         if (minimum != null && maximum != null) {
             multiBlockStructure = MultiBlockStructure.stringify(minimum, maximum);
@@ -435,7 +435,7 @@ public class PrivateMinesCommand {
             structure = mine.getStructure();
             structure.getRegion().forEachBlock(block -> block.setType(Material.AIR, false));
             mine.setMineType(newType);
-            mine.build();
+//            mine.build();
             mine.startAutoResetTask();
             mineStorage.replaceMine(player.getUniqueId(), mine);
             mine.teleportPlayer(target);

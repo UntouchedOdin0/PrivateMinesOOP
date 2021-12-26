@@ -1,8 +1,8 @@
 package me.untouchedodin0.privatemines.compat;
 
+import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -10,8 +10,12 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.util.BlockVector;
 import redempt.redlib.region.CuboidRegion;
 
+import java.io.File;
+
+
 public abstract class WorldEditUtilities {
     private static WorldEditUtilities INSTANCE;
+    private static String version;
 
     protected WorldEditUtilities() {
     }
@@ -22,7 +26,7 @@ public abstract class WorldEditUtilities {
             if (plugin == null) {
                 return INSTANCE;
             }
-            final String version = plugin.getDescription().getVersion();
+            version = plugin.getDescription().getVersion();
             if (version.startsWith("6")) {
                 try {
                     INSTANCE = (WorldEditUtilities) Class.forName("me.untouchedodin0.privatemines.we_6.worldedit.WorldEditUtils").getDeclaredConstructor().newInstance();
@@ -50,11 +54,13 @@ public abstract class WorldEditUtilities {
 
     public abstract CuboidRegion getCuboidRegion(Player player);
 
-    public abstract void createMultiBlockStructure(Player player, String name);
+//    public abstract void createMultiBlockStructure(Player player, String name);
 
     public abstract void setBlocks(CuboidRegion cuboidRegion, String blockType);
 
     public abstract void setBlock(Location location, String blockType);
 
     public abstract void flushQueue();
+
+    public abstract Clipboard pasteSchematic(Location location, File file);
 }
