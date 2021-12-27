@@ -255,6 +255,7 @@ public class PrivateMines extends JavaPlugin {
                                     worldEditMineData.getRegionMaxX()+1, // why is this one max? hell if i know
                                     worldEditMineData.getRegionMinY()-3,
                                     worldEditMineData.getRegionMinZ())); // only pain and despair
+                            worldEditMine.startResetTask();
                             mineStorage.addWorldEditMine(worldEditMineData.getMineOwner(), worldEditMine);
                             mineWorldManager.getNextFreeLocation();
                         } catch (IOException e) {

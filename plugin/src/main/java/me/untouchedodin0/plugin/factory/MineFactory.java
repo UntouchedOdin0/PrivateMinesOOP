@@ -408,6 +408,7 @@ public class MineFactory {
                         worldEditMine.setWorldEditMineData(worldEditMineData);
                         worldEditMine.setDataBlock(dataBlock);
                         worldEditMine.reset();
+                        worldEditMine.startResetTask();
 
                         if (replaceOld) {
                             privateMines.getMineStorage().replaceMine(uuid, worldEditMine);

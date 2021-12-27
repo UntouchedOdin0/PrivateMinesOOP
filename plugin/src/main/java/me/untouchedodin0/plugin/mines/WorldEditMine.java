@@ -46,11 +46,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.codemc.worldguardwrapper.region.IWrappedRegion;
 import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.configmanager.annotations.ConfigValue;
+import redempt.redlib.misc.Task;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -70,6 +72,9 @@ public class WorldEditMine {
     private static int startingSize = 48;
     @ConfigValue("autoUpgrade.everyXthExpansion")
     private static int expansionIncrement = 4;
+    @ConfigValue("resetPercentage")
+    private static double resetPercentage = 50;
+
     final Utils utils;
     private final PrivateMines privateMines;
     private WorldEditMineType worldEditMineType;
@@ -86,6 +91,7 @@ public class WorldEditMine {
     private DataBlock dataBlock;
     private WorldEditMineData worldEditMineData;
     private MineFactory mineFactory;
+    private Task task;
 
     public WorldEditMine(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -173,6 +179,10 @@ public class WorldEditMine {
         return whitelistedPlayers;
     }
 
+    public static double getResetPercentage() {
+        return resetPercentage;
+    }
+
     public void addToWhitelist(Player player, UUID uuid) {
         Player bukkitPlayer = Bukkit.getPlayer(uuid);
         Player mineOwner = Bukkit.getPlayer(getMineOwner());
@@ -240,9 +250,23 @@ public class WorldEditMine {
 
     //todo work out how to do this
 
+    public boolean isInside(Location location) {
+        CuboidRegion cuboidRegion = getCuboidRegion();
+        return (location.getX() >= cuboidRegion.getMinimumPoint().getX() && location.getX() <= cuboidRegion.getMaximumPoint().getX() &&
+                location.getY() >= cuboidRegion.getMinimumPoint().getY() && location.getY() <= cuboidRegion.getMaximumPoint().getY() &&
+                location.getZ() >= cuboidRegion.getMinimumPoint().getZ() && location.getZ() <= cuboidRegion.getMaximumPoint().getZ());
+    }
+
     public void fill(Map<Material, Double> blocks) {
 
         World world = privateMines.getMineWorldManager().getMinesWorld();
+        CuboidRegion cuboidRegion = getCuboidRegion();
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (isInside(player.getLocation())) {
+                teleport(player);
+            }
+        }
 
         try (final var session = getInstance()
                 .newEditSession(BukkitAdapter.adapt(world))) {
@@ -253,7 +277,7 @@ public class WorldEditMine {
                 randomPattern.add(pattern, 1.0);
             });
 
-            session.setBlocks(getCuboidRegion(), randomPattern);
+            session.setBlocks(cuboidRegion, randomPattern);
             // fix lighting ffs
         } catch (MaxChangedBlocksException e) {
             e.printStackTrace();
@@ -330,7 +354,6 @@ public class WorldEditMine {
         } catch (MaxChangedBlocksException e) {
             e.printStackTrace();
         }
-
         mineStorage.removeWorldEditMine(getMineOwner());
     }
 
@@ -487,7 +510,49 @@ public class WorldEditMine {
         mineStorage.replaceMine(getMineOwner(), this);
     }
 
-    // fuck sake idk if i should remove this or not, advice?
+    public double getPercentage() {
+        double count = 0;
+        long volume = getCuboidRegion().getVolume();
+        World world = privateMines.getMineWorldManager().getMinesWorld();
+
+        int minX = getCuboidRegion().getMinimumPoint().getBlockX();
+        int minY = getCuboidRegion().getMinimumPoint().getBlockY();
+        int minZ = getCuboidRegion().getMinimumPoint().getBlockZ();
+
+        int maxX = getCuboidRegion().getMaximumPoint().getBlockX();
+        int maxY = getCuboidRegion().getMaximumPoint().getBlockY();
+        int maxZ = getCuboidRegion().getMaximumPoint().getBlockZ();
+
+        for (int x = minX; x < maxX; x++) {
+            for (int y = minY; y < maxY; y++) {
+                for (int z = minZ; z < maxZ; z++) {
+                    Block block = world.getBlockAt(x, y, z);
+                    if (!block.isEmpty()) count++;
+                }
+            }
+        }
+        return count * 100 / volume;
+    }
+
+    public void startResetTask() {
+        this.task = Task.syncRepeating(() -> {
+            double percentage = getPercentage();
+            double resetPercentage = getResetPercentage();
+            privateMines.getLogger().info("percentage: " + percentage);
+            privateMines.getLogger().info("reset percentage: " + resetPercentage);
+            if (percentage <= resetPercentage) {
+                reset();
+                privateMines.getLogger().info("i should reset now");
+            }
+        }, 0L, 20L);
+    }
+
+    public Task getTask() {
+        return task;
+    }
+}
+
+// fuck sake idk if i should remove this or not, advice?
 
 //    public void expand(final int amount) {
 //        final var fillType = BlockTypes.DIAMOND_BLOCK;
@@ -558,7 +623,7 @@ public class WorldEditMine {
 //
 ////        setBedrockCubeRegion(stupidWallCuboid);
 //    }
-}
+
 
 //    public void teleport(Player player) {
 //        player.teleport(location);

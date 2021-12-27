@@ -49,6 +49,7 @@ import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.inventorygui.InventoryGUI;
 import redempt.redlib.inventorygui.ItemButton;
 import redempt.redlib.itemutils.ItemBuilder;
+import redempt.redlib.misc.Task;
 import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.MultiBlockStructure;
 import redempt.redlib.multiblock.Structure;
@@ -191,6 +192,9 @@ public class PrivateMinesCommand {
             commandSender.sendMessage(ChatColor.RED + "Player doesn't own a mine!");
         } else {
             WorldEditMine worldEditMine = privateMines.getMineStorage().getWorldEditMine(uuid);
+            Task task = worldEditMine.getTask();
+            privateMines.getLogger().info("task: " + task);
+            task.cancel();
             worldEditMine.delete();
             privateMines.getMineStorage().removeWorldEditMine(uuid);
             privateMines.getLogger().info(privateMines.getMineStorage().getWorldEditMines().toString());
@@ -221,7 +225,7 @@ public class PrivateMinesCommand {
             WorldEditMineType worldEditMineType = privateMines.getWorldEditMineType(mineType);
             worldEditMine.fill(worldEditMineType.getMaterials());
             utils.sendMessage(player, mineReset);
-            worldEditMine.teleport(player);
+//            worldEditMine.teleport(player); - PUT BACK ASAP
             utils.sendMessage(player, teleportedToMine);
         }
     }

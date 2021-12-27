@@ -7,6 +7,8 @@ mainMenuTitle: "Private Mines"
 
 debugMode: false
 useWorldEdit: true
+resetPercentage: 50 # Supports double values
+
 autoUpgrade:
   enabled: false
   everyXthExpansion: 4
