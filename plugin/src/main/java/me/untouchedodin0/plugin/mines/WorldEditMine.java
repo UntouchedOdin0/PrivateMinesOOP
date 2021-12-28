@@ -538,8 +538,8 @@ public class WorldEditMine {
         this.task = Task.syncRepeating(() -> {
             double percentage = getPercentage();
             double resetPercentage = getResetPercentage();
-            privateMines.getLogger().info("percentage: " + percentage);
-            privateMines.getLogger().info("reset percentage: " + resetPercentage);
+           //privateMines.getLogger().info("percentage: " + percentage);
+            //privateMines.getLogger().info("reset percentage: " + resetPercentage);
             if (percentage <= resetPercentage) {
                 reset();
                 privateMines.getLogger().info("i should reset now");
