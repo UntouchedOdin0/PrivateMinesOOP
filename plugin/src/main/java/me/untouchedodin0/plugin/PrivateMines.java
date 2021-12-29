@@ -166,6 +166,8 @@ public class PrivateMines extends JavaPlugin {
             }
         }
 
+        // something in the world edit mine is breaking it...
+
         configManager = new ConfigManager(this).register(this, WorldEditMine.class).load();
         blockDataManager = new BlockDataManager(
                 getDataFolder()
@@ -176,6 +178,18 @@ public class PrivateMines extends JavaPlugin {
         mineFactory = new MineFactory(this, blockDataManager);
         mineWorldManager = new MineWorldManager(this);
         utils = new Utils(this);
+
+        Plugin worldEditPlugin = Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
+
+        if (worldEditPlugin != null) {
+            worldEditUtils = WorldEditUtilities.getInstance();
+            getLogger().info("Loading worldedit v" + WorldEditPlugin.getPlugin(WorldEditPlugin.class)
+                    .getDescription().getVersion());
+            if (useWorldEdit) {
+                isWorldEditEnabled = true;
+            }
+        }
+
         PluginManager pluginManager = Bukkit.getServer().getPluginManager();
         addonLoader = new AddonLoader(this, pluginManager);
 
@@ -186,7 +200,11 @@ public class PrivateMines extends JavaPlugin {
 
         File[] addons = addonsDirectory.listFiles();
 
-        Plugin worldEditPlugin = Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
+        getLogger().info("---[POLYMART]---");
+        getLogger().info("User ID: %%__USER__%%");
+        getLogger().info("User Name: %%__USERNAME__%%");
+        getLogger().info("---[POLYMART]---");
+
 
         int pluginId = 11413;
 
@@ -385,14 +403,7 @@ public class PrivateMines extends JavaPlugin {
         Metrics metrics = new Metrics(this, pluginId);
         metrics.addCustomChart(new Metrics.SingleLineChart("mines", MineStorage::getLoadedMineSize));
 
-        if (worldEditPlugin != null) {
-            worldEditUtils = WorldEditUtilities.getInstance();
-            getLogger().info("Loading worldedit v" + WorldEditPlugin.getPlugin(WorldEditPlugin.class)
-                    .getDescription().getVersion());
-            if (useWorldEdit) {
-                isWorldEditEnabled = true;
-            }
-        }
+
 
         //TODO FIX THIS
         if (addons != null) {

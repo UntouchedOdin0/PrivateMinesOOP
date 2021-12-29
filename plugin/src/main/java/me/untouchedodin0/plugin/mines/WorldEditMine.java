@@ -60,12 +60,14 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.*;
 
-import static com.sk89q.worldedit.WorldEdit.*;
+import static com.sk89q.worldedit.WorldEdit.getInstance;
 
 public class WorldEditMine {
 
     public static final List<BlockVector3> EXPANSION_VECTORS = List.of(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X,
                                                                        BlockVector3.UNIT_Z, BlockVector3.UNIT_MINUS_Z);
+    public static final BlockVector3 WALLS = BlockVector3.UNIT_Y;
+
     @ConfigValue("autoUpgrade.enabled")
     private static boolean autoUpgrade = false;
     @ConfigValue("autoUpgrade.startingSize")
@@ -272,8 +274,8 @@ public class WorldEditMine {
                 .newEditSession(BukkitAdapter.adapt(world))) {
             final RandomPattern randomPattern = new RandomPattern();
 
-            blocks.forEach((material1, aDouble) -> {
-                Pattern pattern = BukkitAdapter.adapt(material1.createBlockData());
+            blocks.forEach((material, aDouble) -> {
+                Pattern pattern = BukkitAdapter.adapt(material.createBlockData());
                 randomPattern.add(pattern, 1.0);
             });
 
@@ -472,6 +474,7 @@ public class WorldEditMine {
                 try (final var session = getInstance().newEditSession(BukkitAdapter.adapt(world))) {
                     session.setBlocks(mine, fillType.getDefaultState());
                     session.setBlocks(Adapter.walls(walls), wallType.getDefaultState());
+
                     mine.contract(expansionVectors(1));
 
                     BlockVector3 min = mine.getMinimumPoint();
@@ -538,11 +541,8 @@ public class WorldEditMine {
         this.task = Task.syncRepeating(() -> {
             double percentage = getPercentage();
             double resetPercentage = getResetPercentage();
-           //privateMines.getLogger().info("percentage: " + percentage);
-            //privateMines.getLogger().info("reset percentage: " + resetPercentage);
             if (percentage <= resetPercentage) {
                 reset();
-                privateMines.getLogger().info("i should reset now");
             }
         }, 0L, 20L);
     }
