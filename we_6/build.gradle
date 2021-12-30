@@ -9,6 +9,6 @@ repositories {
 
 dependencies {
     compileOnly project(':compat')
-    compileOnly 'com.sk89q.worldedit:worldedit-bukkit:6.1.4-SNAPSHOT'
+//    implementation 'com.sk89q.worldedit:worldedit-bukkit:6.1.4-SNAPSHOT'
     compileOnly 'com.sk89q.worldguard:worldguard-legacy:6.1.3-SNAPSHOT'
 }

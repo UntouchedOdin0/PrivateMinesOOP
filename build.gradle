@@ -24,7 +24,9 @@ allprojects {
         maven { url = 'https://jitpack.io' }
         maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
         maven { url = "https://repo.codemc.org/repository/maven-public/" }
-        maven { url = 'https://maven.sk89q.com/repo/' }
+        maven {
+            url = "https://maven.enginehub.org/repo/"
+        }
         maven { url = 'https://mvn.intellectualsites.com/content/groups/public/' }
         maven { url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
         maven { url = 'https://repo.onarandombox.com/content/groups/public/' }
@@ -122,18 +124,3 @@ task updateJars {
     dependsOn copyTo_18Server
     dependsOn copyTo_DevServer
 }
-
-//publishing {
-//    publications {
-//        maven(MavenPublication) {
-//            groupId = 'me.untouchedodin0'
-//            artifactId = 'privatemines'
-//            version = "0.9-SNAPSHOT"
-//
-//            pom {
-//                name = 'Private Mines'
-//                description = '3.0.8-SNAPSHOT'
-//            }
-//        }
-//    }
-//}
