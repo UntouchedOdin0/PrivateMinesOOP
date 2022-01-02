@@ -200,28 +200,12 @@ public class PrivateMines extends JavaPlugin {
 
         File[] addons = addonsDirectory.listFiles();
 
-        getLogger().info("---[POLYMART]---");
-        getLogger().info("User ID: %%__USER__%%");
-        getLogger().info("User Name: %%__USERNAME__%%");
-        getLogger().info("---[POLYMART]---");
-
-
         int pluginId = 11413;
 
         int loaded = mineTypes.size();
         getLogger().info("Loaded a total of {loaded} mine types!"
                 .replace("{loaded}",
                         String.valueOf(loaded)));
-
-        inventory.forEach((string, menuConfig) -> {
-            getLogger().info("Menu Config string: " + string);
-            getLogger().info("Menu Config menuConfig: " + menuConfig);
-            getLogger().info("Menu Config name: " + menuConfig.getName());
-            getLogger().info("Menu Config lore: " + menuConfig.getLore());
-            getLogger().info("Menu Config type: " + menuConfig.getType());
-            getLogger().info("Menu Config slot: " + menuConfig.getSlot());
-            getLogger().info("Menu Config action: " + menuConfig.getAction());
-        });
 
         if (useWorldEdit) {
             files = minesDirectory.listFiles();
@@ -425,10 +409,7 @@ public class PrivateMines extends JavaPlugin {
         World world = getMineWorldManager().getMinesWorld();
         if (WorldGuardWrapper.getInstance().getRegion(world, "__global__").isPresent()) {
             globalRegion = WorldGuardWrapper.getInstance().getRegion(world, "__global__").get();
-            getLogger().info("global region: " + globalRegion);
-            getLogger().info("global region toString: " + globalRegion.toString());
             utils.setGlobalFlags(globalRegion);
-            getLogger().info("global flags: " + globalRegion.getFlags());
         } else {
             privateMines.getLogger().warning("The global region was somehow null. This should be impossible.");
         }
