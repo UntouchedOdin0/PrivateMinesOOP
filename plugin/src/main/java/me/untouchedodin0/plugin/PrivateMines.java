@@ -26,6 +26,7 @@ package me.untouchedodin0.plugin;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.google.gson.Gson;
+import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
@@ -44,6 +45,7 @@ import me.untouchedodin0.plugin.util.addons.AddonLoader;
 import me.untouchedodin0.plugin.util.placeholderapi.PrivateMinesExpansion;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
+import me.untouchedodin0.privatemines.we_6.worldedit.WorldEditMine6;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -53,6 +55,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.codemc.worldguardwrapper.WorldGuardWrapper;
 import org.codemc.worldguardwrapper.region.IWrappedRegion;
+import redempt.redlib.RedLib;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.commandmanager.ArgType;
 import redempt.redlib.commandmanager.CommandParser;
@@ -81,6 +84,7 @@ public class PrivateMines extends JavaPlugin {
     private Utils utils;
     private AddonLoader addonLoader;
     private WorldEditUtilities worldEditUtils;
+    private ConfigManager configManager6;
     private ConfigManager configManager;
     private boolean isWorldEditEnabled = false;
     private final File minesDirectory = new File("plugins/PrivateMines/mines");
@@ -168,7 +172,15 @@ public class PrivateMines extends JavaPlugin {
 
         // something in the world edit mine is breaking it...
 
-        configManager = new ConfigManager(this).register(this, WorldEditMine.class).load();
+        if (RedLib.MID_VERSION == 12) {
+            getLogger().info("loading old worldedit");
+            WorldEditMine6 worldEditMine6 = new WorldEditMine6();
+            worldEditMine6.sayHi();
+
+        } else {
+            configManager = new ConfigManager(this).register(this, WorldEditMine.class).load();
+        }
+
         blockDataManager = new BlockDataManager(
                 getDataFolder()
                         .toPath()
