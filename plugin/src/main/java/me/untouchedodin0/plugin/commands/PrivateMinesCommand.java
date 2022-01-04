@@ -36,7 +36,13 @@ import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
-import org.bukkit.*;
+import me.untouchedodin0.privatemines.we_6.worldedit.MineFactoryWE6;
+import me.untouchedodin0.privatemines.we_6.worldedit.WorldEditMine6;
+import me.untouchedodin0.privatemines.we_6.worldedit.WorldEditMineType6;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -48,7 +54,6 @@ import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.inventorygui.InventoryGUI;
 import redempt.redlib.inventorygui.ItemButton;
-import redempt.redlib.itemutils.ItemBuilder;
 import redempt.redlib.misc.Task;
 import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.MultiBlockStructure;
@@ -61,11 +66,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.UUID;
 
 public class PrivateMinesCommand {
 
     private final MineFactory mineFactory;
+    private final MineFactoryWE6 mineFactoryWE6;
     private final MineStorage mineStorage;
     private final MineWorldManager mineWorldManager;
     private final PrivateMines privateMines;
@@ -75,6 +84,7 @@ public class PrivateMinesCommand {
     public PrivateMinesCommand(PrivateMines privateMine) {
         this.privateMines = privateMine;
         this.mineFactory = privateMine.getMineFactory();
+        this.mineFactoryWE6 = privateMine.getMineFactoryWE6();
         this.mineStorage = privateMine.getMineStorage();
         this.mineWorldManager = privateMine.getMineWorldManager();
         this.utils = privateMine.getUtils();
@@ -168,9 +178,13 @@ public class PrivateMinesCommand {
             }
             commandSender.sendMessage(ChatColor.GREEN + "Giving " + target.getName() + " a private mine!");
             Location location = mineWorldManager.getNextFreeLocation();
-            if (privateMines.isWorldEditEnabled()) {
+            if (privateMines.isWorldEditEnabled() && !privateMines.isUseLegacyMineFactory()) {
                 @SuppressWarnings("unused")
                 WorldEditMine worldEditMine = mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType(), false);
+            } else if (privateMines.isWorldEditEnabled() && privateMines.isUseLegacyMineFactory()) {
+                privateMines.getLogger().info("lets use the legacy world edit to do this then....");
+                WorldEditMine6 worldEditMine6 = mineFactoryWE6.createMine(target, location,  privateMines.getDefaultWorldEdit6MineType());
+                privateMines.getLogger().info("worldedit 6 mine: " + worldEditMine6);
             }
         } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException) {
             arrayIndexOutOfBoundsException.printStackTrace();

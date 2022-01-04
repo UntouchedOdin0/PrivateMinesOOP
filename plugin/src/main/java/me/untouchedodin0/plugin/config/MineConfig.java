@@ -27,6 +27,7 @@ package me.untouchedodin0.plugin.config;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.WorldEditMineType;
+import me.untouchedodin0.privatemines.we_6.worldedit.WorldEditMineType6;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import redempt.redlib.configmanager.ConfigManager;
@@ -110,6 +111,31 @@ public class MineConfig {
             privateMines.getLogger().warning(missingFile);
         }
 
+        if (privateMines.isWorldEditEnabled() && !privateMines.isUsingOldVersion()) {
+            this.path = privateMines.getSchematicsDirectory().toPath().resolve(file);
+            File file = path.toFile();
+
+            WorldEditMineType worldEditMineType = new WorldEditMineType(privateMines, file);
+            worldEditMineType.setName(getName());
+            worldEditMineType.setMineTier(getPriority());
+            worldEditMineType.setResetTime(getResetTime());
+            worldEditMineType.setMaterials(getMaterials());
+            privateMines.addType(getName(), worldEditMineType);
+            privateMines.getLogger().info("Loaded mine type: " + worldEditMineType.getName());
+        } else if (privateMines.isWorldEditEnabled() && privateMines.isUsingOldVersion()) {
+            // using old version..... yay.... (this was a sarcastic yay btw....)
+            this.path = privateMines.getSchematicsDirectory().toPath().resolve(file);
+            File file = path.toFile();
+
+            WorldEditMineType6 worldEditMineType6 = new WorldEditMineType6(file);
+            worldEditMineType6.setName(getName());
+            worldEditMineType6.setMineTier(getPriority());
+            worldEditMineType6.setResetTime(getResetTime());
+            worldEditMineType6.setMaterials(getMaterials());
+            privateMines.addWorldEdit6MineType(getName(), worldEditMineType6);
+        }
+
+        /*
         if (privateMines.useWorldEdit()) {
             this.path = privateMines.getSchematicsDirectory().toPath().resolve(file);
             File file = path.toFile();
@@ -141,6 +167,7 @@ public class MineConfig {
 
             privateMines.addMineData(getName(), mineType);
         }
+         */
     }
 
     // a getter for the private mines instance
