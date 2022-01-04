@@ -26,10 +26,10 @@ package me.untouchedodin0.plugin;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.google.gson.Gson;
-import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
+import lombok.Getter;
 import me.untouchedodin0.plugin.commands.PrivateMinesCommand;
 import me.untouchedodin0.plugin.config.MenuConfig;
 import me.untouchedodin0.plugin.config.MineConfig;
@@ -99,6 +99,9 @@ public class PrivateMines extends JavaPlugin {
     IWrappedRegion globalRegion;
 
     private Map<Material, Double> materials = new HashMap<>();
+
+    @Getter
+    private final List<Integer> old_versions = List.of(6, 7, 8, 9, 10, 11, 12);
 
     @ConfigValue
     private String spawnPoint;
@@ -172,11 +175,13 @@ public class PrivateMines extends JavaPlugin {
 
         // something in the world edit mine is breaking it...
 
-        if (RedLib.MID_VERSION == 12) {
+        getLogger().info("old versions: " + old_versions);
+        if (old_versions.contains(RedLib.MID_VERSION)) {
             getLogger().info("loading old worldedit");
             WorldEditMine6 worldEditMine6 = new WorldEditMine6();
             worldEditMine6.sayHi();
-
+            configManager6 = new ConfigManager(this).register(this, WorldEditMine6.class).load();
+            getLogger().info("configManager6: " + configManager6);
         } else {
             configManager = new ConfigManager(this).register(this, WorldEditMine.class).load();
         }
