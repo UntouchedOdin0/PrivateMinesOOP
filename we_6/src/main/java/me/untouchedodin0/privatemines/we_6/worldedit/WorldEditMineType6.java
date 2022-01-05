@@ -1,14 +1,12 @@
 package me.untouchedodin0.privatemines.we_6.worldedit;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.Material;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-@Setter
 @Getter
 public class WorldEditMineType6 {
 
@@ -27,7 +25,27 @@ public class WorldEditMineType6 {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public File getSchematicFile() {
         return schematicFile;
+    }
+
+    public void setMineTier(int mineTier) {
+        this.mineTier = mineTier;
+    }
+
+    public void setResetTime(int resetTime) {
+        this.resetTime = resetTime;
+    }
+
+    public void setMaterial(Material material) {
+        this.material = material;
+    }
+
+    public void setMaterials(Map<Material, Double> materials) {
+        this.materials = materials;
     }
 }

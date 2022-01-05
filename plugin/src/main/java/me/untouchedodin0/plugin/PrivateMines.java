@@ -26,6 +26,7 @@ package me.untouchedodin0.plugin;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.google.gson.Gson;
+import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
@@ -109,7 +110,6 @@ public class PrivateMines extends JavaPlugin {
     @Getter
     private final List<Integer> old_versions = List.of(6, 7, 8, 9, 10, 11, 12);
 
-    @Getter
     private boolean isUsingOldVersion = false;
 
     @ConfigValue
@@ -212,8 +212,7 @@ public class PrivateMines extends JavaPlugin {
 
         if (worldEditPlugin != null) {
             worldEditUtils = WorldEditUtilities.getInstance();
-            getLogger().info("Loading worldedit v" + WorldEditPlugin.getPlugin(WorldEditPlugin.class)
-                    .getDescription().getVersion());
+            getLogger().info("Loading worldedit v" + WorldEdit.getVersion());
             if (useWorldEdit) {
                 isWorldEditEnabled = true;
             }
@@ -436,12 +435,12 @@ public class PrivateMines extends JavaPlugin {
         }
 
         World world = getMineWorldManager().getMinesWorld();
-        if (WorldGuardWrapper.getInstance().getRegion(world, "__global__").isPresent()) {
-            globalRegion = WorldGuardWrapper.getInstance().getRegion(world, "__global__").get();
-            utils.setGlobalFlags(globalRegion);
-        } else {
-            privateMines.getLogger().warning("The global region was somehow null. This should be impossible.");
-        }
+//        if (WorldGuardWrapper.getInstance().getRegion(world, "__global__").isPresent()) {
+//            globalRegion = WorldGuardWrapper.getInstance().getRegion(world, "__global__").get();
+//            utils.setGlobalFlags(globalRegion);
+//        } else {
+//            privateMines.getLogger().warning("The global region was somehow null. This should be impossible.");
+//        }
     }
 
     @Override
@@ -678,6 +677,10 @@ public class PrivateMines extends JavaPlugin {
 
     public boolean isUseLegacyMineFactory() {
         return useLegacyMineFactory;
+    }
+
+    public boolean isUsingOldVersion() {
+        return isUsingOldVersion;
     }
 
     public boolean useWorldEdit() {
