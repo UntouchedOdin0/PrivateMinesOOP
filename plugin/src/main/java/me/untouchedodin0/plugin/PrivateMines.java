@@ -26,7 +26,6 @@ package me.untouchedodin0.plugin;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.google.gson.Gson;
-import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
@@ -46,9 +45,7 @@ import me.untouchedodin0.plugin.util.addons.AddonLoader;
 import me.untouchedodin0.plugin.util.placeholderapi.PrivateMinesExpansion;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
-import me.untouchedodin0.privatemines.we_6.worldedit.MineFactoryWE6;
 import me.untouchedodin0.privatemines.we_6.worldedit.WorldEditMine6;
-import me.untouchedodin0.privatemines.we_6.worldedit.WorldEditMineType6;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -79,11 +76,8 @@ public class PrivateMines extends JavaPlugin {
     private final Map<String, MineType> mineDataMap = new HashMap<>();
     private final TreeMap<String, MineType> mineTypeTreeMap = new TreeMap<>();
     private final TreeMap<String, WorldEditMineType> worldEditMineTypeTreeMap = new TreeMap<>();
-    private final TreeMap<String, WorldEditMineType6> worldEditMineType6TreeMap = new TreeMap<>();
 
     private MineFactory mineFactory;
-    private MineFactoryWE6 mineFactoryWE6;
-
     private MineWorldManager mineWorldManager;
     private MineStorage mineStorage;
     private BlockDataManager blockDataManager;
@@ -93,7 +87,6 @@ public class PrivateMines extends JavaPlugin {
     private ConfigManager configManager6;
     private ConfigManager configManager;
     private boolean isWorldEditEnabled = false;
-    private boolean useLegacyMineFactory = false;
     private final File minesDirectory = new File("plugins/PrivateMines/mines");
     private final File schematicsDirectory = new File("plugins/PrivateMines/schematics");
     private final File addonsDirectory = new File("plugins/PrivateMines/addons");
@@ -109,8 +102,6 @@ public class PrivateMines extends JavaPlugin {
 
     @Getter
     private final List<Integer> old_versions = List.of(6, 7, 8, 9, 10, 11, 12);
-
-    private boolean isUsingOldVersion = false;
 
     @ConfigValue
     private String spawnPoint;
@@ -191,9 +182,6 @@ public class PrivateMines extends JavaPlugin {
             worldEditMine6.sayHi();
             configManager6 = new ConfigManager(this).register(this, WorldEditMine6.class).load();
             getLogger().info("configManager6: " + configManager6);
-            useLegacyMineFactory = true;
-            isUsingOldVersion = true;
-            mineFactoryWE6 = new MineFactoryWE6();
         } else {
             configManager = new ConfigManager(this).register(this, WorldEditMine.class).load();
         }
@@ -212,7 +200,8 @@ public class PrivateMines extends JavaPlugin {
 
         if (worldEditPlugin != null) {
             worldEditUtils = WorldEditUtilities.getInstance();
-            getLogger().info("Loading worldedit v" + WorldEdit.getVersion());
+            getLogger().info("Loading worldedit v" + WorldEditPlugin.getPlugin(WorldEditPlugin.class)
+                    .getDescription().getVersion());
             if (useWorldEdit) {
                 isWorldEditEnabled = true;
             }
@@ -435,12 +424,12 @@ public class PrivateMines extends JavaPlugin {
         }
 
         World world = getMineWorldManager().getMinesWorld();
-//        if (WorldGuardWrapper.getInstance().getRegion(world, "__global__").isPresent()) {
-//            globalRegion = WorldGuardWrapper.getInstance().getRegion(world, "__global__").get();
-//            utils.setGlobalFlags(globalRegion);
-//        } else {
-//            privateMines.getLogger().warning("The global region was somehow null. This should be impossible.");
-//        }
+        if (WorldGuardWrapper.getInstance().getRegion(world, "__global__").isPresent()) {
+            globalRegion = WorldGuardWrapper.getInstance().getRegion(world, "__global__").get();
+            utils.setGlobalFlags(globalRegion);
+        } else {
+            privateMines.getLogger().warning("The global region was somehow null. This should be impossible.");
+        }
     }
 
     @Override
@@ -467,11 +456,6 @@ public class PrivateMines extends JavaPlugin {
 
     public void addType(String name, WorldEditMineType worldEditMineType) {
         worldEditMineTypeTreeMap.put(name, worldEditMineType);
-    }
-
-    // this sadly exists...
-    public void addWorldEdit6MineType(String name, WorldEditMineType6 worldEditMineType6) {
-        worldEditMineType6TreeMap.put(name, worldEditMineType6);
     }
 
     /*
@@ -513,18 +497,6 @@ public class PrivateMines extends JavaPlugin {
             return null;
         }
         return worldEditMineTypeTreeMap.firstEntry().getValue();
-    }
-
-    public WorldEditMineType6 getDefaultWorldEdit6MineType() {
-        if (worldEditMineType6TreeMap.isEmpty()) {
-            Bukkit.getLogger().info("No default world edit mine type was found!");
-            Bukkit.getLogger().info("Create a mine type in the mineTypes");
-            Bukkit.getLogger().info("section of the config.yml");
-            Bukkit.getLogger().info("Please ask in the discord server" +
-                                            " if you need help");
-            return null;
-        }
-        return worldEditMineType6TreeMap.firstEntry().getValue();
     }
 
     /*
@@ -634,22 +606,12 @@ public class PrivateMines extends JavaPlugin {
     }
 
     /*
-        Get the mine factory for WE 6.
-     */
-
-    public MineFactoryWE6 getMineFactoryWE6() {
-        return mineFactoryWE6;
-    }
-
-    /*
-        Gets the Mine Factory for WE7.
+        Gets the Mine Factory.
      */
 
     public MineFactory getMineFactory() {
         return mineFactory;
     }
-
-
 
     /*
         Gets the mine storage
@@ -673,14 +635,6 @@ public class PrivateMines extends JavaPlugin {
 
     public boolean isWorldEditEnabled() {
         return isWorldEditEnabled;
-    }
-
-    public boolean isUseLegacyMineFactory() {
-        return useLegacyMineFactory;
-    }
-
-    public boolean isUsingOldVersion() {
-        return isUsingOldVersion;
     }
 
     public boolean useWorldEdit() {
