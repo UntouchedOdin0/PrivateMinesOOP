@@ -166,7 +166,6 @@ public class WorldEditUtils extends WorldEditUtilities {
         }
     }
 
-    // This method pastes the schematic for world edit 7.
 
     @Override
     public Region pasteSchematic(Location location, File file) {

@@ -29,7 +29,6 @@ import com.google.gson.Gson;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
-import lombok.Getter;
 import me.untouchedodin0.plugin.commands.PrivateMinesCommand;
 import me.untouchedodin0.plugin.config.MenuConfig;
 import me.untouchedodin0.plugin.config.MineConfig;
@@ -45,7 +44,6 @@ import me.untouchedodin0.plugin.util.addons.AddonLoader;
 import me.untouchedodin0.plugin.util.placeholderapi.PrivateMinesExpansion;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
-import me.untouchedodin0.privatemines.we_6.worldedit.WorldEditMine6;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -55,7 +53,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.codemc.worldguardwrapper.WorldGuardWrapper;
 import org.codemc.worldguardwrapper.region.IWrappedRegion;
-import redempt.redlib.RedLib;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.commandmanager.ArgType;
 import redempt.redlib.commandmanager.CommandParser;
@@ -84,7 +81,6 @@ public class PrivateMines extends JavaPlugin {
     private Utils utils;
     private AddonLoader addonLoader;
     private WorldEditUtilities worldEditUtils;
-    private ConfigManager configManager6;
     private ConfigManager configManager;
     private boolean isWorldEditEnabled = false;
     private final File minesDirectory = new File("plugins/PrivateMines/mines");
@@ -99,9 +95,6 @@ public class PrivateMines extends JavaPlugin {
     IWrappedRegion globalRegion;
 
     private Map<Material, Double> materials = new HashMap<>();
-
-    @Getter
-    private final List<Integer> old_versions = List.of(6, 7, 8, 9, 10, 11, 12);
 
     @ConfigValue
     private String spawnPoint;
@@ -175,17 +168,7 @@ public class PrivateMines extends JavaPlugin {
 
         // something in the world edit mine is breaking it...
 
-        getLogger().info("old versions: " + old_versions);
-        if (old_versions.contains(RedLib.MID_VERSION)) {
-            getLogger().info("loading old worldedit");
-            WorldEditMine6 worldEditMine6 = new WorldEditMine6();
-            worldEditMine6.sayHi();
-            configManager6 = new ConfigManager(this).register(this, WorldEditMine6.class).load();
-            getLogger().info("configManager6: " + configManager6);
-        } else {
-            configManager = new ConfigManager(this).register(this, WorldEditMine.class).load();
-        }
-
+        configManager = new ConfigManager(this).register(this, WorldEditMine.class).load();
         blockDataManager = new BlockDataManager(
                 getDataFolder()
                         .toPath()
