@@ -115,6 +115,7 @@ public class WorldEditUtils extends WorldEditUtilities {
             cuboidClipboard = schematicFormat.load(file);
             cuboidClipboard.paste(editSession, BukkitUtil.toVector(location), true);
             editSession.flushQueue();
+            Bukkit.broadcastMessage("pasted at " + location);
             return (Region) cuboidClipboard;
         } catch (IOException | DataException | MaxChangedBlocksException e) {
             e.printStackTrace();
