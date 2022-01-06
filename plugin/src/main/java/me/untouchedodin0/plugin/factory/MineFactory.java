@@ -33,6 +33,7 @@ import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.world.block.BlockType;
 import com.sk89q.worldedit.world.block.BlockTypes;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.mines.Mine;
@@ -59,14 +60,20 @@ import java.io.*;
 import java.util.*;
 
 public class MineFactory {
-
     private final boolean debugMode;
+
     PrivateMines privateMines;
+
     Utils utils;
+
     MineStorage mineStorage;
+
     MineFactory mineFactory;
+
     MineType defaultMineType;
+
     BlockDataManager blockDataManager;
+
     Location spawnLocation;
 
     public MineFactory(PrivateMines privateMines, BlockDataManager blockDataManager) {
@@ -79,52 +86,24 @@ public class MineFactory {
         this.debugMode = privateMines.isDebugMode();
     }
 
-
-    @SuppressWarnings("unused")
     public Mine createMine(Player player, Location location) {
-        if (defaultMineType == null) {
-            privateMines.getLogger().warning("Failed to create mine due to defaultMineData being null");
-        }
-
-        final WorldGuardWrapper worldGuardWrapper = WorldGuardWrapper.getInstance();
-
+        if (this.defaultMineType == null)
+            this.privateMines.getLogger().warning("Failed to create mine due to defaultMineData being null");
+        WorldGuardWrapper worldGuardWrapper = WorldGuardWrapper.getInstance();
         Block block = location.getBlock();
         String userUUID = player.getUniqueId().toString();
-        Mine mine = new Mine(privateMines);
+        Mine mine = new Mine(this.privateMines);
         mine.setMineOwner(player.getUniqueId());
         mine.setMineLocation(location);
-        mine.setMineType(defaultMineType);
-        mine.setWeightedRandom(defaultMineType.getWeightedRandom());
-//        mine.build();
-
-        mineStorage.addMine(player.getUniqueId(), mine);
-
+        mine.setMineType(this.defaultMineType);
+        mine.setWeightedRandom(this.defaultMineType.getWeightedRandom());
+        this.mineStorage.addMine(player.getUniqueId(), mine);
         DataBlock dataBlock = getDataBlock(block, player, location, mine);
-
-        String regionName = String.format("mine-%s", userUUID);
-
-//        IWrappedRegion mineRegion = WorldGuardWrapper.getInstance()
-//                .addCuboidRegion(regionName, mine.getCorner1(), mine.getCorner2())
-//                .orElseThrow(() -> new RuntimeException("Could not create the mine WorldGuard region!"));
-//        mineRegion.getOwners().addPlayer(player.getUniqueId());
-
+        String regionName = String.format("mine-%s", new Object[]{userUUID});
         MineType mineType = mine.getMineType();
-
         List<String> allowFlags = mineType.getAllowFlags();
         List<String> denyFlags = mineType.getDenyFlags();
-
-//        Stream.of(worldGuardWrapper.getFlag("block-place", WrappedState.class),
-//                        worldGuardWrapper.getFlag("mob-spawning", WrappedState.class)
-//                ).filter(Optional::isPresent)
-//                .map(Optional::get)
-//                .forEach(flag -> mineRegion.setFlag(flag, WrappedState.DENY));
-//
-//        Stream.of(worldGuardWrapper.getFlag("block-break", WrappedState.class)
-//                ).filter(Optional::isPresent)
-//                .map(Optional::get)
-//                .forEach(wrappedStateIWrappedFlag -> mineRegion.setFlag(wrappedStateIWrappedFlag, WrappedState.ALLOW));
-
-        blockDataManager.save();
+        this.blockDataManager.save();
         mine.reset();
         mine.startAutoResetTask();
         return mine;
@@ -133,10 +112,9 @@ public class MineFactory {
     private DataBlock getDataBlock(Block block, Player player, Location location, Mine mine) {
         UUID ownerUUID = player.getUniqueId();
         String ownerUUIDString = ownerUUID.toString();
-
-        DataBlock dataBlock = blockDataManager.getDataBlock(block);
+        DataBlock dataBlock = this.blockDataManager.getDataBlock(block);
         dataBlock.set("owner", ownerUUIDString);
-        dataBlock.set("type", defaultMineType.getName());
+        dataBlock.set("type", this.defaultMineType.getName());
         dataBlock.set("location", LocationUtils.toString(location));
         dataBlock.set("spawnLocation", LocationUtils.toString(mine.getSpawnLocation()));
         dataBlock.set("npcLocation", LocationUtils.toString(mine.getNpcLocation()));
@@ -146,174 +124,124 @@ public class MineFactory {
         return dataBlock;
     }
 
-    private DataBlock getWorldEditDataBlock(Block block,
-                                            Player player,
-                                            Location location,
-                                            WorldEditMine worldEditMine) {
+    private DataBlock getWorldEditDataBlock(Block block, Player player, Location location, WorldEditMine worldEditMine) {
         UUID ownerUUID = player.getUniqueId();
         String ownerUUIDString = ownerUUID.toString();
-        String worldName = Objects.requireNonNull(location.getWorld()).getName();
+        String worldName = ((World) Objects.<World>requireNonNull(location.getWorld())).getName();
         WorldEditMineType worldEditMineType = worldEditMine.getWorldEditMineType();
-
-        DataBlock dataBlock = blockDataManager.getDataBlock(block);
-
+        DataBlock dataBlock = this.blockDataManager.getDataBlock(block);
         int corner1X = worldEditMine.getCuboidRegion().getMinimumPoint().getBlockX();
         int corner1Y = worldEditMine.getCuboidRegion().getMinimumPoint().getBlockY();
         int corner1Z = worldEditMine.getCuboidRegion().getMinimumPoint().getBlockZ();
-
         int corner2X = worldEditMine.getCuboidRegion().getMaximumPoint().getBlockX();
         int corner2Y = worldEditMine.getCuboidRegion().getMaximumPoint().getBlockY();
         int corner2Z = worldEditMine.getCuboidRegion().getMaximumPoint().getBlockZ();
-
         BlockVector3 minimumPoint = worldEditMine.getRegion().getMinimumPoint();
         BlockVector3 maximumPoint = worldEditMine.getRegion().getMaximumPoint();
-
         int spawnX = location.getBlockX();
         int spawnY = location.getBlockY();
         int spawnZ = location.getBlockZ();
-
         dataBlock.set("owner", ownerUUIDString);
         dataBlock.set("type", worldEditMineType.getName());
         dataBlock.set("corner1X", Integer.toString(corner1X));
         dataBlock.set("corner1Y", Integer.toString(corner1Y));
         dataBlock.set("corner1Z", Integer.toString(corner1Z));
-
         dataBlock.set("corner2X", Integer.toString(corner2X));
         dataBlock.set("corner2Y", Integer.toString(corner2Y));
         dataBlock.set("corner2Z", Integer.toString(corner2Z));
-
         dataBlock.set("spawnX", Integer.toString(spawnX));
         dataBlock.set("spawnY", Integer.toString(spawnY));
         dataBlock.set("spawnZ", Integer.toString(spawnZ));
-
-        dataBlock.set("minX", minimumPoint.getBlockX());
-        dataBlock.set("minY", minimumPoint.getBlockY());
-        dataBlock.set("minZ", minimumPoint.getBlockZ());
-
-        dataBlock.set("maxX", maximumPoint.getBlockX());
-        dataBlock.set("maxY", maximumPoint.getBlockY());
-        dataBlock.set("maxZ", maximumPoint.getBlockZ());
-
+        dataBlock.set("minX", Integer.valueOf(minimumPoint.getBlockX()));
+        dataBlock.set("minY", Integer.valueOf(minimumPoint.getBlockY()));
+        dataBlock.set("minZ", Integer.valueOf(minimumPoint.getBlockZ()));
+        dataBlock.set("maxX", Integer.valueOf(maximumPoint.getBlockX()));
+        dataBlock.set("maxY", Integer.valueOf(maximumPoint.getBlockY()));
+        dataBlock.set("maxZ", Integer.valueOf(maximumPoint.getBlockZ()));
         dataBlock.set("world", location.getWorld());
         dataBlock.set("worldName", worldName);
         dataBlock.set("location", LocationUtils.toString(location));
-        dataBlock.set("spawnLocation", LocationUtils.toString(spawnLocation));
-
+        dataBlock.set("spawnLocation", LocationUtils.toString(this.spawnLocation));
         return dataBlock;
     }
 
-    /**
-     * @param player   - The target player to be given a mine
-     * @param location - The spigot world location where to create the mine
-     * @param mineType - The mine data such as the MultiBlockStructure and the Materials
-     */
-
     public Mine createMine(Player player, Location location, MineType mineType) {
         if (mineType == null) {
-            privateMines.getLogger().warning("Failed to create mine due to the minetype being null");
+            this.privateMines.getLogger().warning("Failed to create mine due to the minetype being null");
         } else {
-
-            Utils utils = privateMines.getUtils();
-            Mine mine = new Mine(privateMines);
+            Utils utils = this.privateMines.getUtils();
+            Mine mine = new Mine(this.privateMines);
             mine.setMineOwner(player.getUniqueId());
             mine.setMineLocation(location);
             mine.setMineType(mineType);
             mine.setWeightedRandom(mineType.getWeightedRandom());
-//            mine.build();
-
             Location corner1 = utils.getRelative(mine.getStructure(), mineType.getCorner1());
             Location corner2 = utils.getRelative(mine.getStructure(), mineType.getCorner2());
-
             Location spawnLocation = utils.getRelative(mine.getStructure(), mineType.getSpawnLocation());
             Location npcLocation = utils.getRelative(mine.getStructure(), mineType.getNpcLocation());
-
             mine.setCorner1(corner1);
             mine.setCorner2(corner2);
             mine.setSpawnLocation(spawnLocation);
             mine.setNpcLocation(npcLocation);
-
-            mineStorage.addMine(player.getUniqueId(), mine);
+            this.mineStorage.addMine(player.getUniqueId(), mine);
             Block block = location.getBlock();
             DataBlock dataBlock = getDataBlock(block, player, location, mine);
-            blockDataManager.save();
+            this.blockDataManager.save();
             mine.reset();
             mine.startAutoResetTask();
-
-            if (debugMode) {
-                privateMines.getLogger().info("createMine block: " + block);
-                privateMines.getLogger().info("createMine dataBlock: " + dataBlock);
-                privateMines.getLogger().info("createMine dataBlock getData: " + dataBlock.getData());
+            if (this.debugMode) {
+                this.privateMines.getLogger().info("createMine block: " + block);
+                this.privateMines.getLogger().info("createMine dataBlock: " + dataBlock);
+                this.privateMines.getLogger().info("createMine dataBlock getData: " + dataBlock.getData());
             }
             return mine;
         }
         return null;
     }
 
-    //todo Create upc shops automatically with the format "mine-uuid" and set the prices from a pre-configured map in the config.yml
-
     public WorldEditMine createMine(Player player, Location location, WorldEditMineType worldEditMineType, boolean replaceOld) {
-        Clipboard clipboard;
-        WorldEditUtilities worldEditUtilities;
-        Utils utils = new Utils(privateMines);
-        World world;
+        Utils utils = new Utils(this.privateMines);
         UUID uuid = player.getUniqueId();
         List<Location> corners = new ArrayList<>();
         String recievedMine = "recievedMine";
         String toSend = Messages.msg(recievedMine);
-
-        final var fillType = BlockTypes.DIAMOND_BLOCK;
-        final var block = location.getBlock();
-
+        BlockType fillType = BlockTypes.DIAMOND_BLOCK;
+        Block block = location.getBlock();
         if (worldEditMineType == null) {
-            privateMines.getLogger().warning("Failed to create mine due to the worldedit mine type being null");
+            this.privateMines.getLogger().warning("Failed to create mine due to the worldedit mine type being null");
+        } else if (fillType == null) {
+            this.privateMines.getLogger().warning("Failed to fill mine due to fillType being null");
         } else {
-            if (fillType == null) {
-                privateMines.getLogger().warning("Failed to fill mine due to fillType being null");
-            } else {
-
-                File file = worldEditMineType.getSchematicFile();
-                PasteFactory pasteFactory = new PasteFactory(privateMines);
-                WorldEditMine worldEditMine = new WorldEditMine(privateMines);
-                WorldEditMineData worldEditMineData = new WorldEditMineData();
-
-                ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(file);
-
-                if (!file.exists()) {
-                    privateMines.getLogger().warning("File doesn't exist, can't create mine!");
-                    return null;
-                }
-
-                if (clipboardFormat != null) {
-                    try (ClipboardReader clipboardReader = clipboardFormat.getReader(new FileInputStream(file))) {
-                        clipboard = clipboardReader.read();
+            File file = worldEditMineType.getSchematicFile();
+            PasteFactory pasteFactory = new PasteFactory(this.privateMines);
+            WorldEditMine worldEditMine = new WorldEditMine(this.privateMines);
+            WorldEditMineData worldEditMineData = new WorldEditMineData();
+            ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(file);
+            if (!file.exists()) {
+                this.privateMines.getLogger().warning("File doesn't exist, can't create mine!");
+                return null;
+            }
+            if (clipboardFormat != null)
+                try {
+                    ClipboardReader clipboardReader = clipboardFormat.getReader(new FileInputStream(file));
+                    try {
+                        Clipboard clipboard = clipboardReader.read();
                         if (clipboard == null) {
-                            privateMines.getLogger().warning("Clipboard was null");
-                            return null;
+                            this.privateMines.getLogger().warning("Clipboard was null");
+                            WorldEditMine worldEditMine1 = null;
+                            if (clipboardReader != null)
+                                clipboardReader.close();
+                            return worldEditMine1;
                         }
-
-                        world = location.getWorld();
-                        worldEditUtilities = privateMines.getWorldEditUtils();
-
-                        // Pastes the schematic and loops the region finding blocks
-
-                        privateMines.getLogger().info("location: " + location);
-
+                        World world = location.getWorld();
+                        WorldEditUtilities worldEditUtilities = this.privateMines.getWorldEditUtils();
+                        this.privateMines.getLogger().info("location: " + location);
                         Region region = worldEditUtilities.pasteSchematic(location, file);
-                        privateMines.getLogger().info("region " + region);
-
-//                        Clipboard clipboard1 = pasteFactory.pasteSchematic(location, file);
-
-//                        privateMines.getLogger().info(clipboard1.getRegion().toString());
-//                        Region pastedRegion = clipboard1.getRegion();
-//
-//                        privateMines.getLogger().info("pastedRegion: " + pastedRegion);
-
-//                        Region region = pasteFactory.paste(clipboard, location);
+                        this.privateMines.getLogger().info("region " + region);
                         region.iterator().forEachRemaining(blockVector3 -> {
                             if (world != null) {
                                 Location bukkitLocation = utils.blockVector3toBukkit(world, blockVector3);
                                 Material bukkitMaterial = bukkitLocation.getBlock().getType();
-
                                 if (bukkitMaterial == Material.CHEST) {
                                     this.spawnLocation = utils.blockVector3toBukkit(world, blockVector3);
                                 } else if (bukkitMaterial == Material.POWERED_RAIL) {
@@ -321,65 +249,39 @@ public class MineFactory {
                                 }
                             }
                         });
-
-                        // Gets the corner locations
                         Location corner1 = corners.get(0);
                         Location corner2 = corners.get(1);
-
-                        // Makes the block vector 3 corner locations
-
-                        BlockVector3 blockVectorCorner1 = BlockVector3.at(
-                                corner1.getBlockX(),
-                                corner1.getBlockY(),
-                                corner1.getBlockZ());
-
-                        BlockVector3 blockVectorCorner2 = BlockVector3.at(
-                                corner2.getBlockX(),
-                                corner2.getBlockY(),
-                                corner2.getBlockZ());
-
-                        // Makes the cuboid region to fill with blocks
-
+                        BlockVector3 blockVectorCorner1 = BlockVector3.at(corner1.getBlockX(), corner1.getBlockY(), corner1.getBlockZ());
+                        BlockVector3 blockVectorCorner2 = BlockVector3.at(corner2.getBlockX(), corner2.getBlockY(), corner2.getBlockZ());
                         CuboidRegion cuboidRegion = new CuboidRegion(blockVectorCorner1, blockVectorCorner2);
-
-                        spawnLocation.getBlock().setType(Material.AIR, false);
-
-                        // Set the cuboid region and mine and then reset it and then teleport the player
-
+                        this.spawnLocation.getBlock().setType(Material.AIR, false);
                         worldEditMine.setCuboidRegion(cuboidRegion);
                         worldEditMine.setRegion(region);
                         worldEditMine.setLocation(location);
-                        worldEditMine.setSpawnLocation(spawnLocation);
-                        worldEditMine.setWorld(spawnLocation.getWorld());
+                        worldEditMine.setSpawnLocation(this.spawnLocation);
+                        worldEditMine.setWorld(this.spawnLocation.getWorld());
                         worldEditMine.setMaterials(worldEditMineType.getMaterials());
                         worldEditMine.setWorldEditMineType(worldEditMineType);
                         worldEditMine.setMineOwner(player.getUniqueId());
-
                         worldEditMineData.setMineOwner(uuid);
-                        worldEditMineData.setSpawnX(spawnLocation.getBlockX());
-                        worldEditMineData.setSpawnY(spawnLocation.getBlockY());
-                        worldEditMineData.setSpawnZ(spawnLocation.getBlockZ());
-
+                        worldEditMineData.setSpawnX(this.spawnLocation.getBlockX());
+                        worldEditMineData.setSpawnY(this.spawnLocation.getBlockY());
+                        worldEditMineData.setSpawnZ(this.spawnLocation.getBlockZ());
                         worldEditMineData.setMinX(corner2.getBlockX());
                         worldEditMineData.setMinY(corner2.getBlockY());
                         worldEditMineData.setMinZ(corner2.getBlockZ());
-
                         worldEditMineData.setMaxX(corner1.getBlockX());
                         worldEditMineData.setMaxY(corner1.getBlockY());
                         worldEditMineData.setMaxZ(corner1.getBlockZ());
-
                         worldEditMineData.setRegionMinX(region.getMinimumPoint().getBlockX());
                         worldEditMineData.setRegionMinY(region.getMinimumPoint().getBlockY());
                         worldEditMineData.setRegionMinZ(region.getMinimumPoint().getBlockZ());
-
                         worldEditMineData.setRegionMaxX(region.getMaximumPoint().getBlockX());
                         worldEditMineData.setRegionMaxY(region.getMaximumPoint().getBlockY());
                         worldEditMineData.setRegionMaxZ(region.getMaximumPoint().getBlockZ());
 
-                        if (world != null) {
+                        if (world != null)
                             worldEditMineData.setWorldName(world.getName());
-                        }
-
                         if (worldEditMineType.getMaterial() != null) {
                             worldEditMineData.setMaterial(worldEditMineType.getMaterial().toString());
                         }
@@ -389,49 +291,43 @@ public class MineFactory {
                         }
 
                         worldEditMineData.setMaterials(worldEditMineType.getMaterials());
-//                        worldEditMineData.setCuboidRegion(cuboidRegion);
-
-                        File minesDirectory = privateMines.getMinesDirectory();
-
+                        File minesDirectory = this.privateMines.getMinesDirectory();
                         GsonBuilder gsonBuilder = new GsonBuilder();
                         Gson gson = gsonBuilder.create();
-                        String fileName = player.getUniqueId() + ".json";
-
+                        String fileName = "" + player.getUniqueId() + ".json";
                         File jsonFile = new File(minesDirectory, fileName);
-
                         Writer fileWriter = new FileWriter(jsonFile);
                         fileWriter.write(gson.toJson(worldEditMineData));
                         fileWriter.close();
-
                         DataBlock dataBlock = getWorldEditDataBlock(block, player, location, worldEditMine);
-
                         worldEditMine.setWorldEditMineData(worldEditMineData);
                         worldEditMine.setDataBlock(dataBlock);
                         worldEditMine.reset();
                         worldEditMine.startResetTask();
-
                         if (replaceOld) {
-                            privateMines.getMineStorage().replaceMine(uuid, worldEditMine);
-                            player.teleport(spawnLocation);
+                            this.privateMines.getMineStorage().replaceMine(uuid, worldEditMine);
+                            player.teleport(this.spawnLocation);
                         } else {
-                            privateMines.getMineStorage().addWorldEditMine(uuid, worldEditMine);
-                            // Tell the player it's been created and teleport them
+                            this.privateMines.getMineStorage().addWorldEditMine(uuid, worldEditMine);
                             player.sendMessage(toSend);
-                            player.teleport(spawnLocation);
+                            player.teleport(this.spawnLocation);
                         }
-
                         IWrappedRegion iWrappedRegion = utils.createWorldGuardRegion(player, world, cuboidRegion);
                         worldEditMine.setIWrappedRegion(iWrappedRegion);
                         utils.setMineFlags(worldEditMine);
-//                        utils.setMineFlags(java.util.Optional.ofNullable(iWrappedRegion));
+                        try {
+                            clipboardReader.close();
+                        } catch (Throwable throwable) {
+                            throwable.printStackTrace();
+                        }
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            }
+            return null;
         }
         return null;
     }
 }
-
-
