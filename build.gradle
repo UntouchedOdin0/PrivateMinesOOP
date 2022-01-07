@@ -124,3 +124,31 @@ task updateJars {
     dependsOn copyTo_18Server
     dependsOn copyTo_DevServer
 }
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+}
+
+// Publishes the code to mavenLocal
+
+publishing {
+    repositories {
+        maven {
+            def releasesRepoUrl = "https://repo.bristermitten.me/repository/maven-releases"
+            def snapshotsRepoUrl = "https://repo.bristermitten.me/repository/maven-snapshots"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+//            url = "https://repo.bristermitten.me/repository/maven-releases"
+            credentials {
+                username = System.getenv('MAVEN_USER')
+                password = System.getenv('MAVEN_PASSWORD')
+            }
+        }
+    }
+    publications {
+        mavenJava(MavenPublication) {
+//            from components.java
+            artifact sourceJar
+        }
+    }
+}
