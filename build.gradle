@@ -57,6 +57,7 @@ allprojects {
 subprojects {
     apply plugin: 'java-library'
     apply plugin: 'com.github.johnrengelman.shadow'
+    apply plugin: 'maven-publish'
 
     dependencies {
         compileOnly 'org.spigotmc:spigot-api:1.18-R0.1-SNAPSHOT'
@@ -74,6 +75,30 @@ subprojects {
 
     shadowJar {
         relocate 'org.codemc.worldguardwrapper', 'me.untouchedodin0.privatemines.worldguardwrapper'
+    }
+
+    publishing {
+        repositories {
+            maven {
+                def releasesRepoUrl = "https://repo.bristermitten.me/repository/maven-releases"
+                def snapshotsRepoUrl = "https://repo.bristermitten.me/repository/maven-snapshots"
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+                credentials {
+                    username = System.getenv('MAVEN_USER')
+                    password = System.getenv('MAVEN_PASSWORD')
+                }
+            }
+        }
+        publications {
+//        shadow(MavenPublication) {
+//            publication -> project.shadow.component(publication)
+//        }
+            mavenJava(MavenPublication) {
+                from components.java
+//                artifact sourceJar
+            }
+        }
     }
 }
 
@@ -131,22 +156,3 @@ task sourceJar(type: Jar) {
 
 // Publishes the code to mavenLocal
 
-publishing {
-    repositories {
-        maven {
-            def releasesRepoUrl = "https://repo.bristermitten.me/repository/maven-releases"
-            def snapshotsRepoUrl = "https://repo.bristermitten.me/repository/maven-snapshots"
-            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-
-            credentials {
-                username = System.getenv('MAVEN_USER')
-                password = System.getenv('MAVEN_PASSWORD')
-            }
-        }
-    }
-    publications {
-        shadow(MavenPublication) {
-            publication -> project.shadow.component(publication)
-        }
-    }
-}
