@@ -131,6 +131,11 @@ task sourceJar(type: Jar) {
 
 // Publishes the code to mavenLocal
 
+/*
+        group 'me.untouchedodin0.privatemines'
+    version '3.0.8-SNAPSHOT'
+ */
+
 publishing {
     repositories {
         maven {
@@ -145,8 +150,8 @@ publishing {
         }
     }
     publications {
-        mavenJava(MavenPublication) {
-            artifact sourceJar
+        shadow(MavenPublication) {
+            publication -> project.shadow.component(publication)
         }
     }
 }
