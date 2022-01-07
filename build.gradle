@@ -138,7 +138,6 @@ publishing {
             def snapshotsRepoUrl = "https://repo.bristermitten.me/repository/maven-snapshots"
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
 
-//            url = "https://repo.bristermitten.me/repository/maven-releases"
             credentials {
                 username = System.getenv('MAVEN_USER')
                 password = System.getenv('MAVEN_PASSWORD')
@@ -147,7 +146,6 @@ publishing {
     }
     publications {
         mavenJava(MavenPublication) {
-//            from components.java
             artifact sourceJar
         }
     }
