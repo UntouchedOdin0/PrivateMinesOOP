@@ -4,6 +4,5 @@ version: 3.0.8
 api-version: 1.13
 
 depend:
-  - WorldGuard
-softdepend:
   - WorldEdit
+  - WorldGuard
