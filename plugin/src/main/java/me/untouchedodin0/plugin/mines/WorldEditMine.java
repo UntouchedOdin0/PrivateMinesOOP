@@ -94,6 +94,7 @@ public class WorldEditMine {
     private WorldEditMineData worldEditMineData;
     private MineFactory mineFactory;
     private Task task;
+    private double tax = 5;
 
     public WorldEditMine(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -549,6 +550,14 @@ public class WorldEditMine {
 
     public Task getTask() {
         return task;
+    }
+
+    public double getTax() {
+        return tax;
+    }
+
+    public void setTax(double tax) {
+        this.tax = tax;
     }
 }
 

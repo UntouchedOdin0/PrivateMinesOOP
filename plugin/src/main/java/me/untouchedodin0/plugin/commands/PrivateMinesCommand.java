@@ -48,6 +48,7 @@ import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.inventorygui.InventoryGUI;
 import redempt.redlib.inventorygui.ItemButton;
+import redempt.redlib.itemutils.ItemBuilder;
 import redempt.redlib.misc.Task;
 import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.MultiBlockStructure;
@@ -502,6 +503,36 @@ public class PrivateMinesCommand {
         target.sendMessage(replacedYouHaveBeenSet);
         worldEditMine.setWorldEditMineData(worldEditMineData);
         privateMines.getMineStorage().replaceMine(uuid, worldEditMine);
+    }
+
+    @CommandHook("tax")
+    public void tax(Player player, Double tax) {
+        UUID uuid = player.getUniqueId();
+        player.sendMessage("Setting your tax to " + tax);
+        if (!mineStorage.hasWorldEditMine(uuid)) {
+            player.sendMessage("You can't set tax as you don't own a mine!");
+        }
+        WorldEditMine worldEditMine = mineStorage.getWorldEditMine(uuid);
+        player.sendMessage("current tax: " + worldEditMine.getTax());
+        worldEditMine.setTax(tax);
+        mineStorage.replaceMine(uuid, worldEditMine);
+        player.sendMessage("new tax: " + worldEditMine.getTax());
+    }
+
+    @CommandHook("list")
+    public void list(Player player) {
+        player.sendMessage("" + mineStorage);
+        player.sendMessage("" + mineStorage.getWorldEditMinesCount());
+        InventoryGUI inventoryGUI = new InventoryGUI(Bukkit.createInventory(null, 27, "Public Mines"));
+
+        mineStorage.getWorldEditMines().forEach((uuid, worldEditMine) -> {
+            ItemButton itemButton = ItemButton.create(new ItemBuilder(Material.EMERALD_BLOCK).setName("Click me"), inventoryClickEvent -> {
+               Player clickPlayer = (Player) inventoryClickEvent.getWhoClicked();
+               clickPlayer.sendMessage("howdy " + this);
+            });
+            player.sendMessage(String.valueOf(worldEditMine.getTax()));
+        });
+        inventoryGUI.open(player);
     }
 
     @CommandHook("reload")

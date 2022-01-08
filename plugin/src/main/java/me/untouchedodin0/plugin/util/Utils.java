@@ -55,6 +55,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.temporal.ValueRange;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
@@ -393,5 +394,10 @@ public class Utils {
 
     public String convertPAPI(Player player, String message) {
         return PlaceholderAPI.setPlaceholders(player, message);
+    }
+
+    public boolean isInRange(double value) {
+        ValueRange valueRange = ValueRange.of(0, 100);
+        return valueRange.isValidValue((long) value);
     }
 }
