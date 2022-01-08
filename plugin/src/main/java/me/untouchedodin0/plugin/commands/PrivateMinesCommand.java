@@ -48,7 +48,6 @@ import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.inventorygui.InventoryGUI;
 import redempt.redlib.inventorygui.ItemButton;
-import redempt.redlib.itemutils.ItemBuilder;
 import redempt.redlib.misc.Task;
 import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.MultiBlockStructure;
@@ -118,40 +117,6 @@ public class PrivateMinesCommand {
         });
 
         gui.open(player);
-
-//        menuConfig.forEach((s, c) -> {
-//
-//            ItemButton button = ItemButton.create(new ItemBuilder(Material.EMERALD_BLOCK).setName("Click Me"), inventoryClickEvent -> {
-//                HumanEntity humanEntity = inventoryClickEvent.getWhoClicked();
-//                if (!(humanEntity instanceof Player)) return; // makes sure the entity who clicked is a player idk how something else could click it
-//                String action = c.getAction();
-//
-//
-//                switch (action) {
-//                    case "teleporttomine":
-//                        player.sendMessage("switch case teleport to mine!!! yay!!!?");
-//                    case "reset":
-//                        player.sendMessage("switch case reset mine.... yay?");
-//                    case "lock":
-//                        player.sendMessage("locking pmine lol");
-//                    case "unlock":
-//                        player.sendMessage("unlocking pmine");
-//                    case "whitelistedplayers":
-//                        player.sendMessage("opening whitelisted players gui");
-//                    case "publicmines":
-//                        player.sendMessage("lets see who has their mine open");
-//                }
-//
-////                privateMines.getLogger().info("item: " + c.getItem());
-////                privateMines.getLogger().info("lore: " + c.getLore());
-////                privateMines.getLogger().info("type: " + c.getType());
-////                privateMines.getLogger().info("slot: " + c.getSlot());
-//                privateMines.getLogger().info("action: " + c.getAction());
-//            });
-//
-//            player.sendMessage("button: " + button);
-//            gui.addButton(c.getSlot(), button);
-//        });
         //todo https://github.com/Redempt/RedLib/wiki/InventoryGUI
     }
 
