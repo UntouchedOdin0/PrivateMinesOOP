@@ -247,7 +247,6 @@ public class PrivateMinesCommand {
         }
     }
 
-    //todo check if this is still working i got a feeling its not
     @CommandHook("upgrade")
     public void upgrade(CommandSender commandSender, Player target) {
         String targetDoesNotOwnMine = Messages.msg("targetDoesNotOwnMine");
