@@ -133,6 +133,7 @@ public class PrivateMinesCommand {
             commandSender.sendMessage(ChatColor.GREEN + "Giving " + target.getName() + " a private mine!");
             Location location = mineWorldManager.getNextFreeLocation();
             if (privateMines.isWorldEditEnabled()) {
+                // had WorldEditMine = mineFactory.create before incase it needs to go back...
                 mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType(), false);
             }
         } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException) {
@@ -248,7 +249,6 @@ public class PrivateMinesCommand {
 
     @CommandHook("upgrade")
     public void upgrade(CommandSender commandSender, Player target) {
-        //Player player = (Player) commandSender;
         String targetDoesNotOwnMine = Messages.msg("targetDoesNotOwnMine");
 
         TreeMap<String, WorldEditMineType> worldEditMineTypeTreeMap = privateMines.getWorldEditMineTypeTreeMap();
