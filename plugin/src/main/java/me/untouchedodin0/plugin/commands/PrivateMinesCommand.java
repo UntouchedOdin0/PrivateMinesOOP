@@ -124,7 +124,6 @@ public class PrivateMinesCommand {
     public void give(CommandSender commandSender, Player target) {
 
         String alreadyOwnsMine = "targetAlreadyOwnsAMine";
-        String targetAlreadyOwnsAMine = Messages.msg(alreadyOwnsMine);
 
         try {
             if (privateMines.getMineStorage().hasWorldEditMine(target.getUniqueId())) {
