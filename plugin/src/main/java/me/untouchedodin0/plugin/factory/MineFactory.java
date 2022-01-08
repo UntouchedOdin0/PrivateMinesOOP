@@ -199,7 +199,7 @@ public class MineFactory {
         return null;
     }
 
-    public WorldEditMine createMine(Player player, Location location, WorldEditMineType worldEditMineType, boolean replaceOld) {
+    public void createMine(Player player, Location location, WorldEditMineType worldEditMineType, boolean replaceOld) {
         Utils utils = new Utils(this.privateMines);
         UUID uuid = player.getUniqueId();
         List<Location> corners = new ArrayList<>();
@@ -219,7 +219,6 @@ public class MineFactory {
             ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(file);
             if (!file.exists()) {
                 this.privateMines.getLogger().warning("File doesn't exist, can't create mine!");
-                return null;
             }
             if (clipboardFormat != null)
                 try {
@@ -231,7 +230,6 @@ public class MineFactory {
                             WorldEditMine worldEditMine1 = null;
                             if (clipboardReader != null)
                                 clipboardReader.close();
-                            return worldEditMine1;
                         }
                         World world = location.getWorld();
                         WorldEditUtilities worldEditUtilities = this.privateMines.getWorldEditUtils();
@@ -326,8 +324,6 @@ public class MineFactory {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            return null;
         }
-        return null;
     }
 }
