@@ -704,9 +704,9 @@ public class Mine {
     public void expandMine(int amount) {
         Player player = Bukkit.getPlayer(mineOwner);
 
-        if (XMaterial.matchXMaterial(privateMines.getUpgradeMaterial()).isPresent()) {
-            expandMaterial = XMaterial.matchXMaterial(privateMines.getUpgradeMaterial()).get().parseMaterial();
-        }
+//        if (XMaterial.matchXMaterial(privateMines.getUpgradeMaterial()).isPresent()) {
+//            expandMaterial = XMaterial.matchXMaterial(privateMines.getUpgradeMaterial()).get().parseMaterial();
+//        }
 
         CuboidRegion mineCube = getCuboidRegion();
         CuboidRegion bedrockCube;

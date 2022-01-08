@@ -97,16 +97,16 @@ public class PrivateMines extends JavaPlugin {
     private Map<Material, Double> materials = new HashMap<>();
 
     @ConfigValue
-    private String spawnPoint;
+    private Material spawnPoint;
 
     @ConfigValue
-    private String mineCorner;
+    private Material mineCorner;
 
     @ConfigValue
-    private String sellNpc;
+    private Material sellNpc;
 
     @ConfigValue
-    private String upgradeMaterial;
+    private Material upgradeMaterial;
 
     @ConfigValue
     private String mainMenuTitle;
@@ -206,6 +206,10 @@ public class PrivateMines extends JavaPlugin {
         getLogger().info("Loaded a total of {loaded} mine types!"
                 .replace("{loaded}",
                         String.valueOf(loaded)));
+
+        getLogger().info("corner material: " + getCornerMaterial());
+        getLogger().info("sell npc material: " + getSellNpcMaterial());
+        getLogger().info("upgrade material: " + getUpgradeMaterial());
 
         if (useWorldEdit) {
             files = minesDirectory.listFiles();
@@ -486,7 +490,7 @@ public class PrivateMines extends JavaPlugin {
         Gets the spawn material
      */
 
-    public String getSpawnMaterial() {
+    public Material getSpawnMaterial() {
         return spawnPoint;
     }
 
@@ -494,7 +498,7 @@ public class PrivateMines extends JavaPlugin {
         Gets the corner material
      */
 
-    public String getCornerMaterial() {
+    public Material getCornerMaterial() {
         return mineCorner;
     }
 
@@ -502,7 +506,7 @@ public class PrivateMines extends JavaPlugin {
         Gets the sell npc material
      */
 
-    public String getSellNpcMaterial() {
+    public Material getSellNpcMaterial() {
         return sellNpc;
     }
 
@@ -510,7 +514,7 @@ public class PrivateMines extends JavaPlugin {
         Gets the upgrade material
      */
 
-    public String getUpgradeMaterial() {
+    public Material getUpgradeMaterial() {
         return upgradeMaterial;
     }
 

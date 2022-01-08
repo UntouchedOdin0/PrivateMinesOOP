@@ -175,14 +175,14 @@ public class MineFactory {
             mine.setMineLocation(location);
             mine.setMineType(mineType);
             mine.setWeightedRandom(mineType.getWeightedRandom());
-            Location corner1 = utils.getRelative(mine.getStructure(), mineType.getCorner1());
-            Location corner2 = utils.getRelative(mine.getStructure(), mineType.getCorner2());
-            Location spawnLocation = utils.getRelative(mine.getStructure(), mineType.getSpawnLocation());
-            Location npcLocation = utils.getRelative(mine.getStructure(), mineType.getNpcLocation());
-            mine.setCorner1(corner1);
-            mine.setCorner2(corner2);
-            mine.setSpawnLocation(spawnLocation);
-            mine.setNpcLocation(npcLocation);
+//            Location corner1 = utils.getRelative(mine.getStructure(), mineType.getCorner1());
+//            Location corner2 = utils.getRelative(mine.getStructure(), mineType.getCorner2());
+//            Location spawnLocation = utils.getRelative(mine.getStructure(), mineType.getSpawnLocation());
+//            Location npcLocation = utils.getRelative(mine.getStructure(), mineType.getNpcLocation());
+//            mine.setCorner1(corner1);
+//            mine.setCorner2(corner2);
+//            mine.setSpawnLocation(spawnLocation);
+//            mine.setNpcLocation(npcLocation);
             this.mineStorage.addMine(player.getUniqueId(), mine);
             Block block = location.getBlock();
             DataBlock dataBlock = getDataBlock(block, player, location, mine);
@@ -233,9 +233,7 @@ public class MineFactory {
                         }
                         World world = location.getWorld();
                         WorldEditUtilities worldEditUtilities = this.privateMines.getWorldEditUtils();
-                        this.privateMines.getLogger().info("location: " + location);
                         Region region = worldEditUtilities.pasteSchematic(location, file);
-                        this.privateMines.getLogger().info("region " + region);
                         region.iterator().forEachRemaining(blockVector3 -> {
                             if (world != null) {
                                 Location bukkitLocation = utils.blockVector3toBukkit(world, blockVector3);
