@@ -247,11 +247,10 @@ public class PrivateMinesCommand {
         }
     }
 
+    //todo check if this is still working i got a feeling its not
     @CommandHook("upgrade")
     public void upgrade(CommandSender commandSender, Player target) {
         String targetDoesNotOwnMine = Messages.msg("targetDoesNotOwnMine");
-
-        TreeMap<String, WorldEditMineType> worldEditMineTypeTreeMap = privateMines.getWorldEditMineTypeTreeMap();
 
         if (!mineStorage.hasWorldEditMine(target.getUniqueId())) {
             utils.sendMessage(commandSender, targetDoesNotOwnMine);
@@ -261,54 +260,6 @@ public class PrivateMinesCommand {
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(target.getUniqueId());
         privateMines.getLogger().info("worldEditMine: " + worldEditMine);
         worldEditMine.upgrade();
-
-//        WorldEditMineData worldEditMineData = worldEditMine.getWorldEditMineData();
-
-//        privateMines.getLogger().info("worldEditMineData " + worldEditMineData);
-//        privateMines.getLogger().info("data mine type: " + worldEditMineData.getMineType());
-//
-//        WorldEditMineType higherEntry = worldEditMineTypeTreeMap.higherEntry(worldEditMineData.getMineType()).getValue();
-//
-//        if (higherEntry == null) {
-//            privateMines.getLogger().info("Already maxed!");
-//        }
-//        privateMines.getLogger().info("higher entry: " + higherEntry.getName());
-//        worldEditMine.upgrade(player, higherEntry);
-
-//        if (worldEditMineTypeTreeMap.lastEntry().getValue() == worldEditMineType) {
-//            privateMines.getLogger().info("The mine is already at the highest level!");
-//            return;
-//        }
-//        WorldEditMineType nextWorldEditMineType = worldEditMineTypeTreeMap.higherEntry(worldEditMineType.getName()).getValue();
-//
-//        if (nextWorldEditMineType == null) {
-//            privateMines.getLogger().info("Failed to upgrade players mine as they're at max type!");
-//        } else {
-//            worldEditMine.upgrade(player, nextWorldEditMineType);
-//        }
-
-//        if (worldEditMineTypeTreeMap.higherEntry(worldEditMineData.getMineType()) == null) {
-//            privateMines.getLogger().info("The mine is maxed out already!");
-//        } else {
-//
-//            WorldEditMineType nextWorldEditMineType = worldEditMineTypeTreeMap.higherEntry(worldEditMineData.getMineType()).getValue();
-//
-//            player.sendMessage("type: " + worldEditMineData.getMineType());
-//            player.sendMessage("next: " + worldEditMineTypeTreeMap.higherEntry(worldEditMineData.getMineType()));
-//
-//            worldEditMineData.setMineType(nextWorldEditMineType.getName());
-//            worldEditMine.setWorldEditMineData(worldEditMineData);
-//            privateMines.getMineStorage().replaceMine(target.getUniqueId(), worldEditMine);
-//
-////        WorldEditMineType worldEditMineType = worldEditMine.getWorldEditMineType();
-////        WorldEditMineType nextWorldEditMineType = worldEditMineTypeTreeMap.higherEntry(worldEditMineType.getName()).getValue();
-////
-////        if (nextWorldEditMineType == null) {
-////            privateMines.getLogger().info("Failed to upgrade players mine as they're at max type!");
-////        } else {
-////            worldEditMine.upgrade(player, nextWorldEditMineType);
-////        }
-//        }
     }
 
     // Add 1 to whatever args you put so if you want to expand by one do /pmine expand 2
