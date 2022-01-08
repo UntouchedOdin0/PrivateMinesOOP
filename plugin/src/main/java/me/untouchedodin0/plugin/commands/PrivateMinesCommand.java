@@ -133,8 +133,7 @@ public class PrivateMinesCommand {
             commandSender.sendMessage(ChatColor.GREEN + "Giving " + target.getName() + " a private mine!");
             Location location = mineWorldManager.getNextFreeLocation();
             if (privateMines.isWorldEditEnabled()) {
-                @SuppressWarnings("unused")
-                WorldEditMine worldEditMine = mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType(), false);
+                mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType(), false);
             }
         } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException) {
             arrayIndexOutOfBoundsException.printStackTrace();
