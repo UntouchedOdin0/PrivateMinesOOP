@@ -665,7 +665,7 @@ public class PrivateMines extends JavaPlugin {
     }
 
     @SuppressWarnings("unused")
-    public PrivateMines getInstance() {
+    public static PrivateMines getInstance() {
         return privateMines;
     }
 }
