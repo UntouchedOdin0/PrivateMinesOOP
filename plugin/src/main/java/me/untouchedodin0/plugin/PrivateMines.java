@@ -663,4 +663,9 @@ public class PrivateMines extends JavaPlugin {
     public ConfigManager getConfigManager() {
         return configManager;
     }
+
+    @SuppressWarnings("unused")
+    public PrivateMines getInstance() {
+        return privateMines;
+    }
 }
