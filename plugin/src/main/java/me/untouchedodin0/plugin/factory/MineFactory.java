@@ -227,7 +227,6 @@ public class MineFactory {
                         Clipboard clipboard = clipboardReader.read();
                         if (clipboard == null) {
                             this.privateMines.getLogger().warning("Clipboard was null");
-                            WorldEditMine worldEditMine1 = null;
                             if (clipboardReader != null)
                                 clipboardReader.close();
                         }
