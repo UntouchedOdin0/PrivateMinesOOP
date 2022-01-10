@@ -139,8 +139,11 @@ public class PrivateMinesCommand {
             if (privateMines.isWorldEditEnabled()) {
                 if (privateMines.useWorldEdit6()) {
                     mineFactory6.sayHi();
+                    mineFactory6.createMine(target, target.getLocation(), privateMines.getDefaultWorldEdit6MineType(), false);
                 } else {
-                    mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType(), false);
+                    target.sendMessage("hi from w/e 7");
+//                    privateMines.getLogger().info(privateMines.getDefaultWorldEditMineType().getName());
+//                    mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType(), false);
                 }
                 // had WorldEditMine = mineFactory.create before incase it needs to go back...
 //                mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType(), false);

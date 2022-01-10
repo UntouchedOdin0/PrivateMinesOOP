@@ -25,10 +25,11 @@ SOFTWARE.
 package me.untouchedodin0.plugin.config;
 
 import me.untouchedodin0.plugin.PrivateMines;
-import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.WorldEditMineType;
+import me.untouchedodin0.privatemines.we_6.worldedit.WorldEdit6MineType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import redempt.redlib.RedLib;
 import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.configmanager.annotations.ConfigMappable;
 import redempt.redlib.configmanager.annotations.ConfigPath;
@@ -38,12 +39,9 @@ import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.MultiBlockStructure;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @SuppressWarnings({"FieldMayBeFinal", "unused"})
 @ConfigMappable
@@ -98,7 +96,9 @@ public class MineConfig {
     // This method also gets called when you type /privatemines reload
 
     @ConfigPostInit
-    private void postInit() throws IOException {
+    private void postInit() {
+        int MID_VERSION = RedLib.MID_VERSION;
+
         if (privateMines == null) {
             Bukkit.getLogger().info(
                     "Private Mines instance in the MineConfig was null " +
@@ -110,6 +110,40 @@ public class MineConfig {
             privateMines.getLogger().warning(missingFile);
         }
 
+        privateMines.getLogger().info("MID_VERSION: " + MID_VERSION);
+
+        if (MID_VERSION == 12) {
+            // Use legacy code (fun)
+
+            privateMines.getLogger().info("mid version was <= 12 loading legacy config...");
+
+            this.path = privateMines.getSchematicsDirectory().toPath().resolve(file);
+            File file = path.toFile();
+
+            WorldEdit6MineType worldEdit6MineType = new WorldEdit6MineType(file);
+            worldEdit6MineType.setName(getName());
+            worldEdit6MineType.setMineTier(getPriority());
+            worldEdit6MineType.setResetTime(getResetTime());
+            worldEdit6MineType.setMaterials(getMaterials());
+            privateMines.addType(getName(), worldEdit6MineType);
+            privateMines.getLogger().info("worldedit6 mine type: " + worldEdit6MineType);
+        } else {
+
+            privateMines.getLogger().info("loading up a decent version >= 12");
+
+            this.path = privateMines.getSchematicsDirectory().toPath().resolve(file);
+            File file = path.toFile();
+
+            WorldEditMineType worldEditMineType = new WorldEditMineType(privateMines, file);
+            worldEditMineType.setName(getName());
+            worldEditMineType.setMineTier(getPriority());
+            worldEditMineType.setResetTime(getResetTime());
+            worldEditMineType.setMaterials(getMaterials());
+            privateMines.addType(getName(), worldEditMineType);
+            privateMines.getLogger().info("Loaded mine type: " + worldEditMineType.getName());
+        }
+
+        /*
         if (privateMines.useWorldEdit()) {
             this.path = privateMines.getSchematicsDirectory().toPath().resolve(file);
             File file = path.toFile();
@@ -141,6 +175,7 @@ public class MineConfig {
 
             privateMines.addMineData(getName(), mineType);
         }
+         */
     }
 
     // a getter for the private mines instance

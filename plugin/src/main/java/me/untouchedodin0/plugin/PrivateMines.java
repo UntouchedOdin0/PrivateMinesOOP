@@ -45,6 +45,7 @@ import me.untouchedodin0.plugin.util.placeholderapi.PrivateMinesExpansion;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
 import me.untouchedodin0.privatemines.we_6.worldedit.MineFactory6;
+import me.untouchedodin0.privatemines.we_6.worldedit.WorldEdit6MineType;
 import me.untouchedodin0.privatemines.we_6.worldedit.WorldEditMine6;
 import me.untouchedodin0.privatemines.we_7.worldedit.MineFactory7;
 import org.bukkit.Bukkit;
@@ -76,6 +77,7 @@ public class PrivateMines extends JavaPlugin {
     private static PrivateMines privateMines;
     private final Map<String, MineType> mineDataMap = new HashMap<>();
     private final TreeMap<String, MineType> mineTypeTreeMap = new TreeMap<>();
+    private final TreeMap<String, WorldEdit6MineType> worldEdit6MineTypeTreeMap = new TreeMap<>();
     private final TreeMap<String, WorldEditMineType> worldEditMineTypeTreeMap = new TreeMap<>();
 
     private MineFactory6 mineFactory6;
@@ -452,6 +454,10 @@ public class PrivateMines extends JavaPlugin {
         mineTypeTreeMap.put(name, mineType);
     }
 
+    public void addType(String name, WorldEdit6MineType worldEdit6MineType) {
+        worldEdit6MineTypeTreeMap.put(name, worldEdit6MineType);
+    }
+
     public void addType(String name, WorldEditMineType worldEditMineType) {
         worldEditMineTypeTreeMap.put(name, worldEditMineType);
     }
@@ -481,6 +487,18 @@ public class PrivateMines extends JavaPlugin {
         return mineTypeTreeMap.firstEntry().getValue();
     }
 
+    public WorldEdit6MineType getDefaultWorldEdit6MineType() {
+        if (worldEdit6MineTypeTreeMap.isEmpty()) {
+            Bukkit.getLogger().info("No default world edit mine type was found!");
+            Bukkit.getLogger().info("Create a mine type in the mineTypes");
+            Bukkit.getLogger().info("section of the config.yml");
+            Bukkit.getLogger().info("Please ask in the discord server" +
+                                            " if you need help");
+            return null;
+        }
+        return worldEdit6MineTypeTreeMap.firstEntry().getValue();
+    }
+
     /*
         Get default world edit type
      */
@@ -496,6 +514,8 @@ public class PrivateMines extends JavaPlugin {
         }
         return worldEditMineTypeTreeMap.firstEntry().getValue();
     }
+
+
 
     /*
         Gets the spawn material
