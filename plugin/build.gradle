@@ -1,4 +1,6 @@
 dependencies {
     compileOnly project(':compat')
+    implementation project(':we_6')
+    implementation project(':we_7')
     compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.2.8-SNAPSHOT'
 }

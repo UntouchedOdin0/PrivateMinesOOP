@@ -179,39 +179,19 @@ public class PrivateMines extends JavaPlugin {
         mineWorldManager = new MineWorldManager(this);
         utils = new Utils(this);
 
+        String pluginFolder = getDataFolder().getPath();
+        File folder = new File(pluginFolder);
+        File[] files = folder.listFiles();
+        utils.moveSchematicFiles(files);
+
         Plugin worldEditPlugin = Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
 
         if (worldEditPlugin != null) {
             worldEditUtils = WorldEditUtilities.getInstance();
             getLogger().info("Loading worldedit v" + WorldEditPlugin.getPlugin(WorldEditPlugin.class)
                     .getDescription().getVersion());
-            if (useWorldEdit) {
                 isWorldEditEnabled = true;
-            }
-        }
 
-        PluginManager pluginManager = Bukkit.getServer().getPluginManager();
-        addonLoader = new AddonLoader(this, pluginManager);
-
-        String pluginFolder = getDataFolder().getPath();
-        File folder = new File(pluginFolder);
-        File[] files = folder.listFiles();
-        utils.moveSchematicFiles(files);
-
-        File[] addons = addonsDirectory.listFiles();
-
-        int pluginId = 11413;
-
-        int loaded = mineTypes.size();
-        getLogger().info("Loaded a total of {loaded} mine types!"
-                .replace("{loaded}",
-                        String.valueOf(loaded)));
-
-        getLogger().info("corner material: " + getCornerMaterial());
-        getLogger().info("sell npc material: " + getSellNpcMaterial());
-        getLogger().info("upgrade material: " + getUpgradeMaterial());
-
-        if (useWorldEdit) {
             files = minesDirectory.listFiles();
             if (files != null) {
                 Arrays.stream(files).forEach(file -> {
@@ -258,9 +238,9 @@ public class PrivateMines extends JavaPlugin {
                                 getLogger().severe("World " + worldName + " was deleted.");
                             }
                             worldEditMine.setLocation(new Location(world,
-                                    worldEditMineData.getRegionMaxX()+1, // why is this one max? hell if i know
-                                    worldEditMineData.getRegionMinY()-3,
-                                    worldEditMineData.getRegionMinZ())); // only pain and despair
+                                                                   worldEditMineData.getRegionMaxX()+1, // why is this one max? hell if i know
+                                                                   worldEditMineData.getRegionMinY()-3,
+                                                                   worldEditMineData.getRegionMinZ())); // only pain and despair
                             worldEditMine.startResetTask();
                             mineStorage.addWorldEditMine(worldEditMineData.getMineOwner(), worldEditMine);
                             mineWorldManager.getNextFreeLocation();
@@ -270,7 +250,19 @@ public class PrivateMines extends JavaPlugin {
                     }
                 });
             }
+        }
 
+        PluginManager pluginManager = Bukkit.getServer().getPluginManager();
+        addonLoader = new AddonLoader(this, pluginManager);
+
+        File[] addons = addonsDirectory.listFiles();
+
+        int pluginId = 11413;
+
+        int loaded = mineTypes.size();
+        getLogger().info("Loaded a total of {loaded} mine types!"
+                .replace("{loaded}",
+                        String.valueOf(loaded)));
 
 //            blockDataManager.getAll().forEach(dataBlock -> {
 //                UUID uuid = UUID.fromString(dataBlock.getString("owner"));
@@ -304,10 +296,10 @@ public class PrivateMines extends JavaPlugin {
 //
 //                mineStorage.addWorldEditMine(uuid, worldEditMine);
 //            });
-        } else {
 
-            privateMines.getLogger().info("using redlib");
-            //todo re add this back
+
+//            privateMines.getLogger().info("using redlib");
+//            //todo re add this back
 
             /*
             // Loops all the data blocks
@@ -365,14 +357,13 @@ public class PrivateMines extends JavaPlugin {
                 mineStorage.addMine(playerUUID, mine);
             });
              */
-        }
 
-        mineStorage.getMines().forEach(((uuid, mine) -> {
-            String username = Bukkit.getOfflinePlayer(mine.getMineOwner()).getName();
-            String loadingMessage = String.format("Loading %s's Mine!", username);
-            getLogger().info(loadingMessage);
-            mine.reset();
-        }));
+//        mineStorage.getMines().forEach(((uuid, mine) -> {
+//            String username = Bukkit.getOfflinePlayer(mine.getMineOwner()).getName();
+//            String loadingMessage = String.format("Loading %s's Mine!", username);
+//            getLogger().info(loadingMessage);
+//            mine.reset();
+//        }));
 
         /*
             Does these things in order
