@@ -44,6 +44,9 @@ import me.untouchedodin0.plugin.util.addons.AddonLoader;
 import me.untouchedodin0.plugin.util.placeholderapi.PrivateMinesExpansion;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
+import me.untouchedodin0.privatemines.we_6.worldedit.MineFactory6;
+import me.untouchedodin0.privatemines.we_6.worldedit.WorldEditMine6;
+import me.untouchedodin0.privatemines.we_7.worldedit.MineFactory7;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -53,6 +56,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.codemc.worldguardwrapper.WorldGuardWrapper;
 import org.codemc.worldguardwrapper.region.IWrappedRegion;
+import redempt.redlib.RedLib;
 import redempt.redlib.blockdata.BlockDataManager;
 import redempt.redlib.commandmanager.ArgType;
 import redempt.redlib.commandmanager.CommandParser;
@@ -138,6 +142,7 @@ public class PrivateMines extends JavaPlugin {
     public void onEnable() {
         privateMines = this;
         gson = new Gson();
+        int MID_VERSION = RedLib.MID_VERSION;
 
         File configFile = new File(getDataFolder(), "config.yml");
 
@@ -168,7 +173,7 @@ public class PrivateMines extends JavaPlugin {
 
         // something in the world edit mine is breaking it...
 
-        configManager = new ConfigManager(this).register(this, WorldEditMine.class).load();
+//        configManager = new ConfigManager(this).register(this, WorldEditMine.class).load();
         blockDataManager = new BlockDataManager(
                 getDataFolder()
                         .toPath()
@@ -178,6 +183,18 @@ public class PrivateMines extends JavaPlugin {
         mineFactory = new MineFactory(this, blockDataManager);
         mineWorldManager = new MineWorldManager(this);
         utils = new Utils(this);
+
+        if (MID_VERSION <= 12) {
+            WorldEditMine6 worldEditMine6 = new WorldEditMine6();
+            MineFactory6 mineFactory6 = new MineFactory6();
+            getLogger().info("world edit mine 6: " + worldEditMine6);
+            mineFactory6.sayHi();
+        } else  {
+            WorldEditMine worldEditMine7 = new WorldEditMine(this);
+            MineFactory7 mineFactory7 = new MineFactory7();
+            getLogger().info("world edit mine 7: " + worldEditMine7);
+            mineFactory7.sayHi();
+        }
 
         String pluginFolder = getDataFolder().getPath();
         File folder = new File(pluginFolder);
