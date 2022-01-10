@@ -36,6 +36,7 @@ import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
+import me.untouchedodin0.privatemines.we_6.worldedit.MineFactory6;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -65,6 +66,7 @@ import java.util.*;
 
 public class PrivateMinesCommand {
 
+    private final MineFactory6 mineFactory6;
     private final MineFactory mineFactory;
     private final MineStorage mineStorage;
     private final MineWorldManager mineWorldManager;
@@ -74,6 +76,7 @@ public class PrivateMinesCommand {
 
     public PrivateMinesCommand(PrivateMines privateMine) {
         this.privateMines = privateMine;
+        this.mineFactory6 = privateMine.getMineFactory6();
         this.mineFactory = privateMine.getMineFactory();
         this.mineStorage = privateMine.getMineStorage();
         this.mineWorldManager = privateMine.getMineWorldManager();
@@ -134,8 +137,13 @@ public class PrivateMinesCommand {
             commandSender.sendMessage(ChatColor.GREEN + "Giving " + target.getName() + " a private mine!");
             Location location = mineWorldManager.getNextFreeLocation();
             if (privateMines.isWorldEditEnabled()) {
+                if (privateMines.useWorldEdit6()) {
+                    mineFactory6.sayHi();
+                } else {
+                    mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType(), false);
+                }
                 // had WorldEditMine = mineFactory.create before incase it needs to go back...
-                mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType(), false);
+//                mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType(), false);
             }
         } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException) {
             arrayIndexOutOfBoundsException.printStackTrace();

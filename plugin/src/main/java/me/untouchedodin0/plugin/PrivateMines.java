@@ -78,6 +78,7 @@ public class PrivateMines extends JavaPlugin {
     private final TreeMap<String, MineType> mineTypeTreeMap = new TreeMap<>();
     private final TreeMap<String, WorldEditMineType> worldEditMineTypeTreeMap = new TreeMap<>();
 
+    private MineFactory6 mineFactory6;
     private MineFactory mineFactory;
     private MineWorldManager mineWorldManager;
     private MineStorage mineStorage;
@@ -87,6 +88,7 @@ public class PrivateMines extends JavaPlugin {
     private WorldEditUtilities worldEditUtils;
     private ConfigManager configManager;
     private boolean isWorldEditEnabled = false;
+    private boolean useWorldEdit6 = false;
     private final File minesDirectory = new File("plugins/PrivateMines/mines");
     private final File schematicsDirectory = new File("plugins/PrivateMines/schematics");
     private final File addonsDirectory = new File("plugins/PrivateMines/addons");
@@ -180,20 +182,21 @@ public class PrivateMines extends JavaPlugin {
                         .resolve("mines.db"));
 
         mineStorage = new MineStorage();
-        mineFactory = new MineFactory(this, blockDataManager);
+//        mineFactory = new MineFactory(this, blockDataManager);
         mineWorldManager = new MineWorldManager(this);
         utils = new Utils(this);
 
         if (MID_VERSION <= 12) {
             WorldEditMine6 worldEditMine6 = new WorldEditMine6();
-            MineFactory6 mineFactory6 = new MineFactory6();
+            mineFactory6 = new MineFactory6();
             getLogger().info("world edit mine 6: " + worldEditMine6);
             mineFactory6.sayHi();
+            useWorldEdit6 = true;
         } else  {
             WorldEditMine worldEditMine7 = new WorldEditMine(this);
-            MineFactory7 mineFactory7 = new MineFactory7();
+            mineFactory = new MineFactory(this, blockDataManager);
             getLogger().info("world edit mine 7: " + worldEditMine7);
-            mineFactory7.sayHi();
+            useWorldEdit6 = false;
         }
 
         String pluginFolder = getDataFolder().getPath();
@@ -600,6 +603,10 @@ public class PrivateMines extends JavaPlugin {
         return worldEditMineType.equals(lastValue);
     }
 
+    public MineFactory6 getMineFactory6() {
+        return mineFactory6;
+    }
+
     /*
         Gets the Mine Factory.
      */
@@ -634,6 +641,10 @@ public class PrivateMines extends JavaPlugin {
 
     public boolean useWorldEdit() {
         return useWorldEdit;
+    }
+
+    public boolean useWorldEdit6() {
+        return useWorldEdit6;
     }
 
     public int getMineDistance() {
