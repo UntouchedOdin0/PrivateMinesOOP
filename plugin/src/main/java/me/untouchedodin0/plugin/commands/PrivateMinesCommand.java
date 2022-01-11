@@ -148,6 +148,10 @@ public class PrivateMinesCommand {
                         privateMines.getLogger().info("S: " + s);
                         privateMines.getLogger().info("type: " + worldEditMineType);
                     });
+                    privateMines.getLogger().info("first: " + privateMines.getWorldEditMineTypeTreeMap().firstKey());
+                    WorldEditMineType worldEditMineType = privateMines.getWorldEditMineTypeTreeMap().firstEntry().getValue();
+                    privateMines.getLogger().info("worldEditMineType: " + worldEditMineType);
+                    mineFactory.createMine(target, location, worldEditMineType, false);
 //                    mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType(), false);
 //                    privateMines.getLogger().info(privateMines.getDefaultWorldEditMineType().getName());
 //                    mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType(), false);
