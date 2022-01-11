@@ -177,7 +177,7 @@ public class PrivateMines extends JavaPlugin {
 
         // something in the world edit mine is breaking it...
 
-//        configManager = new ConfigManager(this).register(this, WorldEditMine.class).load();
+        configManager = new ConfigManager(this).register(this, WorldEditMine.class).load();
         blockDataManager = new BlockDataManager(
                 getDataFolder()
                         .toPath()
@@ -454,12 +454,13 @@ public class PrivateMines extends JavaPlugin {
         mineTypeTreeMap.put(name, mineType);
     }
 
-    public void addType(String name, WorldEdit6MineType worldEdit6MineType) {
+    public void addWe6Type(String name, WorldEdit6MineType worldEdit6MineType) {
         worldEdit6MineTypeTreeMap.put(name, worldEdit6MineType);
     }
 
-    public void addType(String name, WorldEditMineType worldEditMineType) {
+    public void addWe7Type(String name, WorldEditMineType worldEditMineType) {
         worldEditMineTypeTreeMap.put(name, worldEditMineType);
+        privateMines.getLogger().info("tree map: " + worldEditMineTypeTreeMap);
     }
 
     /*

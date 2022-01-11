@@ -125,10 +125,9 @@ public class MineConfig {
             worldEdit6MineType.setMineTier(getPriority());
             worldEdit6MineType.setResetTime(getResetTime());
             worldEdit6MineType.setMaterials(getMaterials());
-            privateMines.addType(getName(), worldEdit6MineType);
+            privateMines.addWe6Type(getName(), worldEdit6MineType);
             privateMines.getLogger().info("worldedit6 mine type: " + worldEdit6MineType);
         } else {
-
             privateMines.getLogger().info("loading up a decent version >= 12");
 
             this.path = privateMines.getSchematicsDirectory().toPath().resolve(file);
@@ -139,7 +138,7 @@ public class MineConfig {
             worldEditMineType.setMineTier(getPriority());
             worldEditMineType.setResetTime(getResetTime());
             worldEditMineType.setMaterials(getMaterials());
-            privateMines.addType(getName(), worldEditMineType);
+            privateMines.addWe7Type(getName(), worldEditMineType);
             privateMines.getLogger().info("Loaded mine type: " + worldEditMineType.getName());
         }
 

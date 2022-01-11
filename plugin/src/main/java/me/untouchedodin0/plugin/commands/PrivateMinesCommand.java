@@ -142,6 +142,13 @@ public class PrivateMinesCommand {
                     mineFactory6.createMine(target, target.getLocation(), privateMines.getDefaultWorldEdit6MineType(), false);
                 } else {
                     target.sendMessage("hi from w/e 7");
+                    target.sendMessage("" + privateMines.getWorldEditMineTypeTreeMap().isEmpty());
+                    privateMines.getLogger().info("" + privateMines.getWorldEditMineTypeTreeMap());
+                    privateMines.getWorldEditMineTypeTreeMap().forEach((s, worldEditMineType) -> {
+                        privateMines.getLogger().info("S: " + s);
+                        privateMines.getLogger().info("type: " + worldEditMineType);
+                    });
+//                    mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType(), false);
 //                    privateMines.getLogger().info(privateMines.getDefaultWorldEditMineType().getName());
 //                    mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType(), false);
                 }
