@@ -47,7 +47,6 @@ import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
 import me.untouchedodin0.privatemines.we_6.worldedit.MineFactory6;
 import me.untouchedodin0.privatemines.we_6.worldedit.WorldEdit6MineType;
 import me.untouchedodin0.privatemines.we_6.worldedit.WorldEditMine6;
-import me.untouchedodin0.privatemines.we_7.worldedit.MineFactory7;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -69,7 +68,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 public class PrivateMines extends JavaPlugin {
@@ -422,6 +424,7 @@ public class PrivateMines extends JavaPlugin {
         } else {
             getLogger().info("PlaceholderAPI was not present, not able to establish a hook!");
         }
+
 
         World world = getMineWorldManager().getMinesWorld();
         if (WorldGuardWrapper.getInstance().getRegion(world, "__global__").isPresent()) {
