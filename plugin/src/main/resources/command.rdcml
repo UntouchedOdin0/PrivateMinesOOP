@@ -37,13 +37,13 @@ privatemine,privatemines,pmine {
     upgrade player:target {
         hook upgrade
         help Upgrade a users private mine
-        permission: privatemines.upgrade
+        permission privatemines.upgrade
     }
 
     create string:name {
         hook create
         help Creates a mine structure with the set name
-        permission: privatemines.create
+        permission privatemines.create
         user player
     }
 
@@ -62,14 +62,14 @@ privatemine,privatemines,pmine {
     open {
         hook open
         help Opens your private mine for others to come and join you!
-        permission: privatemines.open
+        permission privatemines.open
         user player
     }
 
     close {
         hook close
         help Closes your mine so nobody else can come mine at your mine
-        permission: privatemines.close
+        permission privatemines.close
         user player
     }
 
@@ -83,38 +83,38 @@ privatemine,privatemines,pmine {
     unwhitelist player:target {
         hook unwhitelist
         help Removes a player from your mines whitelist
-        permission: privatemines.unwhitelist
+        permission privatemines.unwhitelist
         user player
     }
 
     coowner player:target {
         hook coowner
         help Toggles the co-owner at your mine
-        permission: privatemines.coowner
+        permission privatemines.coowner
         user player
     }
 
     expand player:target int:amount {
         hook expand
         help Expands a players mine by a certain amount
-        permission: privatemines.expand
+        permission privatemines.expand
     }
 
     reload {
         hook reload
         help Reloads the config file
-        permission: privatemines.reload
+        permission privatemines.reload
     }
 
     tax double:amount{
         hook tax
         help Sets the tax amount in the players private mine
-        permission: privatemines.tax
+        permission privatemines.tax
     }
 
     list {
         hook list
         help Opens a menu with a list of public private mines
-        permission: privatemines.list
+        permission privatemines.list
     }
 }
