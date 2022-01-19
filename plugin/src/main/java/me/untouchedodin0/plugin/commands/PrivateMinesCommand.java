@@ -300,35 +300,6 @@ public class PrivateMinesCommand {
         mineStorage.replaceMine(player.getUniqueId(), worldEditMine);
     }
 
-    @CommandHook("create")
-    public void create(Player player, String name) {
-        CuboidRegion cuboidRegion;
-        Location minimum;
-        Location maximum;
-        String multiBlockStructure;
-        WorldEditUtilities worldEditUtilities;
-
-        worldEditUtilities = privateMines.getWorldEditUtils();
-        cuboidRegion = worldEditUtilities.getCuboidRegion(player);
-
-        minimum = cuboidRegion.getStart();
-        maximum = cuboidRegion.getEnd();
-
-//        worldEditUtilities.createMultiBlockStructure(player, name);
-
-        if (minimum != null && maximum != null) {
-            multiBlockStructure = MultiBlockStructure.stringify(minimum, maximum);
-            try {
-                path = Paths.get("plugins/PrivateMines/").resolve(name + ".dat");
-                player.sendMessage(ChatColor.YELLOW + "Attempting to write the file, " + name + ".dat...");
-                Files.write(path, multiBlockStructure.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-            } catch (IOException ioException) {
-                player.sendMessage("oh no");
-                ioException.printStackTrace();
-            }
-        }
-    }
-
     @CommandHook("setblocks")
     public void setBlocks(CommandSender commandSender, Player target, Material[] materials) {
         Player player = (Player) commandSender;
