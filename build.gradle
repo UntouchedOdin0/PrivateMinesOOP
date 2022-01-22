@@ -65,8 +65,7 @@ subprojects {
         compileOnly 'me.clip:placeholderapi:2.10.9'
         compileOnly 'com.google.code.gson:gson:2.8.5'
 
-        implementation 'org.codemc.worldguardwrapper:worldguardwrapper:1.1.9-SNAPSHOT' // need to get this to 1.2.0
-//        implementation 'org.codemc.worldguardwrapper:worldguardwrapper:1.2.0'
+        implementation 'org.codemc.worldguardwrapper:worldguardwrapper:1.2.0-SNAPSHOT'
         implementation 'com.github.CryptoMorin:XSeries:v8.4.0'
         implementation 'com.github.Redempt:RedLib:6.0.9.1'
 

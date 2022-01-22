@@ -57,7 +57,10 @@ import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.misc.LocationUtils;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 public class MineFactory {
     private final boolean debugMode;
