@@ -300,7 +300,6 @@ public class WorldEditMine {
         Map<Material, Double> mineTypeMaterials = worldEditMineType.getMaterials();
 
         mineTypeMaterials.forEach((material1, aDouble) -> {
-            privateMines.getLogger().info("blockData: " + material1.createBlockData());
             Pattern blockPattern = (Pattern) BukkitAdapter.adapt(material1.createBlockData());
             pattern.add(blockPattern, aDouble);
         });

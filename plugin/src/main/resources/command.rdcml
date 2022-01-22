@@ -1,4 +1,4 @@
-privatemine,privatemines,pmine {
+privatemine,privatemines,pmine,pmines {
     hook main
 
     give player:target {
@@ -38,13 +38,6 @@ privatemine,privatemines,pmine {
         hook upgrade
         help Upgrade a users private mine
         permission privatemines.upgrade
-    }
-
-    create string:name {
-        hook create
-        help Creates a mine structure with the set name
-        permission privatemines.create
-        user player
     }
 
     setblocks player:target material[]:materials {
