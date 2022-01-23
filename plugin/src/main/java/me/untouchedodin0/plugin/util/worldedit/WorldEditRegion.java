@@ -27,6 +27,7 @@ package me.untouchedodin0.plugin.util.worldedit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+@Deprecated
 public class WorldEditRegion {
     private final WorldEditVector min;
     private final WorldEditVector max;
