@@ -143,9 +143,6 @@ public class PrivateMinesCommand {
                 } else {
                     WorldEditMineType worldEditMineType = privateMines.getWorldEditMineTypeTreeMap().firstEntry().getValue();
                     mineFactory.createMine(target, location, worldEditMineType, false);
-//                    mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType(), false);
-//                    privateMines.getLogger().info(privateMines.getDefaultWorldEditMineType().getName());
-//                    mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType(), false);
                 }
                 // had WorldEditMine = mineFactory.create before incase it needs to go back...
 //                mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType(), false);
@@ -171,7 +168,6 @@ public class PrivateMinesCommand {
         } else {
             WorldEditMine worldEditMine = privateMines.getMineStorage().getWorldEditMine(uuid);
             Task task = worldEditMine.getTask();
-            privateMines.getLogger().info("task: " + task);
             task.cancel();
             worldEditMine.delete();
             privateMines.getMineStorage().removeWorldEditMine(uuid);
