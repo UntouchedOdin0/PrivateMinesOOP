@@ -60,48 +60,10 @@ public class WorldEditUtils extends WorldEditUtilities {
         return null;
     }
 
-
     private WorldEditPlugin getWorldEdit() {
         Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
         return (WorldEditPlugin) plugin;
     }
-
-    /*
-    @Override
-    public void createMultiBlockStructure(Player player, String name) {
-        LocalSession localSession = getWorldEdit().getSession(player);
-        com.sk89q.worldedit.world.World selectionWorld = localSession.getSelectionWorld();
-        org.bukkit.World bukkitWorld = player.getWorld();
-
-        try {
-            if (selectionWorld == null) throw new IncompleteRegionException();
-            if (localSession.getClipboard().getClipboards().isEmpty()) {
-                player.sendMessage(ChatColor.RED + "Your clipboard was empty!");
-            } else {
-                Clipboard clipboard = localSession.getClipboard().getClipboards().get(0);
-                BlockVector3 minimum = clipboard.getMinimumPoint();
-                Location minimumBukkit = blockVector3toBukkit(bukkitWorld, minimum);
-                BlockVector3 maximum = clipboard.getMaximumPoint();
-                Location maximumBukkit = blockVector3toBukkit(bukkitWorld, maximum);
-
-                String multiBlockStructure = MultiBlockStructure.stringify(minimumBukkit, maximumBukkit);
-                try {
-                    Path path = Paths.get("plugins/PrivateMines" + name + ".dat");
-                    player.sendMessage("Attempting to write the file " + path.getFileName() + "...");
-                    Files.write(
-                            path,
-                            multiBlockStructure.getBytes(),
-                            StandardOpenOption.CREATE,
-                            StandardOpenOption.TRUNCATE_EXISTING);
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-            }
-        } catch (IncompleteRegionException | EmptyClipboardException incompleteRegionException) {
-            player.sendMessage("Please make a full selection");
-        }
-    }
-     */
 
     @Override
     public void setBlocks(CuboidRegion cuboidRegion, String material) {
