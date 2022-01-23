@@ -24,8 +24,6 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin.mines.data;
 
-import com.sk89q.worldedit.regions.CuboidRegion;
-import com.sk89q.worldedit.regions.Region;
 import org.bukkit.Material;
 
 import java.util.*;
@@ -55,8 +53,6 @@ public class WorldEditMineData {
     int regionMaxY;
     int regionMaxZ;
 
-    Region region;
-    CuboidRegion cuboidRegion;
     String worldName;
     String material;
     String mineType;
@@ -202,22 +198,6 @@ public class WorldEditMineData {
 
     public void setRegionMaxZ(int regionMaxZ) {
         this.regionMaxZ = regionMaxZ;
-    }
-
-    public Region getRegion() {
-        return region;
-    }
-
-    public void setRegion(Region region) {
-        this.region = region;
-    }
-
-    public CuboidRegion getCuboidRegion() {
-        return cuboidRegion;
-    }
-
-    public void setCuboidRegion(CuboidRegion cuboidRegion) {
-        this.cuboidRegion = cuboidRegion;
     }
 
     public String getWorldName() {
