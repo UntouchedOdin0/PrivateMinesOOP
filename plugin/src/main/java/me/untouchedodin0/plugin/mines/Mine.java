@@ -68,7 +68,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-
 @Deprecated(since = "3.0.9")
 public class Mine {
 

@@ -23,7 +23,6 @@ SOFTWARE.
  */
 package me.untouchedodin0.plugin.mines;
 
-import com.cryptomorin.xseries.XMaterial;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.world.utils.MineLoopUtil;
 import org.bukkit.Material;
@@ -35,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated(since = "3.0.9")
 public class MineType {
 
 //    private final int[] spawnLocation;
