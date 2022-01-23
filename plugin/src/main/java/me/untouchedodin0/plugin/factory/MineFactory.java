@@ -66,17 +66,11 @@ public class MineFactory {
     private final boolean debugMode;
 
     PrivateMines privateMines;
-
     Utils utils;
-
     MineStorage mineStorage;
-
     MineFactory mineFactory;
-
     MineType defaultMineType;
-
     BlockDataManager blockDataManager;
-
     Location spawnLocation;
 
     public MineFactory(PrivateMines privateMines, BlockDataManager blockDataManager) {
@@ -102,7 +96,7 @@ public class MineFactory {
         mine.setWeightedRandom(this.defaultMineType.getWeightedRandom());
         this.mineStorage.addMine(player.getUniqueId(), mine);
         DataBlock dataBlock = getDataBlock(block, player, location, mine);
-        String regionName = String.format("mine-%s", new Object[]{userUUID});
+        String regionName = String.format("mine-%s", userUUID);
         MineType mineType = mine.getMineType();
         List<String> allowFlags = mineType.getAllowFlags();
         List<String> denyFlags = mineType.getDenyFlags();
@@ -155,12 +149,12 @@ public class MineFactory {
         dataBlock.set("spawnX", Integer.toString(spawnX));
         dataBlock.set("spawnY", Integer.toString(spawnY));
         dataBlock.set("spawnZ", Integer.toString(spawnZ));
-        dataBlock.set("minX", Integer.valueOf(minimumPoint.getBlockX()));
-        dataBlock.set("minY", Integer.valueOf(minimumPoint.getBlockY()));
-        dataBlock.set("minZ", Integer.valueOf(minimumPoint.getBlockZ()));
-        dataBlock.set("maxX", Integer.valueOf(maximumPoint.getBlockX()));
-        dataBlock.set("maxY", Integer.valueOf(maximumPoint.getBlockY()));
-        dataBlock.set("maxZ", Integer.valueOf(maximumPoint.getBlockZ()));
+        dataBlock.set("minX", minimumPoint.getBlockX());
+        dataBlock.set("minY", minimumPoint.getBlockY());
+        dataBlock.set("minZ", minimumPoint.getBlockZ());
+        dataBlock.set("maxX", maximumPoint.getBlockX());
+        dataBlock.set("maxY", maximumPoint.getBlockY());
+        dataBlock.set("maxZ", maximumPoint.getBlockZ());
         dataBlock.set("world", location.getWorld());
         dataBlock.set("worldName", worldName);
         dataBlock.set("location", LocationUtils.toString(location));
@@ -178,14 +172,6 @@ public class MineFactory {
             mine.setMineLocation(location);
             mine.setMineType(mineType);
             mine.setWeightedRandom(mineType.getWeightedRandom());
-//            Location corner1 = utils.getRelative(mine.getStructure(), mineType.getCorner1());
-//            Location corner2 = utils.getRelative(mine.getStructure(), mineType.getCorner2());
-//            Location spawnLocation = utils.getRelative(mine.getStructure(), mineType.getSpawnLocation());
-//            Location npcLocation = utils.getRelative(mine.getStructure(), mineType.getNpcLocation());
-//            mine.setCorner1(corner1);
-//            mine.setCorner2(corner2);
-//            mine.setSpawnLocation(spawnLocation);
-//            mine.setNpcLocation(npcLocation);
             this.mineStorage.addMine(player.getUniqueId(), mine);
             Block block = location.getBlock();
             DataBlock dataBlock = getDataBlock(block, player, location, mine);
@@ -223,7 +209,6 @@ public class MineFactory {
             privateMines.getLogger().warning("Failed to fill mine due to fillType being null");
         } else {
             File file = worldEditMineType.getSchematicFile();
-            PasteFactory pasteFactory = new PasteFactory(privateMines);
             WorldEditMine worldEditMine = new WorldEditMine(privateMines);
             WorldEditMineData worldEditMineData = new WorldEditMineData();
             ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(file);
