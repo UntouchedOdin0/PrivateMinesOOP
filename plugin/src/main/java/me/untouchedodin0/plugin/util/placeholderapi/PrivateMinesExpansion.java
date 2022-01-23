@@ -42,25 +42,22 @@ public class PrivateMinesExpansion extends PlaceholderExpansion {
     UUID uuid;
 
     @Override
-    public @org.jetbrains.annotations.NotNull String getAuthor() {
+    public @NotNull String getAuthor() {
         return "UntouchedOdin0";
     }
 
     @Override
-    public @NotNull
-    String getName() {
+    public @NotNull String getName() {
         return "PrivateMines";
     }
 
     @Override
-    public @NotNull
-    String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return "PrivateMines";
     }
 
-
     @Override
-    public @org.jetbrains.annotations.NotNull String getVersion() {
+    public @NotNull String getVersion() {
         return "1.0";
     }
 
