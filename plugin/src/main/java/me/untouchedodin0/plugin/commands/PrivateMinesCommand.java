@@ -35,9 +35,11 @@ import me.untouchedodin0.plugin.mines.data.WorldEditMineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.world.MineWorldManager;
-import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
 import me.untouchedodin0.privatemines.we_6.worldedit.MineFactory6;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -52,17 +54,12 @@ import redempt.redlib.inventorygui.ItemButton;
 import redempt.redlib.itemutils.ItemBuilder;
 import redempt.redlib.misc.Task;
 import redempt.redlib.misc.WeightedRandom;
-import redempt.redlib.multiblock.MultiBlockStructure;
 import redempt.redlib.multiblock.Structure;
-import redempt.redlib.region.CuboidRegion;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class PrivateMinesCommand {
 
@@ -87,7 +84,6 @@ public class PrivateMinesCommand {
         Map<String, MenuConfig> menuConfig = privateMines.getInventory();
         String inventoryTitle = privateMines.getMainMenuTitle();
         String inventoryTitleColored = utils.color(inventoryTitle);
-        ItemStack filler = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
 
         InventoryGUI gui = new InventoryGUI(Bukkit.createInventory(null, 27, inventoryTitleColored));
 
