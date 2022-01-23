@@ -70,10 +70,8 @@ public class WorldEditUtils extends WorldEditUtilities {
         Location start = cuboidRegion.getStart();
         Location end = cuboidRegion.getEnd();
         World world = start.getWorld();
-        String worldName;
 
         if (start.getWorld() != null) {
-            worldName = start.getWorld().getName();
             int startX = start.getBlockX();
             int startY = start.getBlockY();
             int startZ = start.getBlockZ();
@@ -87,18 +85,6 @@ public class WorldEditUtils extends WorldEditUtilities {
 
             BlockType blockType = BlockType.REGISTRY.get(material.toLowerCase());
             Region cube = new com.sk89q.worldedit.regions.CuboidRegion(startVector3, endVector3);
-
-//            EditSessionBuilder editSessionBuilder = FaweAPI.getEditSessionBuilder(FaweAPI.getWorld(world.getName()));
-//            EditSession editSession = editSessionBuilder.build();
-//
-////            EditSessionBuilder editSessionBuilder = FaweAPI.getEditSessionBuilder(FaweAPI.getWorld(worldName))
-////                    .limitUnlimited()
-////                    .allowedRegionsEverywhere()
-////                    .fastmode(true);
-//
-//            editSessionBuilder.fastmode(true);
-//            editSession.setBlocks(cube, blockType);
-//            editSession.flushQueue();
         }
     }
 
@@ -113,18 +99,6 @@ public class WorldEditUtils extends WorldEditUtilities {
             int x = location.getBlockX();
             int y = location.getBlockY();
             int z = location.getBlockZ();
-
-
-//            EditSessionBuilder editSessionBuilder = FaweAPI.getEditSessionBuilder(FaweAPI.getWorld(worldName))
-//                    .limitUnlimited()
-//                    .allowedRegionsEverywhere()
-//                    .fastmode(true);
-//
-//            editSession = editSessionBuilder.build();
-//            editSession.setBlock(x, y, z, blockType);
-
-//            editSession.flushQueue();
-//            editSession.flushSession();
         }
     }
 
@@ -150,7 +124,7 @@ public class WorldEditUtils extends WorldEditUtilities {
                 try (EditSession editSession = WorldEdit.getInstance().newEditSession(world)) {
                     centerVector = BlockVector3.at(location.getX(), location.getY(), location.getZ());
 
-                    // If the clipboard isn't null prepare to create a paste operation, complete it and set the region stuff.
+                        // If the clipboard isn't null prepare to create a paste operation, complete it and set the region stuff.
                         operation = new ClipboardHolder(clipboard)
                                 .createPaste(editSession)
                                 .to(centerVector)
