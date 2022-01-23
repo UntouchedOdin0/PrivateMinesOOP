@@ -483,15 +483,13 @@ public class PrivateMinesCommand {
     @CommandHook("tax")
     public void tax(Player player, Double tax) {
         UUID uuid = player.getUniqueId();
-        player.sendMessage("Setting your tax to " + tax);
+        player.sendMessage(ChatColor.GREEN + "Setting your tax to " + tax);
         if (!mineStorage.hasWorldEditMine(uuid)) {
             player.sendMessage("You can't set tax as you don't own a mine!");
         }
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(uuid);
-        player.sendMessage("current tax: " + worldEditMine.getTax());
         worldEditMine.setTax(tax);
         mineStorage.replaceMine(uuid, worldEditMine);
-        player.sendMessage("new tax: " + worldEditMine.getTax());
     }
 
     @CommandHook("list")
