@@ -71,27 +71,27 @@ public class PasteFactory {
         }
 
         // Try and make a new edit session with the world to do stuff
-        try (EditSession editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
+        if (world != null) {
+            try (EditSession editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
 
-            // If the location isn't null then set the center vector to the location
-            if (location != null) {
+                // If the location isn't null then set the center vector to the location
                 centerVector = BlockVector3.at(location.getX(), location.getY(), location.getZ());
-            }
-            // If the clipboard isn't null prepare to create a paste operation, complete it and set the region stuff.
-            if (clipboard != null) {
-                operation = new ClipboardHolder(clipboard).createPaste(editSession).to(centerVector).ignoreAirBlocks(true).build();
-                try {
-                    // Complete the paste
-                    Operations.complete(operation);
-                    // Set the region to the clipboard region
-                    region = clipboard.getRegion();
-                    // Check if the center vector isn't null and if it's not then set it to the Origin - centerVector.
-                    if (centerVector != null) {
-                        region.shift(centerVector.subtract(clipboard.getOrigin()));
-                        return region;
+                // If the clipboard isn't null prepare to create a paste operation, complete it and set the region stuff.
+                if (clipboard != null) {
+                    operation = new ClipboardHolder(clipboard).createPaste(editSession).to(centerVector).ignoreAirBlocks(true).build();
+                    try {
+                        // Complete the paste
+                        Operations.complete(operation);
+                        // Set the region to the clipboard region
+                        region = clipboard.getRegion();
+                        // Check if the center vector isn't null and if it's not then set it to the Origin - centerVector.
+                        if (centerVector != null) {
+                            region.shift(centerVector.subtract(clipboard.getOrigin()));
+                            return region;
+                        }
+                    } catch (WorldEditException worldEditException) {
+                        worldEditException.printStackTrace();
                     }
-                } catch (WorldEditException worldEditException) {
-                    worldEditException.printStackTrace();
                 }
             }
         }
