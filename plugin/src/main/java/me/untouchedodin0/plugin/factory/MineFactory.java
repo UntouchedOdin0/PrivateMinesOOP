@@ -210,6 +210,13 @@ public class MineFactory {
         String toSend = Messages.msg(recievedMine);
         BlockType fillType = BlockTypes.DIAMOND_BLOCK;
         Block block = location.getBlock();
+        Material spawnMaterial = privateMines.getSpawnMaterial();
+        Material mineCornerMaterial = privateMines.getCornerMaterial();
+        Material upgradeMaterial = privateMines.getUpgradeMaterial();
+        privateMines.getLogger().info("spawnMaterial: " + spawnMaterial.name());
+        privateMines.getLogger().info("mineCornerMaterial: " + mineCornerMaterial.name());
+        privateMines.getLogger().info("upgradeMaterial: " + upgradeMaterial.name());
+
         if (worldEditMineType == null) {
             this.privateMines.getLogger().warning("Failed to create mine due to the worldedit mine type being null");
         } else if (fillType == null) {
