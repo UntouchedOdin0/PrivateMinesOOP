@@ -142,7 +142,6 @@ public class WorldEditUtils extends WorldEditUtilities {
                             worldEditException.printStackTrace();
                         }
                     }
-
                 return null;
             } catch (IOException e) {
                 e.printStackTrace();
