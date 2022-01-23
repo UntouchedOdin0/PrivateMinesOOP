@@ -247,9 +247,9 @@ public class MineFactory {
                             if (world != null) {
                                 Location bukkitLocation = utils.blockVector3toBukkit(world, blockVector3);
                                 Material bukkitMaterial = bukkitLocation.getBlock().getType();
-                                if (bukkitMaterial == Material.CHEST) {
+                                if (bukkitMaterial.equals(spawnMaterial)) {
                                     this.spawnLocation = utils.blockVector3toBukkit(world, blockVector3);
-                                } else if (bukkitMaterial == Material.POWERED_RAIL) {
+                                } else if (bukkitMaterial.equals(mineCornerMaterial)) {
                                     corners.add(bukkitLocation);
                                 }
                             }

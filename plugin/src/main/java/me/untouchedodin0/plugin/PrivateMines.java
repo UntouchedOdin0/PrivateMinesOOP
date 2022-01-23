@@ -433,6 +433,10 @@ public class PrivateMines extends JavaPlugin {
         } else {
             privateMines.getLogger().warning("The global region was somehow null. This should be impossible.");
         }
+
+        privateMines.getLogger().info("spawnPointMaterial: " + spawnPoint.name());
+        privateMines.getLogger().info("mineCornerMaterial: " + mineCorner.name());
+        privateMines.getLogger().info("upgradeMaterial: " + upgradeMaterial.name());
     }
 
     @Override
