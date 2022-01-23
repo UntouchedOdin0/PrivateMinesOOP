@@ -218,17 +218,17 @@ public class MineFactory {
         privateMines.getLogger().info("upgradeMaterial: " + upgradeMaterial.name());
 
         if (worldEditMineType == null) {
-            this.privateMines.getLogger().warning("Failed to create mine due to the worldedit mine type being null");
+            privateMines.getLogger().warning("Failed to create mine due to the worldedit mine type being null");
         } else if (fillType == null) {
-            this.privateMines.getLogger().warning("Failed to fill mine due to fillType being null");
+            privateMines.getLogger().warning("Failed to fill mine due to fillType being null");
         } else {
             File file = worldEditMineType.getSchematicFile();
-            PasteFactory pasteFactory = new PasteFactory(this.privateMines);
-            WorldEditMine worldEditMine = new WorldEditMine(this.privateMines);
+            PasteFactory pasteFactory = new PasteFactory(privateMines);
+            WorldEditMine worldEditMine = new WorldEditMine(privateMines);
             WorldEditMineData worldEditMineData = new WorldEditMineData();
             ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(file);
             if (!file.exists()) {
-                this.privateMines.getLogger().warning("File doesn't exist, can't create mine!");
+                privateMines.getLogger().warning("File doesn't exist, can't create mine!");
             }
             if (clipboardFormat != null)
                 try {
@@ -236,12 +236,11 @@ public class MineFactory {
                     try {
                         Clipboard clipboard = clipboardReader.read();
                         if (clipboard == null) {
-                            this.privateMines.getLogger().warning("Clipboard was null");
-                            if (clipboardReader != null)
-                                clipboardReader.close();
+                            privateMines.getLogger().warning("Clipboard was null");
+                            clipboardReader.close();
                         }
                         World world = location.getWorld();
-                        WorldEditUtilities worldEditUtilities = this.privateMines.getWorldEditUtils();
+                        WorldEditUtilities worldEditUtilities = privateMines.getWorldEditUtils();
                         Region region = worldEditUtilities.pasteSchematic(location, file);
                         region.iterator().forEachRemaining(blockVector3 -> {
                             if (world != null) {
