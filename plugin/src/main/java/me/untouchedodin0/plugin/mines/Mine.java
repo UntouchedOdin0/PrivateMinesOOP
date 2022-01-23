@@ -68,6 +68,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+
+@Deprecated(since = "3.0.9")
 public class Mine {
 
     public static final List<BlockVector3> EXPANSION_VECTORS = List.of(BlockVector3.UNIT_X, BlockVector3.UNIT_MINUS_X,
