@@ -1,6 +1,7 @@
 package me.untouchedodin0.plugin;
 
 import me.untouchedodin0.plugin.factory.MineFactory;
+import me.untouchedodin0.plugin.mines.WorldEditMineType;
 import me.untouchedodin0.plugin.storage.MineStorage;
 
 public class PrivateMinesAPI {
@@ -13,6 +14,9 @@ public class PrivateMinesAPI {
         this.mineStorage = privateMines.getMineStorage();
     }
 
+    public PrivateMines getInstance() {
+        return PrivateMines.getPrivateMines();
+    }
 
     public MineFactory getMineFactory() {
         return mineFactory;
@@ -20,5 +24,9 @@ public class PrivateMinesAPI {
 
     public MineStorage getMineStorage() {
         return mineStorage;
+    }
+
+    public WorldEditMineType getWorldEditMineType(String name) {
+        return PrivateMines.getInstance().getWorldEditMineType(name);
     }
 }

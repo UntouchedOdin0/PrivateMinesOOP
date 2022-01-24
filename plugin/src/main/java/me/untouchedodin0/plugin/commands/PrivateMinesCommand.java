@@ -25,6 +25,7 @@ SOFTWARE.
 package me.untouchedodin0.plugin.commands;
 
 import me.untouchedodin0.plugin.PrivateMines;
+import me.untouchedodin0.plugin.PrivateMinesAPI;
 import me.untouchedodin0.plugin.config.MenuConfig;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.mines.Mine;
@@ -68,6 +69,8 @@ public class PrivateMinesCommand {
     private final MineStorage mineStorage;
     private final MineWorldManager mineWorldManager;
     private final PrivateMines privateMines;
+    private final PrivateMinesAPI privateMinesAPI;
+
     Utils utils;
 
     public PrivateMinesCommand(PrivateMines privateMine) {
@@ -77,6 +80,7 @@ public class PrivateMinesCommand {
         this.mineStorage = privateMine.getMineStorage();
         this.mineWorldManager = privateMine.getMineWorldManager();
         this.utils = privateMine.getUtils();
+        this.privateMinesAPI = PrivateMines.getAPI();
     }
 
     @CommandHook("main")
@@ -123,9 +127,10 @@ public class PrivateMinesCommand {
     public void give(CommandSender commandSender, Player target) {
 
         String alreadyOwnsMine = "targetAlreadyOwnsAMine";
+        MineStorage mineStorage = privateMinesAPI.getMineStorage();
 
         try {
-            if (privateMines.getMineStorage().hasWorldEditMine(target.getUniqueId())) {
+            if (mineStorage.hasWorldEditMine(target.getUniqueId())) {
                 commandSender.sendMessage(ChatColor.RED + "User already has a mine!");
                 return;
             }
@@ -133,14 +138,11 @@ public class PrivateMinesCommand {
             Location location = mineWorldManager.getNextFreeLocation();
             if (privateMines.isWorldEditEnabled()) {
                 if (privateMines.useWorldEdit6()) {
-                    mineFactory6.sayHi();
                     mineFactory6.createMine(target, target.getLocation(), privateMines.getDefaultWorldEdit6MineType(), false);
                 } else {
                     WorldEditMineType worldEditMineType = privateMines.getWorldEditMineTypeTreeMap().firstEntry().getValue();
                     mineFactory.createMine(target, location, worldEditMineType, false);
                 }
-                // had WorldEditMine = mineFactory.create before incase it needs to go back...
-//                mineFactory.createMine(target, location, privateMines.getDefaultWorldEditMineType(), false);
             }
         } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException) {
             arrayIndexOutOfBoundsException.printStackTrace();
@@ -166,7 +168,7 @@ public class PrivateMinesCommand {
             task.cancel();
             worldEditMine.delete();
             privateMines.getMineStorage().removeWorldEditMine(uuid);
-            privateMines.getLogger().info(privateMines.getMineStorage().getWorldEditMines().toString());
+
             if (jsonFile.exists()) {
                 boolean deleted = jsonFile.delete();
                 if (deleted) {

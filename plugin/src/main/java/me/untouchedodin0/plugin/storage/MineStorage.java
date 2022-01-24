@@ -44,6 +44,7 @@ public class MineStorage {
 
     private final Map<UUID, WorldEditMine> worldEditMines = new HashMap<>();
 
+
     /**
      * A simple get method to get how many mines have been created
      *
