@@ -77,6 +77,8 @@ import java.util.regex.Pattern;
 public class PrivateMines extends JavaPlugin {
 
     private static PrivateMines privateMines;
+    private static PrivateMinesAPI privateMinesAPI;
+
     private final Map<String, MineType> mineDataMap = new HashMap<>();
     private final TreeMap<String, MineType> mineTypeTreeMap = new TreeMap<>();
     private final TreeMap<String, WorldEdit6MineType> worldEdit6MineTypeTreeMap = new TreeMap<>();
@@ -140,6 +142,10 @@ public class PrivateMines extends JavaPlugin {
         return privateMines;
     }
 
+    public static PrivateMinesAPI getAPI() {
+        return privateMinesAPI;
+    }
+
     /*
         Disables the plugin, clears the map and saves the block data manager
      */
@@ -147,6 +153,7 @@ public class PrivateMines extends JavaPlugin {
     @Override
     public void onEnable() {
         privateMines = this;
+        privateMinesAPI = new PrivateMinesAPI(privateMines);
         gson = new Gson();
         int MID_VERSION = RedLib.MID_VERSION;
 
