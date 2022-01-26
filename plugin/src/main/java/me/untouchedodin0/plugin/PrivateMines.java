@@ -687,6 +687,10 @@ public class PrivateMines extends JavaPlugin {
         return useWorldEdit6;
     }
 
+    public boolean isUsingAStupidlyOldVersionOfMinecraftAndWorldEditAndShouldReallyBeUpdatingToANewerVersionByNow() {
+        return useWorldEdit6;
+    }
+
     public int getMineDistance() {
         return mineDistance;
     }
