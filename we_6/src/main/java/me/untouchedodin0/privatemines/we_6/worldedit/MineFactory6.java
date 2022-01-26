@@ -44,7 +44,6 @@ public class MineFactory6 {
         UUID uuid = player.getUniqueId();
         List<Location> corners = new ArrayList<>();
 
-
         player.sendMessage("player: " + player);
         player.sendMessage("location: " + location);
         player.sendMessage("worldEdit6MineType: " + worldEdit6MineType);

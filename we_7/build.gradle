@@ -2,6 +2,9 @@ repositories {
     maven {
         url = uri("https://mvn.intellectualsites.com/content/groups/public/")
     }
+    maven {
+        url = "https://maven.enginehub.org/repo/"
+    }
 }
 dependencies {
     compileOnly project(':compat')

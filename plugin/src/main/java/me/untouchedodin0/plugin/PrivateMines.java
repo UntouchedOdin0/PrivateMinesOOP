@@ -204,9 +204,7 @@ public class PrivateMines extends JavaPlugin {
             mineFactory6.sayHi();
             useWorldEdit6 = true;
         } else  {
-            WorldEditMine worldEditMine7 = new WorldEditMine(this);
             mineFactory = new MineFactory(this, blockDataManager);
-            getLogger().info("world edit mine 7: " + worldEditMine7);
             useWorldEdit6 = false;
         }
 

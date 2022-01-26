@@ -199,9 +199,6 @@ public class MineFactory {
         Material spawnMaterial = privateMines.getSpawnMaterial();
         Material mineCornerMaterial = privateMines.getCornerMaterial();
         Material upgradeMaterial = privateMines.getUpgradeMaterial();
-        privateMines.getLogger().info("spawnMaterial: " + spawnMaterial.name());
-        privateMines.getLogger().info("mineCornerMaterial: " + mineCornerMaterial.name());
-        privateMines.getLogger().info("upgradeMaterial: " + upgradeMaterial.name());
 
         if (worldEditMineType == null) {
             privateMines.getLogger().warning("Failed to create mine due to the worldedit mine type being null");
