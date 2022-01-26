@@ -126,7 +126,6 @@ public class WorldEditUtils extends WorldEditUtilities {
         }
     }
 
-
     @Override
     public Region pasteSchematic(Location location, File file) {
         // fill this one

@@ -186,7 +186,7 @@ public class PrivateMines extends JavaPlugin {
 
         // something in the world edit mine is breaking it...
 
-        configManager = new ConfigManager(this).register(this, WorldEditMine.class).load();
+//        configManager = new ConfigManager(this).register(this, WorldEditMine.class).load();
         blockDataManager = new BlockDataManager(
                 getDataFolder()
                         .toPath()
@@ -198,14 +198,20 @@ public class PrivateMines extends JavaPlugin {
         utils = new Utils(this);
 
         if (MID_VERSION <= 12) {
+            useWorldEdit6 = true;
             WorldEditMine6 worldEditMine6 = new WorldEditMine6();
             mineFactory6 = new MineFactory6();
             getLogger().info("world edit mine 6: " + worldEditMine6);
             mineFactory6.sayHi();
-            useWorldEdit6 = true;
+            configManager = new ConfigManager(this).register(this, WorldEditMine6.class).load();
+            getLogger().info("spawnMaterial: " + spawnPoint);
+            getLogger().info("mineCorner: " + mineCorner);
+            getLogger().info("sellNpc: " + sellNpc);
+            getLogger().info("upgradeMaterial: " + upgradeMaterial);
         } else  {
-            mineFactory = new MineFactory(this, blockDataManager);
             useWorldEdit6 = false;
+            mineFactory = new MineFactory(this, blockDataManager);
+            configManager = new ConfigManager(this).register(this, WorldEditMine.class).load();
         }
 
         String pluginFolder = getDataFolder().getPath();
@@ -439,9 +445,10 @@ public class PrivateMines extends JavaPlugin {
             privateMines.getLogger().warning("The global region was somehow null. This should be impossible.");
         }
 
-        privateMines.getLogger().info("spawnPointMaterial: " + spawnPoint.name());
-        privateMines.getLogger().info("mineCornerMaterial: " + mineCorner.name());
-        privateMines.getLogger().info("upgradeMaterial: " + upgradeMaterial.name());
+        getPrivateMines().getLogger().info("spawnPointMaterial: " + spawnPoint);
+//        privateMines.getLogger().info("spawnPointMaterial: " + spawnPoint.name());
+//        privateMines.getLogger().info("mineCornerMaterial: " + mineCorner.name());
+//        privateMines.getLogger().info("upgradeMaterial: " + upgradeMaterial.name());
     }
 
     @Override
