@@ -29,4 +29,8 @@ public class PrivateMinesAPI {
     public WorldEditMineType getWorldEditMineType(String name) {
         return PrivateMines.getInstance().getWorldEditMineType(name);
     }
+
+    public boolean isUsingAStupidlyOldVersionOfMinecraftAndWorldEditAndShouldReallyBeUpdatingToANewerVersionByNow() {
+        return PrivateMines.getInstance().isUsingAStupidlyOldVersionOfMinecraftAndWorldEditAndShouldReallyBeUpdatingToANewerVersionByNow();
+    }
 }
