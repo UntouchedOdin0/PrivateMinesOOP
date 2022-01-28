@@ -82,6 +82,7 @@ public class MineFactory {
         this.debugMode = privateMines.isDebugMode();
     }
 
+    @Deprecated
     public Mine createMine(Player player, Location location) {
         if (this.defaultMineType == null)
             this.privateMines.getLogger().warning("Failed to create mine due to defaultMineData being null");
@@ -123,7 +124,7 @@ public class MineFactory {
     private DataBlock getWorldEditDataBlock(Block block, Player player, Location location, WorldEditMine worldEditMine) {
         UUID ownerUUID = player.getUniqueId();
         String ownerUUIDString = ownerUUID.toString();
-        String worldName = ((World) Objects.<World>requireNonNull(location.getWorld())).getName();
+        String worldName = Objects.requireNonNull(location.getWorld()).getName();
         WorldEditMineType worldEditMineType = worldEditMine.getWorldEditMineType();
         DataBlock dataBlock = this.blockDataManager.getDataBlock(block);
         int corner1X = worldEditMine.getCuboidRegion().getMinimumPoint().getBlockX();
@@ -161,6 +162,7 @@ public class MineFactory {
         return dataBlock;
     }
 
+    @Deprecated
     public Mine createMine(Player player, Location location, MineType mineType) {
         if (mineType == null) {
             this.privateMines.getLogger().warning("Failed to create mine due to the minetype being null");
