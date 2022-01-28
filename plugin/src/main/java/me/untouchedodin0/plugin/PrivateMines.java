@@ -29,6 +29,7 @@ import com.google.gson.Gson;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
+import de.jeff_media.updatechecker.UpdateChecker;
 import me.untouchedodin0.plugin.commands.PrivateMinesCommand;
 import me.untouchedodin0.plugin.config.MenuConfig;
 import me.untouchedodin0.plugin.config.MineConfig;
@@ -102,6 +103,7 @@ public class PrivateMines extends JavaPlugin {
     private final Pattern filePattern = Pattern.compile("(.*?)\\.(json)");
     private final Pattern jarPattern = Pattern.compile("(.*?)\\.(jar)");
 
+
     private Gson gson;
     private Material material;
     IWrappedRegion globalRegion;
@@ -159,6 +161,8 @@ public class PrivateMines extends JavaPlugin {
         privateMinesAPI = new PrivateMinesAPI(privateMines);
         gson = new Gson();
         int MID_VERSION = RedLib.MID_VERSION;
+        int pluginId = 11413;
+        int spigotPluginId = 90890;
 
         File configFile = new File(getDataFolder(), "config.yml");
 
@@ -199,6 +203,7 @@ public class PrivateMines extends JavaPlugin {
 //        mineFactory = new MineFactory(this, blockDataManager);
         mineWorldManager = new MineWorldManager(this);
         utils = new Utils(this);
+
 
         if (MID_VERSION <= 12) {
             useWorldEdit6 = true;
@@ -295,8 +300,6 @@ public class PrivateMines extends JavaPlugin {
 
         File[] addons = addonsDirectory.listFiles();
 
-        int pluginId = 11413;
-
         int loaded = mineTypes.size();
         getLogger().info("Loaded a total of {loaded} mine types!"
                 .replace("{loaded}",
@@ -316,6 +319,7 @@ public class PrivateMines extends JavaPlugin {
                         new PrivateMinesCommand(this));
 
         Messages.load(this);
+
         Metrics metrics = new Metrics(this, pluginId);
         metrics.addCustomChart(new Metrics.SingleLineChart("mines", MineStorage::getLoadedMineSize));
 
@@ -343,6 +347,10 @@ public class PrivateMines extends JavaPlugin {
             utils.setGlobalFlags(globalRegion);
         } else {
             privateMines.getLogger().warning("The global region was somehow null. This should be impossible.");
+        }
+
+        if (notifyForUpdates) {
+            UpdateChecker.init(this, spigotPluginId).checkEveryXHours(1).checkNow();
         }
     }
 
@@ -374,7 +382,6 @@ public class PrivateMines extends JavaPlugin {
 
     public void addWe7Type(String name, WorldEditMineType worldEditMineType) {
         worldEditMineTypeTreeMap.put(name, worldEditMineType);
-        privateMines.getLogger().info("tree map: " + worldEditMineTypeTreeMap);
     }
 
     /*
@@ -391,12 +398,13 @@ public class PrivateMines extends JavaPlugin {
      */
 
     public MineType getDefaultMineType() {
-        if (mineTypeTreeMap.isEmpty()) {
+        if (mineTypeTreeMap.isEmpty() || isWorldEditEnabled) {
             Bukkit.getLogger().info("No default mine type was found!");
             Bukkit.getLogger().info("Create a mine type in the mineTypes");
             Bukkit.getLogger().info("section of the config.yml");
             Bukkit.getLogger().info("Please ask in the discord server" +
                     " if you need help");
+            getLogger().info("HERE!");
             return null;
         }
         return mineTypeTreeMap.firstEntry().getValue();

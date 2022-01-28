@@ -110,12 +110,8 @@ public class MineConfig {
             privateMines.getLogger().warning(missingFile);
         }
 
-        privateMines.getLogger().info("MID_VERSION: " + MID_VERSION);
-
         if (MID_VERSION == 12) {
             // Use legacy code (fun)
-
-            privateMines.getLogger().info("mid version was <= 12 loading legacy config...");
 
             this.path = privateMines.getSchematicsDirectory().toPath().resolve(file);
             File file = path.toFile();
@@ -126,9 +122,7 @@ public class MineConfig {
             worldEdit6MineType.setResetTime(getResetTime());
             worldEdit6MineType.setMaterials(getMaterials());
             privateMines.addWe6Type(getName(), worldEdit6MineType);
-            privateMines.getLogger().info("worldedit6 mine type: " + worldEdit6MineType);
         } else {
-            privateMines.getLogger().info("loading up a decent version >= 12");
 
             this.path = privateMines.getSchematicsDirectory().toPath().resolve(file);
             File file = path.toFile();

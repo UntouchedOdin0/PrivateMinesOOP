@@ -78,6 +78,7 @@ subprojects {
 
     shadowJar {
         relocate 'org.codemc.worldguardwrapper', 'me.untouchedodin0.privatemines.worldguardwrapper'
+        relocate 'de.jeff_media.updatechecker', 'me.untouchedodin0.privatemines.updatechecker'
     }
 
     publishing {
