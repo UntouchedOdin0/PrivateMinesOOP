@@ -24,6 +24,7 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin.util.addons;
 
+import lombok.NonNull;
 import me.untouchedodin0.plugin.PrivateMines;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.bukkit.plugin.InvalidPluginException;
@@ -48,20 +49,8 @@ public class AddonLoader {
 
     // Load the addons from the addons folder
 
-    public void load(File file) {
-        if (pluginManager != null) {
-            try {
-                Plugin plugin = pluginManager.loadPlugin(file);
-                if (plugin != null) {
-                    privateMines.getLogger().info("Loading addon... " + plugin.getName());
-                    addons.add(plugin.getName());
-                } else {
-                    privateMines.getLogger().warning("Failed to load file: " + file);
-                }
-            } catch (InvalidPluginException | InvalidDescriptionException e) {
-                e.printStackTrace();
-            }
-        }
+    public void loadAddon(@NonNull File file) {
+        Addon addon;
     }
 
     // Unload a specific addon via it's name.
