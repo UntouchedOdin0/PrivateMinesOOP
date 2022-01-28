@@ -41,7 +41,6 @@ import me.untouchedodin0.plugin.mines.data.WorldEditMineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Metrics;
 import me.untouchedodin0.plugin.util.Utils;
-import me.untouchedodin0.plugin.util.addons.AddonLoader;
 import me.untouchedodin0.plugin.util.placeholderapi.PrivateMinesExpansion;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditUtilities;
@@ -91,7 +90,6 @@ public class PrivateMines extends JavaPlugin {
     private MineStorage mineStorage;
     private BlockDataManager blockDataManager;
     private Utils utils;
-    private AddonLoader addonLoader;
     private WorldEditUtilities worldEditUtils;
     private ConfigManager configManager;
     private boolean isWorldEditEnabled = false;
@@ -295,7 +293,6 @@ public class PrivateMines extends JavaPlugin {
         }
 
         PluginManager pluginManager = Bukkit.getServer().getPluginManager();
-        addonLoader = new AddonLoader(this, pluginManager);
 
         File[] addons = addonsDirectory.listFiles();
 
@@ -327,7 +324,6 @@ public class PrivateMines extends JavaPlugin {
             Arrays.stream(addons).forEach(file -> {
                 if (file.getName().matches(String.valueOf(jarPattern))) {
                     privateMines.getLogger().info("found addon file: " + file);
-                    addonLoader.load(file);
                 }
             });
         }
@@ -360,10 +356,6 @@ public class PrivateMines extends JavaPlugin {
         getLogger().info("Saving and closing the BlockDataManager...");
         blockDataManager.getAll().forEach(dataBlock -> Bukkit.getLogger().info("Saving data block: " + dataBlock));
         blockDataManager.saveAndClose();
-
-        addonLoader.getAddons().forEach(addon -> {
-            addonLoader.unload(addon);
-        });
     }
 
     /*
