@@ -120,7 +120,6 @@ public class PrivateMinesCommand {
         });
 
         gui.open(player);
-        //todo https://github.com/Redempt/RedLib/wiki/InventoryGUI
     }
 
     @CommandHook("give")
