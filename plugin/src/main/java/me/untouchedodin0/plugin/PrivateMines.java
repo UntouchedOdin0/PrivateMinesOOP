@@ -210,7 +210,6 @@ public class PrivateMines extends JavaPlugin {
             WorldEditMine6 worldEditMine6 = new WorldEditMine6();
             mineFactory6 = new MineFactory6();
             getLogger().info("world edit mine 6: " + worldEditMine6);
-            mineFactory6.sayHi();
             configManager = new ConfigManager(this).register(this, WorldEditMine6.class).load();
             getLogger().info("spawnMaterial: " + spawnPoint);
             getLogger().info("mineCorner: " + mineCorner);
@@ -350,7 +349,7 @@ public class PrivateMines extends JavaPlugin {
         }
 
         if (notifyForUpdates) {
-            UpdateChecker.init(this, spigotPluginId).checkEveryXHours(1).checkNow();
+            UpdateChecker.init(this, spigotPluginId).checkEveryXHours(1).setDownloadLink(spigotPluginId).checkNow();
         }
     }
 

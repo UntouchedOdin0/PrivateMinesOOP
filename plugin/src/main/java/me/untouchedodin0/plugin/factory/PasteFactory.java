@@ -60,8 +60,9 @@ public class PasteFactory {
         }
 
         // Set up the variables.
+
         World world = null;
-        BlockVector3 centerVector = null;
+        BlockVector3 centerVector;
         Operation operation;
         Region region;
 
