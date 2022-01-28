@@ -299,107 +299,6 @@ public class PrivateMines extends JavaPlugin {
                 .replace("{loaded}",
                         String.valueOf(loaded)));
 
-//            blockDataManager.getAll().forEach(dataBlock -> {
-//                UUID uuid = UUID.fromString(dataBlock.getString("owner"));
-//                Location location; //= LocationUtils.fromString(dataBlock.getString("location"));
-//                Location spawnLocation = LocationUtils.fromString(dataBlock.getString("spawnLocation"));
-//                String worldEditMineTypeName = dataBlock.getString("type");
-//                WorldEditMineType worldEditMineType = worldEditMineTypeTreeMap.get(worldEditMineTypeName);
-//
-//                int corner1X = Integer.parseInt(dataBlock.getString("corner1X"));
-//                int corner1Y = Integer.parseInt(dataBlock.getString("corner1Y"));
-//                int corner1Z = Integer.parseInt(dataBlock.getString("corner1Z"));
-//
-//                int corner2X = Integer.parseInt(dataBlock.getString("corner2X"));
-//                int corner2Y = Integer.parseInt(dataBlock.getString("corner2Y"));
-//                int corner2Z = Integer.parseInt(dataBlock.getString("corner2Z"));
-//
-//                BlockVector3 corner1Vector = BlockVector3.at(corner1X, corner1Y, corner1Z);
-//                BlockVector3 corner2Vector = BlockVector3.at(corner2X, corner2Y, corner2Z);
-//
-//                CuboidRegion cuboidRegion = new CuboidRegion(corner1Vector, corner2Vector);
-//
-//                WorldEditMine worldEditMine = new WorldEditMine(this);
-//                worldEditMine.setMineOwner(uuid);
-//                worldEditMine.setCuboidRegion(cuboidRegion);
-//                worldEditMine.setLocation(location);
-//                worldEditMine.setSpawnLocation(spawnLocation);
-//                worldEditMine.setMaterial(Material.STONE);
-//                worldEditMine.setWorld(minesWorld);
-//                worldEditMine.setWorldEditMineType(worldEditMineType);
-//                worldEditMine.setDataBlock(dataBlock);
-//
-//                mineStorage.addWorldEditMine(uuid, worldEditMine);
-//            });
-
-
-//            privateMines.getLogger().info("using redlib");
-//            //todo re add this back
-
-            /*
-            // Loops all the data blocks
-            blockDataManager.getAll().forEach(dataBlock -> {
-
-                // Gets the mine type from the data block
-
-                MineType mineType = getMineDataMap().get(dataBlock.getString("type"));
-
-                // Creates a new mine object
-                Mine mine = new Mine(this);
-
-                // Gets the player uuid string from the data block then converts it to a UUID
-                UUID playerUUID = UUID.fromString(dataBlock.getString("owner"));
-
-                // Gets the mine location string from the datablock then converts it to a bukkit Location
-                Location location = LocationUtils.fromString(dataBlock.getString("location"));
-
-                // The multi block structure for the mine initialized further on
-                MultiBlockStructure multiBlockStructure;
-
-                // Sets the mine owner and the mine type
-                mine.setMineOwner(playerUUID);
-                mine.setMineType(mineType);
-
-                // Initialize the multi block structure from the mine type
-                multiBlockStructure = mineType.getMultiBlockStructure();
-
-                // Initialize the structure by using the multi block structure to assume the structure is at a location
-
-                this.structure = multiBlockStructure.assumeAt(location);
-
-                // Get the relative locations
-                int[] relativeSpawn = mineType.getSpawnLocation();
-                int[] relativeNpc = mineType.getNpcLocation();
-                int[] relativeCorner1 = mineType.getCorner1();
-                int[] relativeCorner2 = mineType.getCorner2();
-
-                Location spawnLocation = utils.getRelative(structure, relativeSpawn);
-                Location npcLocation = utils.getRelative(structure, relativeNpc);
-                Location corner1Location = utils.getRelative(structure, relativeCorner1);
-                Location corner2Location = utils.getRelative(structure, relativeCorner2);
-
-                CuboidRegion cuboidRegion = new CuboidRegion(corner1Location, corner2Location);
-                cuboidRegion.expand(1, 0, 1, 0, 1, 0);
-
-                mine.setSpawnLocation(spawnLocation);
-                mine.setNpcLocation(npcLocation);
-                mine.setCuboidRegion(cuboidRegion);
-                mine.setMineOwner(playerUUID);
-                mine.setStructure(structure);
-                mine.reset();
-                mine.startAutoResetTask();
-
-                mineStorage.addMine(playerUUID, mine);
-            });
-             */
-
-//        mineStorage.getMines().forEach(((uuid, mine) -> {
-//            String username = Bukkit.getOfflinePlayer(mine.getMineOwner()).getName();
-//            String loadingMessage = String.format("Loading %s's Mine!", username);
-//            getLogger().info(loadingMessage);
-//            mine.reset();
-//        }));
-
         /*
             Does these things in order
 
@@ -416,8 +315,6 @@ public class PrivateMines extends JavaPlugin {
         Messages.load(this);
         Metrics metrics = new Metrics(this, pluginId);
         metrics.addCustomChart(new Metrics.SingleLineChart("mines", MineStorage::getLoadedMineSize));
-
-
 
         //TODO FIX THIS
         if (addons != null) {
@@ -444,11 +341,6 @@ public class PrivateMines extends JavaPlugin {
         } else {
             privateMines.getLogger().warning("The global region was somehow null. This should be impossible.");
         }
-
-        getPrivateMines().getLogger().info("spawnPointMaterial: " + spawnPoint);
-//        privateMines.getLogger().info("spawnPointMaterial: " + spawnPoint.name());
-//        privateMines.getLogger().info("mineCornerMaterial: " + mineCorner.name());
-//        privateMines.getLogger().info("upgradeMaterial: " + upgradeMaterial.name());
     }
 
     @Override
