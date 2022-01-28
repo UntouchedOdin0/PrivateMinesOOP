@@ -104,8 +104,6 @@ public class Mine {
     private boolean isAutoResetting;
     private boolean isOpen;
     private Task resetTask;
-    private World world;
-    private EditSession editSession;
     private com.sk89q.worldedit.regions.CuboidRegion worldEditCube;
 
     public Mine(PrivateMines privateMines) {

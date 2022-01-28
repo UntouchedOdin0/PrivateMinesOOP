@@ -1,6 +1,5 @@
 package me.untouchedodin0.privatemines.compat;
 
-import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.regions.Region;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

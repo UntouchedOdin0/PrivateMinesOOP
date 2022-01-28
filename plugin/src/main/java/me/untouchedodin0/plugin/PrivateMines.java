@@ -83,7 +83,12 @@ public class PrivateMines extends JavaPlugin {
     private final TreeMap<String, MineType> mineTypeTreeMap = new TreeMap<>();
     private final TreeMap<String, WorldEdit6MineType> worldEdit6MineTypeTreeMap = new TreeMap<>();
     private final TreeMap<String, WorldEditMineType> worldEditMineTypeTreeMap = new TreeMap<>();
-
+    private final File minesDirectory = new File("plugins/PrivateMines/mines");
+    private final File schematicsDirectory = new File("plugins/PrivateMines/schematics");
+    private final File addonsDirectory = new File("plugins/PrivateMines/addons");
+    private final Pattern filePattern = Pattern.compile("(.*?)\\.(json)");
+    private final Pattern jarPattern = Pattern.compile("(.*?)\\.(jar)");
+    IWrappedRegion globalRegion;
     private MineFactory6 mineFactory6;
     private MineFactory mineFactory;
     private MineWorldManager mineWorldManager;
@@ -94,18 +99,8 @@ public class PrivateMines extends JavaPlugin {
     private ConfigManager configManager;
     private boolean isWorldEditEnabled = false;
     private boolean useWorldEdit6 = false;
-    private final File minesDirectory = new File("plugins/PrivateMines/mines");
-    private final File schematicsDirectory = new File("plugins/PrivateMines/schematics");
-    private final File addonsDirectory = new File("plugins/PrivateMines/addons");
-
-    private final Pattern filePattern = Pattern.compile("(.*?)\\.(json)");
-    private final Pattern jarPattern = Pattern.compile("(.*?)\\.(jar)");
-
-
     private Gson gson;
     private Material material;
-    IWrappedRegion globalRegion;
-
     private Map<Material, Double> materials = new HashMap<>();
 
     @ConfigValue
@@ -152,6 +147,11 @@ public class PrivateMines extends JavaPlugin {
     /*
         Disables the plugin, clears the map and saves the block data manager
      */
+
+    @SuppressWarnings("unused")
+    public static PrivateMines getInstance() {
+        return privateMines;
+    }
 
     @Override
     public void onEnable() {
@@ -213,7 +213,7 @@ public class PrivateMines extends JavaPlugin {
             getLogger().info("mineCorner: " + mineCorner);
             getLogger().info("sellNpc: " + sellNpc);
             getLogger().info("upgradeMaterial: " + upgradeMaterial);
-        } else  {
+        } else {
             useWorldEdit6 = false;
             mineFactory = new MineFactory(this, blockDataManager);
             configManager = new ConfigManager(this).register(this, WorldEditMine.class).load();
@@ -230,7 +230,7 @@ public class PrivateMines extends JavaPlugin {
             worldEditUtils = WorldEditUtilities.getInstance();
             getLogger().info("Loading worldedit v" + WorldEditPlugin.getPlugin(WorldEditPlugin.class)
                     .getDescription().getVersion());
-                isWorldEditEnabled = true;
+            isWorldEditEnabled = true;
 
             files = minesDirectory.listFiles();
             if (files != null) {
@@ -254,7 +254,7 @@ public class PrivateMines extends JavaPlugin {
                             int maxZ = worldEditMineData.getMaxZ();
 
                             Location spawn = new Location(Bukkit.getWorld(worldEditMineData.getWorldName()),
-                                                          worldEditMineData.getSpawnX(), worldEditMineData.getSpawnY(), worldEditMineData.getSpawnZ());
+                                    worldEditMineData.getSpawnX(), worldEditMineData.getSpawnY(), worldEditMineData.getSpawnZ());
 
                             BlockVector3 min = BlockVector3.at(minX, minY, minZ);
                             BlockVector3 max = BlockVector3.at(maxX, maxY, maxZ);
@@ -278,9 +278,9 @@ public class PrivateMines extends JavaPlugin {
                                 getLogger().severe("World " + worldName + " was deleted.");
                             }
                             worldEditMine.setLocation(new Location(world,
-                                                                   worldEditMineData.getRegionMaxX()+1, // why is this one max? hell if i know
-                                                                   worldEditMineData.getRegionMinY()-3,
-                                                                   worldEditMineData.getRegionMinZ())); // only pain and despair
+                                    worldEditMineData.getRegionMaxX() + 1, // why is this one max? hell if i know
+                                    worldEditMineData.getRegionMinY() - 3,
+                                    worldEditMineData.getRegionMinZ())); // only pain and despair
                             worldEditMine.startResetTask();
                             mineStorage.addWorldEditMine(worldEditMineData.getMineOwner(), worldEditMine);
                             mineWorldManager.getNextFreeLocation();
@@ -317,7 +317,7 @@ public class PrivateMines extends JavaPlugin {
         Messages.load(this);
 
         Metrics metrics = new Metrics(this, pluginId);
-        metrics.addCustomChart(new Metrics.SingleLineChart("mines", MineStorage::getLoadedMineSize));
+        metrics.addCustomChart(new Metrics.SingleLineChart("mines", mineStorage::getLoadedWorldEditMinesSize));
 
         //TODO FIX THIS
         if (addons != null) {
@@ -349,6 +349,10 @@ public class PrivateMines extends JavaPlugin {
         }
     }
 
+    /*
+        Adds a MineData to the maps
+     */
+
     @Override
     public void onDisable() {
         getLogger().info("Disabling Private Mines...");
@@ -357,10 +361,6 @@ public class PrivateMines extends JavaPlugin {
         blockDataManager.getAll().forEach(dataBlock -> Bukkit.getLogger().info("Saving data block: " + dataBlock));
         blockDataManager.saveAndClose();
     }
-
-    /*
-        Adds a MineData to the maps
-     */
 
     public void addMineData(String name, MineType mineType) {
         mineDataMap.putIfAbsent(name, mineType);
@@ -371,12 +371,16 @@ public class PrivateMines extends JavaPlugin {
         worldEdit6MineTypeTreeMap.put(name, worldEdit6MineType);
     }
 
+    /*
+        Gets a map of all the MineData types
+     */
+
     public void addWe7Type(String name, WorldEditMineType worldEditMineType) {
         worldEditMineTypeTreeMap.put(name, worldEditMineType);
     }
 
     /*
-        Gets a map of all the MineData types
+        Gets the default mine data
      */
 
     @SuppressWarnings("unused")
@@ -384,22 +388,22 @@ public class PrivateMines extends JavaPlugin {
         return mineDataMap;
     }
 
-    /*
-        Gets the default mine data
-     */
-
     public MineType getDefaultMineType() {
         if (mineTypeTreeMap.isEmpty() || isWorldEditEnabled) {
             Bukkit.getLogger().info("No default mine type was found!");
             Bukkit.getLogger().info("Create a mine type in the mineTypes");
             Bukkit.getLogger().info("section of the config.yml");
             Bukkit.getLogger().info("Please ask in the discord server" +
-                    " if you need help");
+                                    " if you need help");
             getLogger().info("HERE!");
             return null;
         }
         return mineTypeTreeMap.firstEntry().getValue();
     }
+
+    /*
+        Get default world edit type
+     */
 
     public WorldEdit6MineType getDefaultWorldEdit6MineType() {
         if (worldEdit6MineTypeTreeMap.isEmpty()) {
@@ -407,26 +411,10 @@ public class PrivateMines extends JavaPlugin {
             Bukkit.getLogger().info("Create a mine type in the mineTypes");
             Bukkit.getLogger().info("section of the config.yml");
             Bukkit.getLogger().info("Please ask in the discord server" +
-                                            " if you need help");
+                                    " if you need help");
             return null;
         }
         return worldEdit6MineTypeTreeMap.firstEntry().getValue();
-    }
-
-    /*
-        Get default world edit type
-     */
-
-    public WorldEditMineType getDefaultWorldEditMineType() {
-        if (worldEditMineTypeTreeMap.isEmpty()) {
-            Bukkit.getLogger().info("No default world edit mine type was found!");
-            Bukkit.getLogger().info("Create a mine type in the mineTypes");
-            Bukkit.getLogger().info("section of the config.yml");
-            Bukkit.getLogger().info("Please ask in the discord server" +
-                                            " if you need help");
-            return null;
-        }
-        return worldEditMineTypeTreeMap.firstEntry().getValue();
     }
 
 
@@ -435,12 +423,28 @@ public class PrivateMines extends JavaPlugin {
         Gets the spawn material
      */
 
+    public WorldEditMineType getDefaultWorldEditMineType() {
+        if (worldEditMineTypeTreeMap.isEmpty()) {
+            Bukkit.getLogger().info("No default world edit mine type was found!");
+            Bukkit.getLogger().info("Create a mine type in the mineTypes");
+            Bukkit.getLogger().info("section of the config.yml");
+            Bukkit.getLogger().info("Please ask in the discord server" +
+                                    " if you need help");
+            return null;
+        }
+        return worldEditMineTypeTreeMap.firstEntry().getValue();
+    }
+
+    /*
+        Gets the corner material
+     */
+
     public Material getSpawnMaterial() {
         return spawnPoint;
     }
 
     /*
-        Gets the corner material
+        Gets the sell npc material
      */
 
     public Material getCornerMaterial() {
@@ -448,7 +452,7 @@ public class PrivateMines extends JavaPlugin {
     }
 
     /*
-        Gets the sell npc material
+        Gets the upgrade material
      */
 
     public Material getSellNpcMaterial() {
@@ -456,33 +460,32 @@ public class PrivateMines extends JavaPlugin {
     }
 
     /*
-        Gets the upgrade material
+        Gets the main menu title
      */
 
     public Material getUpgradeMaterial() {
         return upgradeMaterial;
     }
 
-    /*
-        Gets the main menu title
-     */
-
     public String getMainMenuTitle() {
         return mainMenuTitle;
     }
-
 
     public MineType getMineType(String mineType) {
         MineType newType = mineTypeTreeMap.get(mineType);
         return newType;
     }
 
+    /*
+        Gets the next MineData from the TreeMap using String
+     */
+
     public WorldEditMineType getWorldEditMineType(String mineType) {
         return worldEditMineTypeTreeMap.get(mineType);
     }
 
     /*
-        Gets the next MineData from the TreeMap using String
+        Gets the next MineData from the TreeMap using MineData
      */
 
     @SuppressWarnings("unused")
@@ -495,7 +498,7 @@ public class PrivateMines extends JavaPlugin {
         return mineTypeTreeMap.higherEntry(mineType).getValue();
     }
 
-    /*
+        /*
         Gets the next MineData from the TreeMap using MineData
      */
 
@@ -507,8 +510,8 @@ public class PrivateMines extends JavaPlugin {
         return mineTypeTreeMap.higherEntry(mineType.getName()).getValue();
     }
 
-        /*
-        Gets the next MineData from the TreeMap using MineData
+    /*
+        Checks is the mine is currently fully maxed out
      */
 
     public WorldEditMineType getNextMineType(WorldEditMineType worldEditMineType) {
@@ -528,21 +531,21 @@ public class PrivateMines extends JavaPlugin {
         return mineType.equals(lastValue);
     }
 
-    /*
-        Checks is the mine is currently fully maxed out
-     */
-
     public boolean isAtLastMineType(WorldEditMineType worldEditMineType) {
         WorldEditMineType lastValue = worldEditMineTypeTreeMap.lastEntry().getValue();
         return worldEditMineType.equals(lastValue);
     }
+
+    /*
+        Gets the Mine Factory.
+     */
 
     public MineFactory6 getMineFactory6() {
         return mineFactory6;
     }
 
     /*
-        Gets the Mine Factory.
+        Gets the mine storage
      */
 
     public MineFactory getMineFactory() {
@@ -550,16 +553,12 @@ public class PrivateMines extends JavaPlugin {
     }
 
     /*
-        Gets the mine storage
+        Gets the block data manager
      */
 
     public MineStorage getMineStorage() {
         return mineStorage;
     }
-
-    /*
-        Gets the block data manager
-     */
 
     public BlockDataManager getBlockDataManager() {
         return blockDataManager;
@@ -619,10 +618,5 @@ public class PrivateMines extends JavaPlugin {
 
     public ConfigManager getConfigManager() {
         return configManager;
-    }
-
-    @SuppressWarnings("unused")
-    public static PrivateMines getInstance() {
-        return privateMines;
     }
 }

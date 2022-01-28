@@ -71,7 +71,6 @@ subprojects {
         implementation 'com.github.Redempt:RedLib:6.0.9.1'
         implementation 'de.jeff_media:SpigotUpdateChecker:1.3.2'
 
-        compileOnly 'com.sk89q.worldedit:worldedit-bukkit:6.1.4-SNAPSHOT'
         compileOnly 'org.projectlombok:lombok:1.18.22'
     }
 

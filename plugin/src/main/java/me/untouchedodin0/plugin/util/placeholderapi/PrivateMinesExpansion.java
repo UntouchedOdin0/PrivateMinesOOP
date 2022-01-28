@@ -27,6 +27,7 @@ package me.untouchedodin0.plugin.util.placeholderapi;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.mines.Mine;
+import me.untouchedodin0.plugin.mines.WorldEditMine;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -38,7 +39,6 @@ public class PrivateMinesExpansion extends PlaceholderExpansion {
 
     PrivateMines privateMines;
     MineStorage mineStorage;
-    Mine mine;
     UUID uuid;
 
     @Override
@@ -71,13 +71,13 @@ public class PrivateMinesExpansion extends PlaceholderExpansion {
 
         this.privateMines = PrivateMines.getPrivateMines();
         this.mineStorage = privateMines.getMineStorage();
-        if (mineStorage.hasMine(uuid)) {
-            mine = mineStorage.getMine(uuid);
+        if (mineStorage.hasWorldEditMine(uuid)) {
+            WorldEditMine mine = mineStorage.getWorldEditMine(uuid);
 
             try {
                 switch (identifier) {
                     case "type":
-                        return mine.getMineType().getName();
+                        return mine.getWorldEditMineType().getName();
                     case "hasMine":
                         return String.valueOf(mineStorage.hasMine(uuid));
                 }

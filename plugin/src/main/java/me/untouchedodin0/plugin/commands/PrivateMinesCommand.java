@@ -287,7 +287,6 @@ public class PrivateMinesCommand {
     public void setBlocks(CommandSender commandSender, Player target, Material[] materials) {
         Player player = (Player) commandSender;
         WeightedRandom<Material> weightedRandom = new WeightedRandom<>();
-        Mine mine;
         String targetDoesNotOwnMine = Messages.msg("targetDoesNotOwnMine");
 
         for (Material material : materials) {
@@ -502,7 +501,7 @@ public class PrivateMinesCommand {
         player.sendMessage("" + mineStorage.getWorldEditMinesCount());
         InventoryGUI inventoryGUI = new InventoryGUI(Bukkit.createInventory(null, 27, "Public Mines"));
 
-        mineStorage.getWorldEditMines().forEach((uuid, worldEditMine) -> {
+        mineStorage.getMines().forEach((uuid, worldEditMine) -> {
             ItemButton itemButton = ItemButton.create(new ItemBuilder(Material.EMERALD_BLOCK).setName("Click me"), inventoryClickEvent -> {
                Player clickPlayer = (Player) inventoryClickEvent.getWhoClicked();
                clickPlayer.sendMessage("howdy " + this);
