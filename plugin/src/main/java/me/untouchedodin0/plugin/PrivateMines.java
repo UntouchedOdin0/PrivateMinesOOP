@@ -130,6 +130,9 @@ public class PrivateMines extends JavaPlugin {
     private boolean useWorldEdit = false;
 
     @ConfigValue
+    private boolean notifyForUpdates = false;
+
+    @ConfigValue
     private int mineDistance = 150;
 
     @ConfigValue
