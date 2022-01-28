@@ -348,6 +348,8 @@ public class PrivateMines extends JavaPlugin {
             privateMines.getLogger().warning("The global region was somehow null. This should be impossible.");
         }
 
+//        UpdateChecker.init(this, spigotPluginId).checkEveryXHours(1).setDownloadLink(spigotPluginId).checkNow();
+
         if (notifyForUpdates) {
             UpdateChecker.init(this, spigotPluginId).checkEveryXHours(1).setDownloadLink(spigotPluginId).checkNow();
         }
