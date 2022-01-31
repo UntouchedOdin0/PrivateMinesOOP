@@ -1,7 +1,7 @@
 repositories {
-    maven {
-        url = uri("https://mvn.intellectualsites.com/content/groups/public/")
-    }
+//    maven {
+//        url = uri("https://mvn.intellectualsites.com/content/groups/public/")
+//    }
     maven {
         url = uri("https://maven.enginehub.org/repo/")
     }
@@ -9,5 +9,5 @@ repositories {
 
 dependencies {
     compileOnly project(':compat')
-    compileOnly 'com.sk89q.worldguard:worldguard-legacy:6.1.9-SNAPSHOT'
+//    compileOnly 'com.sk89q.worldguard:worldguard-legacy:6.1.9-SNAPSHOT'
 }
