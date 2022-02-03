@@ -1,12 +1,11 @@
 # The different Materials to look for within the mine structure.
 spawnPoint: "CHEST"
 mineCorner: "POWERED_RAIL"
-sellNpc: "WHITE_WOOL"
+sellNpc: "WOOL"
 upgradeMaterial: "OBSIDIAN"
 mainMenuTitle: "Private Mines"
 
 debugMode: false
-useWorldEdit: true
 notifyForUpdates: true
 mineDistance: 150
 resetPercentage: 50 # Supports double values
