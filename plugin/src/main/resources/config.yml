@@ -72,7 +72,7 @@ inventory:
     lore:
       - "&aClick me to set your tax"
       - "&7Soon! &c<3"
-    type: OAK_SIGN
+    type: SIGN
     slot: 11
     action: "settax"
   Item4:
