@@ -76,7 +76,7 @@ public class WE6Adapter implements WorldEditAdapter {
             randomPattern.add(pattern, chance);
         });
 
-        final com.sk89q.worldedit.regions.CuboidRegion worldEditRegion = new com.sk89q.worldedit.regions.CuboidRegion(
+        final Region worldEditRegion = new com.sk89q.worldedit.regions.CuboidRegion(
                 BukkitUtil.toVector(region.getStart()),
                 BukkitUtil.toVector(region.getEnd())
         );

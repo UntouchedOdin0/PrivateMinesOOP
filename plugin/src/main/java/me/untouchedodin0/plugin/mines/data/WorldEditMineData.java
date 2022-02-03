@@ -24,7 +24,10 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin.mines.data;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import redempt.redlib.region.CuboidRegion;
 
 import java.util.*;
@@ -179,6 +182,13 @@ public class WorldEditMineData {
         setWorldName(region.getWorld().getName());
     }
 
+    public CuboidRegion getFullRegion() {
+        World world = Bukkit.getWorld(worldName);
+        return new CuboidRegion(
+                new Location(world, getRegionMinX(), getRegionMinY(), getRegionMinZ()),
+                new Location(world, getRegionMaxX(), getRegionMaxY(), getRegionMaxZ())
+        );
+    }
     public int getRegionMinY() {
         return regionMinY;
     }

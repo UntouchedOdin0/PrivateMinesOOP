@@ -44,7 +44,7 @@ allprojects {
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
 
-        sourceCompatibility = sourceCompatibility =  JavaVersion.VERSION_1_8
+        sourceCompatibility = targetCompatibility =  JavaVersion.VERSION_1_8
     }
 }
 
