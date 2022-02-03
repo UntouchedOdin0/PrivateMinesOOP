@@ -150,6 +150,10 @@ public class WorldEditMine {
         return mineTypes.isEmpty() ? mineType.getMaterials() : mineTypes;
     }
 
+    public void setMineTypes(Map<Material, Double> mineTypes) {
+        this.mineTypes = mineTypes;
+    }
+
     public boolean isInside(Location location) {
         return getMiningRegion().contains(location);
     }
@@ -168,7 +172,6 @@ public class WorldEditMine {
     public void reset() {
         fill(getMineTypes());
     }
-
 
     public void delete() {
         privateMines.getWorldEditAdapter().fillRegion(region, Material.AIR);
@@ -213,10 +216,6 @@ public class WorldEditMine {
 
         return miningRegion.clone().expand(amount, 0, amount, 0, amount, 0)
                 .stream().noneMatch(block -> block.getType() == Material.OBSIDIAN);
-    }
-
-    public void setMineTypes(Map<Material, Double> mineTypes) {
-        this.mineTypes = mineTypes;
     }
 
     public void expand(final int amount) {

@@ -64,7 +64,7 @@ public class PrivateMinesCommand {
     private final MineStorage mineStorage;
     private final MineWorldManager mineWorldManager;
     private final PrivateMines privateMines;
-    private final PrivateMinesAPI privateMinesAPI;
+
 
     Utils utils;
 
@@ -74,7 +74,6 @@ public class PrivateMinesCommand {
         this.mineStorage = privateMine.getMineStorage();
         this.mineWorldManager = privateMine.getMineWorldManager();
         this.utils = privateMine.getUtils();
-        this.privateMinesAPI = PrivateMines.getAPI();
     }
 
     @CommandHook("main")
