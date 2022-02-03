@@ -57,14 +57,14 @@ inventory:
     lore:
       - "&aClick to teleport"
       - "&eTo your mine!"
-    type: GOLDEN_BOOTS
+    type: GOLD_BOOTS
     slot: 9
     action: "teleport"
   Item2:
     name: "&cStatus"
     lore:
       - ""
-    type: RED_WOOL
+    type: WOOL
     slot: 10
     action: "status"
   Item3:
