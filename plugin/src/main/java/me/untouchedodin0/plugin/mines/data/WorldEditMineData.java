@@ -25,6 +25,7 @@ SOFTWARE.
 package me.untouchedodin0.plugin.mines.data;
 
 import org.bukkit.Material;
+import redempt.redlib.region.CuboidRegion;
 
 import java.util.*;
 
@@ -54,12 +55,11 @@ public class WorldEditMineData {
     int regionMaxZ;
 
     String worldName;
-    String material;
     String mineType;
 
     boolean isOpen;
 
-    Map<Material, Double> materials = new HashMap<>();
+    Map<Material, Double> materials = new EnumMap<>(Material.class);
     List<UUID> whitelistedPlayers = new ArrayList<>();
     List<UUID> bannedPlayers = new ArrayList<>();
     List<UUID> priorityPlayers = new ArrayList<>();
@@ -160,6 +160,25 @@ public class WorldEditMineData {
         this.regionMinX = regionMinX;
     }
 
+    public void setMiningRegion(CuboidRegion region) {
+        setMinX(region.getStart().getBlockX());
+        setMinY(region.getStart().getBlockY());
+        setMinZ(region.getStart().getBlockZ());
+        setMaxX(region.getEnd().getBlockX());
+        setMaxY(region.getEnd().getBlockY());
+        setMaxZ(region.getEnd().getBlockZ());
+    }
+
+    public void setFullRegion(CuboidRegion region) {
+        setRegionMinX(region.getStart().getBlockX());
+        setRegionMinY(region.getStart().getBlockY());
+        setRegionMinZ(region.getStart().getBlockZ());
+        setRegionMaxX(region.getEnd().getBlockX());
+        setRegionMaxY(region.getEnd().getBlockY());
+        setRegionMaxZ(region.getEnd().getBlockZ());
+        setWorldName(region.getWorld().getName());
+    }
+
     public int getRegionMinY() {
         return regionMinY;
     }
@@ -206,14 +225,6 @@ public class WorldEditMineData {
 
     public void setWorldName(String worldName) {
         this.worldName = worldName;
-    }
-
-    public String getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(String material) {
-        this.material = material;
     }
 
     public String getMineType() {

@@ -1,22 +1,15 @@
 plugins {
     id 'java-library'
-    // id 'com.github.joschi.licenser' version '0.6.0'
     id 'com.github.johnrengelman.shadow' version '7.1.0'
     id 'maven-publish'
 }
 
 allprojects {
     apply plugin: 'java-library'
-    // apply plugin: 'com.github.joschi.licenser'
-    apply plugin: 'com.github.johnrengelman.shadow'
 
     group 'me.untouchedodin0.privatemines'
     version '3.0.9-SNAPSHOT'
 
-
-    /* license {
-         header = project.file('LICENCE')
-     }*/
 
     repositories {
         mavenCentral()
@@ -57,7 +50,6 @@ allprojects {
 
 subprojects {
     apply plugin: 'java-library'
-    apply plugin: 'com.github.johnrengelman.shadow'
     apply plugin: 'maven-publish'
 
     dependencies {
@@ -107,6 +99,12 @@ subprojects {
 dependencies {
     subprojects.forEach(project -> implementation(project))
 }
+
+shadowJar {
+    relocate 'org.codemc.worldguardwrapper', 'me.untouchedodin0.privatemines.worldguardwrapper'
+    relocate 'de.jeff_media.updatechecker', 'me.untouchedodin0.privatemines.updatechecker'
+}
+
 
 task copyTo1_8Server(type: Copy) {
     from shadowJar

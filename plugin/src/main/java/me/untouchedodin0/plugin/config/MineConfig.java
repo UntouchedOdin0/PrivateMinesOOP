@@ -25,11 +25,9 @@ SOFTWARE.
 package me.untouchedodin0.plugin.config;
 
 import me.untouchedodin0.plugin.PrivateMines;
-import me.untouchedodin0.plugin.mines.WorldEditMineType;
-import me.untouchedodin0.privatemines.we_6.worldedit.WorldEdit6MineType;
+import me.untouchedodin0.plugin.mines.MineType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import redempt.redlib.RedLib;
 import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.configmanager.annotations.ConfigMappable;
 import redempt.redlib.configmanager.annotations.ConfigPath;
@@ -38,7 +36,6 @@ import redempt.redlib.configmanager.annotations.ConfigValue;
 import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.MultiBlockStructure;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +81,7 @@ public class MineConfig {
     private WeightedRandom<Material> weightedRandom = new WeightedRandom<>();
 
     public MineConfig() {
-        this.privateMines = PrivateMines.getPlugin(PrivateMines.class);
+        this.privateMines = PrivateMines.getPrivateMines();
     }
 
     /*
@@ -97,12 +94,12 @@ public class MineConfig {
 
     @ConfigPostInit
     private void postInit() {
-        int MID_VERSION = RedLib.MID_VERSION;
 
         if (privateMines == null) {
             Bukkit.getLogger().info(
                     "Private Mines instance in the MineConfig was null " +
-                            "please make a ticket on the discord reporting this");
+                    "please make a ticket on the discord reporting this");
+            return;
         }
 
         if (file == null) {
@@ -110,65 +107,14 @@ public class MineConfig {
             privateMines.getLogger().warning(missingFile);
         }
 
-        if (MID_VERSION == 12) {
-            // Use legacy code (fun)
 
-            this.path = privateMines.getSchematicsDirectory().toPath().resolve(file);
-            File file = path.toFile();
-
-            WorldEdit6MineType worldEdit6MineType = new WorldEdit6MineType(file);
-            worldEdit6MineType.setName(getName());
-            worldEdit6MineType.setMineTier(getPriority());
-            worldEdit6MineType.setResetTime(getResetTime());
-            worldEdit6MineType.setMaterials(getMaterials());
-            privateMines.addWe6Type(getName(), worldEdit6MineType);
-        } else {
-
-            this.path = privateMines.getSchematicsDirectory().toPath().resolve(file);
-            File file = path.toFile();
-
-            WorldEditMineType worldEditMineType = new WorldEditMineType(privateMines, file);
-            worldEditMineType.setName(getName());
-            worldEditMineType.setMineTier(getPriority());
-            worldEditMineType.setResetTime(getResetTime());
-            worldEditMineType.setMaterials(getMaterials());
-            privateMines.addWe7Type(getName(), worldEditMineType);
-            privateMines.getLogger().info("Loaded mine type: " + worldEditMineType.getName());
-        }
-
-        /*
-        if (privateMines.useWorldEdit()) {
-            this.path = privateMines.getSchematicsDirectory().toPath().resolve(file);
-            File file = path.toFile();
-
-            WorldEditMineType worldEditMineType = new WorldEditMineType(privateMines, file);
-            worldEditMineType.setName(getName());
-            worldEditMineType.setMineTier(getPriority());
-            worldEditMineType.setResetTime(getResetTime());
-            worldEditMineType.setMaterials(getMaterials());
-            privateMines.addType(getName(), worldEditMineType);
-            privateMines.getLogger().info("Loaded mine type: " + worldEditMineType.getName());
-        } else {
-            privateMines.getLogger().info("Creating redlib mine types...");
-
-            this.path = privateMines.getDataFolder().toPath().resolve(file);
-            this.contents = Files.lines(path).collect(Collectors.joining());
-
-            this.multiBlockStructure = MultiBlockStructure.create(contents, name, false, true);
-
-            MineType mineType = new MineType(privateMines, multiBlockStructure);
-            mineType.setName(getName());
-            mineType.setMineTier(getPriority());
-            mineType.setResetTime(getResetTime());
-            mineType.setResetPercentage(getResetPercentage());
-            mineType.setMaterials(getMaterials());
-            getMaterials().forEach((material, percentage) -> weightedRandom.set(material, percentage));
-            mineType.setWeightedRandom(weightedRandom);
-            mineType.setFile(path.toFile());
-
-            privateMines.addMineData(getName(), mineType);
-        }
-         */
+        this.path = privateMines.getSchematicsDirectory().resolve(file);
+        MineType mineType = new MineType(path);
+        mineType.setName(getName());
+        mineType.setMineTier(getPriority());
+        mineType.setResetTime(getResetTime());
+        mineType.setMaterials(getMaterials());
+        privateMines.getMineTypeManager().registerMineType(mineType);
     }
 
     // a getter for the private mines instance

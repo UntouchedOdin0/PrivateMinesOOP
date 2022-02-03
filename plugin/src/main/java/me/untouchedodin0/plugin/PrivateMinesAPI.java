@@ -1,7 +1,7 @@
 package me.untouchedodin0.plugin;
 
 import me.untouchedodin0.plugin.factory.MineFactory;
-import me.untouchedodin0.plugin.mines.WorldEditMineType;
+import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.storage.MineStorage;
 
 public class PrivateMinesAPI {
@@ -26,11 +26,8 @@ public class PrivateMinesAPI {
         return mineStorage;
     }
 
-    public WorldEditMineType getWorldEditMineType(String name) {
-        return PrivateMines.getInstance().getWorldEditMineType(name);
+    public MineType getMineType(String name) {
+        return PrivateMines.getPrivateMines().getMineTypeManager().getMineType(name);
     }
 
-    public boolean isUsingAStupidlyOldVersionOfMinecraftAndWorldEditAndShouldReallyBeUpdatingToANewerVersionByNow() {
-        return PrivateMines.getInstance().isUsingAStupidlyOldVersionOfMinecraftAndWorldEditAndShouldReallyBeUpdatingToANewerVersionByNow();
-    }
 }

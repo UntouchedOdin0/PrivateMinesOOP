@@ -1,7 +1,6 @@
 name: PrivateMines
 main: me.untouchedodin0.plugin.PrivateMines
 version: 3.0.9
-api-version: 1.13
 
 depend:
   - WorldEdit
