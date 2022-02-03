@@ -86,6 +86,10 @@ public class PrivateMinesCommand {
         InventoryGUI gui = new InventoryGUI(Bukkit.createInventory(null, 27, inventoryTitleColored));
 
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(player.getUniqueId());
+        if (worldEditMine == null) {
+            player.sendMessage(Messages.msg("doNotOwnMine"));
+            return;
+        }
 
         menuConfig.forEach((s, c) -> {
             String name = utils.color(c.getName());
