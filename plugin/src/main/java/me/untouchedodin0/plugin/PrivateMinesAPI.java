@@ -29,5 +29,4 @@ public class PrivateMinesAPI {
     public MineType getMineType(String name) {
         return PrivateMines.getPrivateMines().getMineTypeManager().getMineType(name);
     }
-
 }

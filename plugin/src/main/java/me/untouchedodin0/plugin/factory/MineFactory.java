@@ -137,11 +137,6 @@ public class MineFactory {
             IWrappedRegion worldGuardRegion = utils.createWorldGuardRegion(player, miningRegion);
             mine.setIWrappedRegion(worldGuardRegion);
             utils.setMineFlags(mine);
-
-            privateMines.getLogger().info(String.valueOf(privateMineCreationEvent.isCancelled()));
-            privateMines.getLogger().info(String.valueOf(privateMineCreationEvent.getMine()));
-            privateMines.getLogger().info(String.valueOf(privateMineCreationEvent.getOwner()));
-            privateMines.getLogger().info(String.valueOf(privateMineCreationEvent.getMineType()));
         }
     }
 

@@ -173,18 +173,19 @@ public class Mine {
     public void reset() {
         PrivateMineResetEvent privateMineResetEvent = new PrivateMineResetEvent(this, privateMines);
         Bukkit.getPluginManager().callEvent(privateMineResetEvent);
-        fill(getMineTypes());
+        if (!privateMineResetEvent.isCancelled()) {
+            fill(getMineTypes());
+        }
     }
 
     public void delete() {
         PrivateMineDeletionEvent privateMineDeletionEvent = new PrivateMineDeletionEvent(this);
         Bukkit.getPluginManager().callEvent(privateMineDeletionEvent);
-
-        privateMines.getWorldEditAdapter().fillRegion(region, Material.AIR);
-
-        MineStorage mineStorage = privateMines.getMineStorage();
-
-        mineStorage.removeMine(getMineOwner());
+        if (!privateMineDeletionEvent.isCancelled()) {
+            privateMines.getWorldEditAdapter().fillRegion(region, Material.AIR);
+            MineStorage mineStorage = privateMines.getMineStorage();
+            mineStorage.removeMine(getMineOwner());
+        }
     }
 
     public void upgrade() {

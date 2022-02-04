@@ -21,10 +21,12 @@ public class PrivateMineResetEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
     private final PrivateMines privateMines;
     private final Mine mine;
+    private boolean isCancelled;
 
     public PrivateMineResetEvent(Mine mine, PrivateMines privateMines) {
         this.mine = mine;
         this.privateMines = privateMines;
+        this.isCancelled = false;
     }
 
     public static HandlerList getHandlerList() {
@@ -34,6 +36,14 @@ public class PrivateMineResetEvent extends Event {
     @Override
     public HandlerList getHandlers() {
         return HANDLERS;
+    }
+
+    public boolean isCancelled() {
+        return this.isCancelled;
+    }
+
+    public void setCancelled(boolean isCancelled) {
+        this.isCancelled = isCancelled;
     }
 
     public Mine getMine() {

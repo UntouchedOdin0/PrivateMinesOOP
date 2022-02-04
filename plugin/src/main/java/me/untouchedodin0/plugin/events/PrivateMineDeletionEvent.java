@@ -11,9 +11,11 @@ public class PrivateMineDeletionEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
     private final Mine mine;
+    private boolean isCancelled;
 
     public PrivateMineDeletionEvent(Mine mine) {
         this.mine = mine;
+        this.isCancelled = false;
     }
 
     public static HandlerList getHandlerList() {
@@ -23,6 +25,14 @@ public class PrivateMineDeletionEvent extends Event {
     @Override
     public HandlerList getHandlers() {
         return HANDLERS;
+    }
+
+    public boolean isCancelled() {
+        return this.isCancelled;
+    }
+
+    public void setCancelled(boolean isCancelled) {
+        this.isCancelled = isCancelled;
     }
 
     public Mine getMine() {
