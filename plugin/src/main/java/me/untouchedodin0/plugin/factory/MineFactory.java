@@ -124,7 +124,7 @@ public class MineFactory {
             this.privateMines.getMineStorage().replaceMine(uuid, mine);
             player.teleport(spawnLocation);
         } else {
-            this.privateMines.getMineStorage().addWorldEditMine(uuid, mine);
+            this.privateMines.getMineStorage().addMine(uuid, mine);
             player.sendMessage(Messages.msg("recievedMine"));
             player.teleport(spawnLocation);
         }

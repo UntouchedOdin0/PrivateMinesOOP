@@ -192,7 +192,7 @@ public class PrivateMines extends JavaPlugin {
         Messages.load(this);
 
         Metrics metrics = new Metrics(this, PLUGIN_ID);
-        metrics.addCustomChart(new Metrics.SingleLineChart("mines", mineStorage::getLoadedWorldEditMinesSize));
+        metrics.addCustomChart(new Metrics.SingleLineChart("mines", mineStorage::getLoadedMinesSize));
 
         //TODO FIX THIS
         File[] addons = addonsDirectory.listFiles();
@@ -267,7 +267,7 @@ public class PrivateMines extends JavaPlugin {
                     mine.setMineType(mineTypeManager.getMineType(mineData.getMineType()));
                     mine.setMineOwner(mineData.getMineOwner());
                     mine.startResetTask();
-                    mineStorage.addWorldEditMine(mineData.getMineOwner(), mine);
+                    mineStorage.addMine(mineData.getMineOwner(), mine);
                     mineWorldManager.getNextFreeLocation();
                     loadedMineCount.incrementAndGet();
                 });

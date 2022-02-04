@@ -177,7 +177,7 @@ public class Mine {
 
         MineStorage mineStorage = privateMines.getMineStorage();
 
-        mineStorage.removeWorldEditMine(getMineOwner());
+        mineStorage.removeMine(getMineOwner());
     }
 
     public void upgrade() {

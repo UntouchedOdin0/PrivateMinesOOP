@@ -37,21 +37,21 @@ public class MineStorage {
     /**
      * A simple get method to get how many worldedit mines have been created
      *
-     * @return the amount of mines created in a integer form.
+     * @return the amount of mines created in an integer form.
      */
 
-    public int getLoadedWorldEditMinesSize() {
+    public int getLoadedMinesSize() {
         return mines.size();
     }
 
 
     /**
      * @param uuid          - The UUID Of the mine owner to be added to the storage
-     * @param worldEditMine - The World Edit Mine to be added into the storage
+     * @param mine          - The Mine to be added into the storage
      */
 
-    public void addWorldEditMine(UUID uuid, Mine worldEditMine) {
-        mines.putIfAbsent(uuid, worldEditMine);
+    public void addMine(UUID uuid, Mine mine) {
+        mines.putIfAbsent(uuid, mine);
     }
 
 
@@ -59,36 +59,35 @@ public class MineStorage {
      * @param uuid - The UUID of the player who's worldedit mine we'll be deleting from storage
      */
 
-    public void removeWorldEditMine(UUID uuid) {
+    public void removeMine(UUID uuid) {
         mines.remove(uuid);
     }
 
 
-    public void replaceMine(UUID uuid, Mine worldEditMine) {
-        mines.replace(uuid, worldEditMine);
+    public void replaceMine(UUID uuid, Mine mine) {
+        mines.replace(uuid, mine);
     }
 
 
     /**
-     * @return A map of all the worldedit mines with the owners UUID's.
+     * @return A map of all the mines with the owners UUID's.
      */
 
     public Map<UUID, Mine> getMines() {
         return mines;
     }
 
-    // Get a players world edit mine
+    // Get a players mine
 
-    public Mine getWorldEditMine(UUID uuid) {
+    public Mine getMine(UUID uuid) {
         return mines.get(uuid);
     }
 
-
-    public boolean hasWorldEditMine(UUID uuid) {
+    public boolean hasMine(UUID uuid) {
         return mines.containsKey(uuid);
     }
 
-    public int getWorldEditMinesCount() {
+    public int getMinesCount() {
         return mines.size();
     }
 }
