@@ -7,12 +7,12 @@ import org.bukkit.event.HandlerList;
 
 import java.util.UUID;
 
-public class PrivateMineDeletionEvent extends Event {
+public class TemplateEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
     private final Mine mine;
 
-    public PrivateMineDeletionEvent(Mine mine) {
+    public TemplateEvent(Mine mine) {
         this.mine = mine;
     }
 

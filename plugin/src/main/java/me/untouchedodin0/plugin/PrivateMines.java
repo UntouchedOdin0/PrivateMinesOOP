@@ -29,6 +29,7 @@ import de.jeff_media.updatechecker.UpdateChecker;
 import me.untouchedodin0.plugin.commands.PrivateMinesCommand;
 import me.untouchedodin0.plugin.config.MenuConfig;
 import me.untouchedodin0.plugin.config.MineConfig;
+import me.untouchedodin0.plugin.debug.TestEventThing;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.mines.MineTypeManager;
 import me.untouchedodin0.plugin.mines.Mine;
@@ -273,6 +274,7 @@ public class PrivateMines extends JavaPlugin {
                 });
 
         getLogger().info(() -> "Loaded " + loadedMineCount.get() + " mines");
+        Bukkit.getServer().getPluginManager().registerEvents(new TestEventThing(), this);
     }
 
     @Override

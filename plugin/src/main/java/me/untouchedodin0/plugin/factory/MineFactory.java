@@ -89,55 +89,60 @@ public class MineFactory {
         UUID uuid = player.getUniqueId();
         Material spawnMaterial = privateMines.getSpawnMaterial();
         Material mineCornerMaterial = privateMines.getCornerMaterial();
-
-        Path file = mineType.getSchematicFile();
-
-        CuboidRegion region = privateMines.getWorldEditAdapter().pasteSchematic(location, file);
-
-        MineBlocks mineBlocks = findMineBlocks(region, spawnMaterial, mineCornerMaterial);
-        Location spawnLocation = mineBlocks.spawnLocation;
-        final Location corner1 = mineBlocks.corners[0];
-        final Location corner2 = mineBlocks.corners[1];
-        spawnLocation.getBlock().setType(Material.AIR, false);
-
-        final CuboidRegion miningRegion = new CuboidRegion(corner1, corner2);
         Mine mine = new Mine(privateMines);
-        MineData mineData = new MineData();
-        mine.setMiningRegion(miningRegion);
-        mine.setRegion(region);
-        mine.setSpawnLocation(spawnLocation);
-        mine.setMineTypes(mineType.getMaterials());
-        mine.setMineType(mineType);
-        mine.setMineOwner(player.getUniqueId());
-        mine.setWorldEditMineData(mineData);
-        mineData.setMineOwner(uuid);
-        mineData.setSpawnX(spawnLocation.getBlockX());
-        mineData.setSpawnY(spawnLocation.getBlockY());
-        mineData.setSpawnZ(spawnLocation.getBlockZ());
-        mineData.setMiningRegion(miningRegion);
-        mineData.setFullRegion(region);
-        mineData.setMaterials(mineType.getMaterials());
-        mineData.setMineType(mineType.getName());
-        saveMineData(uuid, mineData);
-
-        mine.reset();
-        mine.startResetTask();
-        if (replaceOld) {
-            this.privateMines.getMineStorage().replaceMine(uuid, mine);
-            player.teleport(spawnLocation);
-        } else {
-            this.privateMines.getMineStorage().addMine(uuid, mine);
-            player.sendMessage(Messages.msg("recievedMine"));
-            player.teleport(spawnLocation);
-        }
-        IWrappedRegion worldGuardRegion = utils.createWorldGuardRegion(player, miningRegion);
-        mine.setIWrappedRegion(worldGuardRegion);
-        utils.setMineFlags(mine);
+        Path file = mineType.getSchematicFile();
 
         PrivateMineCreationEvent privateMineCreationEvent = new PrivateMineCreationEvent(mine);
         Bukkit.getPluginManager().callEvent(privateMineCreationEvent);
 
-        player.sendMessage(String.valueOf(privateMineCreationEvent));
+        if (!privateMineCreationEvent.isCancelled()) {
+            CuboidRegion region = privateMines.getWorldEditAdapter().pasteSchematic(location, file);
+
+            MineBlocks mineBlocks = findMineBlocks(region, spawnMaterial, mineCornerMaterial);
+            Location spawnLocation = mineBlocks.spawnLocation;
+            final Location corner1 = mineBlocks.corners[0];
+            final Location corner2 = mineBlocks.corners[1];
+            spawnLocation.getBlock().setType(Material.AIR, false);
+
+            final CuboidRegion miningRegion = new CuboidRegion(corner1, corner2);
+
+            MineData mineData = new MineData();
+            mine.setMiningRegion(miningRegion);
+            mine.setRegion(region);
+            mine.setSpawnLocation(spawnLocation);
+            mine.setMineTypes(mineType.getMaterials());
+            mine.setMineType(mineType);
+            mine.setMineOwner(player.getUniqueId());
+            mine.setWorldEditMineData(mineData);
+            mineData.setMineOwner(uuid);
+            mineData.setSpawnX(spawnLocation.getBlockX());
+            mineData.setSpawnY(spawnLocation.getBlockY());
+            mineData.setSpawnZ(spawnLocation.getBlockZ());
+            mineData.setMiningRegion(miningRegion);
+            mineData.setFullRegion(region);
+            mineData.setMaterials(mineType.getMaterials());
+            mineData.setMineType(mineType.getName());
+            saveMineData(uuid, mineData);
+
+            mine.reset();
+            mine.startResetTask();
+            if (replaceOld) {
+                this.privateMines.getMineStorage().replaceMine(uuid, mine);
+                player.teleport(spawnLocation);
+            } else {
+                this.privateMines.getMineStorage().addMine(uuid, mine);
+                player.sendMessage(Messages.msg("recievedMine"));
+                player.teleport(spawnLocation);
+            }
+            IWrappedRegion worldGuardRegion = utils.createWorldGuardRegion(player, miningRegion);
+            mine.setIWrappedRegion(worldGuardRegion);
+            utils.setMineFlags(mine);
+
+            privateMines.getLogger().info(String.valueOf(privateMineCreationEvent.isCancelled()));
+            privateMines.getLogger().info(String.valueOf(privateMineCreationEvent.getMine()));
+            privateMines.getLogger().info(String.valueOf(privateMineCreationEvent.getOwner()));
+            privateMines.getLogger().info(String.valueOf(privateMineCreationEvent.getMineType()));
+        }
     }
 
     private void saveMineData(UUID uuid, MineData mineData) {

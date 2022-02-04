@@ -131,7 +131,7 @@ public class Utils {
 
     public void doAction(Player player, @NotNull Mine worldEditMine, String action) {
 
-        MineData worldEditMineData = worldEditMine.getWorldEditMineData();
+        MineData worldEditMineData = worldEditMine.getMineData();
         List<UUID> whitelistedPlayers = worldEditMineData.getWhitelistedPlayers();
         List<UUID> bannedPlayers = worldEditMineData.getBannedPlayers();
         List<UUID> priorityPlayers = worldEditMineData.getPriorityPlayers();

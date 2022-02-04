@@ -208,7 +208,7 @@ public class PrivateMinesCommand {
         }
 
         Mine mine = mineStorage.getMine(uuid);
-        MineData mineData = mine.getWorldEditMineData();
+        MineData mineData = mine.getMineData();
 
         UUID coowner = mineData.getCoOwner();
         boolean isCoOwner = coowner.equals(player.getUniqueId());
@@ -315,7 +315,7 @@ public class PrivateMinesCommand {
         }
 
         mine = mineStorage.getMine(player.getUniqueId());
-        mineData = mine.getWorldEditMineData();
+        mineData = mine.getMineData();
         boolean isOpen = mineData.isOpen();
 
         if (isOpen) {
@@ -344,7 +344,7 @@ public class PrivateMinesCommand {
         }
 
         mine = mineStorage.getMine(player.getUniqueId());
-        mineData = mine.getWorldEditMineData();
+        mineData = mine.getMineData();
         boolean isOpen = mineData.isOpen();
 
         if (!isOpen) {
@@ -376,7 +376,7 @@ public class PrivateMinesCommand {
             player.sendMessage(doNotOwnMine);
         }
         mine = privateMines.getMineStorage().getMine(uuid);
-        mineData = mine.getWorldEditMineData();
+        mineData = mine.getMineData();
         mineData.addWhitelistedPlayer(targetUUID);
         player.sendMessage(addedPlayerReplaced);
         target.sendMessage(addedReplaced);
@@ -406,7 +406,7 @@ public class PrivateMinesCommand {
             player.sendMessage(doNotOwnMine);
         }
         mine = privateMines.getMineStorage().getMine(uuid);
-        mineData = mine.getWorldEditMineData();
+        mineData = mine.getMineData();
         mineData.removeWhitelistedPlayer(targetUUID);
         player.sendMessage(youHaveRemovedPlayerReplaced);
         target.sendMessage(youHaveBeenUnwhitelistedPlayerReplaced);
@@ -437,7 +437,7 @@ public class PrivateMinesCommand {
         }
 
         mine = privateMines.getMineStorage().getMine(uuid);
-        mineData = mine.getWorldEditMineData();
+        mineData = mine.getMineData();
         mineData.setCoOwner(targetUUID);
         player.sendMessage(replacedYouHaveSetUser);
         target.sendMessage(replacedYouHaveBeenSet);
