@@ -128,8 +128,8 @@ public class MineFactory {
             player.sendMessage(Messages.msg("recievedMine"));
             player.teleport(spawnLocation);
         }
-        IWrappedRegion iWrappedRegion = utils.createWorldGuardRegion(player, region);
-        mine.setIWrappedRegion(iWrappedRegion);
+        IWrappedRegion worldGuardRegion = utils.createWorldGuardRegion(player, miningRegion);
+        mine.setIWrappedRegion(worldGuardRegion);
         utils.setMineFlags(mine);
     }
 
