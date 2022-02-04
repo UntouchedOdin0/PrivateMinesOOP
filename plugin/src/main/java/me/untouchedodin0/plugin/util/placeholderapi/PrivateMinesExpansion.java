@@ -26,7 +26,7 @@ package me.untouchedodin0.plugin.util.placeholderapi;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.untouchedodin0.plugin.PrivateMines;
-import me.untouchedodin0.plugin.mines.WorldEditMine;
+import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -71,7 +71,7 @@ public class PrivateMinesExpansion extends PlaceholderExpansion {
         }
 
         if (mineStorage.hasWorldEditMine(uuid)) {
-            WorldEditMine mine = mineStorage.getWorldEditMine(uuid);
+            Mine mine = mineStorage.getWorldEditMine(uuid);
             if (identifier.equals("type")) {
                 return mine.getMineType().getName();
             }

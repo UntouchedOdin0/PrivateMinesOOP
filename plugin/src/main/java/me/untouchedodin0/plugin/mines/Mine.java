@@ -27,7 +27,7 @@ package me.untouchedodin0.plugin.mines;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.untouchedodin0.plugin.PrivateMines;
-import me.untouchedodin0.plugin.mines.data.WorldEditMineData;
+import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.world.MineWorldManager;
@@ -49,7 +49,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-public class WorldEditMine {
+public class Mine {
     @ConfigValue("autoUpgrade.enabled")
     private static boolean autoUpgrade = false;
     @ConfigValue("autoUpgrade.startingSize")
@@ -67,12 +67,12 @@ public class WorldEditMine {
     private IWrappedRegion iWrappedRegion;
     private CuboidRegion region;
     private Location spawnLocation;
-    private WorldEditMineData worldEditMineData;
+    private MineData worldEditMineData;
     private Task task;
     private double tax = 5;
     private Map<Material, Double> mineTypes = new EnumMap<>(Material.class);
 
-    public WorldEditMine(PrivateMines privateMines) {
+    public Mine(PrivateMines privateMines) {
         this.privateMines = privateMines;
         this.utils = new Utils(privateMines);
     }
@@ -81,11 +81,11 @@ public class WorldEditMine {
         return resetPercentage;
     }
 
-    public WorldEditMineData getWorldEditMineData() {
+    public MineData getWorldEditMineData() {
         return worldEditMineData;
     }
 
-    public void setWorldEditMineData(WorldEditMineData worldEditMineData) {
+    public void setWorldEditMineData(MineData worldEditMineData) {
         this.worldEditMineData = worldEditMineData;
     }
 
@@ -133,9 +133,8 @@ public class WorldEditMine {
         this.spawnLocation = spawnLocation;
     }
 
-
     public void teleport(Player player) {
-        WorldEditMineData worldEditMineData = getWorldEditMineData();
+        MineData worldEditMineData = getWorldEditMineData();
         MineWorldManager mineWorldManager = privateMines.getMineWorldManager();
         World world = mineWorldManager.getMinesWorld();
 

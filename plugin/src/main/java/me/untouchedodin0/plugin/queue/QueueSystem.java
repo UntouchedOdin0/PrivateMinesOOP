@@ -24,8 +24,7 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin.queue;
 
-import me.untouchedodin0.plugin.mines.WorldEditMine;
-import org.bukkit.Bukkit;
+import me.untouchedodin0.plugin.mines.Mine;
 import redempt.redlib.misc.Task;
 
 import java.util.LinkedList;
@@ -34,20 +33,20 @@ import java.util.concurrent.TimeUnit;
 
 public class QueueSystem {
 
-    Queue<WorldEditMine> worldEditUpgradeMineQueue = new LinkedList<>();
-    Queue<WorldEditMine> worldEditExpandMineQueue = new LinkedList<>();
+    Queue<Mine> worldEditUpgradeMineQueue = new LinkedList<>();
+    Queue<Mine> worldEditExpandMineQueue = new LinkedList<>();
 
     Task upgradeQueueTask;
     Task expandQueueTask;
 
     public void startUpgradeQueueSystem() {
         this.upgradeQueueTask = Task.syncDelayed(task1 -> {
-            WorldEditMine worldEditMine = worldEditUpgradeMineQueue.poll();
+            Mine worldEditMine = worldEditUpgradeMineQueue.poll();
             //Bukkit.broadcastMessage("Found mine: " + worldEditMine + " in the queue to be upgraded!");
         }, TimeUnit.SECONDS.toMillis(5));
     }
 
-    public void addToUpgradeQueue(WorldEditMine worldEditMine) {
+    public void addToUpgradeQueue(Mine worldEditMine) {
         if (worldEditUpgradeMineQueue.contains(worldEditMine)) {
             //Bukkit.broadcastMessage("The queue already contained this mine!");
         } else {
@@ -57,12 +56,12 @@ public class QueueSystem {
 
     public void startExpandQueueSystem() {
         this.expandQueueTask = Task.syncDelayed(task1 -> {
-            WorldEditMine worldEditMine = worldEditExpandMineQueue.poll();
+            Mine worldEditMine = worldEditExpandMineQueue.poll();
             //Bukkit.broadcastMessage("Found mine: " + worldEditMine + " in the queue to be upgraded!");
         }, TimeUnit.SECONDS.toMillis(5));
     }
 
-    public void addToExpandQueue(WorldEditMine worldEditMine) {
+    public void addToExpandQueue(Mine worldEditMine) {
         if (worldEditExpandMineQueue.contains(worldEditMine)) {
             //Bukkit.broadcastMessage("The queue already contained this mine!");
         } else {

@@ -24,14 +24,14 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin.storage;
 
-import me.untouchedodin0.plugin.mines.WorldEditMine;
+import me.untouchedodin0.plugin.mines.Mine;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class MineStorage {
-    private final Map<UUID, WorldEditMine> mines = new HashMap<>();
+    private final Map<UUID, Mine> mines = new HashMap<>();
 
 
     /**
@@ -50,7 +50,7 @@ public class MineStorage {
      * @param worldEditMine - The World Edit Mine to be added into the storage
      */
 
-    public void addWorldEditMine(UUID uuid, WorldEditMine worldEditMine) {
+    public void addWorldEditMine(UUID uuid, Mine worldEditMine) {
         mines.putIfAbsent(uuid, worldEditMine);
     }
 
@@ -64,7 +64,7 @@ public class MineStorage {
     }
 
 
-    public void replaceMine(UUID uuid, WorldEditMine worldEditMine) {
+    public void replaceMine(UUID uuid, Mine worldEditMine) {
         mines.replace(uuid, worldEditMine);
     }
 
@@ -73,13 +73,13 @@ public class MineStorage {
      * @return A map of all the worldedit mines with the owners UUID's.
      */
 
-    public Map<UUID, WorldEditMine> getMines() {
+    public Map<UUID, Mine> getMines() {
         return mines;
     }
 
     // Get a players world edit mine
 
-    public WorldEditMine getWorldEditMine(UUID uuid) {
+    public Mine getWorldEditMine(UUID uuid) {
         return mines.get(uuid);
     }
 

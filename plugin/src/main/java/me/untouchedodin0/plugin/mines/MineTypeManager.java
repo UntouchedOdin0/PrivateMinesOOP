@@ -45,5 +45,4 @@ public class MineTypeManager {
                 .orElse(mineTypes.lastEntry())
                 .getValue();
     }
-
 }

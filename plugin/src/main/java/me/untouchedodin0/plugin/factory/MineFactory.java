@@ -28,8 +28,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.mines.MineType;
-import me.untouchedodin0.plugin.mines.WorldEditMine;
-import me.untouchedodin0.plugin.mines.data.WorldEditMineData;
+import me.untouchedodin0.plugin.mines.Mine;
+import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import org.bukkit.Location;
@@ -55,7 +55,6 @@ public class MineFactory {
         this.privateMines = privateMines;
         this.utils = privateMines.getUtils();
         this.mineStorage = privateMines.getMineStorage();
-
     }
 
     private MineBlocks findMineBlocks(CuboidRegion mineRegion, Material spawnMaterial, Material cornerMaterial) {
@@ -91,7 +90,6 @@ public class MineFactory {
 
         Path file = mineType.getSchematicFile();
 
-
         CuboidRegion region = privateMines.getWorldEditAdapter().pasteSchematic(location, file);
 
         MineBlocks mineBlocks = findMineBlocks(region, spawnMaterial, mineCornerMaterial);
@@ -101,8 +99,8 @@ public class MineFactory {
         spawnLocation.getBlock().setType(Material.AIR, false);
 
         final CuboidRegion miningRegion = new CuboidRegion(corner1, corner2);
-        WorldEditMine mine = new WorldEditMine(privateMines);
-        WorldEditMineData mineData = new WorldEditMineData();
+        Mine mine = new Mine(privateMines);
+        MineData mineData = new MineData();
         mine.setMiningRegion(miningRegion);
         mine.setRegion(region);
         mine.setSpawnLocation(spawnLocation);
@@ -135,7 +133,7 @@ public class MineFactory {
         utils.setMineFlags(mine);
     }
 
-    private void saveMineData(UUID uuid, WorldEditMineData mineData) {
+    private void saveMineData(UUID uuid, MineData mineData) {
         Path minesDirectory = privateMines.getMinesDirectory();
         Path playerDataFile = minesDirectory.resolve(uuid + ".json");
         // TODO does this file structure work with having multiple mines?

@@ -31,8 +31,8 @@ import me.untouchedodin0.plugin.config.MenuConfig;
 import me.untouchedodin0.plugin.config.MineConfig;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.mines.MineTypeManager;
-import me.untouchedodin0.plugin.mines.WorldEditMine;
-import me.untouchedodin0.plugin.mines.data.WorldEditMineData;
+import me.untouchedodin0.plugin.mines.Mine;
+import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Exceptions;
 import me.untouchedodin0.plugin.util.Metrics;
@@ -75,12 +75,13 @@ public class PrivateMines extends JavaPlugin {
     private static PrivateMines privateMines;
     private static PrivateMinesAPI privateMinesAPI;
 
-    private final MineTypeManager mineTypeManager = new MineTypeManager(privateMines);
+//    private MineTypeManager mineTypeManager; // = new MineTypeManager(privateMines);
     private final Path minesDirectory = getDataFolder().toPath().resolve("mines");
     private final Path schematicsDirectory = getDataFolder().toPath().resolve("schematics");
     private final File addonsDirectory = new File("plugins/PrivateMines/addons");
     private final Pattern jarPattern = Pattern.compile("(.*?)\\.(jar)");
     IWrappedRegion globalRegion;
+    private MineTypeManager mineTypeManager;
     private MineFactory mineFactory;
     private MineWorldManager mineWorldManager;
     private MineStorage mineStorage;
@@ -158,7 +159,8 @@ public class PrivateMines extends JavaPlugin {
         }
         mineStorage = new MineStorage();
         mineFactory = new MineFactory(this);
-        configManager = new ConfigManager(this).register(this, WorldEditMine.class).load();
+        mineTypeManager = new MineTypeManager(this);
+        configManager = new ConfigManager(this).register(this, Mine.class).load();
 
         try {
             final List<Path> files = Files.list(getDataFolder().toPath())
@@ -233,9 +235,9 @@ public class PrivateMines extends JavaPlugin {
                 .map(Exceptions.throwing(Files::readAllLines))
                 .map(lines -> String.join("\n", lines))
                 .forEach(file -> {
-                    WorldEditMine mine = new WorldEditMine(this);
+                    Mine mine = new Mine(this);
 
-                    WorldEditMineData mineData = gson.fromJson(file, WorldEditMineData.class);
+                    MineData mineData = gson.fromJson(file, MineData.class);
                     int minX = mineData.getMinX();
                     int minY = mineData.getMinY();
                     int minZ = mineData.getMinZ();

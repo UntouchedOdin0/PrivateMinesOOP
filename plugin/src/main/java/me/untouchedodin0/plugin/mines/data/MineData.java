@@ -32,7 +32,7 @@ import redempt.redlib.region.CuboidRegion;
 
 import java.util.*;
 
-public class WorldEditMineData {
+public class MineData {
 
     UUID mineOwner;
     UUID coOwner;

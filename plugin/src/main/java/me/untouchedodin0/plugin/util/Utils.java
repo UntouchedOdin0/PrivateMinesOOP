@@ -25,8 +25,8 @@ SOFTWARE.
 package me.untouchedodin0.plugin.util;
 
 import me.untouchedodin0.plugin.PrivateMines;
-import me.untouchedodin0.plugin.mines.WorldEditMine;
-import me.untouchedodin0.plugin.mines.data.WorldEditMineData;
+import me.untouchedodin0.plugin.mines.Mine;
+import me.untouchedodin0.plugin.mines.data.MineData;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -64,7 +64,7 @@ public class Utils {
     }
 
 
-    public void setMineFlags(WorldEditMine worldEditMine) {
+    public void setMineFlags(Mine worldEditMine) {
         final WorldGuardWrapper worldGuardWrapper = WorldGuardWrapper.getInstance();
         IWrappedRegion iWrappedRegion = worldEditMine.getIWrappedRegion();
 
@@ -129,15 +129,14 @@ public class Utils {
                 });
     }
 
-    public void doAction(Player player, @NotNull WorldEditMine worldEditMine, String action) {
+    public void doAction(Player player, @NotNull Mine worldEditMine, String action) {
 
-        WorldEditMineData worldEditMineData = worldEditMine.getWorldEditMineData();
+        MineData worldEditMineData = worldEditMine.getWorldEditMineData();
         List<UUID> whitelistedPlayers = worldEditMineData.getWhitelistedPlayers();
         List<UUID> bannedPlayers = worldEditMineData.getBannedPlayers();
         List<UUID> priorityPlayers = worldEditMineData.getPriorityPlayers();
         UUID coowner = worldEditMineData.getCoOwner();
         String notSetCoOwner = Messages.msg("youHaveNotSetACoOwner");
-        String nextUpdate = "Next Update! <3";
 
         switch (action.toLowerCase()) {
             case "teleport": {
@@ -147,8 +146,6 @@ public class Utils {
             case "status":
             case "minesize":
             case "settax":
-                player.sendMessage(nextUpdate);
-                break;
             case "reset":
                 worldEditMine.reset();
                 break;
