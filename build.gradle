@@ -1,22 +1,15 @@
 plugins {
     id 'java-library'
-    // id 'com.github.joschi.licenser' version '0.6.0'
     id 'com.github.johnrengelman.shadow' version '7.1.0'
     id 'maven-publish'
 }
 
 allprojects {
     apply plugin: 'java-library'
-    // apply plugin: 'com.github.joschi.licenser'
-    apply plugin: 'com.github.johnrengelman.shadow'
 
     group 'me.untouchedodin0.privatemines'
     version '3.0.9-SNAPSHOT'
 
-
-    /* license {
-         header = project.file('LICENCE')
-     }*/
 
     repositories {
         mavenCentral()
@@ -51,18 +44,16 @@ allprojects {
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
 
-        sourceCompatibility = JavaVersion.VERSION_16
-        targetCompatibility = JavaVersion.VERSION_16
+        sourceCompatibility = targetCompatibility =  JavaVersion.VERSION_1_8
     }
 }
 
 subprojects {
     apply plugin: 'java-library'
-    apply plugin: 'com.github.johnrengelman.shadow'
     apply plugin: 'maven-publish'
 
     dependencies {
-        compileOnly 'org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT'
+        compileOnly 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
 
         compileOnly 'me.clip:placeholderapi:2.10.9'
         compileOnly 'com.google.code.gson:gson:2.8.5'
@@ -72,7 +63,6 @@ subprojects {
         implementation 'com.github.Redempt:RedLib:6.0.9.1'
         implementation 'de.jeff_media:SpigotUpdateChecker:1.3.2'
 
-        compileOnly 'com.sk89q.worldedit:worldedit-bukkit:6.1.4-SNAPSHOT'
         compileOnly 'org.projectlombok:lombok:1.18.22'
     }
 
@@ -109,6 +99,12 @@ subprojects {
 dependencies {
     subprojects.forEach(project -> implementation(project))
 }
+
+shadowJar {
+    relocate 'org.codemc.worldguardwrapper', 'me.untouchedodin0.privatemines.worldguardwrapper'
+    relocate 'de.jeff_media.updatechecker', 'me.untouchedodin0.privatemines.updatechecker'
+}
+
 
 task copyTo1_8Server(type: Copy) {
     from shadowJar

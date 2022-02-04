@@ -28,15 +28,12 @@ import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.PrivateMinesAPI;
 import me.untouchedodin0.plugin.config.MenuConfig;
 import me.untouchedodin0.plugin.factory.MineFactory;
-import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.WorldEditMine;
-import me.untouchedodin0.plugin.mines.WorldEditMineType;
 import me.untouchedodin0.plugin.mines.data.WorldEditMineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.world.MineWorldManager;
-import me.untouchedodin0.privatemines.we_6.worldedit.MineFactory6;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -45,8 +42,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import redempt.redlib.blockdata.BlockDataManager;
-import redempt.redlib.blockdata.DataBlock;
 import redempt.redlib.commandmanager.CommandHook;
 import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.configmanager.ConfigManager;
@@ -54,33 +49,31 @@ import redempt.redlib.inventorygui.InventoryGUI;
 import redempt.redlib.inventorygui.ItemButton;
 import redempt.redlib.itemutils.ItemBuilder;
 import redempt.redlib.misc.Task;
-import redempt.redlib.misc.WeightedRandom;
-import redempt.redlib.multiblock.Structure;
 
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 public class PrivateMinesCommand {
 
-    private final MineFactory6 mineFactory6;
     private final MineFactory mineFactory;
     private final MineStorage mineStorage;
     private final MineWorldManager mineWorldManager;
     private final PrivateMines privateMines;
-    private final PrivateMinesAPI privateMinesAPI;
+
 
     Utils utils;
 
     public PrivateMinesCommand(PrivateMines privateMine) {
         this.privateMines = privateMine;
-        this.mineFactory6 = privateMine.getMineFactory6();
         this.mineFactory = privateMine.getMineFactory();
         this.mineStorage = privateMine.getMineStorage();
         this.mineWorldManager = privateMine.getMineWorldManager();
         this.utils = privateMine.getUtils();
-        this.privateMinesAPI = PrivateMines.getAPI();
     }
 
     @CommandHook("main")
@@ -92,6 +85,10 @@ public class PrivateMinesCommand {
         InventoryGUI gui = new InventoryGUI(Bukkit.createInventory(null, 27, inventoryTitleColored));
 
         WorldEditMine worldEditMine = mineStorage.getWorldEditMine(player.getUniqueId());
+        if (worldEditMine == null) {
+            player.sendMessage(Messages.msg("doNotOwnMine"));
+            return;
+        }
 
         menuConfig.forEach((s, c) -> {
             String name = utils.color(c.getName());
@@ -124,28 +121,14 @@ public class PrivateMinesCommand {
 
     @CommandHook("give")
     public void give(CommandSender commandSender, Player target) {
-
-        String alreadyOwnsMine = "targetAlreadyOwnsAMine";
-        MineStorage mineStorage = privateMinesAPI.getMineStorage();
-
-        try {
-            if (mineStorage.hasWorldEditMine(target.getUniqueId())) {
-                commandSender.sendMessage(ChatColor.RED + "User already has a mine!");
-                return;
-            }
-            commandSender.sendMessage(ChatColor.GREEN + "Giving " + target.getName() + " a private mine!");
-            Location location = mineWorldManager.getNextFreeLocation();
-            if (privateMines.isWorldEditEnabled()) {
-                if (privateMines.useWorldEdit6()) {
-                    mineFactory6.createMine(target, target.getLocation(), privateMines.getDefaultWorldEdit6MineType(), false);
-                } else {
-                    WorldEditMineType worldEditMineType = privateMines.getWorldEditMineTypeTreeMap().firstEntry().getValue();
-                    mineFactory.createMine(target, location, worldEditMineType, false);
-                }
-            }
-        } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException) {
-            arrayIndexOutOfBoundsException.printStackTrace();
+        if (mineStorage.hasWorldEditMine(target.getUniqueId())) {
+            commandSender.sendMessage(ChatColor.RED + "User already has a mine!");
+            return;
         }
+        commandSender.sendMessage(ChatColor.GREEN + "Giving " + target.getName() + " a private mine!");
+        Location location = mineWorldManager.getNextFreeLocation();
+        final MineType defaultMineType = privateMines.getMineTypeManager().getDefaultMineType();
+        mineFactory.createMine(target, location, defaultMineType, false);
     }
 
     @CommandHook("delete")
@@ -155,28 +138,27 @@ public class PrivateMinesCommand {
         String deletedPlayersMine = "deletedPlayersMine";
         String yourMineHasBeenDeleted = "deletedMine";
 
-        File minesDirectory = privateMines.getMinesDirectory();
+        Path minesDirectory = privateMines.getMinesDirectory();
         String fileName = target.getUniqueId() + ".json";
-        File jsonFile = new File(minesDirectory, fileName);
+        Path jsonFile = minesDirectory.resolve(fileName);
 
         if (!privateMines.getMineStorage().hasWorldEditMine(uuid)) {
             commandSender.sendMessage(ChatColor.RED + "Player doesn't own a mine!");
-        } else {
-            WorldEditMine worldEditMine = privateMines.getMineStorage().getWorldEditMine(uuid);
-            Task task = worldEditMine.getTask();
-            task.cancel();
-            worldEditMine.delete();
-            privateMines.getMineStorage().removeWorldEditMine(uuid);
-
-            if (jsonFile.exists()) {
-                boolean deleted = jsonFile.delete();
-                if (deleted) {
-                    privateMines.getLogger().info("The file has been deleted!");
-                }
-            }
-            utils.sendMessage(commandSender, deletedPlayersMine);
-            utils.sendMessage(target, yourMineHasBeenDeleted);
+            return;
         }
+        WorldEditMine worldEditMine = privateMines.getMineStorage().getWorldEditMine(uuid);
+        Task task = worldEditMine.getTask();
+        task.cancel();
+        worldEditMine.delete();
+        privateMines.getMineStorage().removeWorldEditMine(uuid);
+
+        try {
+            Files.deleteIfExists(jsonFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        utils.sendMessage(commandSender, deletedPlayersMine);
+        utils.sendMessage(target, yourMineHasBeenDeleted);
     }
 
     @CommandHook("reset")
@@ -188,16 +170,13 @@ public class PrivateMinesCommand {
 
         if (!mineStorage.hasWorldEditMine(uuid)) {
             utils.sendMessage(player, doNotOwnMine);
-        } else {
-            WorldEditMine worldEditMine = mineStorage.getWorldEditMine(uuid);
-            WorldEditMineData worldEditMineData = worldEditMine.getWorldEditMineData();
-            String mineType = worldEditMineData.getMineType();
-            WorldEditMineType worldEditMineType = privateMines.getWorldEditMineType(mineType);
-            worldEditMine.fill(worldEditMineType.getMaterials());
-            utils.sendMessage(player, mineReset);
-//            worldEditMine.teleport(player); - PUT BACK ASAP
-            utils.sendMessage(player, teleportedToMine);
+            return;
         }
+        WorldEditMine mine = mineStorage.getWorldEditMine(uuid);
+        mine.reset();
+        utils.sendMessage(player, mineReset);
+//            worldEditMine.teleport(player); - PUT BACK ASAP
+        utils.sendMessage(player, teleportedToMine);
     }
 
     @CommandHook("teleport")
@@ -285,55 +264,42 @@ public class PrivateMinesCommand {
 
     @CommandHook("setblocks")
     public void setBlocks(CommandSender commandSender, Player target, Material[] materials) {
-        Player player = (Player) commandSender;
-        WeightedRandom<Material> weightedRandom = new WeightedRandom<>();
-        Mine mine;
         String targetDoesNotOwnMine = Messages.msg("targetDoesNotOwnMine");
 
-        for (Material material : materials) {
-            weightedRandom.set(material, 1);
-        }
-
-        if (!mineStorage.hasMine(target.getUniqueId())) {
+        if (!mineStorage.hasWorldEditMine(target.getUniqueId())) {
             utils.sendMessage(commandSender, targetDoesNotOwnMine);
-        } else {
-            mine = mineStorage.getMine(target.getUniqueId());
-            player.sendMessage("Setting " + target.getName() + "'s blocks to " + weightedRandom.getWeights());
-            mine.setWeightedRandom(weightedRandom);
-
-            BlockDataManager blockDataManager = privateMines.getBlockDataManager();
-            DataBlock dataBlock = privateMines.getBlockDataManager().getDataBlock(mine.getMineLocation().getBlock());
-            dataBlock.set("weightedRandom", weightedRandom);
-            mine.reset();
-            blockDataManager.save();
+            return;
         }
+
+        WorldEditMine mine = mineStorage.getWorldEditMine(target.getUniqueId());
+        Map<Material, Double> types = new EnumMap<>(Material.class);
+        for (Material material : materials) {
+            types.put(material, 1.0);
+        }
+        mine.setMineTypes(types);
+        mine.reset();
     }
 
     @CommandHook("settype")
     public void setType(CommandSender commandSender, Player target, String type) {
-        Player player = (Player) commandSender;
-        Mine mine;
-        MineType newType;
-        Structure structure;
         String invalidMineType = Messages.msg("invalidMineType");
-
-        if (mineStorage.hasMine(target.getUniqueId())) {
-            mine = mineStorage.getMine(target.getUniqueId());
-            newType = privateMines.getMineType(type);
-            if (newType == null) {
-                player.sendMessage(ChatColor.RED + "Invalid mine type!");
-                utils.sendMessage(commandSender, invalidMineType);
-                return;
-            }
-            mine.cancelResetTask();
-            structure = mine.getStructure();
-            structure.getRegion().forEachBlock(block -> block.setType(Material.AIR, false));
-            mine.setMineType(newType);
-//            mine.build();
-            mine.startAutoResetTask();
-            mineStorage.replaceMine(player.getUniqueId(), mine);
-            mine.teleportPlayer(target);
+        if (!mineStorage.hasWorldEditMine(target.getUniqueId())) {
+            utils.sendMessage(commandSender, Messages.msg("targetDoesNotOwnMine"));
+            return;
         }
+
+        WorldEditMine mine = mineStorage.getWorldEditMine(target.getUniqueId());
+        MineType newType = privateMines.getMineTypeManager().getMineType(type);
+        if (newType == null) {
+            utils.sendMessage(commandSender, invalidMineType);
+            return;
+        }
+
+        mine.cancelResetTask();
+        mine.setMineType(newType);
+        mine.startResetTask();
+        mineStorage.replaceMine(target.getUniqueId(), mine);
+        mine.teleport(target);
     }
 
     @CommandHook("open")
@@ -433,10 +399,10 @@ public class PrivateMinesCommand {
         String youHaveRemovedPlayerFromYourMine = Messages.msg("youHaveUnWhitelistedPlayerFromYourMine");
 
         String replacedYouHaveBeenUnwhitelisted = youHaveBeenUnWhitelisted.replace("%name%", target.getName());
-        String YouHaveBeenUnwhitelistedPlayerReplaced = replacedYouHaveBeenUnwhitelisted.replace("%name%", player.getName());
+        String youHaveBeenUnwhitelistedPlayerReplaced = replacedYouHaveBeenUnwhitelisted.replace("%name%", player.getName());
 
         String replacedYouHaveRemoved = youHaveRemovedPlayerFromYourMine.replace("%name%", target.getName());
-        String YouHaveRemovedPlayerReplaced = replacedYouHaveRemoved.replace("%name%", player.getName());
+        String youHaveRemovedPlayerReplaced = replacedYouHaveRemoved.replace("%name%", player.getName());
 
         if (!privateMines.getMineStorage().hasWorldEditMine(uuid)) {
             player.sendMessage(doNotOwnMine);
@@ -444,8 +410,8 @@ public class PrivateMinesCommand {
         worldEditMine = privateMines.getMineStorage().getWorldEditMine(uuid);
         worldEditMineData = worldEditMine.getWorldEditMineData();
         worldEditMineData.removeWhitelistedPlayer(targetUUID);
-        player.sendMessage(YouHaveRemovedPlayerReplaced);
-        target.sendMessage(YouHaveBeenUnwhitelistedPlayerReplaced);
+        player.sendMessage(youHaveRemovedPlayerReplaced);
+        target.sendMessage(youHaveBeenUnwhitelistedPlayerReplaced);
         worldEditMine.setWorldEditMineData(worldEditMineData);
         privateMines.getMineStorage().replaceMine(uuid, worldEditMine);
     }
@@ -485,8 +451,6 @@ public class PrivateMinesCommand {
     public void tax(Player player, Double tax) {
         UUID uuid = player.getUniqueId();
 
-        PrivateMines privateMines = PrivateMines.getPrivateMines();
-
         player.sendMessage(ChatColor.GREEN + "Setting your tax to " + tax);
         if (!mineStorage.hasWorldEditMine(uuid)) {
             player.sendMessage("You can't set tax as you don't own a mine!");
@@ -502,10 +466,10 @@ public class PrivateMinesCommand {
         player.sendMessage("" + mineStorage.getWorldEditMinesCount());
         InventoryGUI inventoryGUI = new InventoryGUI(Bukkit.createInventory(null, 27, "Public Mines"));
 
-        mineStorage.getWorldEditMines().forEach((uuid, worldEditMine) -> {
+        mineStorage.getMines().forEach((uuid, worldEditMine) -> {
             ItemButton itemButton = ItemButton.create(new ItemBuilder(Material.EMERALD_BLOCK).setName("Click me"), inventoryClickEvent -> {
-               Player clickPlayer = (Player) inventoryClickEvent.getWhoClicked();
-               clickPlayer.sendMessage("howdy " + this);
+                Player clickPlayer = (Player) inventoryClickEvent.getWhoClicked();
+                clickPlayer.sendMessage("howdy " + this);
             });
             player.sendMessage(String.valueOf(worldEditMine.getTax()));
         });

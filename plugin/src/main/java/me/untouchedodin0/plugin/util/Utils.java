@@ -24,20 +24,11 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin.util;
 
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.extent.clipboard.Clipboard;
-import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldedit.world.block.BlockState;
-import com.sk89q.worldedit.world.block.BlockType;
-import me.clip.placeholderapi.PlaceholderAPI;
 import me.untouchedodin0.plugin.PrivateMines;
-import me.untouchedodin0.plugin.mines.Mine;
-import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.WorldEditMine;
-import me.untouchedodin0.plugin.mines.WorldEditMineType;
 import me.untouchedodin0.plugin.mines.data.WorldEditMineData;
-import org.bukkit.*;
-import org.bukkit.block.Block;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.codemc.worldguardwrapper.WorldGuardWrapper;
@@ -45,136 +36,37 @@ import org.codemc.worldguardwrapper.flag.WrappedState;
 import org.codemc.worldguardwrapper.region.IWrappedRegion;
 import org.jetbrains.annotations.NotNull;
 import redempt.redlib.commandmanager.Messages;
-import redempt.redlib.multiblock.Structure;
 import redempt.redlib.region.CuboidRegion;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.time.temporal.ValueRange;
+import java.nio.file.Path;
 import java.util.*;
-import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
-import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Utils {
 
     private final PrivateMines privateMines;
-    private final boolean debugMode;
-    private final Pattern schemFilePattern = Pattern.compile("[a-zA-Z]\\.(schem)"); //Pattern.compile("(.*?)\\.(schem)");
 
     public Utils(PrivateMines privateMines) {
         this.privateMines = privateMines;
-        this.debugMode = privateMines.isDebugMode();
     }
 
-    public Location getRelative(Structure structure, int[] relative) {
-        return structure
-                .getRelative(relative[0], relative[1], relative[2])
-                .getBlock()
-                .getLocation();
-    }
-
-    public MineType getNextMineType(Mine mine) {
-        MineType mineType = mine.getMineType();
-        MineType upgradeMineType;
-        boolean isAtLastMineType = privateMines.isAtLastMineType(mineType);
-        if (isAtLastMineType) {
-            privateMines.getLogger().info("Mine is already maxed out!");
-            return mineType;
-        }
-        if (debugMode) {
-            privateMines.getLogger().info("Current mine data Name: " + mineType.getName());
-            upgradeMineType = privateMines.getNextMineType(mineType);
-            privateMines.getLogger().info("Next mine data name: " + upgradeMineType.getName());
-        }
-        upgradeMineType = privateMines.getNextMineType(mineType);
-        return upgradeMineType;
-    }
-
-    public WorldEditMineType getNextMineType(WorldEditMine worldEditMine) {
-        WorldEditMineType worldEditMineType = worldEditMine.getWorldEditMineType();
-        WorldEditMineType nextWorldEditMineType;
-        boolean isAtLastType = privateMines.isAtLastMineType(worldEditMineType);
-        if (isAtLastType) {
-            privateMines.getLogger().info("Mine is already maxed out!");
-            return worldEditMineType;
-        }
-
-        if (debugMode) {
-            privateMines.getLogger().info("Current mine data Name: " + worldEditMineType.getName());
-        }
-        nextWorldEditMineType = privateMines.getNextMineType(worldEditMineType);
-        return nextWorldEditMineType;
-    }
-
-    @SuppressWarnings("unused")
-    public double getPercentageLeft(Mine mine) {
-        CuboidRegion cuboidRegion = mine.getCuboidRegion();
-        int totalBlocks = cuboidRegion.getBlockVolume();
-        long airBlocks = cuboidRegion.stream().filter(Block::isEmpty).count();
-        return (double) airBlocks * 100 / totalBlocks;
-    }
-
-    @SuppressWarnings("unused")
-    public CuboidRegion getRegion(Clipboard clipboard) {
-        final BlockVector3 minimumPoint = clipboard.getRegion().getMinimumPoint();
-        final BlockVector3 maximumPoint = clipboard.getRegion().getMaximumPoint();
-
-        final int minX = minimumPoint.getBlockX();
-        final int maxX = maximumPoint.getBlockX();
-        final int minY = minimumPoint.getBlockY();
-        final int maxY = maximumPoint.getBlockY();
-        final int minZ = minimumPoint.getBlockZ();
-        final int maxZ = maximumPoint.getBlockZ();
-
-        World world;
-        Location start;
-        Location end;
-
-        if (clipboard.getRegion().getWorld() == null) {
-            return null;
-        }
-        world = BukkitAdapter.adapt(Objects.requireNonNull(clipboard.getRegion().getWorld()));
-        start = new Location(world, minX, minY, minZ);
-        end = new Location(world, maxX, maxY, maxZ);
-
-        return new CuboidRegion(start, end);
-    }
-
-    public Location blockVector3toBukkit(World world, BlockVector3 blockVector3) {
-        Block block = world.getBlockAt(blockVector3.getBlockX(), blockVector3.getBlockY(), blockVector3.getBlockZ());
-        return block.getLocation();
-    }
-
-    public long minutesToBukkit(int minutes) {
-        return 20L * 60L * minutes;
-    }
-
-    public IWrappedRegion createWorldGuardRegion(Player player, World world, com.sk89q.worldedit.regions.CuboidRegion cuboidRegion) {
+    public IWrappedRegion createWorldGuardRegion(Player player, CuboidRegion cuboidRegion) {
         UUID uuid = player.getUniqueId();
         String regionName = String.format("mine-%s", uuid);
         return WorldGuardWrapper.getInstance().addCuboidRegion(
                 regionName,
-                blockVector3toBukkit(world,
-                                     cuboidRegion.getMinimumPoint()),
-                blockVector3toBukkit(world,
-                                     cuboidRegion.getMaximumPoint())).orElseThrow(() -> new RuntimeException(""));
+                cuboidRegion.getStart(),
+                cuboidRegion.getEnd()
+        ).orElseThrow(() -> new RuntimeException("Could not create worldguard region named " + regionName));
     }
 
-    public void deleteWorldGuardRegion(IWrappedRegion iWrappedRegion) {
-        World world = privateMines.getMineWorldManager().getMinesWorld();
-        WorldGuardWrapper.getInstance().removeRegion(world, iWrappedRegion.getId());
-    }
 
     public void setMineFlags(WorldEditMine worldEditMine) {
         final WorldGuardWrapper worldGuardWrapper = WorldGuardWrapper.getInstance();
-        IWrappedRegion iWrappedRegion = worldEditMine.getiWrappedRegion();
+        IWrappedRegion iWrappedRegion = worldEditMine.getIWrappedRegion();
 
         Stream.of(
                         worldGuardWrapper.getFlag("block-place", WrappedState.class),
@@ -202,24 +94,6 @@ public class Utils {
                 .forEach(flag -> iWrappedRegion.setFlag(flag, WrappedState.DENY));
     }
 
-    // Converts a bukkit material to a world edit block type
-
-    public BlockType bukkitToBlockType(Material material) {
-        return BukkitAdapter.asBlockType(material);
-    }
-
-    public List<BlockType> bukkitToBlockType(@NotNull List<Material> materials) {
-        List<BlockType> converted = new ArrayList<>();
-
-        for (Material material : materials) {
-            converted.add(bukkitToBlockType(material));
-        }
-        return converted;
-    }
-
-    public BlockState getBlockState(@NotNull BlockType blockType) {
-        return blockType.getDefaultState();
-    }
 
     public void sendMessage(CommandSender commandSender, String message) {
         String toSend = Messages.msg(message);
@@ -235,151 +109,74 @@ public class Utils {
         }
     }
 
-    public String getMineFileName(UUID uuid) {
-        return String.format("mine-%s.json", uuid);
-    }
-
-    public CuboidRegion worldEditRegionToRedLibRegion(com.sk89q.worldedit.regions.CuboidRegion cuboidRegion) {
-        BlockVector3 min = cuboidRegion.getMinimumPoint();
-        BlockVector3 max = cuboidRegion.getMaximumPoint();
-        World world = privateMines.getMineWorldManager().getMinesWorld();
-        privateMines.getLogger().info("world: " + world);
-        Location minLoc = blockVector3toBukkit(world, min);
-        Location maxLoc = blockVector3toBukkit(world, max);
-        return new CuboidRegion(minLoc, maxLoc);
-    }
-
-    public void moveSchematicFiles(File[] files) {
-        File directory = privateMines.getSchematicsDirectory();
-        File[] directoryFiles = directory.listFiles();
-
-        if (files != null && directoryFiles != null) {
-            for (File file : files) {
-                if (file.toPath().endsWith(".schem")) {
-                    for (File check : directoryFiles) {
-                        if (check == file) {
-                            privateMines.getLogger().info("The file " + file + " already exists so not moving!");
-                        } else {
-                            try {
-                                privateMines.getLogger().info("Moving file " + file);
-                                Files.move(Paths.get(file.toURI()), directory.toPath());
-                            } catch (IOException ioException) {
-                                ioException.printStackTrace();
-                            }
-                        }
+    public void moveSchematicFiles(@NotNull Collection<Path> files) {
+        Path directory = privateMines.getSchematicsDirectory();
+        files.stream()
+                .filter(path -> path.endsWith(".schem"))
+                .forEach(path -> {
+                    Path inDirectory = directory.resolve(path.getFileName());
+                    if (Files.exists(inDirectory)) {
+                        privateMines.getLogger()
+                                .info("The file " + path + " already exists so not moving!");
+                        return;
                     }
-                }
-            }
-        }
-    }
-
-    public long secondsToBukkit(int seconds) {
-        return 20L * seconds;
-    }
-
-    // Returns an arraylist of class names in a JarInputStream
-    private ArrayList<String> getClassNamesFromJar(JarInputStream jarFile) throws Exception {
-        ArrayList<String> classNames = new ArrayList<>();
-        try {
-            //JarInputStream jarFile = new JarInputStream(jarFileStream);
-            JarEntry jar;
-
-            //Iterate through the contents of the jar file
-            while (true) {
-                jar = jarFile.getNextJarEntry();
-                if (jar == null) {
-                    break;
-                }
-                //Pick file that has the extension of .class
-                if ((jar.getName().endsWith(".class"))) {
-                    String className = jar.getName().replaceAll("/", "\\.");
-                    String myClass = className.substring(0, className.lastIndexOf('.'));
-                    classNames.add(myClass);
-                }
-            }
-        } catch (Exception e) {
-            throw new Exception("Error while getting class names from jar", e);
-        }
-        return classNames;
-    }
-
-    // Returns an arraylist of class names in a JarInputStream
-    // Calls the above function by converting the jar path to a stream
-    private ArrayList<String> getClassNamesFromJar(String jarPath) throws Exception {
-        return getClassNamesFromJar(new JarInputStream(new FileInputStream(jarPath)));
-    }
-
-    // https://techitmore.com/java/dynamically-loading-classes-in-a-jar-file/
-    private ArrayList<Class<?>> loadJarFile(String filePath) throws Exception {
-
-        ArrayList<Class<?>> availableClasses = new ArrayList<>();
-
-        ArrayList<String> classNames = getClassNamesFromJar(filePath);
-        File f = new File(filePath);
-
-        URLClassLoader classLoader = new URLClassLoader(new URL[]{f.toURI().toURL()});
-        for (String className : classNames) {
-            try {
-                Class<?> cc = classLoader.loadClass(className);
-                availableClasses.add(cc);
-            } catch (ClassNotFoundException e) {
-                privateMines.getLogger().warning("Class " + className + " was not found");
-            }
-        }
-        return availableClasses;
-    }
-
-    public void doAction(Player player, WorldEditMine worldEditMine, String action) {
-        if (worldEditMine != null) {
-            WorldEditMineData worldEditMineData = worldEditMine.getWorldEditMineData();
-            List<UUID> whitelistedPlayers = worldEditMineData.getWhitelistedPlayers();
-            List<UUID> bannedPlayers = worldEditMineData.getBannedPlayers();
-            List<UUID> priorityPlayers = worldEditMineData.getPriorityPlayers();
-            UUID coowner = worldEditMineData.getCoOwner();
-            String notSetCoOwner = Messages.msg("youHaveNotSetACoOwner");
-            String nextUpdate = "Next Update! <3";
-
-            switch (action.toLowerCase()) {
-                case "teleport" -> {
-                    worldEditMine.teleport(player);
-                }
-                case "status" -> player.sendMessage(nextUpdate);
-                case "settax" -> player.sendMessage(nextUpdate);
-                case "minesize" -> player.sendMessage(nextUpdate);
-//                        worldEditMine.getMineSize();
-//                        player.sendMessage(String.valueOf(worldEditMine.getMineSize()));
-                case "reset" -> worldEditMine.reset();
-                case "whitelistedplayers" -> {
-                    player.sendMessage(ChatColor.GOLD + "Whitelisted Players:");
-                    whitelistedPlayers.forEach(uuid -> player.sendMessage(ChatColor.YELLOW + "- " + Objects.requireNonNull(Bukkit.getPlayer(uuid)).getName()));
-                }
-                case "bannedplayers" -> {
-                    player.sendMessage(ChatColor.GOLD + "Banned Players:");
-                    bannedPlayers.forEach(uuid -> player.sendMessage(ChatColor.YELLOW + "- " + Objects.requireNonNull(Bukkit.getPlayer(uuid)).getName()));
-                }
-                case "priorityplayers" -> {
-                    player.sendMessage(ChatColor.GOLD + "Priority Players:");
-                    priorityPlayers.forEach(uuid -> player.sendMessage(ChatColor.YELLOW + "- " + Objects.requireNonNull(Bukkit.getPlayer(uuid)).getName()));
-                }
-                case "coowner" -> {
-                    if (coowner == null) {
-                        player.sendMessage(notSetCoOwner);
-                    } else {
-                        player.sendMessage(ChatColor.GREEN + "Your co-owner is set to " +
-                                                   Objects.requireNonNull(Bukkit.getPlayer(worldEditMineData.getCoOwner())).getName());
+                    privateMines.getLogger().info("Moving file " + path);
+                    try {
+                        Files.move(path, inDirectory);
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                }
+                });
+    }
 
+    public void doAction(Player player, @NotNull WorldEditMine worldEditMine, String action) {
 
-//                case "reset":
-//                    worldEditMine.reset();
-//                case "teleporttomine":
-//                    worldEditMine.teleport(player);
-//                case "whitelistedplayers":
-//                    whitelistedPlayers.forEach(uuid -> {
-//                        player.sendMessage(String.valueOf(uuid));
-//                    });
+        WorldEditMineData worldEditMineData = worldEditMine.getWorldEditMineData();
+        List<UUID> whitelistedPlayers = worldEditMineData.getWhitelistedPlayers();
+        List<UUID> bannedPlayers = worldEditMineData.getBannedPlayers();
+        List<UUID> priorityPlayers = worldEditMineData.getPriorityPlayers();
+        UUID coowner = worldEditMineData.getCoOwner();
+        String notSetCoOwner = Messages.msg("youHaveNotSetACoOwner");
+        String nextUpdate = "Next Update! <3";
+
+        switch (action.toLowerCase()) {
+            case "teleport": {
+                worldEditMine.teleport(player);
+                break;
             }
+            case "status":
+            case "minesize":
+            case "settax":
+                player.sendMessage(nextUpdate);
+                break;
+            case "reset":
+                worldEditMine.reset();
+                break;
+            case "whitelistedplayers":
+                player.sendMessage(ChatColor.GOLD + "Whitelisted Players:");
+                whitelistedPlayers.forEach(uuid -> player.sendMessage(ChatColor.YELLOW + "- " + Objects.requireNonNull(Bukkit.getPlayer(uuid)).getName()));
+                break;
+            case "bannedplayers": {
+                player.sendMessage(ChatColor.GOLD + "Banned Players:");
+                bannedPlayers.forEach(uuid -> player.sendMessage(ChatColor.YELLOW + "- " + Objects.requireNonNull(Bukkit.getPlayer(uuid)).getName()));
+                break;
+            }
+            case "priorityplayers": {
+                player.sendMessage(ChatColor.GOLD + "Priority Players:");
+                priorityPlayers.forEach(uuid -> player.sendMessage(ChatColor.YELLOW + "- " + Objects.requireNonNull(Bukkit.getPlayer(uuid)).getName()));
+                break;
+            }
+            case "coowner": {
+                if (coowner == null) {
+                    player.sendMessage(notSetCoOwner);
+                } else {
+                    player.sendMessage(ChatColor.GREEN + "Your co-owner is set to " +
+                                       Objects.requireNonNull(Bukkit.getPlayer(worldEditMineData.getCoOwner())).getName());
+                }
+                break;
+            }
+            default:
+                throw new IllegalStateException("Unexpected value: " + action.toLowerCase());
         }
     }
 
@@ -389,15 +186,6 @@ public class Utils {
 
     // Credits to CapOfCave#5962 for this
     public List<String> color(@NotNull Collection<String> toConvert) {
-        return toConvert.stream().map(this::color).toList();
-    }
-
-    public String convertPAPI(Player player, String message) {
-        return PlaceholderAPI.setPlaceholders(player, message);
-    }
-
-    public boolean isInRange(double value) {
-        ValueRange valueRange = ValueRange.of(0, 100);
-        return valueRange.isValidValue((long) value);
+        return toConvert.stream().map(this::color).collect(Collectors.toList());
     }
 }

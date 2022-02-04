@@ -1,12 +1,11 @@
 # The different Materials to look for within the mine structure.
 spawnPoint: "CHEST"
 mineCorner: "POWERED_RAIL"
-sellNpc: "WHITE_WOOL"
+sellNpc: "WOOL"
 upgradeMaterial: "OBSIDIAN"
 mainMenuTitle: "Private Mines"
 
 debugMode: false
-useWorldEdit: true
 notifyForUpdates: true
 mineDistance: 150
 resetPercentage: 50 # Supports double values
@@ -58,14 +57,14 @@ inventory:
     lore:
       - "&aClick to teleport"
       - "&eTo your mine!"
-    type: GOLDEN_BOOTS
+    type: GOLD_BOOTS
     slot: 9
     action: "teleport"
   Item2:
     name: "&cStatus"
     lore:
       - ""
-    type: RED_WOOL
+    type: WOOL
     slot: 10
     action: "status"
   Item3:
@@ -73,7 +72,7 @@ inventory:
     lore:
       - "&aClick me to set your tax"
       - "&7Soon! &c<3"
-    type: OAK_SIGN
+    type: SIGN
     slot: 11
     action: "settax"
   Item4:
