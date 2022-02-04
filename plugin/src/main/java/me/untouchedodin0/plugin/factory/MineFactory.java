@@ -27,11 +27,13 @@ package me.untouchedodin0.plugin.factory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.untouchedodin0.plugin.PrivateMines;
+import me.untouchedodin0.plugin.events.PrivateMineCreationEvent;
 import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -131,6 +133,11 @@ public class MineFactory {
         IWrappedRegion worldGuardRegion = utils.createWorldGuardRegion(player, miningRegion);
         mine.setIWrappedRegion(worldGuardRegion);
         utils.setMineFlags(mine);
+
+        PrivateMineCreationEvent privateMineCreationEvent = new PrivateMineCreationEvent(mine);
+        Bukkit.getPluginManager().callEvent(privateMineCreationEvent);
+
+        player.sendMessage(String.valueOf(privateMineCreationEvent));
     }
 
     private void saveMineData(UUID uuid, MineData mineData) {

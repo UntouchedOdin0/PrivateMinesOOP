@@ -107,7 +107,7 @@ shadowJar {
 
 task copyTo1_8Server(type: Copy) {
     from shadowJar
-    into "E:/Coding/Spigot Test Servers/1.8.8/plugins"
+    into "E:/Coding/Spigot Test Servers/1.8.8 Private Mines/plugins"
 }
 
 task copyTo1_12Server(type: Copy) {
