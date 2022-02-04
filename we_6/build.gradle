@@ -9,3 +9,4 @@ dependencies {
     compileOnly 'com.sk89q.worldedit:worldedit-bukkit:6.1'
     compileOnly 'com.sk89q:worldguard:6.1'
 }
+}
