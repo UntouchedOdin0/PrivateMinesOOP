@@ -24,6 +24,7 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin.factory;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.untouchedodin0.plugin.PrivateMines;
@@ -87,8 +88,8 @@ public class MineFactory {
 
     public void createMine(Player player, Location location, @NotNull MineType mineType, boolean replaceOld) {
         UUID uuid = player.getUniqueId();
-        Material spawnMaterial = privateMines.getSpawnMaterial();
-        Material mineCornerMaterial = privateMines.getCornerMaterial();
+        Material spawnMaterial = XMaterial.matchXMaterial(privateMines.getSpawnMaterial()).parseMaterial();
+        Material mineCornerMaterial = XMaterial.matchXMaterial(privateMines.getCornerMaterial()).parseMaterial();
         Mine mine = new Mine(privateMines);
         Path file = mineType.getSchematicFile();
 
