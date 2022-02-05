@@ -48,6 +48,7 @@ import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.codemc.worldguardwrapper.WorldGuardWrapper;
 import org.codemc.worldguardwrapper.region.IWrappedRegion;
+import redempt.redlib.RedLib;
 import redempt.redlib.commandmanager.ArgType;
 import redempt.redlib.commandmanager.CommandParser;
 import redempt.redlib.commandmanager.Messages;
@@ -148,7 +149,13 @@ public class PrivateMines extends JavaPlugin {
             e.printStackTrace();
         }
 
-        saveResource("", false);
+        if (RedLib.MID_VERSION < 13) {
+            // Save the schematic file, this format is used pre-1.13
+            saveResource("schematics/mine.schematic", false);
+        } else {
+            // Save the schem file this format is used in 1.13 and beyond.
+            saveResource("schematics/mine.schem", false);
+        }
 
         mineWorldManager = new MineWorldManager(this);
         utils = new Utils(this);
