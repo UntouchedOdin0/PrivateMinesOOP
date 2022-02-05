@@ -125,7 +125,6 @@ public class PrivateMines extends JavaPlugin {
     @ConfigValue
     private Map<String, MenuConfig> inventory = ConfigManager.map(MenuConfig.class);
 
-
     public static PrivateMines getPrivateMines() {
         return privateMines;
     }
