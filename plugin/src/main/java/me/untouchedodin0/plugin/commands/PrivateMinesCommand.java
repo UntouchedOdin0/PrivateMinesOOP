@@ -24,6 +24,7 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin.commands;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.config.MenuConfig;
 import me.untouchedodin0.plugin.factory.MineFactory;
@@ -52,10 +53,7 @@ import redempt.redlib.misc.Task;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class PrivateMinesCommand {
 
@@ -94,8 +92,9 @@ public class PrivateMinesCommand {
             List<String> lore = utils.color(c.getLore());
 
             int slot = c.getSlot();
+            Material material = XMaterial.matchXMaterial(c.getType()).parseMaterial();
 
-            ItemStack itemStack = new ItemStack(c.getType());
+            ItemStack itemStack = new ItemStack(Objects.requireNonNull(material));
             ItemMeta itemMeta = itemStack.getItemMeta();
 
             if (itemMeta != null) {
