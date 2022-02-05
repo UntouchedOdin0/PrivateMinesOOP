@@ -148,6 +148,8 @@ public class PrivateMines extends JavaPlugin {
             e.printStackTrace();
         }
 
+        saveResource("", false);
+
         mineWorldManager = new MineWorldManager(this);
         utils = new Utils(this);
 
@@ -210,7 +212,6 @@ public class PrivateMines extends JavaPlugin {
         } else {
             getLogger().info("PlaceholderAPI was not present, not able to establish a hook!");
         }
-
 
         World world = getMineWorldManager().getMinesWorld();
         final Optional<IWrappedRegion> global = WorldGuardWrapper.getInstance().getRegion(world, "__global__");
