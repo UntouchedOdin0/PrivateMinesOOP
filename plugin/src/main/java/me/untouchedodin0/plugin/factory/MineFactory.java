@@ -29,8 +29,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.events.PrivateMineCreationEvent;
-import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.Mine;
+import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
@@ -38,6 +38,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.codemc.worldguardwrapper.region.IWrappedRegion;
 import org.jetbrains.annotations.NotNull;
 import redempt.redlib.commandmanager.Messages;
@@ -46,6 +47,7 @@ import redempt.redlib.region.CuboidRegion;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.UUID;
 
 public class MineFactory {
@@ -53,6 +55,10 @@ public class MineFactory {
     PrivateMines privateMines;
     Utils utils;
     MineStorage mineStorage;
+
+    Location spawnLocation;
+    Location corner1;
+    Location corner2;
 
     public MineFactory(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -63,6 +69,10 @@ public class MineFactory {
     private MineBlocks findMineBlocks(CuboidRegion mineRegion, Material spawnMaterial, Material cornerMaterial) {
         MineBlocks mineBlocks = new MineBlocks();
         mineBlocks.corners = new Location[2];
+        privateMines.getLogger().info("mineRegion: " + mineRegion);
+        privateMines.getLogger().info("spawnMaterial: " + spawnMaterial);
+        privateMines.getLogger().info("cornerMaterial: " + cornerMaterial);
+
         mineRegion.forEachBlock(mineBlock -> {
             Material bukkitMaterial = mineBlock.getType();
             if (bukkitMaterial == spawnMaterial) {
@@ -77,6 +87,11 @@ public class MineFactory {
                 }
             }
         });
+
+        privateMines.getLogger().info(String.valueOf(mineBlocks.corners[0]));
+        privateMines.getLogger().info(String.valueOf(mineBlocks.corners[1]));
+        privateMines.getLogger().info(String.valueOf(mineBlocks.spawnLocation));
+
         if (mineBlocks.corners[0] == null || mineBlocks.corners[1] == null) {
             throw new IllegalArgumentException("Mine does not have 2 corners set");
         }
@@ -88,8 +103,23 @@ public class MineFactory {
 
     public void createMine(Player player, Location location, @NotNull MineType mineType, boolean replaceOld) {
         UUID uuid = player.getUniqueId();
-        Material spawnMaterial = XMaterial.matchXMaterial(privateMines.getSpawnMaterial()).parseMaterial();
-        Material mineCornerMaterial = XMaterial.matchXMaterial(privateMines.getCornerMaterial()).parseMaterial();
+        //Material spawnMaterial = XMaterial.matchXMaterial(privateMines.getSpawnMaterial()).parseMaterial();
+        //Material mineCornerMaterial = XMaterial.matchXMaterial(privateMines.getCornerMaterial()).parseMaterial();
+        ItemStack spawnStack = XMaterial.matchXMaterial(privateMines.getSpawnMaterial()).parseItem();
+        ItemStack cornerStack = XMaterial.matchXMaterial(privateMines.getCornerMaterial()).parseItem();
+
+        Material spawnMaterial = spawnStack.getType();
+        Material cornerMaterial = cornerStack.getType();
+
+        privateMines.getLogger().info("spawnStack: " + spawnStack);
+        privateMines.getLogger().info("cornerStack: " + cornerStack);
+
+        privateMines.getLogger().info("spawnStack type: " + spawnStack.getType());
+        privateMines.getLogger().info("cornerStack type: " + cornerStack.getType());
+
+        privateMines.getLogger().info("spawnMaterial " + spawnMaterial);
+        privateMines.getLogger().info("cornerMaterial " + cornerMaterial);
+
         Mine mine = new Mine(privateMines);
         Path file = mineType.getSchematicFile();
 
@@ -99,7 +129,7 @@ public class MineFactory {
         if (!privateMineCreationEvent.isCancelled()) {
             CuboidRegion region = privateMines.getWorldEditAdapter().pasteSchematic(location, file);
 
-            MineBlocks mineBlocks = findMineBlocks(region, spawnMaterial, mineCornerMaterial);
+            MineBlocks mineBlocks = findMineBlocks(region, spawnMaterial, cornerMaterial);
             Location spawnLocation = mineBlocks.spawnLocation;
             final Location corner1 = mineBlocks.corners[0];
             final Location corner2 = mineBlocks.corners[1];

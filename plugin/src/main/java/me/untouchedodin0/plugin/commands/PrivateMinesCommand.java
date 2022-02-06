@@ -62,7 +62,6 @@ public class PrivateMinesCommand {
     private final MineWorldManager mineWorldManager;
     private final PrivateMines privateMines;
 
-
     Utils utils;
 
     public PrivateMinesCommand(PrivateMines privateMine) {
