@@ -93,7 +93,6 @@ public class PrivateMinesCommand {
 
             int slot = c.getSlot();
             Material material = XMaterial.matchXMaterial(c.getType()).parseMaterial();
-
             ItemStack itemStack = new ItemStack(Objects.requireNonNull(material));
             ItemMeta itemMeta = itemStack.getItemMeta();
 
