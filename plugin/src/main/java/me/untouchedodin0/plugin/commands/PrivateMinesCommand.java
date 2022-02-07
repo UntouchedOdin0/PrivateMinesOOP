@@ -319,7 +319,7 @@ public class PrivateMinesCommand {
             player.sendMessage(mineAlreadyOpen);
         } else {
             mineData.setOpen(true);
-            mine.setWorldEditMineData(mineData);
+            mine.setMineData(mineData);
             privateMines.getMineStorage().replaceMine(uuid, mine);
             player.sendMessage(mineOpened);
         }
@@ -348,7 +348,7 @@ public class PrivateMinesCommand {
             player.sendMessage(mineAlreadyClosed);
         } else {
             mineData.setOpen(false);
-            mine.setWorldEditMineData(mineData);
+            mine.setMineData(mineData);
             privateMines.getMineStorage().replaceMine(uuid, mine);
             player.sendMessage(mineClosed);
         }
@@ -378,7 +378,7 @@ public class PrivateMinesCommand {
         player.sendMessage(addedPlayerReplaced);
         target.sendMessage(addedReplaced);
 
-        mine.setWorldEditMineData(mineData);
+        mine.setMineData(mineData);
         privateMines.getMineStorage().replaceMine(uuid, mine);
     }
 
@@ -407,7 +407,7 @@ public class PrivateMinesCommand {
         mineData.removeWhitelistedPlayer(targetUUID);
         player.sendMessage(youHaveRemovedPlayerReplaced);
         target.sendMessage(youHaveBeenUnwhitelistedPlayerReplaced);
-        mine.setWorldEditMineData(mineData);
+        mine.setMineData(mineData);
         privateMines.getMineStorage().replaceMine(uuid, mine);
     }
 
@@ -438,7 +438,7 @@ public class PrivateMinesCommand {
         mineData.setCoOwner(targetUUID);
         player.sendMessage(replacedYouHaveSetUser);
         target.sendMessage(replacedYouHaveBeenSet);
-        mine.setWorldEditMineData(mineData);
+        mine.setMineData(mineData);
         privateMines.getMineStorage().replaceMine(uuid, mine);
     }
 

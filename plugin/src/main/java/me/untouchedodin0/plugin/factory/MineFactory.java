@@ -27,9 +27,9 @@ package me.untouchedodin0.plugin.factory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.untouchedodin0.plugin.PrivateMines;
+import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
-import me.untouchedodin0.plugin.mines.WorldEditMine;
-import me.untouchedodin0.plugin.mines.data.WorldEditMineData;
+import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import org.bukkit.Location;
@@ -98,8 +98,8 @@ public class MineFactory {
 
         Path file = mineType.getSchematicFile();
 
-        WorldEditMine mine = new WorldEditMine(privateMines);
-        WorldEditMineData mineData = new WorldEditMineData();
+        Mine mine = new Mine(privateMines);
+        MineData mineData = new MineData();
 
         CuboidRegion region = privateMines.getWorldEditAdapter().pasteSchematic(location, file);
 
@@ -134,7 +134,7 @@ public class MineFactory {
         mine.setMineTypes(mineType.getMaterials());
         mine.setMineType(mineType);
         mine.setMineOwner(player.getUniqueId());
-        mine.setWorldEditMineData(mineData);
+        mine.setMineData(mineData);
         mineData.setMineOwner(uuid);
         //mineData.setSpawnX(spawnLocation.getBlockX());
         //mineData.setSpawnY(spawnLocation.getBlockY());
@@ -151,7 +151,7 @@ public class MineFactory {
             this.privateMines.getMineStorage().replaceMine(uuid, mine);
             //player.teleport(spawnLocation);
         } else {
-            this.privateMines.getMineStorage().addWorldEditMine(uuid, mine);
+            this.privateMines.getMineStorage().addMine(uuid, mine);
             player.sendMessage(Messages.msg("recievedMine"));
             //player.teleport(spawnLocation);
         }
@@ -160,7 +160,7 @@ public class MineFactory {
         utils.setMineFlags(mine);
     }
 
-    private void saveMineData(UUID uuid, WorldEditMineData mineData) {
+    private void saveMineData(UUID uuid, MineData mineData) {
         Path minesDirectory = privateMines.getMinesDirectory();
         Path playerDataFile = minesDirectory.resolve(uuid + ".json");
         // TODO does this file structure work with having multiple mines?
