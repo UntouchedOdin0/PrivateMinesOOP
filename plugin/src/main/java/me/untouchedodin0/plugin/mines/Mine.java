@@ -27,9 +27,7 @@ package me.untouchedodin0.plugin.mines;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.untouchedodin0.plugin.PrivateMines;
-import me.untouchedodin0.plugin.events.PrivateMineDeletionEvent;
-import me.untouchedodin0.plugin.events.PrivateMineResetEvent;
-import me.untouchedodin0.plugin.mines.data.MineData;
+import me.untouchedodin0.plugin.mines.data.WorldEditMineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.world.MineWorldManager;
@@ -51,7 +49,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Mine {
+public class WorldEditMine {
     @ConfigValue("autoUpgrade.enabled")
     private static boolean autoUpgrade = false;
     @ConfigValue("autoUpgrade.startingSize")
@@ -69,12 +67,12 @@ public class Mine {
     private IWrappedRegion iWrappedRegion;
     private CuboidRegion region;
     private Location spawnLocation;
-    private MineData mineData;
+    private WorldEditMineData worldEditMineData;
     private Task task;
     private double tax = 5;
     private Map<Material, Double> mineTypes = new EnumMap<>(Material.class);
 
-    public Mine(PrivateMines privateMines) {
+    public WorldEditMine(PrivateMines privateMines) {
         this.privateMines = privateMines;
         this.utils = new Utils(privateMines);
     }
@@ -83,12 +81,12 @@ public class Mine {
         return resetPercentage;
     }
 
-    public MineData getMineData() {
-        return mineData;
+    public WorldEditMineData getWorldEditMineData() {
+        return worldEditMineData;
     }
 
-    public void setWorldEditMineData(MineData mineData) {
-        this.mineData = mineData;
+    public void setWorldEditMineData(WorldEditMineData worldEditMineData) {
+        this.worldEditMineData = worldEditMineData;
     }
 
     public UUID getMineOwner() {
@@ -135,14 +133,19 @@ public class Mine {
         this.spawnLocation = spawnLocation;
     }
 
+    public Location getSpawnLocation() {
+        return spawnLocation;
+    }
+
+
     public void teleport(Player player) {
-        MineData mineData = getMineData();
+        WorldEditMineData worldEditMineData = getWorldEditMineData();
         MineWorldManager mineWorldManager = privateMines.getMineWorldManager();
         World world = mineWorldManager.getMinesWorld();
 
-        int spawnX = mineData.getSpawnX();
-        int spawnY = mineData.getSpawnY();
-        int spawnZ = mineData.getSpawnZ();
+        int spawnX = worldEditMineData.getSpawnX();
+        int spawnY = worldEditMineData.getSpawnY();
+        int spawnZ = worldEditMineData.getSpawnZ();
         Location location = new Location(world, spawnX + 0.5, spawnY, spawnZ + 0.5);
         player.teleport(location);
     }
@@ -171,26 +174,20 @@ public class Mine {
     }
 
     public void reset() {
-        PrivateMineResetEvent privateMineResetEvent = new PrivateMineResetEvent(this, privateMines);
-        Bukkit.getPluginManager().callEvent(privateMineResetEvent);
-        if (!privateMineResetEvent.isCancelled()) {
-            fill(getMineTypes());
-        }
+        fill(getMineTypes());
     }
 
     public void delete() {
-        PrivateMineDeletionEvent privateMineDeletionEvent = new PrivateMineDeletionEvent(this);
-        Bukkit.getPluginManager().callEvent(privateMineDeletionEvent);
-        if (!privateMineDeletionEvent.isCancelled()) {
-            privateMines.getWorldEditAdapter().fillRegion(region, Material.AIR);
-            MineStorage mineStorage = privateMines.getMineStorage();
-            mineStorage.removeMine(getMineOwner());
-        }
+        privateMines.getWorldEditAdapter().fillRegion(region, Material.AIR);
+
+        MineStorage mineStorage = privateMines.getMineStorage();
+
+        mineStorage.removeWorldEditMine(getMineOwner());
     }
 
     public void upgrade() {
         final MineTypeManager mineTypeManager = privateMines.getMineTypeManager();
-        final String mineTypeName = getMineData().getMineType();
+        final String mineTypeName = getWorldEditMineData().getMineType();
         final MineType mineType = mineTypeManager.getMineType(mineTypeName);
         Objects.requireNonNull(mineType, "Invalid Mine type " + mineTypeName);
 
@@ -200,7 +197,7 @@ public class Mine {
             return;
         }
         final MineType next = mineTypeManager.getNextMineType(mineType);
-        mineData.setMineType(next.getName());
+        worldEditMineData.setMineType(next.getName());
         Player owner = Bukkit.getPlayer(getMineOwner());
         if (owner != null) {
             // TODO why is this necessary? does the player really need to be online to upgrade?
@@ -257,7 +254,7 @@ public class Mine {
         } else {
             final Map<Material, Double> materials = getMineTypes();
             if (materials.isEmpty()) {
-                throw new IllegalStateException("Mine type " + mineData.getMineType() +
+                throw new IllegalStateException("Mine type " + worldEditMineData.getMineType() +
                                                 " has no materials!");
             }
 
@@ -274,20 +271,20 @@ public class Mine {
             // TODO make this configurable
 
             expandXAndZ(mine, -1);
-            mineData.setMiningRegion(mine);
+            worldEditMineData.setMiningRegion(mine);
 
-            mineData.setSpawnX(spawnLocation.getBlockX());
-            mineData.setSpawnY(spawnLocation.getBlockY());
-            mineData.setSpawnZ(spawnLocation.getBlockZ());
+            worldEditMineData.setSpawnX(spawnLocation.getBlockX());
+            worldEditMineData.setSpawnY(spawnLocation.getBlockY());
+            worldEditMineData.setSpawnZ(spawnLocation.getBlockZ());
 
             try {
-                Files.write(jsonFile, gson.toJson(mineData).getBytes());
+                Files.write(jsonFile, gson.toJson(worldEditMineData).getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             setMiningRegion(mine);
-            setWorldEditMineData(mineData);
+            setWorldEditMineData(worldEditMineData);
             privateMines.getMineStorage().replaceMine(getMineOwner(), this);
         }
         mineStorage.replaceMine(getMineOwner(), this);
