@@ -43,8 +43,6 @@ import redempt.redlib.region.CuboidRegion;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class MineFactory {
@@ -53,13 +51,10 @@ public class MineFactory {
     Utils utils;
     MineStorage mineStorage;
 
-    Location spawnLocation;
-
     public MineFactory(PrivateMines privateMines) {
         this.privateMines = privateMines;
         this.utils = privateMines.getUtils();
         this.mineStorage = privateMines.getMineStorage();
-
     }
 
     private MineBlocks findMineBlocks(CuboidRegion mineRegion, Material spawnMaterial, Material cornerMaterial) {
@@ -90,11 +85,8 @@ public class MineFactory {
 
     public void createMine(Player player, Location location, @NotNull MineType mineType, boolean replaceOld) {
         UUID uuid = player.getUniqueId();
-        Material spawnMaterial = Material.SPONGE;
-        Material mineCornerMaterial = Material.POWERED_RAIL;
-
-//        List<Location> spawnLocation = new ArrayList<>(1);
-        List<Location> corners = new ArrayList<>(1);
+        Material spawnMaterial = privateMines.getSpawnMaterial();
+        Material mineCornerMaterial = privateMines.getCornerMaterial();
 
         Path file = mineType.getSchematicFile();
 
