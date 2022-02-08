@@ -103,29 +103,10 @@ public class MineFactory {
 
         CuboidRegion region = privateMines.getWorldEditAdapter().pasteSchematic(location, file);
 
-//        region.forEachBlock(block -> {
-//            Material bukkitMaterial = block.getType();
-//            if (bukkitMaterial == mineCornerMaterial) {
-//                corners.add(block.getLocation());
-//                //if (corner1 == null) this.corner1 = block.getLocation();
-//                //if (corner2 == null) this.corner2 = block.getLocation();
-//            } else if (bukkitMaterial == spawnMaterial) {
-//                this.spawnLocation = block.getLocation();
-//            }
-//        });
-
         privateMines.getLogger().info(spawnMaterial.name());
         privateMines.getLogger().info(mineCornerMaterial.name());
 
-
         MineBlocks mineBlocks = findMineBlocks(region, spawnMaterial, mineCornerMaterial);
-
-        privateMines.getLogger().info("spawnLocation: " + mineBlocks.spawnLocation);
-        privateMines.getLogger().info("corner1: " + mineBlocks.corners[0]);
-        privateMines.getLogger().info("corner2: " + mineBlocks.corners[1]);
-
-//        privateMines.getLogger().info("corner1: " + corners.get(0));
-//        privateMines.getLogger().info("corner2: " + corners.get(1));
 
         Location spawnLocation = mineBlocks.spawnLocation;
         final Location corner1 = mineBlocks.corners[0];
