@@ -42,6 +42,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -177,9 +179,31 @@ public class Utils {
         }
     }
 
+    // Credits to https://www.spigotmc.org/threads/hex-color-code-translate.449748/#post-4270781
+
     public String color(String string) {
+        Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
+        Matcher matcher = pattern.matcher(string);
+        while (matcher.find()) {
+            String hexCode = string.substring(matcher.start(), matcher.end());
+            String replaceSharp = hexCode.replace('#', 'x');
+
+            char[] chars = replaceSharp.toCharArray();
+            StringBuilder stringBuilder = new StringBuilder("");
+
+            for (char c : chars) {
+                stringBuilder.append("&").append(c);
+            }
+
+            string = string.replace(hexCode, stringBuilder.toString());
+            matcher = pattern.matcher(string);
+        }
         return ChatColor.translateAlternateColorCodes('&', string);
     }
+
+//    public String color(String string) {
+//        return ChatColor.translateAlternateColorCodes('&', string);
+//    }
 
     // Credits to CapOfCave#5962 for this
     public List<String> color(@NotNull Collection<String> toConvert) {
