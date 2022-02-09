@@ -210,22 +210,9 @@ public class PrivateMinesCommand {
         UUID coowner = mineData.getCoOwner();
         boolean isCoOwner = coowner.equals(player.getUniqueId());
 
-        List<UUID> whitelistedPlayers = mineData.getWhitelistedPlayers();
         boolean isOpen = mineData.isOpen();
 
-        if (!isOpen) {
-            boolean isWhitelisted = whitelistedPlayers.contains(player.getUniqueId());
-
-            // If they're whitelisted, or they're co-owner they can enter.
-
-            if (isWhitelisted || isCoOwner) {
-                mine.teleport(player);
-            } else {
-                player.sendMessage(notWhitelisted);
-            }
-        } else {
-            mine.teleport(player);
-        }
+        mine.teleport(player, isOpen, isCoOwner);
     }
 
     @CommandHook("upgrade")

@@ -44,10 +44,7 @@ import redempt.redlib.region.CuboidRegion;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class Mine {
     @ConfigValue("autoUpgrade.enabled")
@@ -148,6 +145,19 @@ public class Mine {
         int spawnZ = mineData.getSpawnZ();
         Location location = new Location(world, spawnX + 0.5, spawnY, spawnZ + 0.5);
         player.teleport(location);
+    }
+
+    public void teleport(Player player, boolean whitelisted, boolean coowner) {
+        MineData mineData = getMineData();
+        UUID uuid = player.getUniqueId();
+        List<UUID> whiteListedUsers = mineData.getWhitelistedPlayers();
+
+        if (!whitelisted) { // If mine isn't whitelisted
+            teleport(player);
+        } else { // If mine is whitelisted
+            if (!whiteListedUsers.contains(uuid) || coowner)  return;
+            teleport(player);
+        }
     }
 
     public Map<Material, Double> getMineTypes() {
