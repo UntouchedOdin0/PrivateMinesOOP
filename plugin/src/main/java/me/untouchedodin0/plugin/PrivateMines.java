@@ -41,10 +41,7 @@ import me.untouchedodin0.plugin.util.placeholderapi.PrivateMinesExpansion;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditAdapter;
 import me.untouchedodin0.privatemines.compat.WorldEditCompatability;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.codemc.worldguardwrapper.WorldGuardWrapper;
 import org.codemc.worldguardwrapper.region.IWrappedRegion;
@@ -71,12 +68,12 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class PrivateMines extends JavaPlugin {
+
     private static final int PLUGIN_ID = 11413;
     private static final int SPIGOT_PLUGIN_ID = 90890;
     private static PrivateMines privateMines;
     private static PrivateMinesAPI privateMinesAPI;
 
-//    private MineTypeManager mineTypeManager; // = new MineTypeManager(privateMines);
     private final Path minesDirectory = getDataFolder().toPath().resolve("mines");
     private final Path schematicsDirectory = getDataFolder().toPath().resolve("schematics");
     private final File addonsDirectory = new File("plugins/PrivateMines/addons");

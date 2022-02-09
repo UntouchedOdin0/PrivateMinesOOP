@@ -95,9 +95,6 @@ public class MineFactory {
 
         CuboidRegion region = privateMines.getWorldEditAdapter().pasteSchematic(location, file);
 
-        privateMines.getLogger().info(spawnMaterial.name());
-        privateMines.getLogger().info(mineCornerMaterial.name());
-
         MineBlocks mineBlocks = findMineBlocks(region, spawnMaterial, mineCornerMaterial);
 
         Location spawnLocation = mineBlocks.spawnLocation;
