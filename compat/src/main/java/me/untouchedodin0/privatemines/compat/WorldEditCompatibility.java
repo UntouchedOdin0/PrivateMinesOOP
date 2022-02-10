@@ -4,8 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Nullable;
 
-public class WorldEditCompatability {
-    private WorldEditCompatability() {}
+public class WorldEditCompatibility {
+    private WorldEditCompatibility() {}
     public static @Nullable WorldEditAdapter loadWorldEdit() {
         final Plugin worldEditPlugin = Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
         final Plugin fawePlugin = Bukkit.getServer().getPluginManager().getPlugin("FastAsyncWorldEdit");

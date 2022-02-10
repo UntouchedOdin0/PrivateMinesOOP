@@ -41,7 +41,7 @@ import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.util.placeholderapi.PrivateMinesExpansion;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditAdapter;
-import me.untouchedodin0.privatemines.compat.WorldEditCompatability;
+import me.untouchedodin0.privatemines.compat.WorldEditCompatibility;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -161,7 +161,7 @@ public class PrivateMines extends JavaPlugin {
         mineWorldManager = new MineWorldManager(this);
         utils = new Utils(this);
 
-        this.worldEditAdapter = WorldEditCompatability.loadWorldEdit();
+        this.worldEditAdapter = WorldEditCompatibility.loadWorldEdit();
         if (worldEditAdapter == null) {
             getLogger().warning("WorldEdit is not enabled! Disabling PrivateMines!");
             Bukkit.getPluginManager().disablePlugin(this);
