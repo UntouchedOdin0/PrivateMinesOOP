@@ -24,7 +24,6 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin;
 
-import com.github.yannicklamprecht.worldborder.api.BorderAPI;
 import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
 import com.google.gson.Gson;
 import de.jeff_media.updatechecker.UpdateChecker;
@@ -98,10 +97,6 @@ public class PrivateMines extends JavaPlugin {
         return worldEditAdapter;
     }
 
-    public WorldBorderApi getWorldBorderApi() {
-        return worldBorderApi;
-    }
-
     @ConfigValue
     private Material spawnPoint;
 
@@ -148,8 +143,6 @@ public class PrivateMines extends JavaPlugin {
 
         saveDefaultConfig();
 
-        WorldBorderApi worldBorderApi = BorderAPI.getApi();
-
         try {
             Files.createDirectories(minesDirectory);
             Files.createDirectories(schematicsDirectory);
@@ -178,7 +171,6 @@ public class PrivateMines extends JavaPlugin {
         mineFactory = new MineFactory(this);
         mineTypeManager = new MineTypeManager(this);
         configManager = new ConfigManager(this).register(this, Mine.class).load();
-        worldBorderApi = BorderAPI.getApi();
 
         try {
             final List<Path> files = Files.list(getDataFolder().toPath())
@@ -358,5 +350,9 @@ public class PrivateMines extends JavaPlugin {
 
     public ConfigManager getConfigManager() {
         return configManager;
+    }
+
+    public WorldBorderApi getWorldBorderAPI() {
+        return worldBorderApi;
     }
 }

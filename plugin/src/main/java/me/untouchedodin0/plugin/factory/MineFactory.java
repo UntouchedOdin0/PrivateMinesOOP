@@ -24,6 +24,7 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin.factory;
 
+import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.untouchedodin0.plugin.PrivateMines;
@@ -50,11 +51,13 @@ public class MineFactory {
     PrivateMines privateMines;
     Utils utils;
     MineStorage mineStorage;
+    WorldBorderApi worldBorderApi;
 
     public MineFactory(PrivateMines privateMines) {
         this.privateMines = privateMines;
         this.utils = privateMines.getUtils();
         this.mineStorage = privateMines.getMineStorage();
+        this.worldBorderApi = privateMines.getWorldBorderAPI();
     }
 
     private MineBlocks findMineBlocks(CuboidRegion mineRegion, Material spawnMaterial, Material cornerMaterial) {
@@ -134,6 +137,7 @@ public class MineFactory {
         IWrappedRegion iWrappedRegion = utils.createWorldGuardRegion(player, region);
         mine.setIWrappedRegion(iWrappedRegion);
         utils.setMineFlags(mine);
+        worldBorderApi.setBorder(player, 10, location);
     }
 
     private void saveMineData(UUID uuid, MineData mineData) {
