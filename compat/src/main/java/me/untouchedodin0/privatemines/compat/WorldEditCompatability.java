@@ -7,15 +7,32 @@ import org.jetbrains.annotations.Nullable;
 public class WorldEditCompatability {
     private WorldEditCompatability() {}
     public static @Nullable WorldEditAdapter loadWorldEdit() {
-        final Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
-        if (plugin == null) {
+        final Plugin worldEditPlugin = Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
+        final Plugin fawePlugin = Bukkit.getServer().getPluginManager().getPlugin("FastAsyncWorldEdit");
+
+        // 1.7.10 - 1.12 21.03.26-5ff3a9b-1286-22.3.9
+        // 1.13 1.13-45;0cad7f2
+        // 1.14 1.14-361;f5f5a55
+        // 1.15+ 2.0.2-SNAPSHOT-89;7da993d
+
+        String version = "";
+
+        if (worldEditPlugin == null && fawePlugin == null) {
             return null;
         }
-        String version = plugin.getDescription().getVersion();
-        if (version.startsWith("6")) {
+
+        if (worldEditPlugin != null) {
+            version = worldEditPlugin.getDescription().getVersion();
+        }
+
+        if (fawePlugin != null) {
+            version = fawePlugin.getDescription().getVersion();
+        }
+
+        if (version.startsWith("6") || version.startsWith("21")) {
             return Reflect.instantiate("me.untouchedodin0.privatemines.we_6.worldedit.WE6Adapter");
         }
-        if (version.startsWith("7")) {
+        if (version.startsWith("7") || version.startsWith("1.13") || version.startsWith("1.14") || version.startsWith("2")) {
             return Reflect.instantiate("me.untouchedodin0.privatemines.we_7.worldedit.WE7Adapter");
         }
         return null;
