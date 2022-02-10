@@ -107,7 +107,7 @@ public class Utils {
     public void sendMessage(Player player, String message) {
         String toSend = Messages.msg(message);
         if (player != null && toSend != null) {
-            player.sendMessage(toSend);
+            player.sendMessage(color(toSend));
         }
     }
 
@@ -179,7 +179,10 @@ public class Utils {
         }
     }
 
-    // Credits to https://www.spigotmc.org/threads/hex-color-code-translate.449748/#post-4270781
+    /*
+        Adds hex color support into the plugin
+        Credits to https://www.spigotmc.org/threads/hex-color-code-translate.449748/#post-4270781
+     */
 
     public String color(String string) {
         Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
