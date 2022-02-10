@@ -24,6 +24,8 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin;
 
+import com.github.yannicklamprecht.worldborder.api.BorderAPI;
+import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
 import com.google.gson.Gson;
 import de.jeff_media.updatechecker.UpdateChecker;
 import me.untouchedodin0.plugin.commands.PrivateMinesCommand;
@@ -41,7 +43,10 @@ import me.untouchedodin0.plugin.util.placeholderapi.PrivateMinesExpansion;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditAdapter;
 import me.untouchedodin0.privatemines.compat.WorldEditCompatability;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.codemc.worldguardwrapper.WorldGuardWrapper;
 import org.codemc.worldguardwrapper.region.IWrappedRegion;
@@ -87,9 +92,14 @@ public class PrivateMines extends JavaPlugin {
     private ConfigManager configManager;
     private Gson gson;
     private WorldEditAdapter worldEditAdapter;
+    private WorldBorderApi worldBorderApi;
 
     public WorldEditAdapter getWorldEditAdapter() {
         return worldEditAdapter;
+    }
+
+    public WorldBorderApi getWorldBorderApi() {
+        return worldBorderApi;
     }
 
     @ConfigValue
@@ -138,6 +148,8 @@ public class PrivateMines extends JavaPlugin {
 
         saveDefaultConfig();
 
+        WorldBorderApi worldBorderApi = BorderAPI.getApi();
+
         try {
             Files.createDirectories(minesDirectory);
             Files.createDirectories(schematicsDirectory);
@@ -166,6 +178,7 @@ public class PrivateMines extends JavaPlugin {
         mineFactory = new MineFactory(this);
         mineTypeManager = new MineTypeManager(this);
         configManager = new ConfigManager(this).register(this, Mine.class).load();
+        worldBorderApi = BorderAPI.getApi();
 
         try {
             final List<Path> files = Files.list(getDataFolder().toPath())
