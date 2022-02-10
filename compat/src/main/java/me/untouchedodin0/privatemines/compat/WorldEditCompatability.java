@@ -32,7 +32,12 @@ public class WorldEditCompatability {
         if (version.startsWith("6") || version.startsWith("21")) {
             return Reflect.instantiate("me.untouchedodin0.privatemines.we_6.worldedit.WE6Adapter");
         }
-        if (version.startsWith("7") || version.startsWith("1.13") || version.startsWith("1.14") || version.startsWith("2")) {
+        if (
+                                version.startsWith("7")    ||
+                                version.startsWith("1.13") ||
+                                version.startsWith("1.14") ||
+                                version.startsWith("1.17") ||
+                                version.startsWith("2")) {
             return Reflect.instantiate("me.untouchedodin0.privatemines.we_7.worldedit.WE7Adapter");
         }
         return null;

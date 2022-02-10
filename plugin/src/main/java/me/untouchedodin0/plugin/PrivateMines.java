@@ -229,8 +229,6 @@ public class PrivateMines extends JavaPlugin {
         if (notifyForUpdates) {
             UpdateChecker.init(this, SPIGOT_PLUGIN_ID).checkEveryXHours(1).setDownloadLink(SPIGOT_PLUGIN_ID).checkNow();
         }
-
-        getLogger().info("mineDistance: " + getMineDistance());
     }
 
     private void loadMines() throws IOException {
