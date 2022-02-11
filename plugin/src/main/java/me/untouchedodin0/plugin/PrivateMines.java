@@ -24,6 +24,7 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin;
 
+import com.github.yannicklamprecht.worldborder.api.BorderAPI;
 import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
 import com.google.gson.Gson;
 import de.jeff_media.updatechecker.UpdateChecker;
@@ -46,6 +47,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.codemc.worldguardwrapper.WorldGuardWrapper;
 import org.codemc.worldguardwrapper.region.IWrappedRegion;
@@ -171,6 +173,10 @@ public class PrivateMines extends JavaPlugin {
         mineFactory = new MineFactory(this);
         mineTypeManager = new MineTypeManager(this);
         configManager = new ConfigManager(this).register(this, Mine.class).load();
+
+        RegisteredServiceProvider<WorldBorderApi> worldBorderApiRegisteredServiceProvider = Bukkit.getServer().getServicesManager().getRegistration(WorldBorderApi.class);
+
+        this.worldBorderApi = BorderAPI.getApi(); // this keeps returning null.
 
         try {
             final List<Path> files = Files.list(getDataFolder().toPath())

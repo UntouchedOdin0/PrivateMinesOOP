@@ -137,7 +137,7 @@ public class MineFactory {
         IWrappedRegion iWrappedRegion = utils.createWorldGuardRegion(player, region);
         mine.setIWrappedRegion(iWrappedRegion);
         utils.setMineFlags(mine);
-        worldBorderApi.setBorder(player, 10, location);
+        //worldBorderApi.setBorder(player, 10, location);
     }
 
     private void saveMineData(UUID uuid, MineData mineData) {
