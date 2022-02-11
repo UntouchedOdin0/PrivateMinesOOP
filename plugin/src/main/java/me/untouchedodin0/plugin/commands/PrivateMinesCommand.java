@@ -258,6 +258,9 @@ public class PrivateMinesCommand {
         for (Material material : materials) {
             if (material.isSolid()) {
                 types.put(material, 1.0);
+            } else {
+                commandSender.sendMessage(ChatColor.RED + "You specified a non-solid block " + Utils.prettify(material.name()));
+                return;
             }
         }
         mine.setMineTypes(types);

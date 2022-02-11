@@ -212,4 +212,13 @@ public class Utils {
     public List<String> color(@NotNull Collection<String> toConvert) {
         return toConvert.stream().map(this::color).collect(Collectors.toList());
     }
+
+    // Credits to Brister Mitten#9960 for this
+
+    public static String prettify(String s) {
+        return Arrays.stream(s.split("_"))
+                .map(String::toLowerCase)
+                .map(str -> str.substring(0, 1).toUpperCase() + str.substring(1))
+                .collect(Collectors.joining(" "));
+    }
 }
