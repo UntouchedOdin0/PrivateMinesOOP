@@ -256,7 +256,9 @@ public class PrivateMinesCommand {
         Mine mine = mineStorage.getMine(target.getUniqueId());
         Map<Material, Double> types = new EnumMap<>(Material.class);
         for (Material material : materials) {
-            types.put(material, 1.0);
+            if (material.isSolid()) {
+                types.put(material, 1.0);
+            }
         }
         mine.setMineTypes(types);
         mine.reset();
