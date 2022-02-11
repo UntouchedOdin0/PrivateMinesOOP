@@ -298,6 +298,7 @@ public class Mine {
             privateMines.getMineStorage().replaceMine(getMineOwner(), this);
         }
         mineStorage.replaceMine(getMineOwner(), this);
+        reset();
     }
 
     public double getPercentage() {
