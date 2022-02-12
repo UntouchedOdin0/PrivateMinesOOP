@@ -33,6 +33,7 @@ import me.untouchedodin0.plugin.config.MenuConfig;
 import me.untouchedodin0.plugin.config.MineConfig;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.mines.Mine;
+import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.MineTypeManager;
 import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
@@ -178,6 +179,8 @@ public class PrivateMines extends JavaPlugin {
 
         this.worldBorderApi = BorderAPI.getApi(); // this keeps returning null.
 
+        ArgType<MineType> mineTypes = new ArgType<>("mineType", mineTypeManager::getMineType);
+
         try {
             final List<Path> files = Files.list(getDataFolder().toPath())
                     .collect(Collectors.toList());
@@ -200,7 +203,8 @@ public class PrivateMines extends JavaPlugin {
          */
 
         new CommandParser(this.getResource("command.rdcml"))
-                .setArgTypes(ArgType.of("material", Material.class))
+                .setArgTypes(ArgType.of("material", Material.class),
+                             ArgType.of("mineType", mineTypeManager.getMineTypes()))
                 .parse()
                 .register("privatemines",
                         new PrivateMinesCommand(this));

@@ -45,4 +45,8 @@ public class MineTypeManager {
                 .orElse(mineTypes.lastEntry())
                 .getValue();
     }
+
+    public NavigableMap<String, MineType> getMineTypes() {
+        return mineTypes;
+    }
 }

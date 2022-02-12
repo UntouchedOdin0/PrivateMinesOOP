@@ -116,25 +116,19 @@ public class PrivateMinesCommand {
     }
 
     @CommandHook("give")
-    public void give(CommandSender commandSender, Player target, String type) {
+    public void give(CommandSender commandSender, Player target, MineType mineType) {
         if (mineStorage.hasMine(target.getUniqueId())) {
             commandSender.sendMessage(ChatColor.RED + "User already has a mine!");
             return;
         }
         commandSender.sendMessage(ChatColor.GREEN + "Giving " + target.getName() + " a private mine!");
-        commandSender.sendMessage(type);
         Location location = mineWorldManager.getNextFreeLocation();
         final MineType defaultMineType = privateMines.getMineTypeManager().getDefaultMineType();
 
-        if (type == null) {
+        if (mineType == null) {
             mineFactory.createMine(target, location, defaultMineType, false);
         } else {
-            final MineType specifiedMineType = privateMines.getMineTypeManager().getMineType(type);
-            if (privateMines.getMineTypeManager().getMineType(type) == null) {
-                commandSender.sendMessage(ChatColor.RED + "This mine type doesn't exist!");
-                return;
-            }
-            mineFactory.createMine(target, location, specifiedMineType, false);
+            mineFactory.createMine(target, location, mineType, false);
         }
     }
 
