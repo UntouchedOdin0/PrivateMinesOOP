@@ -45,6 +45,7 @@ public class WE6Adapter implements WorldEditAdapter {
             Operation operation = clipboardHolder
                     .createPaste(editSession, editSession.getWorld().getWorldData())
                     .to(to)
+                    .ignoreAirBlocks(true)
                     .build();
             Operations.completeBlindly(operation);
 

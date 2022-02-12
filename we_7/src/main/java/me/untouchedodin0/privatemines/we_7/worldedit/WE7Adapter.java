@@ -51,7 +51,11 @@ public class WE7Adapter implements WorldEditAdapter {
 
                 // If the clipboard isn't null prepare to create a paste operation, complete it and set the region stuff.
                 Operation operation =
-                        new ClipboardHolder(clipboard).createPaste(editSession).to(centerVector).ignoreAirBlocks(true).build();
+                        new ClipboardHolder(clipboard)
+                                .createPaste(editSession)
+                                .to(centerVector)
+                                .ignoreAirBlocks(true)
+                                .build();
                 Operations.complete(operation);
                 Region region = clipboard.getRegion();
 
