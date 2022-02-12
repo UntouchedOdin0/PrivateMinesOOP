@@ -469,7 +469,7 @@ public class PrivateMinesCommand {
     }
 
     @CommandHook("reload")
-    public void reload(Player player) {
+    public void reload(CommandSender commandSender) {
         ConfigManager configManager = privateMines.getConfigManager();
         configManager.load();
     }
