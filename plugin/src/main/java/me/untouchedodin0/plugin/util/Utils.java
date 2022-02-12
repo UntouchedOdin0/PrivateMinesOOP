@@ -204,10 +204,6 @@ public class Utils {
         return ChatColor.translateAlternateColorCodes('&', string);
     }
 
-//    public String color(String string) {
-//        return ChatColor.translateAlternateColorCodes('&', string);
-//    }
-
     // Credits to CapOfCave#5962 for this
     public List<String> color(@NotNull Collection<String> toConvert) {
         return toConvert.stream().map(this::color).collect(Collectors.toList());
