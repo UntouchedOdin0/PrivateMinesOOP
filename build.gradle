@@ -8,7 +8,7 @@ allprojects {
     apply plugin: 'java-library'
 
     group 'me.untouchedodin0.privatemines'
-    version '3.1.5-SNAPSHOT'
+    version '3.1.6-SNAPSHOT'
 
 
     repositories {
