@@ -289,7 +289,7 @@ public class PrivateMinesCommand {
         Mine mine = mineStorage.getMine(target.getUniqueId());
         MineType newType = privateMines.getMineTypeManager().getMineType(type);
         if (newType == null) {
-            utils.sendMessage(commandSender, invalidMineType);
+            commandSender.sendMessage(ChatColor.RED + "You've specified a invalid mine type!");
             return;
         }
 
