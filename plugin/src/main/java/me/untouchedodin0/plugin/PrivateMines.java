@@ -133,7 +133,7 @@ public class PrivateMines extends JavaPlugin {
             saveResource("schematics/mine.schem", false);
         }
 
-        mineWorldManager = new MineWorldManager(this);
+        mineWorldManager = new MineWorldManager();
         utils = new Utils(this);
 
         this.worldEditAdapter = WorldEditCompatibility.loadWorldEdit();
