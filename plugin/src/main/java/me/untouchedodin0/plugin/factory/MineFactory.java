@@ -28,6 +28,7 @@ import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.untouchedodin0.plugin.PrivateMines;
+import me.untouchedodin0.plugin.config.Config;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.data.MineData;
@@ -88,8 +89,8 @@ public class MineFactory {
 
     public void createMine(Player player, Location location, @NotNull MineType mineType, boolean replaceOld) {
         UUID uuid = player.getUniqueId();
-        Material spawnMaterial = Material.STONE; //privateMines.getSpawnMaterial();
-        Material mineCornerMaterial = Material.STONE; //privateMines.getCornerMaterial();
+        Material spawnMaterial = Config.spawnPoint;
+        Material mineCornerMaterial = Config.mineCorner;
 
         Path file = mineType.getSchematicFile();
 

@@ -1,25 +1,27 @@
 package me.untouchedodin0.plugin.config;
 
 import org.bukkit.Material;
+import redempt.redlib.config.annotations.ConfigMappable;
 import redempt.redlib.config.annotations.ConfigName;
 
+@ConfigMappable
 public class Config {
 
-    public Material spawnPoint = Material.SPONGE;
-    public Material mineCorner = Material.POWERED_RAIL;
-    public Material sellNpc = Material.WOOL;
-    public Material upgradeMaterial = Material.OBSIDIAN;
-    public String mainMenuTitle = "Private Mines";
+    public static Material spawnPoint = Material.SPONGE;
+    public static Material mineCorner = Material.POWERED_RAIL;
+    public static Material sellNpc = Material.WOOL;
+    public static Material upgradeMaterial = Material.OBSIDIAN;
+    public static String mainMenuTitle = "Private Mines";
 
-    public boolean debugMode = false;
-    public boolean notifyForUpdates = true;
-    public int mineDistance = 150;
-    public double resetPercentage = 50;
+    public static boolean debugMode = false;
+    public static boolean notifyForUpdates = true;
+    public static int mineDistance = 150;
+    public static double resetPercentage = 50;
 
     @ConfigName("autoUpgrade.enabled")
-    public boolean autoUpgradeEnabled;
+    public static boolean autoUpgradeEnabled;
     @ConfigName("autoUpgrade.everyXthExpansion")
-    public int everyXthExpansion;
+    public static int everyXthExpansion;
     @ConfigName("autoUpgrade.startingSize")
-    public int startingSize;
+    public static int startingSize;
 }

@@ -18,5 +18,4 @@ public interface WorldEditAdapter {
         map.put(material, 1.0);
         fillRegion(region, map);
     }
-
 }
