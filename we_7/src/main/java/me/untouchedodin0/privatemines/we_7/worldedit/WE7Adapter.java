@@ -1,9 +1,6 @@
 package me.untouchedodin0.privatemines.we_7.worldedit;
 
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.MaxChangedBlocksException;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.WorldEditException;
+import com.sk89q.worldedit.*;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
@@ -23,12 +20,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import redempt.redlib.region.CuboidRegion;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Map;
-import java.util.Objects;
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
 
 public class WE7Adapter implements WorldEditAdapter {
     @Override

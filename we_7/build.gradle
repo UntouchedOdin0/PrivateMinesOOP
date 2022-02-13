@@ -1,20 +1,19 @@
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+}
+
 repositories {
     mavenCentral()
-    maven {
-        url = uri("https://mvn.intellectualsites.com/content/groups/public/")
-    }
     maven {
         url = "https://maven.enginehub.org/repo/"
     }
 }
+
 dependencies {
     compileOnly(project(':compat')) {
         exclude group: 'org.spigotmc', module: 'spigot-api'
     }
+
     compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.2.8-SNAPSHOT'
     compileOnly 'org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT'
-//    compileOnly 'com.sk89q.worldedit:worldedit-core:7.2.0-SNAPSHOT'
-
-//    compileOnly 'com.fastasyncworldedit:FAWE-Core:1.17-268'
-//    compileOnly 'com.fastasyncworldedit:FAWE-Bukkit:1.17-268'
 }

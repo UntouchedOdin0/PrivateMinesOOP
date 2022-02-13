@@ -149,6 +149,7 @@ public class PrivateMines extends JavaPlugin {
         //configManager = ConfigManager.create(this).target(MineConfig.class).saveDefaults().load();
         configManager = ConfigManager.create(this).target(Config.class).saveDefaults().load();
 
+        getLogger().info("configManager: " + configManager);
         RegisteredServiceProvider<WorldBorderApi> worldBorderApiRegisteredServiceProvider = Bukkit.getServer().getServicesManager().getRegistration(WorldBorderApi.class);
 
         this.worldBorderApi = BorderAPI.getApi(); // this keeps returning null.

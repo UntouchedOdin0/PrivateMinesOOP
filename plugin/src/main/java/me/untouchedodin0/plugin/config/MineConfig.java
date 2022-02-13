@@ -31,8 +31,6 @@ import org.bukkit.Material;
 import redempt.redlib.config.annotations.ConfigMappable;
 import redempt.redlib.config.annotations.ConfigPath;
 import redempt.redlib.config.annotations.ConfigPostInit;
-import redempt.redlib.misc.WeightedRandom;
-import redempt.redlib.multiblock.MultiBlockStructure;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -45,53 +43,37 @@ public class MineConfig {
 
     private PrivateMines privateMines;
     private Path path;
-    private String contents;
 
     @ConfigPath
-    private String name = "Default";
-
-    private String file = "structure.dat"; // reads the file
-
-    private int priority = 1; // reads the priority from the section
-
-    private int resetTime = 5; // reads the reset time from the section
-
-    private double resetPercentage = 50.00; // reads the reset percentage from the section
-
-    private Material material = Material.STONE;
-
+    public String name = "Default";
+    public String file = "structure.dat"; // reads the file
+    public int priority = 1; // reads the priority from the section
+    public int resetTime = 5; // reads the reset time from the section
+    public double resetPercentage = 50.00; // reads the reset percentage from the section
+    public Material material = Material.STONE;
     public static Map<Material, Double> materials = new HashMap<>();
-
     public static List<String> allowFlags = new ArrayList<>();
-
     public static List<String> denyFlags = new ArrayList<>();
 
 //    private Map<Material, Double> materials =
 //            ConfigManager.map(Material.class, Double.class); // reads the materials from the section
-
-    private MultiBlockStructure multiBlockStructure;
-
-    private WeightedRandom<Material> weightedRandom = new WeightedRandom<>();
 
     public MineConfig() {
         this.privateMines = PrivateMines.getPrivateMines();
     }
 
     /*
-        These tasks are fired after all the objects in the config file have been mapped.
-        Path: The path of the specified file to be processed
-        Contents: The contents of the the file e.g. 14x24x27;bedrock*9072;
+        Ths is called for when the config is loaded and reloaded
      */
-
-    // This method also gets called when you type /privatemines reload
 
     @ConfigPostInit
     private void postInit() {
 
         if (privateMines == null) {
+            String instanceNull = "Private Mines instance in the MineConfig was null " +
+                    "please make a ticket on the discord reporting this";
             Bukkit.getLogger().info(
-                    "Private Mines instance in the MineConfig was null " +
-                    "please make a ticket on the discord reporting this");
+                    instanceNull);
             return;
         }
 
@@ -119,12 +101,6 @@ public class MineConfig {
 
     public Path getPath() {
         return path;
-    }
-
-    // A getter for the contents
-
-    public String getContents() {
-        return contents;
     }
 
     // A getter for getting the section name
@@ -155,7 +131,7 @@ public class MineConfig {
         return resetPercentage;
     }
 
-    // A getter for getting the materials from the secion
+    // A getter for getting the materials from the section
 
     public Map<Material, Double> getMaterials() {
         return materials;
@@ -167,11 +143,6 @@ public class MineConfig {
         return material;
     }
 
-    // A getter for getting the multi block structure
-
-    public MultiBlockStructure getMultiBlockStructure() {
-        return multiBlockStructure;
-    }
 
     public List<String> getAllowFlags() {
         return allowFlags;
