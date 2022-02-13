@@ -25,50 +25,25 @@ SOFTWARE.
 package me.untouchedodin0.plugin.config;
 
 import org.bukkit.Material;
-import redempt.redlib.configmanager.ConfigManager;
-import redempt.redlib.configmanager.annotations.ConfigMappable;
-import redempt.redlib.configmanager.annotations.ConfigPath;
-import redempt.redlib.configmanager.annotations.ConfigValue;
+import redempt.redlib.config.annotations.ConfigMappable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @ConfigMappable
 public class MenuConfig {
 
-    @ConfigValue
-    private String title = "Private Mines";
-
-    @ConfigPath
-    private final String item = "Default";
-
-    @ConfigValue
-    private String name = "Name";
-
-    @ConfigValue
-    private List<String> lore = ConfigManager.stringList();
-
-    @ConfigValue
-    private Material type = Material.STONE;
-
-    @ConfigValue
-    private int slot = 0;
-
-    @ConfigValue
-    private String action = "action";
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getItem() {
-        return item;
-    }
+    public String name = "Default";
+    public static List<String> lore = new ArrayList<>();
+    public Material type = Material.STONE;
+    public int slot = 0;
+    public String action = "Action";
 
     public String getName() {
         return name;
     }
 
-    public List<String> getLore() {
+    public static List<String> getLore() {
         return lore;
     }
 

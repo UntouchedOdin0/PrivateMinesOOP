@@ -28,19 +28,18 @@ import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.mines.MineType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import redempt.redlib.configmanager.ConfigManager;
-import redempt.redlib.configmanager.annotations.ConfigMappable;
-import redempt.redlib.configmanager.annotations.ConfigPath;
-import redempt.redlib.configmanager.annotations.ConfigPostInit;
-import redempt.redlib.configmanager.annotations.ConfigValue;
+import redempt.redlib.config.annotations.ConfigMappable;
+import redempt.redlib.config.annotations.ConfigPath;
+import redempt.redlib.config.annotations.ConfigPostInit;
 import redempt.redlib.misc.WeightedRandom;
 import redempt.redlib.multiblock.MultiBlockStructure;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings({"FieldMayBeFinal", "unused"})
 @ConfigMappable
 public class MineConfig {
 
@@ -51,30 +50,24 @@ public class MineConfig {
     @ConfigPath
     private String name = "Default";
 
-    @ConfigValue
     private String file = "structure.dat"; // reads the file
 
-    @ConfigValue
     private int priority = 1; // reads the priority from the section
 
-    @ConfigValue
     private int resetTime = 5; // reads the reset time from the section
 
-    @ConfigValue
     private double resetPercentage = 50.00; // reads the reset percentage from the section
 
-    @ConfigValue
     private Material material = Material.STONE;
 
-    @ConfigValue
-    private Map<Material, Double> materials =
-            ConfigManager.map(Material.class, Double.class); // reads the materials from the section
+    public static Map<Material, Double> materials = new HashMap<>();
 
-    @ConfigValue
-    private List<String> allowFlags = ConfigManager.stringList();
+    public static List<String> allowFlags = new ArrayList<>();
 
-    @ConfigValue
-    private List<String> denyFlags = ConfigManager.stringList();
+    public static List<String> denyFlags = new ArrayList<>();
+
+//    private Map<Material, Double> materials =
+//            ConfigManager.map(Material.class, Double.class); // reads the materials from the section
 
     private MultiBlockStructure multiBlockStructure;
 

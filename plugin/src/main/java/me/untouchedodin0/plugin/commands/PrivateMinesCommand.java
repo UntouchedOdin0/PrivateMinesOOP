@@ -44,7 +44,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import redempt.redlib.commandmanager.CommandHook;
 import redempt.redlib.commandmanager.Messages;
-import redempt.redlib.configmanager.ConfigManager;
+import redempt.redlib.config.ConfigManager;
 import redempt.redlib.inventorygui.InventoryGUI;
 import redempt.redlib.inventorygui.ItemButton;
 import redempt.redlib.itemutils.ItemBuilder;
@@ -74,11 +74,11 @@ public class PrivateMinesCommand {
 
     @CommandHook("main")
     public void mainHook(Player player) {
-        Map<String, MenuConfig> menuConfig = privateMines.getInventory();
-        String inventoryTitle = privateMines.getMainMenuTitle();
-        String inventoryTitleColored = utils.color(inventoryTitle);
+//        Map<String, MenuConfig> menuConfig = privateMines.getInventory();
+//        String inventoryTitle = privateMines.getMainMenuTitle();
+        //String inventoryTitleColored = utils.color(inventoryTitle);
 
-        InventoryGUI gui = new InventoryGUI(Bukkit.createInventory(null, 27, inventoryTitleColored));
+        //InventoryGUI gui = new InventoryGUI(Bukkit.createInventory(null, 27, inventoryTitleColored));
 
         Mine mine = mineStorage.getMine(player.getUniqueId());
         if (mine == null) {
@@ -86,6 +86,7 @@ public class PrivateMinesCommand {
             return;
         }
 
+        /*
         menuConfig.forEach((s, c) -> {
             String name = utils.color(c.getName());
             List<String> lore = utils.color(c.getLore());
@@ -111,8 +112,9 @@ public class PrivateMinesCommand {
             });
             gui.addButton(slot, itemButton);
         });
+         */
 
-        gui.open(player);
+        //gui.open(player);
     }
 
     @CommandHook("give")
@@ -471,7 +473,7 @@ public class PrivateMinesCommand {
     @CommandHook("reload")
     public void reload(CommandSender commandSender) {
         ConfigManager configManager = privateMines.getConfigManager();
-        configManager.load();
+        configManager.reload();
     }
 }
 

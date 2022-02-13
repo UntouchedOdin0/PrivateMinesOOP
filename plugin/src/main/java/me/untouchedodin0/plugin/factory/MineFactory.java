@@ -88,8 +88,8 @@ public class MineFactory {
 
     public void createMine(Player player, Location location, @NotNull MineType mineType, boolean replaceOld) {
         UUID uuid = player.getUniqueId();
-        Material spawnMaterial = privateMines.getSpawnMaterial();
-        Material mineCornerMaterial = privateMines.getCornerMaterial();
+        Material spawnMaterial = Material.STONE; //privateMines.getSpawnMaterial();
+        Material mineCornerMaterial = Material.STONE; //privateMines.getCornerMaterial();
 
         Path file = mineType.getSchematicFile();
 

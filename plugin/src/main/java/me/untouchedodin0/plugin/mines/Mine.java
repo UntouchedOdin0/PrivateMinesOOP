@@ -37,7 +37,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.codemc.worldguardwrapper.region.IWrappedRegion;
-import redempt.redlib.configmanager.annotations.ConfigValue;
+import redempt.redlib.config.annotations.ConfigName;
 import redempt.redlib.misc.Task;
 import redempt.redlib.region.CuboidRegion;
 
@@ -47,13 +47,14 @@ import java.nio.file.Path;
 import java.util.*;
 
 public class Mine {
-    @ConfigValue("autoUpgrade.enabled")
+
+    @ConfigName("autoUpgrade.enabled")
     private static boolean autoUpgrade = false;
-    @ConfigValue("autoUpgrade.startingSize")
+    @ConfigName("autoUpgrade.startingSize")
     private static int startingSize = 48;
-    @ConfigValue("autoUpgrade.everyXthExpansion")
+    @ConfigName("autoUpgrade.everyXthExpansion")
     private static int expansionIncrement = 4;
-    @ConfigValue("resetPercentage")
+    @ConfigName("resetPercentage")
     private static double resetPercentage = 50;
 
     final Utils utils;

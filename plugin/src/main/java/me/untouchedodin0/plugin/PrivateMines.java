@@ -29,6 +29,7 @@ import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
 import com.google.gson.Gson;
 import de.jeff_media.updatechecker.UpdateChecker;
 import me.untouchedodin0.plugin.commands.PrivateMinesCommand;
+import me.untouchedodin0.plugin.config.Config;
 import me.untouchedodin0.plugin.config.MenuConfig;
 import me.untouchedodin0.plugin.config.MineConfig;
 import me.untouchedodin0.plugin.factory.MineFactory;
@@ -56,8 +57,7 @@ import redempt.redlib.RedLib;
 import redempt.redlib.commandmanager.ArgType;
 import redempt.redlib.commandmanager.CommandParser;
 import redempt.redlib.commandmanager.Messages;
-import redempt.redlib.configmanager.ConfigManager;
-import redempt.redlib.configmanager.annotations.ConfigValue;
+import redempt.redlib.config.ConfigManager;
 import redempt.redlib.region.CuboidRegion;
 
 import java.io.File;
@@ -100,35 +100,11 @@ public class PrivateMines extends JavaPlugin {
         return worldEditAdapter;
     }
 
-    @ConfigValue
-    private Material spawnPoint;
-
-    @ConfigValue
-    private Material mineCorner;
-
-    @ConfigValue
-    private Material sellNpc;
-
-    @ConfigValue
-    private Material upgradeMaterial;
-
-    @ConfigValue
-    private String mainMenuTitle;
-
-    @ConfigValue
-    private boolean debugMode = false;
-
-    @ConfigValue
-    private boolean notifyForUpdates = false;
-
-    @ConfigValue
-    private int mineDistance = 150;
-
-    @ConfigValue
-    private Map<String, MineConfig> mineTypes = ConfigManager.map(MineConfig.class);
-
-    @ConfigValue
-    private Map<String, MenuConfig> inventory = ConfigManager.map(MenuConfig.class);
+//    @ConfigValue
+//    private Map<String, MineConfig> mineTypes = ConfigManager.map(MineConfig.class);
+//
+//    @ConfigValue
+//    private Map<String, MenuConfig> inventory = ConfigManager.map(MenuConfig.class);
 
     public static PrivateMines getPrivateMines() {
         return privateMines;
@@ -173,7 +149,9 @@ public class PrivateMines extends JavaPlugin {
         mineStorage = new MineStorage();
         mineFactory = new MineFactory(this);
         mineTypeManager = new MineTypeManager(this);
-        configManager = new ConfigManager(this).register(this, Mine.class).load();
+        //configManager = new ConfigManager(this).register(this, Mine.class).load();
+        //configManager = ConfigManager.create(this).target(MineConfig.class).saveDefaults().load();
+        configManager = ConfigManager.create(this).target(Config.class).saveDefaults().load();
 
         RegisteredServiceProvider<WorldBorderApi> worldBorderApiRegisteredServiceProvider = Bukkit.getServer().getServicesManager().getRegistration(WorldBorderApi.class);
 
@@ -241,9 +219,9 @@ public class PrivateMines extends JavaPlugin {
                                             "impossible.");
         }
 
-        if (notifyForUpdates) {
-            UpdateChecker.init(this, SPIGOT_PLUGIN_ID).checkEveryXHours(1).setDownloadLink(SPIGOT_PLUGIN_ID).checkNow();
-        }
+//        if (notifyForUpdates) {
+//            UpdateChecker.init(this, SPIGOT_PLUGIN_ID).checkEveryXHours(1).setDownloadLink(SPIGOT_PLUGIN_ID).checkNow();
+//        }
     }
 
     private void loadMines() throws IOException {
@@ -305,17 +283,17 @@ public class PrivateMines extends JavaPlugin {
         return mineTypeManager;
     }
 
-    public Material getSpawnMaterial() {
-        return spawnPoint;
-    }
-
-    public Material getCornerMaterial() {
-        return mineCorner;
-    }
-
-    public String getMainMenuTitle() {
-        return mainMenuTitle;
-    }
+//    public Material getSpawnMaterial() {
+//        return spawnPoint;
+//    }
+//
+//    public Material getCornerMaterial() {
+//        return mineCorner;
+//    }
+//
+//    public String getMainMenuTitle() {
+//        return mainMenuTitle;
+//    }
 
     /*
         Gets the mine storage
@@ -335,7 +313,7 @@ public class PrivateMines extends JavaPlugin {
 
 
     public int getMineDistance() {
-        return mineDistance;
+        return 150; // need to get from new config (somehow)
     }
 
     public MineWorldManager getMineWorldManager() {
@@ -354,9 +332,9 @@ public class PrivateMines extends JavaPlugin {
         return schematicsDirectory;
     }
 
-    public Map<String, MenuConfig> getInventory() {
-        return inventory;
-    }
+//    public Map<String, MenuConfig> getInventory() {
+//        return inventory;
+//    }
 
     public ConfigManager getConfigManager() {
         return configManager;
