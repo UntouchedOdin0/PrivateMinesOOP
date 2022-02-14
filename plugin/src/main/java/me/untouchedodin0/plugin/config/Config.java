@@ -12,8 +12,8 @@ public class Config {
     public static Material spawnPoint = Material.SPONGE;
     @Comment("The template material for the corners (Needs 2 in a mine to create the cuboid)")
     public static Material mineCorner = Material.POWERED_RAIL;
-    @Comment("The template material for the sell npc")
-    public static Material sellNpc = Material.WOOL;
+//    @Comment("The template material for the sell npc")
+//    public static Material sellNpc = Material.WOOL;
     @Comment("During the /pmine expand process this block will")
     @Comment("looked for to tell the plugin to upgrade to")
     @Comment("the next mine type")
