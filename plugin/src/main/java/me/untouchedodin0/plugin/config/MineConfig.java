@@ -50,7 +50,7 @@ public class MineConfig {
     public int priority = 1; // reads the priority from the section
     public int resetTime = 5; // reads the reset time from the section
     public double resetPercentage = 50.00; // reads the reset percentage from the section
-    public Material material = Material.STONE;
+    public static Material material = Material.STONE;
     public static Map<Material, Double> materials = new HashMap<>();
     public static List<String> allowFlags = new ArrayList<>();
     public static List<String> denyFlags = new ArrayList<>();
@@ -139,9 +139,9 @@ public class MineConfig {
 
     // A getter for getting the material from the section
 
-    public Material getMaterial() {
-        return material;
-    }
+//    public Material getMaterial() {
+//        return material;
+//    }
 
 
     public List<String> getAllowFlags() {

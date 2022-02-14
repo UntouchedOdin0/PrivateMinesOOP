@@ -29,6 +29,7 @@ import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
 import com.google.gson.Gson;
 import me.untouchedodin0.plugin.commands.PrivateMinesCommand;
 import me.untouchedodin0.plugin.config.Config;
+import me.untouchedodin0.plugin.config.MineConfig;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
@@ -88,6 +89,8 @@ public class PrivateMines extends JavaPlugin {
     private MineStorage mineStorage;
     private Utils utils;
     private ConfigManager configManager;
+    private ConfigManager mineConfig;
+
     private Gson gson;
     private WorldEditAdapter worldEditAdapter;
     private WorldBorderApi worldBorderApi;
@@ -148,8 +151,15 @@ public class PrivateMines extends JavaPlugin {
         //configManager = new ConfigManager(this).register(this, Mine.class).load();
         //configManager = ConfigManager.create(this).target(MineConfig.class).saveDefaults().load();
         configManager = ConfigManager.create(this).target(Config.class).saveDefaults().load();
+        mineConfig = ConfigManager.create(this).target(MineConfig.class).saveDefaults().load();
 
         getLogger().info("configManager: " + configManager);
+        getLogger().info("mineConfig: " + mineConfig);
+
+        getLogger().info(Config.stuff);
+        getLogger().info("mineTypeManager: " + mineTypeManager);
+        //getLogger().info("Default mine type: " + mineTypeManager.getDefaultMineType());
+
         RegisteredServiceProvider<WorldBorderApi> worldBorderApiRegisteredServiceProvider = Bukkit.getServer().getServicesManager().getRegistration(WorldBorderApi.class);
 
         this.worldBorderApi = BorderAPI.getApi(); // this keeps returning null.

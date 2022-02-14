@@ -1,5 +1,6 @@
 package me.untouchedodin0.privatemines.we_7.worldedit;
 
+import com.fastasyncworldedit.core.Fawe;
 import com.sk89q.worldedit.*;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
@@ -16,6 +17,7 @@ import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.World;
 import me.untouchedodin0.privatemines.compat.WorldEditAdapter;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import redempt.redlib.region.CuboidRegion;
@@ -64,6 +66,8 @@ public class WE7Adapter implements WorldEditAdapter {
     @Override
     public void fillRegion(CuboidRegion region, Map<Material, Double> materials) {
         World world = new BukkitWorld(region.getWorld());
+        EditSession editSessionBuilder = Fawe.instance().getWorldEdit().newEditSession(world);
+
         try (final EditSession editSession =
                      WorldEdit.getInstance().newEditSession(world)) {
             editSession.setReorderMode(EditSession.ReorderMode.MULTI_STAGE);
@@ -79,7 +83,14 @@ public class WE7Adapter implements WorldEditAdapter {
                     BukkitAdapter.asBlockVector(region.getEnd())
             );
 
-            editSession.setBlocks(worldEditRegion, randomPattern);
+            editSessionBuilder.setBlocks((Region) worldEditRegion, randomPattern);
+            //editSession.setBlocks(worldEditRegion, randomPattern);
+            Bukkit.getLogger().info("world: " + world);
+            Bukkit.getLogger().info("editSessionBuilder: " + editSessionBuilder);
+            Bukkit.getLogger().info("editSession: " + editSession);
+            Bukkit.getLogger().info("randomPattern: " + randomPattern);
+            Bukkit.getLogger().info("worldEditRegion: " + worldEditRegion);
+            Bukkit.getLogger().info("materials: " + materials);
         } catch (MaxChangedBlocksException e) {
             e.printStackTrace();
             // this shouldn't happen

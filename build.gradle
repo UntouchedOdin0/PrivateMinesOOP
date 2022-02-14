@@ -41,11 +41,11 @@ allprojects {
         useJUnitPlatform()
     }
 
-    tasks.withType(JavaCompile) {
-        options.encoding = "UTF-8"
-
-        sourceCompatibility = targetCompatibility =  JavaVersion.VERSION_1_8
-    }
+//    tasks.withType(JavaCompile) {
+//        options.encoding = "UTF-8"
+//
+//        sourceCompatibility = targetCompatibility =  JavaVersion.VERSION_1_8
+//    }
 }
 
 subprojects {
