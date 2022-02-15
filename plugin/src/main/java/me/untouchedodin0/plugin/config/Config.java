@@ -38,4 +38,20 @@ public class Config {
     public static int everyXthExpansion;
     @ConfigName("autoUpgrade.startingSize")
     public static int startingSize;
+
+    public static Material getSpawnPoint() {
+        return spawnPoint;
+    }
+
+    public static Material getMineCorner() {
+        return mineCorner;
+    }
+
+    public static Material getUpgradeMaterial() {
+        return upgradeMaterial;
+    }
+
+    public static String getMainMenuTitle() {
+        return mainMenuTitle;
+    }
 }

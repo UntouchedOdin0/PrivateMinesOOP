@@ -41,7 +41,7 @@ import java.util.Map;
 @ConfigMappable
 public class MineConfig {
 
-    private PrivateMines privateMines;
+    private final transient PrivateMines privateMines;
     private Path path;
 
     @ConfigPath
@@ -69,6 +69,9 @@ public class MineConfig {
     @ConfigPostInit
     private void postInit() {
 
+        System.out.println(privateMines);
+        System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+        privateMines.getLogger().info("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         if (privateMines == null) {
             String instanceNull = "Private Mines instance in the MineConfig was null " +
                     "please make a ticket on the discord reporting this";
@@ -90,6 +93,9 @@ public class MineConfig {
         mineType.setResetTime(getResetTime());
         mineType.setMaterials(getMaterials());
         privateMines.getMineTypeManager().registerMineType(mineType);
+
+        privateMines.getLogger().info("file: " + file);
+        privateMines.getLogger().info("path: " + path);
     }
 
     // a getter for the private mines instance

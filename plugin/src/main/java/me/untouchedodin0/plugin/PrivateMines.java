@@ -156,7 +156,22 @@ public class PrivateMines extends JavaPlugin {
         getLogger().info("configManager: " + configManager);
         getLogger().info("mineConfig: " + mineConfig);
 
+        Material spawnPoint = Config.getSpawnPoint();
+        Material mineCorner = Config.getMineCorner();
+        Material upgradeMaterial = Config.getUpgradeMaterial();
+
         getLogger().info(Config.stuff);
+        getLogger().info(String.valueOf(spawnPoint));
+        getLogger().info(String.valueOf(mineCorner));
+        getLogger().info(String.valueOf(upgradeMaterial));
+        getLogger().info(Config.mainMenuTitle);
+        getLogger().info(String.valueOf(Config.debugMode));
+        getLogger().info(String.valueOf(Config.notifyForUpdates));
+        getLogger().info(String.valueOf(Config.resetPercentage));
+        getLogger().info(String.valueOf(Config.autoUpgradeEnabled));
+        getLogger().info(String.valueOf(Config.everyXthExpansion));
+        getLogger().info(String.valueOf(Config.startingSize));
+
         getLogger().info("mineTypeManager: " + mineTypeManager);
         //getLogger().info("Default mine type: " + mineTypeManager.getDefaultMineType());
 
