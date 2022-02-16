@@ -1,9 +1,11 @@
 package me.untouchedodin0.plugin.config;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import redempt.redlib.config.annotations.Comment;
 import redempt.redlib.config.annotations.ConfigMappable;
 import redempt.redlib.config.annotations.ConfigName;
+import redempt.redlib.config.annotations.ConfigPostInit;
 
 @ConfigMappable
 public class Config {
@@ -53,5 +55,10 @@ public class Config {
 
     public static String getMainMenuTitle() {
         return mainMenuTitle;
+    }
+
+    @ConfigPostInit
+    private void postInit() {
+        Bukkit.getLogger().info("config post init working");
     }
 }

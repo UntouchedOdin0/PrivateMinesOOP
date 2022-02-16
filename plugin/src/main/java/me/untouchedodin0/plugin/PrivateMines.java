@@ -148,10 +148,12 @@ public class PrivateMines extends JavaPlugin {
         mineStorage = new MineStorage();
         mineFactory = new MineFactory(this);
         mineTypeManager = new MineTypeManager(this);
+        MineConfig test = new MineConfig();
+
         //configManager = new ConfigManager(this).register(this, Mine.class).load();
         //configManager = ConfigManager.create(this).target(MineConfig.class).saveDefaults().load();
         configManager = ConfigManager.create(this).target(Config.class).saveDefaults().load();
-        mineConfig = ConfigManager.create(this).target(MineConfig.class).saveDefaults().load();
+        mineConfig = ConfigManager.create(this).target(test).saveDefaults().load();
 
         getLogger().info("configManager: " + configManager);
         getLogger().info("mineConfig: " + mineConfig);

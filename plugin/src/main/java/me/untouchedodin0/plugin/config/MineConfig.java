@@ -45,11 +45,11 @@ public class MineConfig {
     private Path path;
 
     @ConfigPath
-    public String name = "Default";
-    public String file = "structure.dat"; // reads the file
-    public int priority = 1; // reads the priority from the section
-    public int resetTime = 5; // reads the reset time from the section
-    public double resetPercentage = 50.00; // reads the reset percentage from the section
+    public static String name = "Default";
+    public static String file = "structure.dat"; // reads the file
+    public static int priority = 1; // reads the priority from the section
+    public static int resetTime = 5; // reads the reset time from the section
+    public static double resetPercentage = 50.00; // reads the reset percentage from the section
     public static Material material = Material.STONE;
     public static Map<Material, Double> materials = new HashMap<>();
     public static List<String> allowFlags = new ArrayList<>();
@@ -69,9 +69,7 @@ public class MineConfig {
     @ConfigPostInit
     private void postInit() {
 
-        System.out.println(privateMines);
-        System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-        privateMines.getLogger().info("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        privateMines.getLogger().info("" + privateMines);
         if (privateMines == null) {
             String instanceNull = "Private Mines instance in the MineConfig was null " +
                     "please make a ticket on the discord reporting this";
@@ -92,7 +90,13 @@ public class MineConfig {
         mineType.setMineTier(getPriority());
         mineType.setResetTime(getResetTime());
         mineType.setMaterials(getMaterials());
-        privateMines.getMineTypeManager().registerMineType(mineType);
+
+        privateMines.getLogger().info("mineType: " + mineType);
+        privateMines.getLogger().info("mineType name: " + mineType.getName());
+        privateMines.getLogger().info("mineType reset time: " + mineType.getResetTime());
+        privateMines.getLogger().info("mineType materials: " + mineType.getMaterials());
+
+        //privateMines.getMineTypeManager().registerMineType(mineType);
 
         privateMines.getLogger().info("file: " + file);
         privateMines.getLogger().info("path: " + path);

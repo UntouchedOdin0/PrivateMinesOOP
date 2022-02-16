@@ -15,6 +15,10 @@ public class MineTypeManager {
     }
 
     public void registerMineType(MineType mineType) {
+        if (mineType == null) {
+            privateMines.getLogger().info("MineType was null!");
+        }
+        privateMines.getLogger().info("Registering mine type: " + mineType.getName());
         mineTypes.put(mineType.getName(), mineType);
     }
 
