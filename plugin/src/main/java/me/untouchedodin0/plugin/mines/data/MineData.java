@@ -24,6 +24,7 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin.mines.data;
 
+import me.untouchedodin0.plugin.PrivateMines;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -183,7 +184,7 @@ public class MineData {
     }
 
     public CuboidRegion getFullRegion() {
-        World world = Bukkit.getWorld(worldName);
+        World world = PrivateMines.getPrivateMines().getMineWorldManager().getMinesWorld();
         return new CuboidRegion(
                 new Location(world, getRegionMinX(), getRegionMinY(), getRegionMinZ()),
                 new Location(world, getRegionMaxX(), getRegionMaxY(), getRegionMaxZ())

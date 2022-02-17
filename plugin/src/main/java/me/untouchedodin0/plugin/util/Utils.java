@@ -149,7 +149,7 @@ public class Utils {
             case "minesize":
             case "settax":
             case "reset":
-                worldEditMine.reset();
+//                worldEditMine.reset();
                 break;
             case "whitelistedplayers":
                 player.sendMessage(ChatColor.GOLD + "Whitelisted Players:");

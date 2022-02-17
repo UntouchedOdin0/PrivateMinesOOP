@@ -73,7 +73,7 @@ public class PrivateMinesExpansion extends PlaceholderExpansion {
         if (mineStorage.hasMine(uuid)) {
             Mine mine = mineStorage.getMine(uuid);
             if (identifier.equals("type")) {
-                return mine.getMineType().getName();
+//                return mine.getMineType().getName();
             }
         }
         return null;

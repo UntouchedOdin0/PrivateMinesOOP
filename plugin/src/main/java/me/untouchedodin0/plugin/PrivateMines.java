@@ -66,6 +66,7 @@ import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
@@ -148,31 +149,53 @@ public class PrivateMines extends JavaPlugin {
         mineStorage = new MineStorage();
         mineFactory = new MineFactory(this);
         mineTypeManager = new MineTypeManager(this);
-        MineConfig test = new MineConfig();
 
         //configManager = new ConfigManager(this).register(this, Mine.class).load();
         //configManager = ConfigManager.create(this).target(MineConfig.class).saveDefaults().load();
         configManager = ConfigManager.create(this).target(Config.class).saveDefaults().load();
-        mineConfig = ConfigManager.create(this).target(test).saveDefaults().load();
+        ConfigManager mineConfig = ConfigManager.create(this)
+                .addConverter(Material.class, Material::valueOf, Material::toString)
+                .target(MineConfig.class)
+                .saveDefaults()
+                .load();
 
-        getLogger().info("configManager: " + configManager);
-        getLogger().info("mineConfig: " + mineConfig);
+        MineConfig.mineTypes.forEach((s, mineType) -> {
+            getLogger().info(mineType.getName());
+            getLogger().info(mineType.getFile());
+            getLogger().info(String.valueOf(mineType.getResetTime()));
+            mineTypeManager.registerMineType(mineType);
+        });
+        getLogger().info("Loaded " + mineTypeManager.getTotalMineTypes() + " mine types!");
 
         Material spawnPoint = Config.getSpawnPoint();
         Material mineCorner = Config.getMineCorner();
         Material upgradeMaterial = Config.getUpgradeMaterial();
 
-        getLogger().info(Config.stuff);
-        getLogger().info(String.valueOf(spawnPoint));
-        getLogger().info(String.valueOf(mineCorner));
-        getLogger().info(String.valueOf(upgradeMaterial));
-        getLogger().info(Config.mainMenuTitle);
-        getLogger().info(String.valueOf(Config.debugMode));
-        getLogger().info(String.valueOf(Config.notifyForUpdates));
-        getLogger().info(String.valueOf(Config.resetPercentage));
-        getLogger().info(String.valueOf(Config.autoUpgradeEnabled));
-        getLogger().info(String.valueOf(Config.everyXthExpansion));
-        getLogger().info(String.valueOf(Config.startingSize));
+//        getLogger().info(Config.stuff);
+//        getLogger().info(String.valueOf(spawnPoint));
+//        getLogger().info(String.valueOf(mineCorner));
+//        getLogger().info(String.valueOf(upgradeMaterial));
+
+
+//        File schematicFile = new File("plugins/PrivateMines/schematics/" + MineConfig.file);
+//        Path path = schematicFile.toPath();
+
+//        getLogger().info("file: " + schematicFile);
+//        getLogger().info("file path: " + schematicFile.toPath());
+//        MineType mineType = new MineType(path);
+//        mineType.setName(MineConfig.name);
+//        mineType.setMaterials(MineConfig.materials);
+
+//        getLogger().info("------");
+//        getLogger().info(mineType.getName());
+//        getLogger().info("" + mineType.getMaterials());
+//        getLogger().info(Config.mainMenuTitle);
+//        getLogger().info(String.valueOf(Config.debugMode));
+//        getLogger().info(String.valueOf(Config.notifyForUpdates));
+//        getLogger().info(String.valueOf(Config.resetPercentage));
+//        getLogger().info(String.valueOf(Config.autoUpgradeEnabled));
+//        getLogger().info(String.valueOf(Config.everyXthExpansion));
+//        getLogger().info(String.valueOf(Config.startingSize));
 
         getLogger().info("mineTypeManager: " + mineTypeManager);
         //getLogger().info("Default mine type: " + mineTypeManager.getDefaultMineType());
@@ -251,6 +274,12 @@ public class PrivateMines extends JavaPlugin {
     private void loadMines() throws IOException {
         final PathMatcher jsonMatcher = FileSystems.getDefault().getPathMatcher("glob:**/*.json");
         AtomicInteger loadedMineCount = new AtomicInteger();
+        String worldName = mineWorldManager.getMinesWorld().getName();
+
+        final World worldtest = Bukkit.getWorld(worldName);
+        getLogger().info(worldtest.toString());
+        getLogger().info(worldtest.getName());
+
         Files.list(minesDirectory)
                 .filter(jsonMatcher::matches)
                 .map(Exceptions.throwing(Files::readAllLines))
@@ -266,7 +295,7 @@ public class PrivateMines extends JavaPlugin {
                     int maxY = mineData.getMaxY();
                     int maxZ = mineData.getMaxZ();
 
-                    final World world = Bukkit.getWorld(mineData.getWorldName());
+                    final World world = Bukkit.getWorld(worldName);
                     if (world == null) {
                         throw new IllegalStateException("World " + mineData.getWorldName() + " does not exist!");
                     }
@@ -284,7 +313,7 @@ public class PrivateMines extends JavaPlugin {
                     mine.setRegion(mineData.getFullRegion());
                     mine.setMiningRegion(cuboidRegion);
                     mine.setMineData(mineData);
-                    mine.setMineTypes(mineData.getMaterials());
+                    mine.setMaterials(mineData.getMaterials());
                     mine.setMineType(mineTypeManager.getMineType(mineData.getMineType()));
                     mine.setMineOwner(mineData.getMineOwner());
                     mine.startResetTask();

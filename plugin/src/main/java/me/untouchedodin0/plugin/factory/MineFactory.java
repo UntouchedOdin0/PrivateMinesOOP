@@ -29,6 +29,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.config.Config;
+import me.untouchedodin0.plugin.config.MineConfig;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.data.MineData;
@@ -42,6 +43,7 @@ import org.jetbrains.annotations.NotNull;
 import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.region.CuboidRegion;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -92,14 +94,27 @@ public class MineFactory {
         Material spawnMaterial = Config.spawnPoint;
         Material mineCornerMaterial = Config.mineCorner;
 
-        Path file = mineType.getSchematicFile();
+        privateMines.getLogger().info(spawnMaterial.name());
+        privateMines.getLogger().info(mineCornerMaterial.name());
+
+        File schematicFile = new File("plugins/PrivateMines/schematics/" + mineType.getFile());
+        Path path = schematicFile.toPath();
+
+        privateMines.getLogger().info("path: " + path.getFileName());
+        //Path file = mineType.getSchematicFile();
 
         Mine mine = new Mine(privateMines);
         MineData mineData = new MineData();
 
-        CuboidRegion region = privateMines.getWorldEditAdapter().pasteSchematic(location, file);
+        CuboidRegion region = privateMines.getWorldEditAdapter().pasteSchematic(location, path);
+        player.teleport(region.getStart());
 
         MineBlocks mineBlocks = findMineBlocks(region, spawnMaterial, mineCornerMaterial);
+        player.sendMessage("" + mineBlocks.corners[0]);
+        player.sendMessage("" + mineBlocks.corners[1]);
+        player.sendMessage("" + mineBlocks.spawnLocation);
+        player.teleport(mineBlocks.spawnLocation);
+
 
         Location spawnLocation = mineBlocks.spawnLocation;
         final Location corner1 = mineBlocks.corners[0];
@@ -111,22 +126,20 @@ public class MineFactory {
         mine.setMiningRegion(miningRegion);
         mine.setRegion(region);
         mine.setSpawnLocation(spawnLocation);
-        mine.setMineTypes(mineType.getMaterials());
+        mine.setMaterials(mineType.getMaterials());
         mine.setMineType(mineType);
         mine.setMineOwner(player.getUniqueId());
-        mine.setMineData(mineData);
         mineData.setMineOwner(uuid);
         mineData.setSpawnX(spawnLocation.getBlockX());
         mineData.setSpawnY(spawnLocation.getBlockY());
         mineData.setSpawnZ(spawnLocation.getBlockZ());
         mineData.setMiningRegion(miningRegion);
         mineData.setFullRegion(region);
-        mineData.setMaterials(mineType.getMaterials());
-        mineData.setMineType(mineType.getName());
+        mine.setMineData(mineData);
         saveMineData(uuid, mineData);
 
-        mine.reset();
-        mine.startResetTask();
+//        mine.reset();
+       // mine.startResetTask();
         if (replaceOld) {
             this.privateMines.getMineStorage().replaceMine(uuid, mine);
             player.teleport(spawnLocation);
@@ -136,8 +149,8 @@ public class MineFactory {
             player.teleport(spawnLocation);
         }
         IWrappedRegion iWrappedRegion = utils.createWorldGuardRegion(player, miningRegion);
-        mine.setIWrappedRegion(iWrappedRegion);
-        utils.setMineFlags(mine);
+//        mine.setIWrappedRegion(iWrappedRegion);
+        //utils.setMineFlags(mine);
         //worldBorderApi.setBorder(player, 10, location);
     }
 

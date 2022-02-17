@@ -68,7 +68,7 @@ public class Mine {
     private MineData mineData;
     private Task task;
     private double tax = 5;
-    private Map<Material, Double> mineTypes = new EnumMap<>(Material.class);
+    private Map<Material, Double> materials = new EnumMap<>(Material.class);
 
     public Mine(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -161,12 +161,16 @@ public class Mine {
         }
     }
 
-    public Map<Material, Double> getMineTypes() {
-        return mineTypes.isEmpty() ? mineType.getMaterials() : mineTypes;
+    public Map<Material, Double> getMaterials() {
+        return materials.isEmpty() ? mineData.getMaterials() : materials;
     }
 
-    public void setMineTypes(Map<Material, Double> mineTypes) {
-        this.mineTypes = mineTypes;
+//    public Map<Material, Double> getMineTypes() {
+//        return mineTypes.isEmpty() ? mineType.getMaterials() : mineTypes;
+//    }
+
+    public void setMaterials(Map<Material, Double> materials) {
+        this.materials = materials;
     }
 
     public boolean isInside(Location location) {
@@ -185,7 +189,7 @@ public class Mine {
     }
 
     public void reset() {
-        fill(getMineTypes());
+        fill(getMaterials());
     }
 
     public void delete() {
@@ -207,8 +211,8 @@ public class Mine {
             //TODO This should probably be an exception
             return;
         }
-        final MineType next = mineTypeManager.getNextMineType(mineType);
-        mineData.setMineType(next.getName());
+//        final MineType next = mineTypeManager.getNextMineType(mineType);
+//        mineData.setMineType(next.getName());
         Player owner = Bukkit.getPlayer(getMineOwner());
         if (owner != null) {
             // TODO why is this necessary? does the player really need to be online to upgrade?
@@ -263,11 +267,11 @@ public class Mine {
         if (!canExpand) {
             privateMines.getLogger().info("The private mine can't expand anymore!");
         } else {
-            final Map<Material, Double> materials = getMineTypes();
-            if (materials.isEmpty()) {
-                throw new IllegalStateException("Mine type " + mineData.getMineType() +
-                                                " has no materials!");
-            }
+//            final Map<Material, Double> materials = getMineTypes();
+//            if (materials.isEmpty()) {
+//                throw new IllegalStateException("Mine type " + mineData.getMineType() +
+//                                                " has no materials!");
+//            }
 
             final CuboidRegion mine = getMiningRegion().clone();
             final CuboidRegion walls = getMiningRegion().clone();
@@ -275,8 +279,8 @@ public class Mine {
             expandXAndZ(mine, amount);
             expandXAndZ(walls, amount);
 
-            privateMines.getWorldEditAdapter()
-                    .fillRegion(mine, materials);
+//            privateMines.getWorldEditAdapter()
+//                    .fillRegion(mine, materials);
             privateMines.getWorldEditAdapter()
                     .fillRegion(walls, Material.BEDROCK);
             // TODO make this configurable
@@ -299,7 +303,7 @@ public class Mine {
             privateMines.getMineStorage().replaceMine(getMineOwner(), this);
         }
         mineStorage.replaceMine(getMineOwner(), this);
-        reset();
+//        reset();
     }
 
     public double getPercentage() {
@@ -313,7 +317,7 @@ public class Mine {
         this.task = Task.syncRepeating(() -> {
             double percentage = getPercentage();
             if (percentage <= getResetPercentage()) {
-                reset();
+//                reset();
             }
         }, 0L, 20L);
     }

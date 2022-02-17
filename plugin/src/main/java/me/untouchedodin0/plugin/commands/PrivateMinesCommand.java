@@ -126,6 +126,7 @@ public class PrivateMinesCommand {
         commandSender.sendMessage(ChatColor.GREEN + "Giving " + target.getName() + " a private mine!");
         Location location = mineWorldManager.getNextFreeLocation();
         final MineType defaultMineType = privateMines.getMineTypeManager().getDefaultMineType();
+        privateMines.getLogger().info(defaultMineType.getName());
 
         if (mineType == null) {
             mineFactory.createMine(target, location, defaultMineType, false);
@@ -176,7 +177,7 @@ public class PrivateMinesCommand {
             return;
         }
         Mine mine = mineStorage.getMine(uuid);
-        mine.reset();
+//        mine.reset();
         mine.teleport(player);
         utils.sendMessage(player, mineReset);
         utils.sendMessage(player, teleportedToMine);
@@ -261,16 +262,16 @@ public class PrivateMinesCommand {
         }
 
         Mine mine = mineStorage.getMine(target.getUniqueId());
-        Map<Material, Double> types = new EnumMap<>(Material.class);
+        Map<Material, Double> mineBlocks = new EnumMap<>(Material.class);
         for (Material material : materials) {
             if (material.isSolid()) {
-                types.put(material, 1.0);
+                mineBlocks.put(material, 1.0);
             } else {
                 commandSender.sendMessage(ChatColor.RED + "You specified a non-solid block " + Utils.prettify(material.name()));
                 return;
             }
         }
-        mine.setMineTypes(types);
+        mine.setMaterials(mineBlocks);
         mine.reset();
     }
 

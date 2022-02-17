@@ -18,8 +18,10 @@ public class MineTypeManager {
         if (mineType == null) {
             privateMines.getLogger().info("MineType was null!");
         }
-        privateMines.getLogger().info("Registering mine type: " + mineType.getName());
-        mineTypes.put(mineType.getName(), mineType);
+        if (mineType != null) {
+            privateMines.getLogger().info("Registering mine type: " + mineType.getName());
+            mineTypes.put(mineType.getName(), mineType);
+        }
     }
 
     public MineType getMineType(String name) {
@@ -52,5 +54,9 @@ public class MineTypeManager {
 
     public NavigableMap<String, MineType> getMineTypes() {
         return mineTypes;
+    }
+
+    public int getTotalMineTypes() {
+        return mineTypes.size();
     }
 }

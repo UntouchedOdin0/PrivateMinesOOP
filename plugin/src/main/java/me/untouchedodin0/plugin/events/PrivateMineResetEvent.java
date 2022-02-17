@@ -66,9 +66,9 @@ public class PrivateMineResetEvent extends Event {
         return mine.getMineType();
     }
 
-    public Map<Material, Double> getMaterials() {
-        return mine.getMineTypes();
-    }
+//    public Map<Material, Double> getMaterials() {
+//        return mine.getMineTypes();
+//    }
 
     public CuboidRegion getCuboidRegion() {
         return mine.getRegion();
