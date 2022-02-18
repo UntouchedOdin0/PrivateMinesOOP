@@ -31,6 +31,7 @@ public class WE7Adapter implements WorldEditAdapter {
     public CuboidRegion pasteSchematic(Location location, Path file) {
         ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(file.toFile());
         World world = BukkitAdapter.adapt(Objects.requireNonNull(location.getWorld()));
+        EditSession editSessionBuilder = Fawe.instance().getWorldEdit().newEditSession(world);
 
         if (clipboardFormat == null) {
             throw new IllegalArgumentException("File is not a valid schematic");
@@ -48,7 +49,7 @@ public class WE7Adapter implements WorldEditAdapter {
                 // If the clipboard isn't null prepare to create a paste operation, complete it and set the region stuff.
                 Operation operation =
                         new ClipboardHolder(clipboard)
-                                .createPaste(editSession)
+                                .createPaste(editSessionBuilder)
                                 .to(centerVector)
                                 .ignoreAirBlocks(true)
                                 .build();
@@ -84,13 +85,6 @@ public class WE7Adapter implements WorldEditAdapter {
             );
 
             editSessionBuilder.setBlocks((Region) worldEditRegion, randomPattern);
-            //editSession.setBlocks(worldEditRegion, randomPattern);
-            Bukkit.getLogger().info("world: " + world);
-            Bukkit.getLogger().info("editSessionBuilder: " + editSessionBuilder);
-            Bukkit.getLogger().info("editSession: " + editSession);
-            Bukkit.getLogger().info("randomPattern: " + randomPattern);
-            Bukkit.getLogger().info("worldEditRegion: " + worldEditRegion);
-            Bukkit.getLogger().info("materials: " + materials);
         } catch (MaxChangedBlocksException e) {
             e.printStackTrace();
             // this shouldn't happen
