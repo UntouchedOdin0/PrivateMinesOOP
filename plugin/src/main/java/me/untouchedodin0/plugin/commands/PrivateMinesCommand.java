@@ -54,6 +54,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PrivateMinesCommand {
 
@@ -126,8 +127,6 @@ public class PrivateMinesCommand {
         commandSender.sendMessage(ChatColor.GREEN + "Giving " + target.getName() + " a private mine!");
         Location location = mineWorldManager.getNextFreeLocation();
         final MineType defaultMineType = privateMines.getMineTypeManager().getDefaultMineType();
-        privateMines.getLogger().info(defaultMineType.getName());
-
         mineFactory.createMine(target, location, Objects.requireNonNullElse(mineType, defaultMineType), false);
     }
 
@@ -458,16 +457,23 @@ public class PrivateMinesCommand {
 
     @CommandHook("list")
     public void list(Player player) {
-        player.sendMessage("" + mineStorage);
-        player.sendMessage("" + mineStorage.getLoadedMinesSize());
         InventoryGUI inventoryGUI = new InventoryGUI(Bukkit.createInventory(null, 27, "Public Mines"));
+        AtomicInteger slot = new AtomicInteger();
 
-        mineStorage.getMines().forEach((uuid, worldEditMine) -> {
-            ItemButton itemButton = ItemButton.create(new ItemBuilder(Material.EMERALD_BLOCK).setName("Click me"), inventoryClickEvent -> {
-                Player clickPlayer = (Player) inventoryClickEvent.getWhoClicked();
-                clickPlayer.sendMessage("howdy " + this);
-            });
-            player.sendMessage(String.valueOf(worldEditMine.getTax()));
+        mineStorage.getMines().forEach((uuid, mine) -> {
+            Player owner = Bukkit.getOfflinePlayer(uuid).getPlayer();
+            String playerName = owner.getName();
+            MineData mineData = mine.getMineData();
+            if (mineData.isOpen()) {
+                List<String> lore = List.of(ChatColor.WHITE + "Left Click to " + ChatColor.GREEN + "Teleport");
+                ItemButton itemButton = ItemButton.create(new ItemBuilder(Material.EMERALD_BLOCK)
+                                                                  .setName(ChatColor.GREEN + playerName + "'s Mine")
+                                                                  .addLore(lore), inventoryClickEvent -> {
+                    player.sendMessage(ChatColor.GREEN + "Teleporting you to the mine");
+                    mine.teleport(player);
+                });
+                inventoryGUI.addButton(slot.getAndIncrement(), itemButton);
+            }
         });
         inventoryGUI.open(player);
     }

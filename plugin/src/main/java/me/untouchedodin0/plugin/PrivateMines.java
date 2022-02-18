@@ -271,11 +271,6 @@ public class PrivateMines extends JavaPlugin {
 
                     CuboidRegion cuboidRegion = new CuboidRegion(min, max);
 
-                    getLogger().info("spawn" + spawn);
-                    getLogger().info("mineData " + mineData);
-                    getLogger().info("full region: " + mineData.getFullRegion());
-                    getLogger().info("mineData type: " + mineData.getMineType());
-
                     mine.setSpawnLocation(spawn);
                     mine.setRegion(mineData.getFullRegion());
                     mine.setMiningRegion(cuboidRegion);
