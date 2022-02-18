@@ -162,12 +162,8 @@ public class Mine {
     }
 
     public Map<Material, Double> getMaterials() {
-        return mineType.getMaterials(); //materials.isEmpty() ? mineData.getMaterials() : materials;
+        return mineType.getMaterials();
     }
-
-//    public Map<Material, Double> getMineTypes() {
-//        return mineTypes.isEmpty() ? mineType.getMaterials() : mineTypes;
-//    }
 
     public void setMaterials(Map<Material, Double> materials) {
         this.materials = materials;
