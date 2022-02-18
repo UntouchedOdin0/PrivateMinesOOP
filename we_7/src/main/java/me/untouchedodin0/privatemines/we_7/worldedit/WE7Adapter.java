@@ -31,7 +31,7 @@ public class WE7Adapter implements WorldEditAdapter {
     public CuboidRegion pasteSchematic(Location location, Path file) {
         ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(file.toFile());
         World world = BukkitAdapter.adapt(Objects.requireNonNull(location.getWorld()));
-        EditSession editSessionBuilder = Fawe.instance().getWorldEdit().newEditSession(world);
+        EditSession editSessionFAWE = Fawe.instance().getWorldEdit().newEditSession(world);
 
         if (clipboardFormat == null) {
             throw new IllegalArgumentException("File is not a valid schematic");
@@ -47,13 +47,13 @@ public class WE7Adapter implements WorldEditAdapter {
                 BlockVector3 centerVector = BlockVector3.at(location.getX(), location.getY(), location.getZ());
 
                 // If the clipboard isn't null prepare to create a paste operation, complete it and set the region stuff.
-                Operation operation =
-                        new ClipboardHolder(clipboard)
-                                .createPaste(editSessionBuilder)
-                                .to(centerVector)
-                                .ignoreAirBlocks(true)
-                                .build();
-                Operations.complete(operation);
+                Operation operationFAWE = new ClipboardHolder(clipboard)
+                        .createPaste(editSessionFAWE)
+                        .to(centerVector)
+                        .ignoreAirBlocks(true)
+                        .build();
+                    Operations.complete(operationFAWE);
+
                 Region region = clipboard.getRegion();
                 region.shift(centerVector.subtract(clipboard.getOrigin()));
                 return new CuboidRegion(BukkitAdapter.adapt(location.getWorld(), region.getMinimumPoint()), BukkitAdapter.adapt(location.getWorld(), region.getMaximumPoint()));
@@ -67,7 +67,7 @@ public class WE7Adapter implements WorldEditAdapter {
     @Override
     public void fillRegion(CuboidRegion region, Map<Material, Double> materials) {
         World world = new BukkitWorld(region.getWorld());
-        EditSession editSessionBuilder = Fawe.instance().getWorldEdit().newEditSession(world);
+        EditSession editSessionFAWE  = Fawe.instance().getWorldEdit().newEditSession(world);
 
         try (final EditSession editSession =
                      WorldEdit.getInstance().newEditSession(world)) {
@@ -84,7 +84,7 @@ public class WE7Adapter implements WorldEditAdapter {
                     BukkitAdapter.asBlockVector(region.getEnd())
             );
 
-            editSessionBuilder.setBlocks((Region) worldEditRegion, randomPattern);
+            editSessionFAWE .setBlocks((Region) worldEditRegion, randomPattern);
         } catch (MaxChangedBlocksException e) {
             e.printStackTrace();
             // this shouldn't happen

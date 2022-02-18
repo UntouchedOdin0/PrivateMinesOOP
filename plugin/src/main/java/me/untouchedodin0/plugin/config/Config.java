@@ -33,6 +33,8 @@ public class Config {
     public static int mineDistance = 150;
     @Comment("The mine percentage for when it should reset")
     public static double resetPercentage = 50;
+    @Comment("Should we use FastAsyncWorldEdit to reset the mines? (Should make it faster)")
+    public static boolean useFAWE = true;
 
     @ConfigName("autoUpgrade.enabled")
     public static boolean autoUpgradeEnabled;

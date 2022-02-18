@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.util.Map;
 
 public class WE6Adapter implements WorldEditAdapter {
+
     @Override
     public CuboidRegion pasteSchematic(Location location, Path file) {
         World world = new BukkitWorld(location.getWorld());

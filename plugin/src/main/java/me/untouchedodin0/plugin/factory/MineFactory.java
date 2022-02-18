@@ -89,15 +89,13 @@ public class MineFactory {
         UUID uuid = player.getUniqueId();
         Material spawnMaterial = Config.spawnPoint;
         Material mineCornerMaterial = Config.mineCorner;
+        boolean useFAWE = Config.useFAWE;
 
         privateMines.getLogger().info(spawnMaterial.name());
         privateMines.getLogger().info(mineCornerMaterial.name());
 
         File schematicFile = new File("plugins/PrivateMines/schematics/" + mineType.getFile());
         Path path = schematicFile.toPath();
-
-        privateMines.getLogger().info("path: " + path.getFileName());
-        //Path file = mineType.getSchematicFile();
 
         Mine mine = new Mine(privateMines);
         MineData mineData = new MineData();
@@ -106,9 +104,6 @@ public class MineFactory {
         player.teleport(region.getStart());
 
         MineBlocks mineBlocks = findMineBlocks(region, spawnMaterial, mineCornerMaterial);
-        player.sendMessage("" + mineBlocks.corners[0]);
-        player.sendMessage("" + mineBlocks.corners[1]);
-        player.sendMessage("" + mineBlocks.spawnLocation);
         player.teleport(mineBlocks.spawnLocation);
 
 
@@ -136,8 +131,7 @@ public class MineFactory {
         saveMineData(uuid, mineData);
 
         mine.reset();
-//        mine.reset();
-       // mine.startResetTask();
+        //mine.startResetTask();
         if (replaceOld) {
             this.privateMines.getMineStorage().replaceMine(uuid, mine);
             player.teleport(spawnLocation);

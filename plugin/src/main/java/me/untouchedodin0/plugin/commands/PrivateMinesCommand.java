@@ -146,19 +146,23 @@ public class PrivateMinesCommand {
             commandSender.sendMessage(ChatColor.RED + "Player doesn't own a mine!");
             return;
         }
-        Mine worldEditMine = privateMines.getMineStorage().getMine(uuid);
-        Task task = worldEditMine.getTask();
-        task.cancel();
-        worldEditMine.delete();
-        privateMines.getMineStorage().removeMine(uuid);
+        Mine mine = privateMines.getMineStorage().getMine(uuid);
+        Task task = mine.getTask();
+        if (task == null) {
+            privateMines.getLogger().warning("Failed to delete mine as the task was null!" +
+                                                     "\nThis usually happens when the task isn't running");
+        } else {
+            mine.delete();
+            privateMines.getMineStorage().removeMine(uuid);
 
-        try {
-            Files.deleteIfExists(jsonFile);
-        } catch (IOException e) {
-            e.printStackTrace();
+            try {
+                Files.deleteIfExists(jsonFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            utils.sendMessage(commandSender, deletedPlayersMine);
+            utils.sendMessage(target, yourMineHasBeenDeleted);
         }
-        utils.sendMessage(commandSender, deletedPlayersMine);
-        utils.sendMessage(target, yourMineHasBeenDeleted);
     }
 
     @CommandHook("reset")
