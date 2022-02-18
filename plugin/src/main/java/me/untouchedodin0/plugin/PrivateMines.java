@@ -238,10 +238,6 @@ public class PrivateMines extends JavaPlugin {
         AtomicInteger loadedMineCount = new AtomicInteger();
         String worldName = mineWorldManager.getMinesWorld().getName();
 
-        final World worldtest = Bukkit.getWorld(worldName);
-        getLogger().info(worldtest.toString());
-        getLogger().info(worldtest.getName());
-
         Files.list(minesDirectory)
                 .filter(jsonMatcher::matches)
                 .map(Exceptions.throwing(Files::readAllLines))
