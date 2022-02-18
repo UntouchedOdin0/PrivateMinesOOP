@@ -303,18 +303,6 @@ public class PrivateMines extends JavaPlugin {
         return mineTypeManager;
     }
 
-//    public Material getSpawnMaterial() {
-//        return spawnPoint;
-//    }
-//
-//    public Material getCornerMaterial() {
-//        return mineCorner;
-//    }
-//
-//    public String getMainMenuTitle() {
-//        return mainMenuTitle;
-//    }
-
     /*
         Gets the mine storage
      */
