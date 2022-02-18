@@ -166,35 +166,6 @@ public class PrivateMines extends JavaPlugin {
         Material mineCorner = Config.getMineCorner();
         Material upgradeMaterial = Config.getUpgradeMaterial();
 
-//        getLogger().info(Config.stuff);
-//        getLogger().info(String.valueOf(spawnPoint));
-//        getLogger().info(String.valueOf(mineCorner));
-//        getLogger().info(String.valueOf(upgradeMaterial));
-
-
-//        File schematicFile = new File("plugins/PrivateMines/schematics/" + MineConfig.file);
-//        Path path = schematicFile.toPath();
-
-//        getLogger().info("file: " + schematicFile);
-//        getLogger().info("file path: " + schematicFile.toPath());
-//        MineType mineType = new MineType(path);
-//        mineType.setName(MineConfig.name);
-//        mineType.setMaterials(MineConfig.materials);
-
-//        getLogger().info("------");
-//        getLogger().info(mineType.getName());
-//        getLogger().info("" + mineType.getMaterials());
-//        getLogger().info(Config.mainMenuTitle);
-//        getLogger().info(String.valueOf(Config.debugMode));
-//        getLogger().info(String.valueOf(Config.notifyForUpdates));
-//        getLogger().info(String.valueOf(Config.resetPercentage));
-//        getLogger().info(String.valueOf(Config.autoUpgradeEnabled));
-//        getLogger().info(String.valueOf(Config.everyXthExpansion));
-//        getLogger().info(String.valueOf(Config.startingSize));
-
-        getLogger().info("mineTypeManager: " + mineTypeManager);
-        //getLogger().info("Default mine type: " + mineTypeManager.getDefaultMineType());
-
         ArgType<MineType> mineTypes = new ArgType<>("mineType", mineTypeManager::getMineType);
 
         try {
@@ -299,6 +270,11 @@ public class PrivateMines extends JavaPlugin {
                             new Location(world, maxX, maxY, maxZ);
 
                     CuboidRegion cuboidRegion = new CuboidRegion(min, max);
+
+                    getLogger().info("spawn" + spawn);
+                    getLogger().info("mineData " + mineData);
+                    getLogger().info("full region: " + mineData.getFullRegion());
+                    getLogger().info("mineData type: " + mineData.getMineType());
 
                     mine.setSpawnLocation(spawn);
                     mine.setRegion(mineData.getFullRegion());

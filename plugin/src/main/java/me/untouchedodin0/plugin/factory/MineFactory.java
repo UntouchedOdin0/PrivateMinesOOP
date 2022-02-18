@@ -131,6 +131,7 @@ public class MineFactory {
         mineData.setSpawnZ(spawnLocation.getBlockZ());
         mineData.setMiningRegion(miningRegion);
         mineData.setFullRegion(region);
+        mineData.setMineType(mineType.getName());
         mine.setMineData(mineData);
         saveMineData(uuid, mineData);
 

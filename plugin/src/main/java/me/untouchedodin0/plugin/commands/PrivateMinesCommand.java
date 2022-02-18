@@ -173,7 +173,7 @@ public class PrivateMinesCommand {
             return;
         }
         Mine mine = mineStorage.getMine(uuid);
-//        mine.reset();
+        mine.reset();
         mine.teleport(player);
         utils.sendMessage(player, mineReset);
         utils.sendMessage(player, teleportedToMine);
