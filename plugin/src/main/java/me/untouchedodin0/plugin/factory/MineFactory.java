@@ -138,6 +138,7 @@ public class MineFactory {
         mine.setMineData(mineData);
         saveMineData(uuid, mineData);
 
+        mine.reset();
 //        mine.reset();
        // mine.startResetTask();
         if (replaceOld) {
