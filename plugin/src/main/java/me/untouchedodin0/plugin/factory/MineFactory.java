@@ -131,7 +131,7 @@ public class MineFactory {
         saveMineData(uuid, mineData);
 
         mine.reset();
-        //mine.startResetTask();
+        mine.startResetTask();
         if (replaceOld) {
             this.privateMines.getMineStorage().replaceMine(uuid, mine);
             player.teleport(spawnLocation);

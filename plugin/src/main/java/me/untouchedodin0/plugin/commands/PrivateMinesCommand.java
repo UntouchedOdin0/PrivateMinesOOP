@@ -153,6 +153,7 @@ public class PrivateMinesCommand {
                                                      "\nThis usually happens when the task isn't running");
         } else {
             mine.delete();
+            task.cancel();
             privateMines.getMineStorage().removeMine(uuid);
 
             try {
