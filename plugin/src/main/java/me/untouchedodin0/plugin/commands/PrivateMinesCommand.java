@@ -128,11 +128,7 @@ public class PrivateMinesCommand {
         final MineType defaultMineType = privateMines.getMineTypeManager().getDefaultMineType();
         privateMines.getLogger().info(defaultMineType.getName());
 
-        if (mineType == null) {
-            mineFactory.createMine(target, location, defaultMineType, false);
-        } else {
-            mineFactory.createMine(target, location, mineType, false);
-        }
+        mineFactory.createMine(target, location, Objects.requireNonNullElse(mineType, defaultMineType), false);
     }
 
     @CommandHook("delete")
