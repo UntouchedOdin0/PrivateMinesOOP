@@ -24,12 +24,10 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin.factory;
 
-import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.config.Config;
-import me.untouchedodin0.plugin.config.MineConfig;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.data.MineData;
@@ -54,13 +52,11 @@ public class MineFactory {
     PrivateMines privateMines;
     Utils utils;
     MineStorage mineStorage;
-    WorldBorderApi worldBorderApi;
 
     public MineFactory(PrivateMines privateMines) {
         this.privateMines = privateMines;
         this.utils = privateMines.getUtils();
         this.mineStorage = privateMines.getMineStorage();
-        this.worldBorderApi = privateMines.getWorldBorderAPI();
     }
 
     private MineBlocks findMineBlocks(CuboidRegion mineRegion, Material spawnMaterial, Material cornerMaterial) {
@@ -150,6 +146,8 @@ public class MineFactory {
             player.teleport(spawnLocation);
         }
         IWrappedRegion iWrappedRegion = utils.createWorldGuardRegion(player, miningRegion);
+
+
 //        mine.setIWrappedRegion(iWrappedRegion);
         //utils.setMineFlags(mine);
         //worldBorderApi.setBorder(player, 10, location);
