@@ -106,7 +106,6 @@ public class MineFactory {
         MineBlocks mineBlocks = findMineBlocks(region, spawnMaterial, mineCornerMaterial);
         player.teleport(mineBlocks.spawnLocation);
 
-
         Location spawnLocation = mineBlocks.spawnLocation;
         final Location corner1 = mineBlocks.corners[0];
         final Location corner2 = mineBlocks.corners[1];

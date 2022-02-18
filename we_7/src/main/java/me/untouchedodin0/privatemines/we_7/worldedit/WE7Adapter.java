@@ -1,7 +1,10 @@
 package me.untouchedodin0.privatemines.we_7.worldedit;
 
 import com.fastasyncworldedit.core.Fawe;
-import com.sk89q.worldedit.*;
+import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.MaxChangedBlocksException;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
@@ -17,14 +20,16 @@ import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.World;
 import me.untouchedodin0.privatemines.compat.WorldEditAdapter;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import redempt.redlib.region.CuboidRegion;
 
-import java.io.*;
-import java.nio.file.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Map;
+import java.util.Objects;
 
 public class WE7Adapter implements WorldEditAdapter {
     @Override
@@ -84,7 +89,7 @@ public class WE7Adapter implements WorldEditAdapter {
                     BukkitAdapter.asBlockVector(region.getEnd())
             );
 
-            editSessionFAWE .setBlocks((Region) worldEditRegion, randomPattern);
+            editSessionFAWE.setBlocks((Region) worldEditRegion, randomPattern);
         } catch (MaxChangedBlocksException e) {
             e.printStackTrace();
             // this shouldn't happen
