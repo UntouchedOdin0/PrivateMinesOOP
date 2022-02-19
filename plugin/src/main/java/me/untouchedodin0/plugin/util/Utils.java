@@ -24,6 +24,8 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin.util;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.data.MineData;
@@ -50,6 +52,7 @@ import java.util.stream.Stream;
 public class Utils {
 
     private final PrivateMines privateMines;
+    private final Gson gson = new GsonBuilder().create();
 
     public Utils(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -216,5 +219,16 @@ public class Utils {
                 .map(String::toLowerCase)
                 .map(str -> str.substring(0, 1).toUpperCase() + str.substring(1))
                 .collect(Collectors.joining(" "));
+    }
+
+    public void saveMineData(UUID uuid, MineData mineData) {
+        Path minesDirectory = privateMines.getMinesDirectory();
+        Path playerDataFile = minesDirectory.resolve(uuid + ".json");
+        // TODO does this file structure work with having multiple mines?
+        try {
+            Files.write(playerDataFile, gson.toJson(mineData).getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException("Could not save mine data", e);
+        }
     }
 }

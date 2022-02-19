@@ -162,7 +162,7 @@ public class Mine {
     }
 
     public Map<Material, Double> getMaterials() {
-        return mineType.getMaterials();
+        return getMineType().getMaterials();
     }
 
     public void setMaterials(Map<Material, Double> materials) {
@@ -185,7 +185,11 @@ public class Mine {
     }
 
     public void reset() {
-        fill(getMaterials());
+        if (!mineData.getMaterials().isEmpty()) {
+            fill(mineData.getMaterials());
+        } else {
+            fill(mineType.getMaterials());
+        }
     }
 
     public void delete() {
@@ -207,14 +211,19 @@ public class Mine {
             //TODO This should probably be an exception
             return;
         }
-//        final MineType next = mineTypeManager.getNextMineType(mineType);
-//        mineData.setMineType(next.getName());
-        Player owner = Bukkit.getPlayer(getMineOwner());
-        if (owner != null) {
-            // TODO why is this necessary? does the player really need to be online to upgrade?
-            this.expand(0);
-            this.expand(1);
-        }
+        final MineType next = mineTypeManager.getNextMineType(mineType);
+        mineData.setMineType(next.getName());
+        mineData.setMaterials(next.getMaterials());
+//        Player owner = Bukkit.getPlayer(getMineOwner());
+//        if (owner != null) {
+//            // TODO why is this necessary? does the player really need to be online to upgrade?
+//            this.expand(0);
+//            this.expand(1);
+//        }
+        utils.saveMineData(getMineOwner(), mineData);
+        setMineData(mineData);
+        Bukkit.broadcastMessage("" + mineData.getMaterials());
+        reset();
     }
 
     private void expandXAndZ(CuboidRegion region, final int amount) {

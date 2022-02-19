@@ -42,8 +42,6 @@ import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.region.CuboidRegion;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
 
@@ -123,7 +121,7 @@ public class MineFactory {
         mineData.setFullRegion(region);
         mineData.setMineType(mineType.getName());
         mine.setMineData(mineData);
-        saveMineData(uuid, mineData);
+        utils.saveMineData(uuid, mineData);
 
         mine.reset();
         mine.startResetTask();
@@ -140,17 +138,6 @@ public class MineFactory {
         utils.setMineFlags(mine);
 
         //worldBorderApi.setBorder(player, 10, location);
-    }
-
-    private void saveMineData(UUID uuid, MineData mineData) {
-        Path minesDirectory = privateMines.getMinesDirectory();
-        Path playerDataFile = minesDirectory.resolve(uuid + ".json");
-        // TODO does this file structure work with having multiple mines?
-        try {
-            Files.write(playerDataFile, gson.toJson(mineData).getBytes());
-        } catch (IOException e) {
-            throw new RuntimeException("Could not save mine data", e);
-        }
     }
 
     private static class MineBlocks {

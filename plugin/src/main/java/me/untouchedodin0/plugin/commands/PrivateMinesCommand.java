@@ -283,15 +283,22 @@ public class PrivateMinesCommand {
             return;
         }
 
+        UUID uuid = target.getUniqueId();
         Mine mine = mineStorage.getMine(target.getUniqueId());
+        MineData mineData = mine.getMineData();
         MineType newType = privateMines.getMineTypeManager().getMineType(type);
+
         if (newType == null) {
             commandSender.sendMessage(ChatColor.RED + "You've specified a invalid mine type!");
             return;
         }
 
         mine.cancelResetTask();
+        mineData.setMineType(type);
         mine.setMineType(newType);
+        mine.setMineData(mineData);
+        utils.saveMineData(uuid, mineData);
+        mine.reset();
         mine.startResetTask();
         mineStorage.replaceMine(target.getUniqueId(), mine);
         mine.teleport(target);
