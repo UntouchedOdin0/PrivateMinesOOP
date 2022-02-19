@@ -101,7 +101,6 @@ public class MineFactory {
         MineData mineData = new MineData();
 
         CuboidRegion region = privateMines.getWorldEditAdapter().pasteSchematic(location, path);
-        player.teleport(region.getStart());
 
         MineBlocks mineBlocks = findMineBlocks(region, spawnMaterial, mineCornerMaterial);
         player.teleport(mineBlocks.spawnLocation);
@@ -140,10 +139,9 @@ public class MineFactory {
             player.teleport(spawnLocation);
         }
         IWrappedRegion iWrappedRegion = utils.createWorldGuardRegion(player, miningRegion);
+        mine.setIWrappedRegion(iWrappedRegion);
+        utils.setMineFlags(mine);
 
-
-//        mine.setIWrappedRegion(iWrappedRegion);
-        //utils.setMineFlags(mine);
         //worldBorderApi.setBorder(player, 10, location);
     }
 

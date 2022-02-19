@@ -155,9 +155,6 @@ public class PrivateMines extends JavaPlugin {
                 .load();
 
         MineConfig.mineTypes.forEach((s, mineType) -> {
-            getLogger().info(mineType.getName());
-            getLogger().info(mineType.getFile());
-            getLogger().info(String.valueOf(mineType.getResetTime()));
             mineTypeManager.registerMineType(mineType);
         });
         getLogger().info("Loaded " + mineTypeManager.getTotalMineTypes() + " mine types!");
