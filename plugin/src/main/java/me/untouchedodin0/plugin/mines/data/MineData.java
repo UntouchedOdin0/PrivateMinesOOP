@@ -25,7 +25,6 @@ SOFTWARE.
 package me.untouchedodin0.plugin.mines.data;
 
 import me.untouchedodin0.plugin.PrivateMines;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
