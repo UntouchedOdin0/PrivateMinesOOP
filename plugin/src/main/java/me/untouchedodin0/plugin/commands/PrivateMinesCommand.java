@@ -33,6 +33,7 @@ import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
+import me.untouchedodin0.plugin.util.exceptions.MineAlreadyMaxedException;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -233,7 +234,11 @@ public class PrivateMinesCommand {
         }
 
         Mine mine = mineStorage.getMine(target.getUniqueId());
-        mine.upgrade();
+        try {
+            mine.upgrade();
+        } catch (MineAlreadyMaxedException e) {
+            e.printStackTrace();
+        }
     }
 
     // Add 1 to whatever args you put so if you want to expand by one do /pmine expand 2

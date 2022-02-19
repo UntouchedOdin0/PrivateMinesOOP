@@ -30,6 +30,7 @@ import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
+import me.untouchedodin0.plugin.util.exceptions.MineAlreadyMaxedException;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -200,7 +201,7 @@ public class Mine {
         mineStorage.removeMine(getMineOwner());
     }
 
-    public void upgrade() {
+    public void upgrade() throws MineAlreadyMaxedException {
         final MineTypeManager mineTypeManager = privateMines.getMineTypeManager();
         final String mineTypeName = getMineData().getMineType();
         final MineType mineType = mineTypeManager.getMineType(mineTypeName);
@@ -209,7 +210,7 @@ public class Mine {
         if (mineTypeManager.isLastMineType(mineType)) {
             privateMines.getLogger().info("Mine was already maxed!");
             //TODO This should probably be an exception
-            return;
+            throw new MineAlreadyMaxedException("Mine was already maxed!");
         }
         final MineType next = mineTypeManager.getNextMineType(mineType);
         mineData.setMineType(next.getName());
@@ -222,7 +223,6 @@ public class Mine {
 //        }
         utils.saveMineData(getMineOwner(), mineData);
         setMineData(mineData);
-        Bukkit.broadcastMessage("" + mineData.getMaterials());
         reset();
     }
 
@@ -251,7 +251,11 @@ public class Mine {
                     getMiningRegion().getEnd().getBlockX() - getMiningRegion().getStart().getBlockX();
             int newSize = currentSize + amount * 2;
             if ((newSize - startingSize) % (expansionIncrement * 2) == 0) {
-                this.upgrade();
+                try {
+                    this.upgrade();
+                } catch (MineAlreadyMaxedException e) {
+                    privateMines.getLogger().info("The mine was already maxed out!");
+                }
             }
         }
 
