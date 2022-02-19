@@ -313,7 +313,7 @@ public class Mine {
         this.task = Task.syncRepeating(() -> {
             double percentage = getPercentage();
             if (percentage <= getResetPercentage()) {
-//                reset();
+                reset();
             }
         }, 0L, 20L);
     }

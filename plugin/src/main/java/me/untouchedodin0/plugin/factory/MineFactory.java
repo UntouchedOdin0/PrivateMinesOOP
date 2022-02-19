@@ -64,17 +64,15 @@ public class MineFactory {
         mineBlocks.corners = new Location[2];
         mineRegion.forEachBlock(mineBlock -> {
             Material bukkitMaterial = mineBlock.getType();
-            if (bukkitMaterial.isSolid()) {
-                if (bukkitMaterial == spawnMaterial) {
-                    mineBlocks.spawnLocation = mineBlock.getLocation();
-                } else if (bukkitMaterial == (cornerMaterial)) {
-                    if (mineBlocks.corners[0] == null) {
-                        mineBlocks.corners[0] = mineBlock.getLocation();
-                    } else if (mineBlocks.corners[1] == null) {
-                        mineBlocks.corners[1] = mineBlock.getLocation();
-                    } else {
-                        throw new IllegalArgumentException("Too many corners in mine!");
-                    }
+            if (bukkitMaterial == spawnMaterial) {
+                mineBlocks.spawnLocation = mineBlock.getLocation();
+            } else if (bukkitMaterial == (cornerMaterial)) {
+                if (mineBlocks.corners[0] == null) {
+                    mineBlocks.corners[0] = mineBlock.getLocation();
+                } else if (mineBlocks.corners[1] == null) {
+                    mineBlocks.corners[1] = mineBlock.getLocation();
+                } else {
+                    throw new IllegalArgumentException("Too many corners in mine!");
                 }
             }
         });
