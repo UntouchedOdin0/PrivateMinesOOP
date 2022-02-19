@@ -132,11 +132,6 @@ public class Mine {
         this.spawnLocation = spawnLocation;
     }
 
-    public Location getSpawnLocation() {
-        return spawnLocation;
-    }
-
-
     public void teleport(Player player) {
         MineData mineData = getMineData();
         MineWorldManager mineWorldManager = privateMines.getMineWorldManager();
@@ -163,6 +158,7 @@ public class Mine {
     }
 
     public Map<Material, Double> getMaterials() {
+        if (!mineData.getMaterials().isEmpty()) return mineData.getMaterials();
         return getMineType().getMaterials();
     }
 
