@@ -62,7 +62,7 @@ public class MineFactory {
         this.mineStorage = privateMines.getMineStorage();
     }
 
-    private MineBlocks findMineBlocks(CuboidRegion mineRegion, Material spawnMaterial, Material cornerMaterial) {
+    private MineBlocks findMineBlocksLegacy(CuboidRegion mineRegion, Material spawnMaterial, Material cornerMaterial) {
         MineBlocks mineBlocks = new MineBlocks();
         mineBlocks.corners = new Location[2];
 
@@ -97,7 +97,7 @@ public class MineFactory {
         return mineBlocks;
     }
 
-    private MineBlocks findMineBlocksStream(CuboidRegion mineRegion, Material spawnMaterial, Material cornerMaterial) {
+    private MineBlocks findMineBlocks(CuboidRegion mineRegion, Material spawnMaterial, Material cornerMaterial) {
         MineBlocks mineBlocks = new MineBlocks();
         mineBlocks.corners = new Location[2];
 
@@ -144,13 +144,12 @@ public class MineFactory {
 
         CuboidRegion region = privateMines.getWorldEditAdapter().pasteSchematic(location, path);
 
-        MineBlocks mineBlocksForEach = findMineBlocks(region, spawnMaterial, mineCornerMaterial); // 12ms
-        MineBlocks mineBlocks = findMineBlocksStream(region, spawnMaterial, mineCornerMaterial); // 3ms
-        player.teleport(mineBlocksForEach.spawnLocation);
+        MineBlocks mineBlocks = findMineBlocks(region, spawnMaterial, mineCornerMaterial);
+        player.teleport(mineBlocks.spawnLocation);
 
-        Location spawnLocation = mineBlocksForEach.spawnLocation;
-        final Location corner1 = mineBlocksForEach.corners[0];
-        final Location corner2 = mineBlocksForEach.corners[1];
+        Location spawnLocation = mineBlocks.spawnLocation;
+        final Location corner1 = mineBlocks.corners[0];
+        final Location corner2 = mineBlocks.corners[1];
         spawnLocation.getBlock().setType(Material.AIR, false);
 
         final CuboidRegion miningRegion = new CuboidRegion(corner1, corner2);
