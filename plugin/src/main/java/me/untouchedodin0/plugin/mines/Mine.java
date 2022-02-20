@@ -112,20 +112,20 @@ public class Mine {
         this.miningRegion = miningRegion;
     }
 
-    public IWrappedRegion getIWrappedRegion() {
-        return iWrappedRegion;
-    }
-
-    public void setIWrappedRegion(IWrappedRegion iWrappedRegion) {
-        this.iWrappedRegion = iWrappedRegion;
-    }
-
     public CuboidRegion getRegion() {
         return region;
     }
 
     public void setRegion(CuboidRegion region) {
         this.region = region;
+    }
+
+    public IWrappedRegion getIWrappedRegion() {
+        return iWrappedRegion;
+    }
+
+    public void setIWrappedRegion(IWrappedRegion iWrappedRegion) {
+        this.iWrappedRegion = iWrappedRegion;
     }
 
     public Location getSpawnLocation() {
