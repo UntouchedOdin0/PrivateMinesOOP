@@ -34,6 +34,7 @@ import java.util.Objects;
 public class WE7Adapter implements WorldEditAdapter {
     @Override
     public CuboidRegion pasteSchematic(Location location, Path file) {
+
         ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(file.toFile());
         World world = BukkitAdapter.adapt(Objects.requireNonNull(location.getWorld()));
         EditSession editSessionFAWE = Fawe.instance().getWorldEdit().newEditSession(world);

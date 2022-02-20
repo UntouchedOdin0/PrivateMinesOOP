@@ -15,6 +15,7 @@ dependencies {
         exclude group: 'org.spigotmc', module: 'spigot-api'
     }
 
+    compileOnly project(':API')
     compileOnly 'com.fastasyncworldedit:FastAsyncWorldEdit-Core:2.0.1'
     compileOnly 'com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit:2.0.1'
     compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.2.8-SNAPSHOT'
