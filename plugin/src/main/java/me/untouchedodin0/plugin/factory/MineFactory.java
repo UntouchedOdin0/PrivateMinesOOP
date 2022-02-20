@@ -39,10 +39,13 @@ import org.bukkit.entity.Player;
 import org.codemc.worldguardwrapper.region.IWrappedRegion;
 import org.jetbrains.annotations.NotNull;
 import redempt.redlib.commandmanager.Messages;
+import redempt.redlib.misc.Task;
 import redempt.redlib.region.CuboidRegion;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.UUID;
 
 public class MineFactory {
@@ -50,6 +53,8 @@ public class MineFactory {
     PrivateMines privateMines;
     Utils utils;
     MineStorage mineStorage;
+    MineBlocks mineBlocks;
+    Location spawnLocation;
 
     public MineFactory(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -60,20 +65,62 @@ public class MineFactory {
     private MineBlocks findMineBlocks(CuboidRegion mineRegion, Material spawnMaterial, Material cornerMaterial) {
         MineBlocks mineBlocks = new MineBlocks();
         mineBlocks.corners = new Location[2];
+
+        Instant forEachStart = Instant.now();
+
         mineRegion.forEachBlock(mineBlock -> {
-            Material bukkitMaterial = mineBlock.getType();
+                Material bukkitMaterial = mineBlock.getType();
+                if (bukkitMaterial == spawnMaterial) {
+                    mineBlocks.spawnLocation = mineBlock.getLocation();
+                } else if (bukkitMaterial == (cornerMaterial)) {
+                    if (mineBlocks.corners[0] == null) {
+                        mineBlocks.corners[0] = mineBlock.getLocation();
+                    } else if (mineBlocks.corners[1] == null) {
+                        mineBlocks.corners[1] = mineBlock.getLocation();
+                    } else {
+                        throw new IllegalArgumentException("Too many corners in mine!");
+                    }
+                }
+            });
+
+            Instant forEachEnd = Instant.now();
+
+            Duration timeElapsedStream = Duration.between(forEachStart, forEachEnd);
+            privateMines.getLogger().info("forEach: " + timeElapsedStream.toMillis() + "ms");
+
+            if (mineBlocks.corners[0] == null || mineBlocks.corners[1] == null) {
+                throw new IllegalArgumentException("Mine does not have 2 corners set");
+            }
+            if (mineBlocks.spawnLocation == null) {
+                throw new IllegalArgumentException("Mine does not have a spawn location set");
+            }
+        return mineBlocks;
+    }
+
+    private MineBlocks findMineBlocksStream(CuboidRegion mineRegion, Material spawnMaterial, Material cornerMaterial) {
+        MineBlocks mineBlocks = new MineBlocks();
+        mineBlocks.corners = new Location[2];
+
+        Instant streamStart = Instant.now();
+
+        mineRegion.stream().iterator().forEachRemaining(block -> {
+            Material bukkitMaterial = block.getType();
             if (bukkitMaterial == spawnMaterial) {
-                mineBlocks.spawnLocation = mineBlock.getLocation();
+                mineBlocks.spawnLocation = block.getLocation();
             } else if (bukkitMaterial == (cornerMaterial)) {
                 if (mineBlocks.corners[0] == null) {
-                    mineBlocks.corners[0] = mineBlock.getLocation();
+                    mineBlocks.corners[0] = block.getLocation();
                 } else if (mineBlocks.corners[1] == null) {
-                    mineBlocks.corners[1] = mineBlock.getLocation();
+                    mineBlocks.corners[1] = block.getLocation();
                 } else {
                     throw new IllegalArgumentException("Too many corners in mine!");
                 }
             }
         });
+        Instant streamEnd = Instant.now();
+
+        Duration timeElapsedStream = Duration.between(streamStart, streamEnd);
+        privateMines.getLogger().info("Stream: " + timeElapsedStream.toMillis() + "ms");
         if (mineBlocks.corners[0] == null || mineBlocks.corners[1] == null) {
             throw new IllegalArgumentException("Mine does not have 2 corners set");
         }
@@ -97,12 +144,13 @@ public class MineFactory {
 
         CuboidRegion region = privateMines.getWorldEditAdapter().pasteSchematic(location, path);
 
-        MineBlocks mineBlocks = findMineBlocks(region, spawnMaterial, mineCornerMaterial);
-        player.teleport(mineBlocks.spawnLocation);
+        MineBlocks mineBlocksForEach = findMineBlocks(region, spawnMaterial, mineCornerMaterial); // 12ms
+        MineBlocks mineBlocks = findMineBlocksStream(region, spawnMaterial, mineCornerMaterial); // 3ms
+        player.teleport(mineBlocksForEach.spawnLocation);
 
-        Location spawnLocation = mineBlocks.spawnLocation;
-        final Location corner1 = mineBlocks.corners[0];
-        final Location corner2 = mineBlocks.corners[1];
+        Location spawnLocation = mineBlocksForEach.spawnLocation;
+        final Location corner1 = mineBlocksForEach.corners[0];
+        final Location corner2 = mineBlocksForEach.corners[1];
         spawnLocation.getBlock().setType(Material.AIR, false);
 
         final CuboidRegion miningRegion = new CuboidRegion(corner1, corner2);
