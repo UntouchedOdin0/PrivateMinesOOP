@@ -128,6 +128,10 @@ public class Mine {
         this.region = region;
     }
 
+    public Location getSpawnLocation() {
+        return spawnLocation;
+    }
+
     public void setSpawnLocation(Location spawnLocation) {
         this.spawnLocation = spawnLocation;
     }

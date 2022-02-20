@@ -5,6 +5,8 @@ import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.PrivateMinesAPI;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.mines.Mine;
+import me.untouchedodin0.plugin.mines.MineType;
+import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 
 import java.util.UUID;
@@ -26,5 +28,25 @@ public class API {
 
     public boolean hasMine(UUID uuid) {
         return mineStorage.hasMine(uuid);
+    }
+
+    public int getTotalMines() {
+        return mineStorage.getMinesCount();
+    }
+
+    public double getResetPercentage(Mine mine) {
+        return mine.getPercentage();
+    }
+
+    public MineData getMineData(Mine mine) {
+        return mine.getMineData();
+    }
+
+    public UUID getMineOwner(Mine mine) {
+        return mine.getMineOwner();
+    }
+
+    public MineType getMineType(Mine mine) {
+        return mine.getMineType();
     }
 }
