@@ -492,8 +492,16 @@ public class PrivateMinesCommand {
         String needToBeInAMine = Messages.msg("youNeedToBeInAMine");
 
         mines.forEach((uuid, mine) -> {
-            if (mine.isInsideFullRegion(playerLocation)) {
-                player.sendMessage("You're inside the region for the mine: " + mine + "!");
+            MineData mineData = mine.getMineData();
+            String playerName = Bukkit.getOfflinePlayer(mineData.getMineOwner()).getName();
+
+            if (mine.isInsideFullRegion(playerLocation) || mine.isInside(playerLocation)) {
+                player.sendMessage(ChatColor.GRAY + "Owner: " + ChatColor.GREEN + playerName);
+                if (mineData.isOpen()) {
+                    player.sendMessage(ChatColor.GRAY + "Status: " + ChatColor.GREEN + "Open");
+                } else {
+                    player.sendMessage(ChatColor.GRAY + "Status: " + ChatColor.RED + "Closed");
+                }
             } else {
                 player.sendMessage(needToBeInAMine);
             }
