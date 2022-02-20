@@ -337,7 +337,6 @@ public class PrivateMinesCommand {
         }
     }
 
-
     @CommandHook("close")
     public void close(Player player) {
         Mine mine;
