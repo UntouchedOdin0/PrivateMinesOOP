@@ -195,7 +195,7 @@ public class Utils {
             String replaceSharp = hexCode.replace('#', 'x');
 
             char[] chars = replaceSharp.toCharArray();
-            StringBuilder stringBuilder = new StringBuilder("");
+            StringBuilder stringBuilder = new StringBuilder();
 
             for (char c : chars) {
                 stringBuilder.append("&").append(c);
