@@ -61,7 +61,6 @@ subprojects {
         implementation 'org.codemc.worldguardwrapper:worldguardwrapper:1.2.0-SNAPSHOT'
         implementation 'com.github.cryptomorin:XSeries:8.6.1'
         implementation 'com.github.Redempt:RedLib:6.5.1.8'
-        //implementation 'com.github:ZandyDEV:PlayerBorderAPI:Build_4'
 
         implementation 'de.jeff_media:SpigotUpdateChecker:1.3.2'
 
