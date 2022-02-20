@@ -25,3 +25,4 @@ youHaveNotSetACoOwner: &cYou've not set a co-owner
 youHaveSetUserAsCoOwner: &aYou've set &e%name% &aas the co-owner of your mine
 youHaveUnsetUserAsCoOwner: &cYou've removed &e%name% &aas a co-owner from your mine
 youHaveBeenSetAsACoOwnerAtMine: &aYou've been set as a co-owner at &e%name%&a's mine
+youNeedToBeInAMine: &cYou need to be inside a mine to use this command!

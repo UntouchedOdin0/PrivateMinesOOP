@@ -170,6 +170,10 @@ public class Mine {
         return getMiningRegion().contains(location);
     }
 
+    public boolean isInsideFullRegion(Location location) {
+        return getRegion().contains(location);
+    }
+
     public void fill(Map<Material, Double> blocks) {
         CuboidRegion cuboidRegion = getMiningRegion();
 

@@ -110,4 +110,10 @@ privatemine,privatemines,pmine,pmines {
         help Opens a menu with a list of public private mines
         permission privatemines.list
     }
+
+    info {
+        hook info
+        help Gets the information of the current mine you're in
+        permission privatemines.info
+    }
 }

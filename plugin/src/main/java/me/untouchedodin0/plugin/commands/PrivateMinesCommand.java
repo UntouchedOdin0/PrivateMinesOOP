@@ -24,9 +24,7 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin.commands;
 
-import com.cryptomorin.xseries.XMaterial;
 import me.untouchedodin0.plugin.PrivateMines;
-import me.untouchedodin0.plugin.config.MenuConfig;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
@@ -41,8 +39,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import redempt.redlib.commandmanager.CommandHook;
 import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.config.ConfigManager;
@@ -487,6 +483,21 @@ public class PrivateMinesCommand {
             }
         });
         inventoryGUI.open(player);
+    }
+
+    @CommandHook("info")
+    public void info(Player player) {
+        Map<UUID, Mine> mines = mineStorage.getMines();
+        Location playerLocation = player.getLocation();
+        String needToBeInAMine = Messages.msg("youNeedToBeInAMine");
+
+        mines.forEach((uuid, mine) -> {
+            if (mine.isInsideFullRegion(playerLocation)) {
+                player.sendMessage("You're inside the region for the mine: " + mine + "!");
+            } else {
+                player.sendMessage(needToBeInAMine);
+            }
+        });
     }
 
     @CommandHook("reload")
