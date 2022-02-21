@@ -218,6 +218,7 @@ public class PrivateMines extends JavaPlugin {
 
         if (Bukkit.getPluginManager().getPlugin("AutoSell") != null) {
             // AutoSell was enabled, lets set up the hook!
+            getLogger().info("Found AutoSell, registering a hook!");
             getServer().getPluginManager().registerEvents(new AutoSellListener(this), this);
         }
 

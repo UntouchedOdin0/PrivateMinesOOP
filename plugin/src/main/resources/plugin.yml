@@ -7,4 +7,6 @@ depend:
   - WorldGuard
 softdepend:
   - WorldBorderAPI
+  - AutoSell
+  - Vault
 
