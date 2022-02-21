@@ -149,11 +149,17 @@ public class MineFactory {
         Location spawnLocation = mineBlocks.spawnLocation;
         final Location corner1 = mineBlocks.corners[0];
         final Location corner2 = mineBlocks.corners[1];
+
+        final Location fullCorner1 = region.getStart();
+        final Location fullCorner2 = region.getEnd();
+
         spawnLocation.getBlock().setType(Material.AIR, false);
 
         final CuboidRegion miningRegion = new CuboidRegion(corner1, corner2);
+        final CuboidRegion fullRegion = new CuboidRegion(fullCorner1, fullCorner2);
 
         mine.setMiningRegion(miningRegion);
+        mine.setFullRegion(fullRegion);
         mine.setRegion(region);
         mine.setSpawnLocation(spawnLocation);
         mine.setMaterials(mineType.getMaterials());
@@ -165,6 +171,7 @@ public class MineFactory {
         mineData.setSpawnZ(spawnLocation.getBlockZ());
         mineData.setMiningRegion(miningRegion);
         mineData.setFullRegion(region);
+        mineData.setFullRegion(fullRegion);
         mineData.setMineType(mineType.getName());
         mine.setMineData(mineData);
         utils.saveMineData(uuid, mineData);
@@ -179,8 +186,10 @@ public class MineFactory {
             player.sendMessage(Messages.msg("recievedMine"));
             player.teleport(spawnLocation);
         }
-        IWrappedRegion iWrappedRegion = utils.createWorldGuardRegion(player, miningRegion);
-        mine.setIWrappedRegion(iWrappedRegion);
+        IWrappedRegion iWrappedMiningRegion = utils.createWorldGuardRegion(player, miningRegion);
+        IWrappedRegion iWrappedFullRegion = utils.createWorldGuardRegion(player, fullRegion);
+        mine.setIWrappedMiningRegion(iWrappedMiningRegion);
+        mine.setIWrappedFullRegion(iWrappedFullRegion);
         utils.setMineFlags(mine);
 
         //worldBorderApi.setBorder(player, 10, location);

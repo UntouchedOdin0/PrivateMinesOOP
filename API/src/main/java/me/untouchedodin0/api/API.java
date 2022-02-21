@@ -63,8 +63,12 @@ public class API {
         return mine.getRegion();
     }
 
-    public IWrappedRegion getIWrappedRegion(Mine mine) {
-        return mine.getIWrappedRegion();
+    public IWrappedRegion getIWrappedFullRegion(Mine mine) {
+        return mine.getIWrappedFullRegion();
+    }
+
+    public IWrappedRegion getIWrappedMiningRegion(Mine mine) {
+        return mine.getIWrappedMiningRegion();
     }
 
     public Location getSpawnLocation(Mine mine) {

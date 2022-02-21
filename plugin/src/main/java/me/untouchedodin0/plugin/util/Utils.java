@@ -71,7 +71,7 @@ public class Utils {
 
     public void setMineFlags(Mine worldEditMine) {
         final WorldGuardWrapper worldGuardWrapper = WorldGuardWrapper.getInstance();
-        IWrappedRegion iWrappedRegion = worldEditMine.getIWrappedRegion();
+        IWrappedRegion iWrappedRegion = worldEditMine.getIWrappedMiningRegion();
 
         Stream.of(
                         worldGuardWrapper.getFlag("block-place", WrappedState.class),
@@ -98,7 +98,6 @@ public class Utils {
                 .map(Optional::get)
                 .forEach(flag -> iWrappedRegion.setFlag(flag, WrappedState.DENY));
     }
-
 
     public void sendMessage(CommandSender commandSender, String message) {
         String toSend = Messages.msg(message);

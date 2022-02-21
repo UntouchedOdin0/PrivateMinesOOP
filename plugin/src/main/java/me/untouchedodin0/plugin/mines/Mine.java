@@ -62,8 +62,10 @@ public class Mine {
     private final PrivateMines privateMines;
     private MineType mineType;
     private UUID mineOwner;
+    private CuboidRegion fullRegion;
     private CuboidRegion miningRegion;
-    private IWrappedRegion iWrappedRegion;
+    private IWrappedRegion iWrappedMiningRegion;
+    private IWrappedRegion iWrappedFullRegion;
     private CuboidRegion region;
     private Location spawnLocation;
     private MineData mineData;
@@ -112,6 +114,14 @@ public class Mine {
         this.miningRegion = miningRegion;
     }
 
+    public CuboidRegion getFullRegion() {
+        return fullRegion;
+    }
+
+    public void setFullRegion(CuboidRegion fullRegion) {
+        this.fullRegion = fullRegion;
+    }
+
     public CuboidRegion getRegion() {
         return region;
     }
@@ -120,12 +130,20 @@ public class Mine {
         this.region = region;
     }
 
-    public IWrappedRegion getIWrappedRegion() {
-        return iWrappedRegion;
+    public IWrappedRegion getIWrappedMiningRegion() {
+        return iWrappedMiningRegion;
     }
 
-    public void setIWrappedRegion(IWrappedRegion iWrappedRegion) {
-        this.iWrappedRegion = iWrappedRegion;
+    public void setIWrappedMiningRegion(IWrappedRegion iWrappedRegion) {
+        this.iWrappedMiningRegion = iWrappedRegion;
+    }
+
+    public IWrappedRegion getIWrappedFullRegion() {
+        return iWrappedFullRegion;
+    }
+
+    public void setIWrappedFullRegion(IWrappedRegion iWrappedFullRegion) {
+        this.iWrappedFullRegion = iWrappedFullRegion;
     }
 
     public Location getSpawnLocation() {

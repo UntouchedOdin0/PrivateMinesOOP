@@ -74,8 +74,12 @@ public class PrivateMineResetEvent extends Event {
         return mine.getRegion();
     }
 
-    public IWrappedRegion getIWrappedRegion() {
-        return mine.getIWrappedRegion();
+    public IWrappedRegion getIWrappedFullRegion() {
+        return mine.getIWrappedFullRegion();
+    }
+
+    public IWrappedRegion getIWrappedMiningRegion() {
+        return mine.getIWrappedMiningRegion();
     }
 
     public Location getSpawnLocation() {
