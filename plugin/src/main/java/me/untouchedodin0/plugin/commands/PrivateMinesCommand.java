@@ -145,8 +145,7 @@ public class PrivateMinesCommand {
         Mine mine = privateMines.getMineStorage().getMine(uuid);
         Task task = mine.getTask();
         if (task == null) {
-            privateMines.getLogger().warning("Failed to delete mine as the task was null!" +
-                                                     "\nThis usually happens when the task isn't running");
+            privateMines.getLogger().warning("Failed to delete mine as the task was null!" + "\nThis usually happens when the task isn't running");
         } else {
             mine.delete();
             task.cancel();
@@ -473,9 +472,7 @@ public class PrivateMinesCommand {
             MineData mineData = mine.getMineData();
             if (mineData.isOpen()) {
                 List<String> lore = List.of(ChatColor.WHITE + "Left Click to " + ChatColor.GREEN + "Teleport");
-                ItemButton itemButton = ItemButton.create(new ItemBuilder(Material.EMERALD_BLOCK)
-                                                                  .setName(ChatColor.GREEN + playerName + "'s Mine")
-                                                                  .addLore(lore), inventoryClickEvent -> {
+                ItemButton itemButton = ItemButton.create(new ItemBuilder(Material.EMERALD_BLOCK).setName(ChatColor.GREEN + playerName + "'s Mine").addLore(lore), inventoryClickEvent -> {
                     player.sendMessage(ChatColor.GREEN + "Teleporting you to the mine");
                     mine.teleport(player);
                 });
@@ -501,6 +498,14 @@ public class PrivateMinesCommand {
                     player.sendMessage(ChatColor.GRAY + "Status: " + ChatColor.GREEN + "Open");
                 } else {
                     player.sendMessage(ChatColor.GRAY + "Status: " + ChatColor.RED + "Closed");
+                }
+                player.sendMessage(ChatColor.GRAY + "Tax: " + ChatColor.GREEN + mine.getTax());
+                if (!mine.getMaterials().isEmpty()) {
+                    mine.getMaterials().forEach((material, aDouble) -> player.sendMessage("" + ChatColor.GRAY + "-" + Utils.prettify(material.name() + " " + ChatColor.GREEN + aDouble + "%")));
+                } else {
+                    MineType mineType = mine.getMineType();
+                    Map<Material, Double> materials = mineType.getMaterials();
+                    materials.forEach((material, aDouble) -> player.sendMessage("" + ChatColor.GRAY + "-" + Utils.prettify(material.name() + " " + ChatColor.GREEN + aDouble + "%")));
                 }
             } else {
                 player.sendMessage(needToBeInAMine);
