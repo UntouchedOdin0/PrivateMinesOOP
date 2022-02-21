@@ -29,6 +29,7 @@ import me.untouchedodin0.plugin.commands.PrivateMinesCommand;
 import me.untouchedodin0.plugin.config.Config;
 import me.untouchedodin0.plugin.config.MineConfig;
 import me.untouchedodin0.plugin.factory.MineFactory;
+import me.untouchedodin0.plugin.listener.AutoSellListener;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.MineTypeManager;
@@ -213,6 +214,11 @@ public class PrivateMines extends JavaPlugin {
             new PrivateMinesExpansion().register();
         } else {
             getLogger().info("PlaceholderAPI was not present, not able to establish a hook!");
+        }
+
+        if (Bukkit.getPluginManager().getPlugin("AutoSell") != null) {
+            // AutoSell was enabled, lets set up the hook!
+            getServer().getPluginManager().registerEvents(new AutoSellListener(this), this);
         }
 
         World world = getMineWorldManager().getMinesWorld();
