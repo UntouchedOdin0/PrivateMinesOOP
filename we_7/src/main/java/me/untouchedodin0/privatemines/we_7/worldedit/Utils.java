@@ -18,10 +18,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
 
 public class Utils {
 
     public Map<String, File> fileMap = new HashMap<>();
+    public Map<String, File> test = new TreeMap<>();
+
     public Map<File, RelativePointsWE7> relativePointsWE7Map = new HashMap<>();
 
     Material getType(World world, BlockVector3 blockVector3) {
@@ -30,7 +33,16 @@ public class Utils {
 
     public void loadFile(String name, File file) {
         if (file.exists()) {
-            fileMap.putIfAbsent(name, file);
+            fileMap.put(name, file);
+
+            fileMap.forEach((s, file1) -> {
+                Clipboard clipboard = getClipboard(file);
+                Region region = clipboard.getRegion();
+
+                Bukkit.getLogger().info("clipboard: " + clipboard);
+                Bukkit.getLogger().info("region: " + region);
+            });
+
             Bukkit.getLogger().info("Loaded file: " + file.getName() + "!");
         } else {
             Bukkit.getLogger().warning("File : " + file + " didn't exist!");
@@ -76,11 +88,15 @@ public class Utils {
     }
 
     public void loadAndIterateFiles(Material spawnMaterial, Material cornerMaterial) {
+        Bukkit.getLogger().info("file map size: " + fileMap.size());
+        Bukkit.getLogger().info("test map size: " + test.size());
+
         fileMap.forEach((name, file) -> {
             Bukkit.getLogger().info("Loading file " + file);
             Clipboard clipboard = getClipboard(file);
             Region region = clipboard.getRegion();
             RelativePointsWE7 relativePointsWE7 = findRelativePoints(region, spawnMaterial, cornerMaterial);
+            Bukkit.getLogger().info("relativePointsWE7: " + relativePointsWE7);
             putPoints(file, relativePointsWE7);
         });
     }
