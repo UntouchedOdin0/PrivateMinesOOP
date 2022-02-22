@@ -20,6 +20,7 @@ import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.World;
 import me.untouchedodin0.privatemines.compat.WorldEditAdapter;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.util.BlockVector;
@@ -119,16 +120,18 @@ public class WE7Adapter implements WorldEditAdapter {
         }
     }
 
-//    public BlockVector3 findRelativeSpawnPoint(Region region, Material spawnMaterial) {
-//        Utils utils = new Utils();
-//        World world = region.getWorld();
-//        region.forEach(blockVector3 -> {
+    public BlockVector3 findRelativeSpawnPoint(Region region, Material spawnMaterial) {
+        Utils utils = new Utils();
+        World world = region.getWorld();
+        region.forEach(blockVector3 -> {
+            Material material = utils.getTypeAtBlockVector3(BukkitAdapter.adapt(world), blockVector3);
+            Bukkit.getLogger().info("material: " + material);
 //            if (utils.getType(world, blockVector3).equals(spawnMaterial)) {
 //                spawnPoint = blockVector3;
 //            }
-//        });
-//        return spawnPoint;
-//    }
+        });
+        return spawnPoint;
+    }
 //
 //    public List<BlockVector3> findCornerPoints(Region region, Material cornerMaterial) {
 //        Utils utils = new Utils();

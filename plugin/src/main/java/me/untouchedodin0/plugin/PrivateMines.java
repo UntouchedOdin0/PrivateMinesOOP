@@ -185,7 +185,8 @@ public class PrivateMines extends JavaPlugin {
 
             mineTypeManager.getMineTypes().forEach((s, mineType) -> {
                 File file = new File("plugins/PrivateMines/schematics/" + mineType.getFile());
-                utils.loadFile(mineType.getName(), file);
+                World world = mineWorldManager.getMinesWorld();
+                utils.loadFile(mineType.getName(), file, world);
             });
             we7Utils.loadAndIterateFiles(Config.spawnPoint, Config.mineCorner);
         }

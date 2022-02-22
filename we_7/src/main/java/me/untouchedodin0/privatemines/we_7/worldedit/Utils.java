@@ -5,7 +5,12 @@ import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
+import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.world.block.BlockState;
+import com.sk89q.worldedit.world.block.BlockType;
+import com.sk89q.worldedit.world.block.BlockTypes;
+import com.sk89q.worldedit.world.registry.BlockMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -25,22 +30,27 @@ public class Utils {
 
     public Map<File, RelativePointsWE7> relativePointsWE7Map = new HashMap<>();
 
+    public void loadFile(String name, File file, World world) {
 
-    public void loadFile(String name, File file) {
+        Utils utils = new Utils();
         if (file.exists()) {
             fileMap.put(name, file);
 
             fileMap.forEach((s, file1) -> {
                 Clipboard clipboard = getClipboard(file);
                 Region region = clipboard.getRegion();
-//                RelativePointsWE7 relativePointsWE7 = findRelativePoints(region, Material.SPONGE, Material.POWERED_RAIL);
-
-                Bukkit.getLogger().info("clipboard: " + clipboard);
                 Bukkit.getLogger().info("region: " + region);
-                region.forEach(blockVector3 -> {
+                com.sk89q.worldedit.world.World WEWorld = BukkitAdapter.adapt(world);
+                Bukkit.getLogger().info("WEWorld: " + WEWorld);
 
+                clipboard.getRegion().forEach(blockVector3 -> {
+                    BlockState blockState = clipboard.getBlock(blockVector3);
+                    if (blockState.toBaseBlock().getBlockType().equals(BlockTypes.SPONGE)) {
+                        Bukkit.getLogger().info("FOUND SPONGE AT: " + blockVector3);
+                    } else if (blockState.toBaseBlock().getBlockType().equals(BlockTypes.POWERED_RAIL)) {
+                        Bukkit.getLogger().info("FOUND POWERED RAIL AT: " + blockVector3);
+                    }
                 });
-//                Bukkit.getLogger().info("relativePointsWE7: " + relativePointsWE7);
             });
 
             Bukkit.getLogger().info("Loaded file: " + file.getName() + "!");
@@ -72,6 +82,7 @@ public class Utils {
             BlockVector blockVector = new BlockVector(blockVector3.getBlockX(),
                                                       blockVector3.getBlockY(),
                                                       blockVector3.getBlockZ());
+            relativePointsWE7.setWorld(region.getWorld());
             if (material.equals(spawnMaterial)) {
                 relativePointsWE7.setSpawn(blockVector);
             } else if (material.equals(cornerMaterial) && relativePointsWE7.corner1 == null) {
@@ -95,9 +106,17 @@ public class Utils {
             Bukkit.getLogger().info("Loading file " + file);
             Clipboard clipboard = getClipboard(file);
             Region region = clipboard.getRegion();
+            WE7Adapter we7Adapter = new WE7Adapter();
+            BlockVector3 spawnPoint = we7Adapter.findRelativeSpawnPoint(region, spawnMaterial);
+
             //RelativePointsWE7 relativePointsWE7 = findRelativePoints(region, spawnMaterial, cornerMaterial);
             //Bukkit.getLogger().info("relativePointsWE7: " + relativePointsWE7);
             //putPoints(file, relativePointsWE7);
         });
+    }
+
+    public Material getTypeAtBlockVector3(World world, BlockVector3 blockVector3) {
+        BlockState blockState = BukkitAdapter.adapt(world).getBlock(blockVector3.getBlockX(), blockVector3.getBlockY(), blockVector3.getBlockZ()).getBlockType().getDefaultState();
+        return BukkitAdapter.adapt(blockState).getMaterial();
     }
 }
