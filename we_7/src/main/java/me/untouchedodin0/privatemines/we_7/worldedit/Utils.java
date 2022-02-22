@@ -5,11 +5,10 @@ import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
-import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
-import com.sk89q.worldedit.world.World;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.util.BlockVector;
 
 import java.io.File;
@@ -17,7 +16,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.TreeMap;
 
 public class Utils {
@@ -27,9 +25,6 @@ public class Utils {
 
     public Map<File, RelativePointsWE7> relativePointsWE7Map = new HashMap<>();
 
-    Material getType(World world, BlockVector3 blockVector3) {
-        return BukkitAdapter.adapt(Objects.requireNonNull(world).getFullBlock(blockVector3).getBlockType());
-    }
 
     public void loadFile(String name, File file) {
         if (file.exists()) {
@@ -38,9 +33,14 @@ public class Utils {
             fileMap.forEach((s, file1) -> {
                 Clipboard clipboard = getClipboard(file);
                 Region region = clipboard.getRegion();
+//                RelativePointsWE7 relativePointsWE7 = findRelativePoints(region, Material.SPONGE, Material.POWERED_RAIL);
 
                 Bukkit.getLogger().info("clipboard: " + clipboard);
                 Bukkit.getLogger().info("region: " + region);
+                region.forEach(blockVector3 -> {
+
+                });
+//                Bukkit.getLogger().info("relativePointsWE7: " + relativePointsWE7);
             });
 
             Bukkit.getLogger().info("Loaded file: " + file.getName() + "!");
@@ -64,11 +64,11 @@ public class Utils {
 
     public RelativePointsWE7 findRelativePoints(Region region, Material spawnMaterial, Material cornerMaterial) {
         Utils utils = new Utils();
-        World world = region.getWorld();
+        World world = BukkitAdapter.adapt(region.getWorld());
         RelativePointsWE7 relativePointsWE7 = new RelativePointsWE7();
 
         region.iterator().forEachRemaining(blockVector3 -> {
-            Material material = utils.getType(world, blockVector3);
+            Material material = world.getBlockAt(blockVector3.getBlockX(), blockVector3.getBlockY(), blockVector3.getBlockZ()).getType(); //utils.getType(world, blockVector3);
             BlockVector blockVector = new BlockVector(blockVector3.getBlockX(),
                                                       blockVector3.getBlockY(),
                                                       blockVector3.getBlockZ());
@@ -95,9 +95,9 @@ public class Utils {
             Bukkit.getLogger().info("Loading file " + file);
             Clipboard clipboard = getClipboard(file);
             Region region = clipboard.getRegion();
-            RelativePointsWE7 relativePointsWE7 = findRelativePoints(region, spawnMaterial, cornerMaterial);
-            Bukkit.getLogger().info("relativePointsWE7: " + relativePointsWE7);
-            putPoints(file, relativePointsWE7);
+            //RelativePointsWE7 relativePointsWE7 = findRelativePoints(region, spawnMaterial, cornerMaterial);
+            //Bukkit.getLogger().info("relativePointsWE7: " + relativePointsWE7);
+            //putPoints(file, relativePointsWE7);
         });
     }
 }
