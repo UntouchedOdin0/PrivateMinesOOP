@@ -68,7 +68,6 @@ public class Utils {
         ).orElseThrow(() -> new RuntimeException("Could not create worldguard region named " + regionName));
     }
 
-
     public void setMineFlags(Mine worldEditMine) {
         final WorldGuardWrapper worldGuardWrapper = WorldGuardWrapper.getInstance();
         IWrappedRegion iWrappedRegion = worldEditMine.getIWrappedMiningRegion();

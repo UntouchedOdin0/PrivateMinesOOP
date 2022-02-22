@@ -142,7 +142,7 @@ public class MineFactory {
         MineData mineData = new MineData();
 
         CuboidRegion region = privateMines.getWorldEditAdapter().pasteSchematic(location, path);
-
+        
         MineBlocks mineBlocks = findMineBlocks(region, spawnMaterial, mineCornerMaterial);
         player.teleport(mineBlocks.spawnLocation);
 

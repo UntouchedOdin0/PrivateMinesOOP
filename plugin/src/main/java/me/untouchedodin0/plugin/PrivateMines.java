@@ -35,6 +35,8 @@ import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.MineTypeManager;
 import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
+import me.untouchedodin0.plugin.storage.TransformationStorageWE6;
+import me.untouchedodin0.plugin.storage.TransformationStorageWE7;
 import me.untouchedodin0.plugin.util.Exceptions;
 import me.untouchedodin0.plugin.util.Metrics;
 import me.untouchedodin0.plugin.util.Utils;
@@ -42,6 +44,8 @@ import me.untouchedodin0.plugin.util.placeholderapi.PrivateMinesExpansion;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditAdapter;
 import me.untouchedodin0.privatemines.compat.WorldEditCompatibility;
+import me.untouchedodin0.privatemines.we_6.worldedit.WE6Adapter;
+import me.untouchedodin0.privatemines.we_7.worldedit.WE7Adapter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -125,14 +129,6 @@ public class PrivateMines extends JavaPlugin {
             e.printStackTrace();
         }
 
-        if (RedLib.MID_VERSION < 13) {
-            // Save the schematic file, this format is used pre-1.13
-            saveResource("schematics/mine.schematic", false);
-        } else {
-            // Save the schem file this format is used in 1.13 and beyond.
-            saveResource("schematics/mine.schem", false);
-        }
-
         mineWorldManager = new MineWorldManager();
         utils = new Utils(this);
 
@@ -155,10 +151,39 @@ public class PrivateMines extends JavaPlugin {
                 .saveDefaults()
                 .load();
 
+
+
+        getLogger().info("Version: " + RedLib.MID_VERSION);
+        if (RedLib.MID_VERSION < 13) {
+            // Save the schematic file, this format is used pre-1.13
+            saveResource("schematics/mine.schematic", false);
+        } else {
+            // Save the schem file this format is used in 1.13 and beyond.
+            saveResource("schematics/mine.schem", false);
+        }
+
         MineConfig.mineTypes.forEach((s, mineType) -> {
             mineTypeManager.registerMineType(mineType);
         });
         getLogger().info("Loaded " + mineTypeManager.getTotalMineTypes() + " mine types!");
+
+        if (RedLib.MID_VERSION < 13) {
+            WE6Adapter we6Adapter = new WE6Adapter();
+            TransformationStorageWE6 transformationStorageWE6 = new TransformationStorageWE6();
+            getLogger().info("using adapter: " + we6Adapter);
+            getLogger().info("using storage: " + transformationStorageWE6);
+            mineTypeManager.getMineTypes().forEach((s, mineType) -> {
+
+            });
+        } else {
+            WE7Adapter we7Adapter = new WE7Adapter();
+            TransformationStorageWE7 transformationStorageWE7 = new TransformationStorageWE7();
+            getLogger().info("using adapter: " + we7Adapter);
+            getLogger().info("using storage: " + transformationStorageWE7);
+            mineTypeManager.getMineTypes().forEach((s, mineType) -> {
+
+            });
+        }
 
         Material spawnPoint = Config.getSpawnPoint();
         Material mineCorner = Config.getMineCorner();

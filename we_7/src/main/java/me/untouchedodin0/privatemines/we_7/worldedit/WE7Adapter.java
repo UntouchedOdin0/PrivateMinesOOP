@@ -20,6 +20,7 @@ import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.World;
 import me.untouchedodin0.privatemines.compat.WorldEditAdapter;
+import org.bukkit.BanList;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import redempt.redlib.region.CuboidRegion;
@@ -28,10 +29,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public class WE7Adapter implements WorldEditAdapter {
+
+    BlockVector3 spawnPoint;
+    List<BlockVector3> corners = new ArrayList<>(2);
+
     @Override
     public CuboidRegion pasteSchematic(Location location, Path file) {
 
@@ -45,6 +52,7 @@ public class WE7Adapter implements WorldEditAdapter {
         try (InputStream fix = Files.newInputStream(file); ClipboardReader clipboardReader =
                 clipboardFormat.getReader(fix)) {
             Clipboard clipboard = clipboardReader.read();
+
             if (clipboard == null) {
                 throw new IllegalArgumentException("Clipboard is null");
             }
@@ -97,4 +105,27 @@ public class WE7Adapter implements WorldEditAdapter {
         }
     }
 
+    public BlockVector3 findRelativeSpawnPoint(Region region, Material spawnMaterial) {
+        Utils utils = new Utils();
+        World world = region.getWorld();
+
+        region.forEach(blockVector3 -> {
+            if (utils.getType(world, blockVector3).equals(spawnMaterial)) {
+                spawnPoint = blockVector3;
+            }
+        });
+        return spawnPoint;
+    }
+
+    public List<BlockVector3> findCornerPoints(Region region, Material cornerMaterial) {
+        Utils utils = new Utils();
+        World world = region.getWorld();
+
+        region.forEach(blockVector3 -> {
+            if (utils.getType(world, blockVector3).equals(cornerMaterial)) {
+                corners.add(blockVector3);
+            }
+        });
+        return corners;
+    }
 }

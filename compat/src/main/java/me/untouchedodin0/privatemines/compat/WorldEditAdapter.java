@@ -9,6 +9,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public interface WorldEditAdapter {
+
     CuboidRegion pasteSchematic(Location location, Path file);
 
     void fillRegion(CuboidRegion region, Map<Material, Double> materials);
