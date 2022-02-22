@@ -78,6 +78,20 @@ public class WE7Adapter implements WorldEditAdapter {
         return null;
     }
 
+    public Clipboard loadClipboard(Path file) throws IOException {
+        Clipboard clipboard;
+        ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(file.toFile());
+        if (clipboardFormat == null) throw new IllegalArgumentException("File is not a valid schematic");
+        try (InputStream inputStream = Files.newInputStream(file);
+        ClipboardReader clipboardReader = clipboardFormat.getReader(inputStream)) {
+             clipboard = clipboardReader.read();
+            if (clipboard == null) {
+                throw new IllegalArgumentException("Clipboard is null");
+            }
+        }
+        return clipboard;
+    }
+
     @Override
     public void fillRegion(CuboidRegion region, Map<Material, Double> materials) {
         World world = new BukkitWorld(region.getWorld());

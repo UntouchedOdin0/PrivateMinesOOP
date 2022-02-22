@@ -177,13 +177,19 @@ public class PrivateMines extends JavaPlugin {
             });
         } else {
             WE7Adapter we7Adapter = new WE7Adapter();
+            me.untouchedodin0.privatemines.we_7.worldedit.Utils utils = new me.untouchedodin0.privatemines.we_7.worldedit.Utils();
             TransformationStorageWE7 transformationStorageWE7 = new TransformationStorageWE7();
             getLogger().info("using adapter: " + we7Adapter);
             getLogger().info("using storage: " + transformationStorageWE7);
-            mineTypeManager.getMineTypes().forEach((s, mineType) -> {
+            me.untouchedodin0.privatemines.we_7.worldedit.Utils we7Utils = new me.untouchedodin0.privatemines.we_7.worldedit.Utils();
 
+            mineTypeManager.getMineTypes().forEach((s, mineType) -> {
+                File file = new File("plugins/PrivateMines/schematics/" + mineType.getFile());
+                utils.loadFile(mineType.getName(), file);
             });
+            we7Utils.loadAndIterateFiles(Config.spawnPoint, Config.mineCorner);
         }
+
 
         Material spawnPoint = Config.getSpawnPoint();
         Material mineCorner = Config.getMineCorner();
