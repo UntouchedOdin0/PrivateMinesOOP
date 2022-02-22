@@ -1,9 +1,6 @@
 package me.untouchedodin0.privatemines.we_6.worldedit;
 
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.MaxChangedBlocksException;
-import com.sk89q.worldedit.Vector;
-import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.*;
 import com.sk89q.worldedit.blocks.BaseBlock;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
@@ -19,6 +16,7 @@ import com.sk89q.worldedit.regions.RegionOperationException;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.World;
 import me.untouchedodin0.privatemines.compat.WorldEditAdapter;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import redempt.redlib.region.CuboidRegion;
@@ -27,9 +25,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class WE6Adapter implements WorldEditAdapter {
+
+    BlockVector spawnPoint;
+    List<BlockVector> corners = new ArrayList<>(2);
 
     @Override
     public CuboidRegion pasteSchematic(Location location, Path file) {
@@ -89,5 +93,27 @@ public class WE6Adapter implements WorldEditAdapter {
             // this shouldn't happen
         }
         editSession.flushQueue();
+    }
+
+    public BlockVector findRelativeSpawnPoint(Region region, Material spawnMaterial) {
+        Utils utils = new Utils();
+        org.bukkit.World world = Bukkit.getWorld(Objects.requireNonNull(region.getWorld()).getName());
+        region.forEach(blockVector -> {
+            if (utils.getType(world, blockVector).equals(spawnMaterial)) {
+                spawnPoint = blockVector;
+            }
+        });
+        return spawnPoint;
+    }
+
+    public List<BlockVector> findCornerPoints(Region region, Material cornerMaterial) {
+        Utils utils = new Utils();
+        org.bukkit.World world = Bukkit.getWorld(Objects.requireNonNull(region.getWorld()).getName());
+        region.forEach(blockVector -> {
+            if (utils.getType(world, blockVector).equals(cornerMaterial)) {
+                corners.add(blockVector);
+            }
+        });
+        return corners;
     }
 }

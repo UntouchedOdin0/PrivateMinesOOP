@@ -1,6 +1,6 @@
 package me.untouchedodin0.privatemines.we_6.worldedit;
 
-import com.sk89q.worldedit.BlockVector;
+import org.bukkit.util.BlockVector;
 
 public class RelativePointsWE6 {
 

@@ -25,13 +25,15 @@ SOFTWARE.
 package me.untouchedodin0.privatemines.we_6.worldedit;
 
 import com.sk89q.worldedit.BlockVector;
-import com.sk89q.worldedit.world.World;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 
 public class Utils {
 
     Material getType(World world, BlockVector blockVector) {
-        return Material.AIR;
+        Location location = new Location(world, blockVector.getBlockX(), blockVector.getBlockY(), blockVector.getBlockZ());
+        return world.getBlockAt(location).getType();
     }
 //    public BlockType bukkitToBlockType(Material material) {
 //        return BlockType.fromID(XMaterial.matchXMaterial(material).getId());

@@ -1,34 +1,34 @@
 package me.untouchedodin0.privatemines.we_7.worldedit;
 
-import com.sk89q.worldedit.math.BlockVector3;
+import org.bukkit.util.BlockVector;
 
 public class RelativePointsWE7 {
 
-    BlockVector3 spawn;
-    BlockVector3 corner1;
-    BlockVector3 corner2;
+    BlockVector spawn;
+    BlockVector corner1;
+    BlockVector corner2;
 
-    public BlockVector3 getSpawn() {
+    public BlockVector getSpawn() {
         return spawn;
     }
 
-    public void setSpawn(BlockVector3 spawn) {
+    public void setSpawn(BlockVector spawn) {
         this.spawn = spawn;
     }
 
-    public BlockVector3 getCorner1() {
+    public BlockVector getCorner1() {
         return corner1;
     }
 
-    public void setCorner1(BlockVector3 corner1) {
+    public void setCorner1(BlockVector corner1) {
         this.corner1 = corner1;
     }
 
-    public BlockVector3 getCorner2() {
+    public BlockVector getCorner2() {
         return corner2;
     }
 
-    public void setCorner2(BlockVector3 corner2) {
+    public void setCorner2(BlockVector corner2) {
         this.corner2 = corner2;
     }
 }
