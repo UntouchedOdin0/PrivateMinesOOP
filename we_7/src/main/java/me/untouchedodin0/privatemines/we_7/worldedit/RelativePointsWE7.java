@@ -2,12 +2,14 @@ package me.untouchedodin0.privatemines.we_7.worldedit;
 
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.world.World;
-import org.bukkit.util.BlockVector;
+
+import java.util.List;
 
 public class RelativePointsWE7 {
 
     World world;
     BlockVector3 spawn;
+    List<BlockVector3> corners;
     BlockVector3 corner1;
     BlockVector3 corner2;
 
@@ -25,6 +27,14 @@ public class RelativePointsWE7 {
 
     public void setSpawn(BlockVector3 spawn) {
         this.spawn = spawn;
+    }
+
+    public List<BlockVector3> getCorners() {
+        return corners;
+    }
+
+    public void setCorners(List<BlockVector3> corners) {
+        this.corners = corners;
     }
 
     public BlockVector3 getCorner1() {

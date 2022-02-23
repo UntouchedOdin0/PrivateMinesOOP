@@ -30,13 +30,19 @@ public class Utils {
     BlockVector3 spawnPoint; // = we7Adapter.findRelativeSpawnPoint(region, spawnMaterial);
     BlockVector3 corner1;
     BlockVector3 corner2;
-    List<BlockVector3> test = new ArrayList<>();
+    BlockVector3[] corners = new BlockVector3[2];
+    int a = 0;
+
 
     // This method is what's working
 
     public void loadFile(String name, File file, World world) {
 
         Utils utils = new Utils();
+        List<BlockVector3> test = new ArrayList<>();
+        MineBlocks mineBlocks = new MineBlocks();
+        mineBlocks.corners = new BlockVector3[2];
+        List<BlockVector3> corners = new ArrayList<>();
 
         if (file.exists()) {
             fileMap.put(name, file);
@@ -49,36 +55,36 @@ public class Utils {
                 Bukkit.getLogger().info("WEWorld: " + WEWorld);
                 RelativePointsWE7 relativePointsWE7 = new RelativePointsWE7();
                 relativePointsWE7.setWorld(WEWorld);
-
                 clipboard.getRegion().forEach(blockVector3 -> {
                     BlockState blockState = clipboard.getBlock(blockVector3);
 
                     if (blockState.toBaseBlock().getBlockType().equals(BlockTypes.SPONGE)) {
                         Bukkit.getLogger().info("FOUND SPONGE AT: " + blockVector3);
-                        spawnPoint = blockVector3;
+                        this.spawnPoint = blockVector3;
                         relativePointsWE7.setSpawn(blockVector3);
                         //relativePointsWE7.setSpawn(blockVector3);
                     } else if (blockState.toBaseBlock().getBlockType().equals(BlockTypes.POWERED_RAIL) && relativePointsWE7.getCorner1() == null) {
-                        Bukkit.getLogger().info("FOUND POWERED RAIL AT: " + blockVector3);
-                        corner1 = blockVector3;
-                        test.add(blockVector3);
-                        relativePointsWE7.setCorner1(blockVector3);
+                        Bukkit.getLogger().info("FOUND RAIL AT: " + blockVector3);
+                        relativePointsWE7.corner1 = blockVector3;
+                        corners.add(blockVector3);
+                        mineBlocks.corners[0] = blockVector3;
                     } else if (blockState.toBaseBlock().getBlockType().equals(BlockTypes.POWERED_RAIL) && relativePointsWE7.getCorner2() == null) {
-                        Bukkit.getLogger().info("FOUND POWERED RAIL(2) AT: " + blockVector3);
-                        corner2 = blockVector3;
-                        test.add(blockVector3);
-                        relativePointsWE7.setCorner2(corner2);
+                        relativePointsWE7.corner2 = blockVector3;
+                        Bukkit.getLogger().info("FOUND RAIL (2) AT: " + blockVector3);
+                        corners.add(blockVector3);
+                        mineBlocks.corners[1] = blockVector3;
                     }
                 });
-                Bukkit.getLogger().info("spawnPoint: " + relativePointsWE7.getSpawn());
-                Bukkit.getLogger().info("corner1: " + relativePointsWE7.getCorner1());
-                Bukkit.getLogger().info("corner2: " + relativePointsWE7.getCorner2());
 
-                Bukkit.getLogger().info("corner1 (2): " + corner1);
-                Bukkit.getLogger().info("corner2 (2): " + corner2);
-                Bukkit.getLogger().info("test: " + test);
+                relativePointsWE7.setSpawn(spawnPoint);
+//                relativePointsWE7.setCorner1(corners.get(0));
+//                relativePointsWE7.setCorner2(corners.get(1));
+                Bukkit.getLogger().info("spawnPoint: " + relativePointsWE7.getSpawn());
+                Bukkit.getLogger().info("corner1: " + mineBlocks.corners[0]);
+                Bukkit.getLogger().info("corner2: " + mineBlocks.corners[1]);
             });
 
+            Bukkit.getLogger().info("" + corners);
             Bukkit.getLogger().info("Loaded file: " + file.getName() + "!");
         } else {
             Bukkit.getLogger().warning("File : " + file + " didn't exist!");
@@ -143,5 +149,10 @@ public class Utils {
     public Material getTypeAtBlockVector3(World world, BlockVector3 blockVector3) {
         BlockState blockState = BukkitAdapter.adapt(world).getBlock(blockVector3.getBlockX(), blockVector3.getBlockY(), blockVector3.getBlockZ()).getBlockType().getDefaultState();
         return BukkitAdapter.adapt(blockState).getMaterial();
+    }
+
+    private static class MineBlocks {
+        BlockVector3 spawnLocation;
+        BlockVector3[] corners;
     }
 }

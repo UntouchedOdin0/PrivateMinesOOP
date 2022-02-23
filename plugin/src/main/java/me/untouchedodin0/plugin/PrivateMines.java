@@ -151,9 +151,6 @@ public class PrivateMines extends JavaPlugin {
                 .saveDefaults()
                 .load();
 
-
-
-        getLogger().info("Version: " + RedLib.MID_VERSION);
         if (RedLib.MID_VERSION < 13) {
             // Save the schematic file, this format is used pre-1.13
             saveResource("schematics/mine.schematic", false);
@@ -179,16 +176,14 @@ public class PrivateMines extends JavaPlugin {
             WE7Adapter we7Adapter = new WE7Adapter();
             me.untouchedodin0.privatemines.we_7.worldedit.Utils utils = new me.untouchedodin0.privatemines.we_7.worldedit.Utils();
             TransformationStorageWE7 transformationStorageWE7 = new TransformationStorageWE7();
-            getLogger().info("using adapter: " + we7Adapter);
-            getLogger().info("using storage: " + transformationStorageWE7);
             me.untouchedodin0.privatemines.we_7.worldedit.Utils we7Utils = new me.untouchedodin0.privatemines.we_7.worldedit.Utils();
 
-            mineTypeManager.getMineTypes().forEach((s, mineType) -> {
-                File file = new File("plugins/PrivateMines/schematics/" + mineType.getFile());
-                World world = mineWorldManager.getMinesWorld();
-                utils.loadFile(mineType.getName(), file, world);
-            });
-            we7Utils.loadAndIterateFiles(Config.spawnPoint, Config.mineCorner);
+//            mineTypeManager.getMineTypes().forEach((s, mineType) -> {
+//                File file = new File("plugins/PrivateMines/schematics/" + mineType.getFile());
+//                World world = mineWorldManager.getMinesWorld();
+//                utils.loadFile(mineType.getName(), file, world);
+//            });
+            //we7Utils.loadAndIterateFiles(Config.spawnPoint, Config.mineCorner);
         }
 
 
