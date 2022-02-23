@@ -125,6 +125,9 @@ public class PrivateMinesCommand {
         Location location = mineWorldManager.getNextFreeLocation();
         final MineType defaultMineType = privateMines.getMineTypeManager().getDefaultMineType();
         mineFactory.createMine(target, location, Objects.requireNonNullElse(mineType, defaultMineType), false);
+        Mine mine = mineStorage.getMine(target.getUniqueId());
+        mine.getSpawnLocation().getBlock().setType(Material.AIR, false);
+        mine.teleport(target);
     }
 
     @CommandHook("delete")

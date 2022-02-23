@@ -33,6 +33,7 @@ import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -54,6 +55,8 @@ public class MineFactory {
     MineStorage mineStorage;
     MineBlocks mineBlocks;
     Location spawnLocation;
+    Location corner1;
+    Location corner2;
 
     public MineFactory(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -100,8 +103,6 @@ public class MineFactory {
         MineBlocks mineBlocks = new MineBlocks();
         mineBlocks.corners = new Location[2];
 
-        Instant streamStart = Instant.now();
-
         mineRegion.stream().iterator().forEachRemaining(block -> {
             Material bukkitMaterial = block.getType();
             if (bukkitMaterial == spawnMaterial) {
@@ -116,11 +117,11 @@ public class MineFactory {
                 }
             }
         });
-        Instant streamEnd = Instant.now();
 
-        Duration timeElapsedStream = Duration.between(streamStart, streamEnd);
-        privateMines.getLogger().info("Stream: " + timeElapsedStream.toMillis() + "ms");
+
         if (mineBlocks.corners[0] == null || mineBlocks.corners[1] == null) {
+            Bukkit.getLogger().info("corner1: " + mineBlocks.corners[0]);
+            Bukkit.getLogger().info("corner2: " + mineBlocks.corners[1]);
             throw new IllegalArgumentException("Mine does not have 2 corners set");
         }
         if (mineBlocks.spawnLocation == null) {
@@ -142,13 +143,12 @@ public class MineFactory {
         MineData mineData = new MineData();
 
         CuboidRegion region = privateMines.getWorldEditAdapter().pasteSchematic(location, path);
-        
-        MineBlocks mineBlocks = findMineBlocks(region, spawnMaterial, mineCornerMaterial);
-        player.teleport(mineBlocks.spawnLocation);
+        mineBlocks = findMineBlocks(region, spawnMaterial, mineCornerMaterial);
+        spawnLocation = mineBlocks.spawnLocation;
+        corner1 = mineBlocks.corners[0];
+        corner2 = mineBlocks.corners[1];
 
-        Location spawnLocation = mineBlocks.spawnLocation;
-        final Location corner1 = mineBlocks.corners[0];
-        final Location corner2 = mineBlocks.corners[1];
+        player.teleport(spawnLocation);
 
         final Location fullCorner1 = region.getStart();
         final Location fullCorner2 = region.getEnd();
@@ -170,7 +170,6 @@ public class MineFactory {
         mineData.setSpawnY(spawnLocation.getBlockY());
         mineData.setSpawnZ(spawnLocation.getBlockZ());
         mineData.setMiningRegion(miningRegion);
-        mineData.setFullRegion(region);
         mineData.setFullRegion(fullRegion);
         mineData.setMineType(mineType.getName());
         mine.setMineData(mineData);

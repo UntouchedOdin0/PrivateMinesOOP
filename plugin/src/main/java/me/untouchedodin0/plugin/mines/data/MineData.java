@@ -182,6 +182,14 @@ public class MineData {
         setWorldName(region.getWorld().getName());
     }
 
+    public CuboidRegion getMiningRegion() {
+        World world = PrivateMines.getPrivateMines().getMineWorldManager().getMinesWorld();
+        return new CuboidRegion(
+                new Location(world, getMinX(), getMinY(), getMinZ()),
+                new Location(world, getMaxX(), getMaxY(), getMaxZ())
+        );
+    }
+
     public CuboidRegion getFullRegion() {
         World world = PrivateMines.getPrivateMines().getMineWorldManager().getMinesWorld();
         return new CuboidRegion(
@@ -189,6 +197,7 @@ public class MineData {
                 new Location(world, getRegionMaxX(), getRegionMaxY(), getRegionMaxZ())
         );
     }
+
     public int getRegionMinY() {
         return regionMinY;
     }
