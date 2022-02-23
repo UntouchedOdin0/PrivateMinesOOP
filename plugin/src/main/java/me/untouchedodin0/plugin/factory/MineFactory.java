@@ -118,10 +118,7 @@ public class MineFactory {
             }
         });
 
-
         if (mineBlocks.corners[0] == null || mineBlocks.corners[1] == null) {
-            Bukkit.getLogger().info("corner1: " + mineBlocks.corners[0]);
-            Bukkit.getLogger().info("corner2: " + mineBlocks.corners[1]);
             throw new IllegalArgumentException("Mine does not have 2 corners set");
         }
         if (mineBlocks.spawnLocation == null) {

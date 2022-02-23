@@ -158,10 +158,6 @@ public class Mine {
         MineData mineData = getMineData();
         MineWorldManager mineWorldManager = privateMines.getMineWorldManager();
         World world = mineWorldManager.getMinesWorld();
-        privateMines.getLogger().info("mineData: " + mineData);
-        privateMines.getLogger().info("mineData spawnX: " + mineData.getSpawnX());
-        privateMines.getLogger().info("mineData spawnY: " + mineData.getSpawnY());
-        privateMines.getLogger().info("mineData spawnZ: " + mineData.getSpawnZ());
 
         int spawnX = mineData.getSpawnX();
         int spawnY = mineData.getSpawnY();
