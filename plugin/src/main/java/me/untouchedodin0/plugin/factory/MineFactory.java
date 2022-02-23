@@ -123,7 +123,7 @@ public class MineFactory {
         Instant end = Instant.now();
 
         Duration timeElapsedStream = Duration.between(start, end);
-        privateMines.getLogger().info("Time taken to build private mine: " + timeElapsedStream.toMillis() + "ms");
+        privateMines.getLogger().info("Time elapsed: " + timeElapsedStream.toMillis() + "ms");
 
         if (mineBlocks.corners[0] == null || mineBlocks.corners[1] == null) {
             throw new IllegalArgumentException("Mine does not have 2 corners set");
