@@ -28,11 +28,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.config.Config;
+import me.untouchedodin0.plugin.events.PrivateMineCreationEvent;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -42,6 +44,7 @@ import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.region.CuboidRegion;
 
 import java.io.File;
+import java.nio.Buffer;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
@@ -191,6 +194,8 @@ public class MineFactory {
         mine.setIWrappedMiningRegion(iWrappedMiningRegion);
         mine.setIWrappedFullRegion(iWrappedFullRegion);
         utils.setMineFlags(mine);
+        PrivateMineCreationEvent privateMineCreationEvent = new PrivateMineCreationEvent(mine);
+        Bukkit.getPluginManager().callEvent(privateMineCreationEvent);
 
         //worldBorderApi.setBorder(player, 10, location);
     }
