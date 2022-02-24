@@ -6,6 +6,7 @@ import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -31,7 +32,6 @@ public class AutoSellListener implements Listener {
         MineStorage mineStorage = privateMines.getMineStorage();
         Map<UUID, Mine> mines = mineStorage.getMines();
         Location location = player.getLocation();
-        final DecimalFormat decimalFormat = new DecimalFormat("#.##" );
 
         String afterTaxString = "afterTax";
         String taxTakenString = "taxTaken";
@@ -48,13 +48,12 @@ public class AutoSellListener implements Listener {
                 double afterTax = totalCost - tax;
 
                 String afterTaxAmount = String.valueOf(afterTax);
-                String amount = NumberFormat.getCurrencyInstance().format(tax);
 
                 sellAllEvent.setTotalCost(afterTax);
                 // BristerMitten code credit ends
                 player.sendMessage(Utils.sendColorMessage(afterTaxMessage.replace("%amount%", afterTaxAmount)));
                 player.sendMessage(Utils.sendColorMessage(taxTakenMessage
-                                                                  .replace("%amount%", amount)
+                                                                  .replace("%amount%", String.valueOf(tax))
                                                                   .replace("%tax%", String.valueOf(mine.getTax()))));
             }
         });
@@ -86,7 +85,7 @@ public class AutoSellListener implements Listener {
                 // BristerMitten code credit ends
 
                 String afterTaxAmount = String.valueOf(afterTax);
-                String amount = NumberFormat.getCurrencyInstance().format(tax);
+                String amount = String.valueOf(tax);
 
                 player.sendMessage(Utils.sendColorMessage(afterTaxMessage.replace("%amount%", afterTaxAmount)));
                 player.sendMessage(Utils.sendColorMessage(taxTakenMessage
