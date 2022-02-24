@@ -102,7 +102,6 @@ public class MineFactory {
     private MineBlocks findMineBlocks(CuboidRegion mineRegion, Material spawnMaterial, Material cornerMaterial) {
         MineBlocks mineBlocks = new MineBlocks();
         mineBlocks.corners = new Location[2];
-
         Instant start = Instant.now();
 
         mineRegion.stream().iterator().forEachRemaining(block -> {
@@ -151,13 +150,12 @@ public class MineFactory {
         spawnLocation = mineBlocks.spawnLocation;
         corner1 = mineBlocks.corners[0];
         corner2 = mineBlocks.corners[1];
+        spawnLocation.getBlock().setType(Material.AIR, false);
 
         player.teleport(spawnLocation);
 
         final Location fullCorner1 = region.getStart();
         final Location fullCorner2 = region.getEnd();
-
-        spawnLocation.getBlock().setType(Material.AIR, false);
 
         final CuboidRegion miningRegion = new CuboidRegion(corner1, corner2);
         final CuboidRegion fullRegion = new CuboidRegion(fullCorner1, fullCorner2);
