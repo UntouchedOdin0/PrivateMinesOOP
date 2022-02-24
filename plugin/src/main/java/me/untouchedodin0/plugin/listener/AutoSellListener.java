@@ -12,6 +12,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import redempt.redlib.commandmanager.Messages;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Map;
 import java.util.UUID;
 
@@ -29,6 +31,8 @@ public class AutoSellListener implements Listener {
         MineStorage mineStorage = privateMines.getMineStorage();
         Map<UUID, Mine> mines = mineStorage.getMines();
         Location location = player.getLocation();
+        final DecimalFormat decimalFormat = new DecimalFormat("#.##" );
+
         String afterTaxString = "afterTax";
         String taxTakenString = "taxTaken";
 
@@ -42,20 +46,16 @@ public class AutoSellListener implements Listener {
                 double tax = sellAllEvent.getTotalCost() / 100.0 * mine.getTax();
                 double totalCost = sellAllEvent.getTotalCost();
                 double afterTax = totalCost - tax;
-                int soldItems = sellAllEvent.getTotalItems();
 
-                String taxString = String.valueOf(tax);
                 String afterTaxAmount = String.valueOf(afterTax);
+                String amount = NumberFormat.getCurrencyInstance().format(tax);
 
                 sellAllEvent.setTotalCost(afterTax);
                 // BristerMitten code credit ends
                 player.sendMessage(Utils.sendColorMessage(afterTaxMessage.replace("%amount%", afterTaxAmount)));
                 player.sendMessage(Utils.sendColorMessage(taxTakenMessage
-                                                                  .replace("%amount%", taxString)
+                                                                  .replace("%amount%", amount)
                                                                   .replace("%tax%", String.valueOf(mine.getTax()))));
-
-//                player.sendMessage(Utils.sendColorMessage(String.format("&aYou sold %d items for $%f", soldItems, totalCost)));
-//                player.sendMessage(Utils.sendColorMessage(String.format("&7-%f (%f Tax)", tax, mine.getTax())));
             }
         });
     }
@@ -66,14 +66,32 @@ public class AutoSellListener implements Listener {
         MineStorage mineStorage = privateMines.getMineStorage();
         Map<UUID, Mine> mines = mineStorage.getMines();
         Location location = player.getLocation();
+        double autoSellPrice = autoSellEvent.getPrice();
+
+        String afterTaxString = "afterTax";
+        String taxTakenString = "taxTaken";
+
+        String afterTaxMessage = Messages.msg(afterTaxString);
+        String taxTakenMessage = Messages.msg(taxTakenString);
 
         mines.forEach((uuid, mine) -> {
             if (mine.getMineOwner().equals(player.getUniqueId())) return; // We no tax owner! ;)
             if (mine.isInsideFullRegion(location) || mine.isInside(location)) {
                 // BristerMitten code credit starts
-                double tax = autoSellEvent.getPrice() / 100.0 * mine.getTax();
+                double tax = autoSellPrice / 100.0 * mine.getTax();
+                double afterTax = autoSellPrice - tax;
+
                 autoSellEvent.setMultiplier(1.0D - tax / 100.0D);
+
                 // BristerMitten code credit ends
+
+                String afterTaxAmount = String.valueOf(afterTax);
+                String amount = NumberFormat.getCurrencyInstance().format(tax);
+
+                player.sendMessage(Utils.sendColorMessage(afterTaxMessage.replace("%amount%", afterTaxAmount)));
+                player.sendMessage(Utils.sendColorMessage(taxTakenMessage
+                                                                  .replace("%amount%", amount)
+                                                                  .replace("%tax%", String.valueOf(mine.getTax()))));
             }
         });
     }

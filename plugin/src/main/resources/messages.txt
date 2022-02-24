@@ -27,4 +27,4 @@ youHaveUnsetUserAsCoOwner: &cYou've removed &e%name% &aas a co-owner from your m
 youHaveBeenSetAsACoOwnerAtMine: &aYou've been set as a co-owner at &e%name%&a's mine
 youNeedToBeInAMine: &cYou need to be inside a mine to use this command!
 afterTax: &aYou sold your items for $%amount%
-taxTaken: &7-&a$%amount% &7(%tax%%)
+taxTaken: &a$%amount% tax has been paid to the mine owner! &7(%tax%%)
