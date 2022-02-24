@@ -112,6 +112,10 @@ public class Utils {
         }
     }
 
+    public static String sendColorMessage(String message) {
+        return colorStatic(message);
+    }
+
     public void moveSchematicFiles(@NotNull Collection<Path> files) {
         Path directory = privateMines.getSchematicsDirectory();
         files.stream()
@@ -186,6 +190,31 @@ public class Utils {
      */
 
     public String color(String string) {
+        Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
+        Matcher matcher = pattern.matcher(string);
+        while (matcher.find()) {
+            String hexCode = string.substring(matcher.start(), matcher.end());
+            String replaceSharp = hexCode.replace('#', 'x');
+
+            char[] chars = replaceSharp.toCharArray();
+            StringBuilder stringBuilder = new StringBuilder();
+
+            for (char c : chars) {
+                stringBuilder.append("&").append(c);
+            }
+
+            string = string.replace(hexCode, stringBuilder.toString());
+            matcher = pattern.matcher(string);
+        }
+        return ChatColor.translateAlternateColorCodes('&', string);
+    }
+
+        /*
+        Adds hex color support into the plugin
+        Credits to https://www.spigotmc.org/threads/hex-color-code-translate.449748/#post-4270781
+     */
+
+    public static String colorStatic(String string) {
         Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
         Matcher matcher = pattern.matcher(string);
         while (matcher.find()) {
