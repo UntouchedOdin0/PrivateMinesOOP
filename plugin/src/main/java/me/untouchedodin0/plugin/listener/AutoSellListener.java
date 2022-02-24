@@ -6,15 +6,12 @@ import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import redempt.redlib.commandmanager.Messages;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.Map;
 import java.util.UUID;
 

@@ -38,7 +38,7 @@ import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.storage.TransformationStorageWE6;
 import me.untouchedodin0.plugin.storage.TransformationStorageWE7;
 import me.untouchedodin0.plugin.util.Exceptions;
-import me.untouchedodin0.plugin.util.Metrics;
+//import me.untouchedodin0.plugin.util.Metrics;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.util.placeholderapi.PrivateMinesExpansion;
 import me.untouchedodin0.plugin.world.MineWorldManager;
@@ -46,6 +46,8 @@ import me.untouchedodin0.privatemines.compat.WorldEditAdapter;
 import me.untouchedodin0.privatemines.compat.WorldEditCompatibility;
 import me.untouchedodin0.privatemines.we_6.worldedit.WE6Adapter;
 import me.untouchedodin0.privatemines.we_7.worldedit.WE7Adapter;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SingleLineChart;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -69,6 +71,7 @@ import java.nio.file.PathMatcher;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -223,8 +226,8 @@ public class PrivateMines extends JavaPlugin {
 
         Messages.load(this);
 
-        Metrics metrics = new Metrics(this, PLUGIN_ID);
-        metrics.addCustomChart(new Metrics.SingleLineChart("mines", mineStorage::getLoadedMinesSize));
+
+        //metrics.addCustomChart(new Metrics.("mines", mineStorage::getLoadedMinesSize));
 
         //TODO FIX THIS
         File[] addons = addonsDirectory.listFiles();
@@ -312,6 +315,9 @@ public class PrivateMines extends JavaPlugin {
                 });
 
         getLogger().info(() -> "Loaded " + loadedMineCount.get() + " mines");
+
+        Metrics metrics = new Metrics(this, PLUGIN_ID);
+        metrics.addCustomChart(new SingleLineChart("mines", loadedMineCount::get));
     }
 
     @Override

@@ -11,9 +11,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly(project(':compat')) {
-        exclude group: 'org.spigotmc', module: 'spigot-api'
-    }
+    compileOnly(project(':compat'))
 
     compileOnly 'com.fastasyncworldedit:FastAsyncWorldEdit-Core:2.0.1'
     compileOnly 'com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit:2.0.1'
