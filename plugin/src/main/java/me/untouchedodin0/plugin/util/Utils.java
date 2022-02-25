@@ -258,4 +258,18 @@ public class Utils {
             throw new RuntimeException("Could not save mine data", e);
         }
     }
+
+    /*
+        Credits to https://stackoverflow.com/a/30700808/11167828
+     */
+
+    //without decimal digits
+    public static String toPercentage(Double n){
+        return String.format("%.0f",n*100)+"%";
+    }
+
+    //accept a param to determine the numbers of decimal digits
+    public static String toPercentage(Double n, int digits){
+        return String.format("%."+digits+"f",n*100)+"%";
+    }
 }

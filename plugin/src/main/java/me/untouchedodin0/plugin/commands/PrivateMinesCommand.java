@@ -503,13 +503,13 @@ public class PrivateMinesCommand {
                     player.sendMessage(ChatColor.GRAY + "Status: " + ChatColor.RED + "Closed");
                 }
                 player.sendMessage(ChatColor.GRAY + "Tax: " + ChatColor.GREEN + mine.getTax());
-                player.sendMessage(ChatColor.GRAY + "Mine Percentage: " + ChatColor.GREEN + mine.getPercentage());
+                player.sendMessage(ChatColor.GRAY + "Mine Percentage: " + ChatColor.GREEN + mine.getPercentage() + "%");
                 if (!mine.getMaterials().isEmpty()) {
                     mine.getMaterials().forEach((material, aDouble) -> player.sendMessage("" + ChatColor.GRAY + "-" + Utils.prettify(material.name() + " " + ChatColor.GREEN + aDouble + "%")));
                 } else {
                     MineType mineType = mine.getMineType();
                     Map<Material, Double> materials = mineType.getMaterials();
-                    materials.forEach((material, aDouble) -> player.sendMessage("" + ChatColor.GRAY + "-" + Utils.prettify(material.name() + " " + ChatColor.GREEN + aDouble + "%")));
+                    materials.forEach((material, aDouble) -> player.sendMessage("" + ChatColor.GRAY + "- " + Utils.prettify(material.name() + " " + ChatColor.GREEN + Utils.toPercentage(aDouble) + "%")));
                 }
             } else {
                 player.sendMessage(needToBeInAMine);
