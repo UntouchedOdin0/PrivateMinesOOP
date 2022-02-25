@@ -66,7 +66,6 @@ public class WE7Adapter implements WorldEditAdapter {
                         .ignoreAirBlocks(true)
                         .build();
                     Operations.complete(operation);
-
                 Region region = clipboard.getRegion();
                 region.shift(centerVector.subtract(clipboard.getOrigin()));
                 return new CuboidRegion(BukkitAdapter.adapt(location.getWorld(), region.getMinimumPoint()), BukkitAdapter.adapt(location.getWorld(), region.getMaximumPoint()));
