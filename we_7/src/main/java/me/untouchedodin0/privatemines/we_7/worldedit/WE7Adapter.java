@@ -44,7 +44,6 @@ public class WE7Adapter implements WorldEditAdapter {
 
         ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(file.toFile());
         World world = BukkitAdapter.adapt(Objects.requireNonNull(location.getWorld()));
-        EditSession editSessionFAWE = Fawe.instance().getWorldEdit().newEditSession(world);
 
         if (clipboardFormat == null) {
             throw new IllegalArgumentException("File is not a valid schematic");
@@ -57,16 +56,16 @@ public class WE7Adapter implements WorldEditAdapter {
                 throw new IllegalArgumentException("Clipboard is null");
             }
 
-            try (EditSession editSession = WorldEdit.getInstance().newEditSession(world)) {
+            try (EditSession editSession = WorldEdit.getInstance().newEditSessionBuilder().world(world).build()) {
                 BlockVector3 centerVector = BlockVector3.at(location.getX(), location.getY(), location.getZ());
 
                 // If the clipboard isn't null prepare to create a paste operation, complete it and set the region stuff.
-                Operation operationFAWE = new ClipboardHolder(clipboard)
-                        .createPaste(editSessionFAWE)
+                Operation operation = new ClipboardHolder(clipboard)
+                        .createPaste(editSession)
                         .to(centerVector)
                         .ignoreAirBlocks(true)
                         .build();
-                    Operations.complete(operationFAWE);
+                    Operations.complete(operation);
 
                 Region region = clipboard.getRegion();
                 region.shift(centerVector.subtract(clipboard.getOrigin()));
