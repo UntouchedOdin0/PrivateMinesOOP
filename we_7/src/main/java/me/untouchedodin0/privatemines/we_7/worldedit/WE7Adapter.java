@@ -96,8 +96,10 @@ public class WE7Adapter implements WorldEditAdapter {
         World world = new BukkitWorld(region.getWorld());
         EditSession editSessionFAWE  = Fawe.instance().getWorldEdit().newEditSession(world);
 
+        //             try (EditSession editSession = WorldEdit.getInstance().newEditSessionBuilder().world(world).build()) {
+
         try (final EditSession editSession =
-                     WorldEdit.getInstance().newEditSession(world)) {
+                     WorldEdit.getInstance().newEditSessionBuilder().world(world).build()) {
             editSession.setReorderMode(EditSession.ReorderMode.MULTI_STAGE);
             final RandomPattern randomPattern = new RandomPattern();
 
