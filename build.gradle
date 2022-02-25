@@ -8,7 +8,7 @@ allprojects {
     apply plugin: 'java-library'
 
     group 'me.untouchedodin0.privatemines'
-    version '3.1.6-SNAPSHOT'
+    version '3.1.7-SNAPSHOT'
 
 
     repositories {
@@ -40,12 +40,6 @@ allprojects {
     test {
         useJUnitPlatform()
     }
-
-//    tasks.withType(JavaCompile) {
-//        options.encoding = "UTF-8"
-//
-//        sourceCompatibility = targetCompatibility =  JavaVersion.VERSION_1_8
-//    }
 }
 
 subprojects {
