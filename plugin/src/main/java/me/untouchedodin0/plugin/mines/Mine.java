@@ -27,6 +27,8 @@ package me.untouchedodin0.plugin.mines;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.untouchedodin0.plugin.PrivateMines;
+import me.untouchedodin0.plugin.events.PrivateMineDeletionEvent;
+import me.untouchedodin0.plugin.events.PrivateMineResetEvent;
 import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
@@ -213,9 +215,15 @@ public class Mine {
         } else {
             fill(mineType.getMaterials());
         }
+        PrivateMineResetEvent privateMineResetEvent = new PrivateMineResetEvent(this, privateMines);
+        Bukkit.getPluginManager().callEvent(privateMineResetEvent);
     }
 
     public void delete() {
+        PrivateMineDeletionEvent privateMineDeletionEvent = new PrivateMineDeletionEvent(this);
+        Bukkit.getPluginManager().callEvent(privateMineDeletionEvent);
+        if (privateMineDeletionEvent.isCancelled()) return;
+
         privateMines.getWorldEditAdapter().fillRegion(region, Material.AIR);
 
         MineStorage mineStorage = privateMines.getMineStorage();

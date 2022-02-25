@@ -30,6 +30,7 @@ import me.untouchedodin0.plugin.config.Config;
 import me.untouchedodin0.plugin.config.MineConfig;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.listener.AutoSellListener;
+import me.untouchedodin0.plugin.listener.MineCreationTest;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.MineTypeManager;
@@ -261,6 +262,7 @@ public class PrivateMines extends JavaPlugin {
             privateMines.getLogger().severe("The global region was somehow null. This should be " +
                                             "impossible.");
         }
+        getServer().getPluginManager().registerEvents(new MineCreationTest(), this);
 
 //        if (notifyForUpdates) {
 //            UpdateChecker.init(this, SPIGOT_PLUGIN_ID).checkEveryXHours(1).setDownloadLink(SPIGOT_PLUGIN_ID).checkNow();
