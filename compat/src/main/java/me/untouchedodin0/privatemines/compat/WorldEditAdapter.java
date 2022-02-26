@@ -3,6 +3,7 @@ package me.untouchedodin0.privatemines.compat;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import redempt.redlib.region.CuboidRegion;
+import redempt.redlib.region.Region;
 
 import java.nio.file.Path;
 import java.util.EnumMap;

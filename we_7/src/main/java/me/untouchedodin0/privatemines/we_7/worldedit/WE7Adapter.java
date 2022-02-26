@@ -16,6 +16,7 @@ import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.function.pattern.RandomPattern;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.regions.RegionIntersection;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.World;
 import me.untouchedodin0.privatemines.compat.WorldEditAdapter;
@@ -136,5 +137,45 @@ public class WE7Adapter implements WorldEditAdapter {
 
         });
         return corners;
+    }
+
+    public static Region walls(com.sk89q.worldedit.regions.CuboidRegion region) {
+        BlockVector3 pos1 = region.getPos1();
+        BlockVector3 pos2 = region.getPos2();
+
+        BlockVector3 min = region.getMinimumPoint();
+        BlockVector3 max = region.getMaximumPoint();
+
+        return new RegionIntersection(
+                // Project to Z-Y plane
+                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withX(min.getX()), pos2.withX(min.getX())),
+                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withX(max.getX()), pos2.withX(max.getX())),
+
+                // Project to X-Y plane
+                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withZ(min.getZ()), pos2.withZ(min.getZ())),
+                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withZ(max.getZ()), pos2.withZ(max.getZ())),
+
+                // Project to the X-Z plane
+                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withY(min.getY()), pos2.withY(min.getY())));
+    }
+
+    public static Region walls(CuboidRegion region) {
+        BlockVector3 pos1 = BlockVector3.at(region.getStart().getBlockX(), region.getStart().getBlockY(), region.getStart().getBlockZ());
+        BlockVector3 pos2 = BlockVector3.at(region.getEnd().getBlockX(), region.getEnd().getBlockY(), region.getEnd().getBlockZ());
+
+        BlockVector3 min = BlockVector3.at(region.getStart().getBlockX(), region.getStart().getBlockY(), region.getStart().getBlockZ());
+        BlockVector3 max = BlockVector3.at(region.getEnd().getBlockX(), region.getEnd().getBlockY(), region.getEnd().getBlockZ());
+
+        return new RegionIntersection(
+                // Project to Z-Y plane
+                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withX(min.getX()), pos2.withX(min.getX())),
+                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withX(max.getX()), pos2.withX(max.getX())),
+
+                // Project to X-Y plane
+                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withZ(min.getZ()), pos2.withZ(min.getZ())),
+                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withZ(max.getZ()), pos2.withZ(max.getZ())),
+
+                // Project to the X-Z plane
+                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withY(min.getY()), pos2.withY(min.getY())));
     }
 }

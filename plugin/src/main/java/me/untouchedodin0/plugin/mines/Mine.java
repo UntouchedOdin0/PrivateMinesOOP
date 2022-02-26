@@ -39,6 +39,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.codemc.worldguardwrapper.WorldGuardWrapper;
 import org.codemc.worldguardwrapper.region.IWrappedRegion;
 import redempt.redlib.config.annotations.ConfigName;
 import redempt.redlib.misc.Task;
@@ -301,16 +302,12 @@ public class Mine {
         Gson gson = gsonBuilder.create();
         String fileName = getMineOwner() + ".json";
         Path jsonFile = minesDirectory.resolve(fileName);
-
+        IWrappedRegion miningRegion = getIWrappedMiningRegion();
+        String regionName = miningRegion.getId();
 
         if (!canExpand) {
             privateMines.getLogger().info("The private mine can't expand anymore!");
         } else {
-//            final Map<Material, Double> materials = getMineTypes();
-//            if (materials.isEmpty()) {
-//                throw new IllegalStateException("Mine type " + mineData.getMineType() +
-//                                                " has no materials!");
-//            }
 
             final CuboidRegion mine = getMiningRegion().clone();
             final CuboidRegion walls = getMiningRegion().clone();
@@ -318,14 +315,12 @@ public class Mine {
             expandXAndZ(mine, amount);
             expandXAndZ(walls, amount);
 
-//            privateMines.getWorldEditAdapter()
-//                    .fillRegion(mine, materials);
             privateMines.getWorldEditAdapter()
                     .fillRegion(walls, Material.BEDROCK);
+
             // TODO make this configurable
 
             expandXAndZ(mine, -1);
-            mineData.setMiningRegion(mine);
 
             mineData.setSpawnX(spawnLocation.getBlockX());
             mineData.setSpawnY(spawnLocation.getBlockY());
@@ -337,12 +332,19 @@ public class Mine {
                 e.printStackTrace();
             }
 
-            setMiningRegion(mine);
+            Optional<IWrappedRegion> iWrappedRegion =
+                    WorldGuardWrapper.getInstance().getRegion(world, regionName);
+            WorldGuardWrapper.getInstance().removeRegion(world, regionName);
+
+            Player player = Bukkit.getOfflinePlayer(getMineOwner()).getPlayer();
+            IWrappedRegion expandedMiningRegion = utils.createWorldGuardRegion(player, mine);
+            mineData.setMiningRegion(mine);
+            setIWrappedMiningRegion(expandedMiningRegion);
             setMineData(mineData);
             privateMines.getMineStorage().replaceMine(getMineOwner(), this);
+            utils.setMineFlags(this);
+            reset();
         }
-        mineStorage.replaceMine(getMineOwner(), this);
-//        reset();
     }
 
     public double getPercentage() {
