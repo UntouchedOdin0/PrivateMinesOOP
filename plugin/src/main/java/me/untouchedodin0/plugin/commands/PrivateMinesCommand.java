@@ -265,6 +265,9 @@ public class PrivateMinesCommand {
         }
 
         Mine mine = mineStorage.getMine(target.getUniqueId());
+        MineData mineData = mine.getMineData();
+        UUID uuid = target.getUniqueId();
+
         Map<Material, Double> mineBlocks = new EnumMap<>(Material.class);
         for (Material material : materials) {
             if (material.isSolid()) {
@@ -274,7 +277,9 @@ public class PrivateMinesCommand {
                 return;
             }
         }
-        mine.setMaterials(mineBlocks);
+        mineData.setMaterials(mineBlocks);
+        mine.setMineData(mineData);
+        mineStorage.replaceMine(uuid, mine);
         mine.reset();
     }
 
