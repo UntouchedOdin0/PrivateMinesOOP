@@ -281,6 +281,7 @@ public class PrivateMinesCommand {
         mine.setMineData(mineData);
         mineStorage.replaceMine(uuid, mine);
         mine.reset();
+        utils.saveMineData(uuid, mineData);
     }
 
     @CommandHook("settype")
