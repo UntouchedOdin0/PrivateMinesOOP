@@ -68,6 +68,16 @@ public class Utils {
         ).orElseThrow(() -> new RuntimeException("Could not create worldguard region named " + regionName));
     }
 
+    public IWrappedRegion createFullWorldGuardRegion(Player player, CuboidRegion cuboidRegion) {
+        UUID uuid = player.getUniqueId();
+        String regionName = String.format("mine-full-%s", uuid);
+        return WorldGuardWrapper.getInstance().addCuboidRegion(
+                regionName,
+                cuboidRegion.getStart(),
+                cuboidRegion.getEnd()
+        ).orElseThrow(() -> new RuntimeException("Could not create worldguard region named " + regionName));
+    }
+
     public void setMineFlags(Mine mine) {
         final WorldGuardWrapper worldGuardWrapper = WorldGuardWrapper.getInstance();
         IWrappedRegion iWrappedRegion = mine.getIWrappedMiningRegion();

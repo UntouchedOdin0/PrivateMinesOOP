@@ -189,13 +189,15 @@ public class MineFactory {
             player.teleport(spawnLocation);
         }
         IWrappedRegion iWrappedMiningRegion = utils.createWorldGuardRegion(player, miningRegion);
-        IWrappedRegion iWrappedFullRegion = utils.createWorldGuardRegion(player, fullRegion);
+        IWrappedRegion iWrappedFullRegion = utils.createFullWorldGuardRegion(player, fullRegion);
+
         mine.setIWrappedMiningRegion(iWrappedMiningRegion);
         mine.setIWrappedFullRegion(iWrappedFullRegion);
+
+        //mine.setIWrappedFullRegion(iWrappedFullRegion);
         utils.setMineFlags(mine);
         PrivateMineCreationEvent privateMineCreationEvent = new PrivateMineCreationEvent(mine);
         Bukkit.getPluginManager().callEvent(privateMineCreationEvent);
-
         //worldBorderApi.setBorder(player, 10, location);
     }
 
