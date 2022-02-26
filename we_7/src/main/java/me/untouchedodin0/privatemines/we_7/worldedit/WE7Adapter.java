@@ -65,7 +65,7 @@ public class WE7Adapter implements WorldEditAdapter {
                         .to(centerVector)
                         .ignoreAirBlocks(true)
                         .build();
-                    Operations.complete(operation);
+                Operations.complete(operation);
                 Region region = clipboard.getRegion();
                 region.shift(centerVector.subtract(clipboard.getOrigin()));
                 return new CuboidRegion(BukkitAdapter.adapt(location.getWorld(), region.getMinimumPoint()), BukkitAdapter.adapt(location.getWorld(), region.getMaximumPoint()));
@@ -81,8 +81,8 @@ public class WE7Adapter implements WorldEditAdapter {
         ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(file.toFile());
         if (clipboardFormat == null) throw new IllegalArgumentException("File is not a valid schematic");
         try (InputStream inputStream = Files.newInputStream(file);
-        ClipboardReader clipboardReader = clipboardFormat.getReader(inputStream)) {
-             clipboard = clipboardReader.read();
+             ClipboardReader clipboardReader = clipboardFormat.getReader(inputStream)) {
+            clipboard = clipboardReader.read();
             if (clipboard == null) {
                 throw new IllegalArgumentException("Clipboard is null");
             }
