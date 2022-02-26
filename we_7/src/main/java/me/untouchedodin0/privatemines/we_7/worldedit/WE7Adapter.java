@@ -110,6 +110,7 @@ public class WE7Adapter implements WorldEditAdapter {
             );
 
             editSession.setBlocks((Region) worldEditRegion, randomPattern);
+            editSession.flushQueue();
         } catch (MaxChangedBlocksException e) {
             e.printStackTrace();
             // this shouldn't happen
