@@ -1,6 +1,5 @@
 package me.untouchedodin0.privatemines.we_7.worldedit;
 
-import com.fastasyncworldedit.core.Fawe;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.WorldEdit;
