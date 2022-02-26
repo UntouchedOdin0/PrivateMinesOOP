@@ -93,9 +93,6 @@ public class WE7Adapter implements WorldEditAdapter {
     @Override
     public void fillRegion(CuboidRegion region, Map<Material, Double> materials) {
         World world = new BukkitWorld(region.getWorld());
-        EditSession editSessionFAWE  = Fawe.instance().getWorldEdit().newEditSession(world);
-
-        //             try (EditSession editSession = WorldEdit.getInstance().newEditSessionBuilder().world(world).build()) {
 
         try (final EditSession editSession =
                      WorldEdit.getInstance().newEditSessionBuilder().world(world).build()) {
@@ -112,7 +109,7 @@ public class WE7Adapter implements WorldEditAdapter {
                     BukkitAdapter.asBlockVector(region.getEnd())
             );
 
-            editSessionFAWE.setBlocks((Region) worldEditRegion, randomPattern);
+            editSession.setBlocks((Region) worldEditRegion, randomPattern);
         } catch (MaxChangedBlocksException e) {
             e.printStackTrace();
             // this shouldn't happen
