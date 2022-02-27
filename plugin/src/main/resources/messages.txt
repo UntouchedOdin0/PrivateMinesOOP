@@ -21,6 +21,11 @@ youHaveUnWhitelistedPlayerFromYourMine: &aYou've un-whitelisted %name% from your
 youHaveBeenUnWhitelistedFromUsersMine: &aYou've been un-whitelisted from %name%'s mine!
 playerAlreadyWhitelisted: &cThis player was already whitelisted!
 playerWasNotWhitelisted: &c%name% was not whitelisted!
+youAreBanned: &cYou can't teleport to this mine as you're banned!
+youHaveBeenUnbanned: &aYou've been unbanned from %name%'s mine!
+youHaveUnbanned: &aYou've unbanned %name% from your mine!
+youHaveBeenBanned: &aYou've been banned from %name%'s mine!
+youHaveBannedPlayer: &aYou have banned %name% from your mine!
 youHaveNotSetACoOwner: &cYou've not set a co-owner
 youHaveSetUserAsCoOwner: &aYou've set &e%name% &aas the co-owner of your mine
 youHaveUnsetUserAsCoOwner: &cYou've removed &e%name% &aas a co-owner from your mine

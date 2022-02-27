@@ -420,11 +420,66 @@ public class PrivateMinesCommand {
         mine = privateMines.getMineStorage().getMine(uuid);
         mineData = mine.getMineData();
         mineData.removeWhitelistedPlayer(targetUUID);
-        player.sendMessage(youHaveRemovedPlayerReplaced);
-        target.sendMessage(youHaveBeenUnwhitelistedPlayerReplaced);
         mine.setMineData(mineData);
         privateMines.getMineStorage().replaceMine(uuid, mine);
+        player.sendMessage(youHaveRemovedPlayerReplaced);
+        target.sendMessage(youHaveBeenUnwhitelistedPlayerReplaced);
     }
+
+    @CommandHook("ban")
+    public void ban(Player player, Player target) {
+
+        Mine mine;
+        MineData mineData;
+        UUID uuid = player.getUniqueId();
+        UUID targetUUID = target.getUniqueId();
+
+        String doNotOwnMine = Messages.msg("doNotOwnMine");
+        String youHaveBeenBanned = Messages.msg("youHaveBeenBanned");
+        String youHaveBannedPlayer = Messages.msg("youHaveBannedPlayer");
+
+        String replacedYouHaveBeenBanned = youHaveBeenBanned.replace("%name%", player.getName());
+        String replacedYouHaveBannedPlayer = youHaveBannedPlayer.replace("%name%", target.getName());
+
+        if (!privateMines.getMineStorage().hasMine(uuid)) {
+            player.sendMessage(doNotOwnMine);
+        }
+        mine = privateMines.getMineStorage().getMine(uuid);
+        mineData = mine.getMineData();
+        mineData.addBannedPlayer(targetUUID);
+        mine.setMineData(mineData);
+        privateMines.getMineStorage().replaceMine(uuid, mine);
+        player.sendMessage(replacedYouHaveBannedPlayer);
+        target.sendMessage(replacedYouHaveBeenBanned);
+    }
+
+    @CommandHook("unban")
+    public void unban(Player player, Player target) {
+
+        Mine mine;
+        MineData mineData;
+        UUID uuid = player.getUniqueId();
+        UUID targetUUID = target.getUniqueId();
+
+        String doNotOwnMine = Messages.msg("doNotOwnMine");
+        String youHaveBeenUnbanned = Messages.msg("youHaveBeenUnbanned");
+        String youHaveUnbannedPlayer = Messages.msg("youHaveUnbanned");
+
+        String replacedYouHaveBeenUnbanned = youHaveBeenUnbanned.replace("%name%", player.getName());
+        String replacedYouHaveUnbannedPlayer = youHaveUnbannedPlayer.replace("%name%", target.getName());
+
+        if (!privateMines.getMineStorage().hasMine(uuid)) {
+            player.sendMessage(doNotOwnMine);
+        }
+        mine = privateMines.getMineStorage().getMine(uuid);
+        mineData = mine.getMineData();
+        mineData.addBannedPlayer(targetUUID);
+        mine.setMineData(mineData);
+        privateMines.getMineStorage().replaceMine(uuid, mine);
+        player.sendMessage(replacedYouHaveBeenUnbanned);
+        target.sendMessage(replacedYouHaveUnbannedPlayer);
+    }
+
 
     @CommandHook("coowner")
     public void coOwner(Player player, Player target) {
