@@ -212,6 +212,15 @@ public class Mine {
         Task task = Task.asyncDelayed(() -> privateMines.getWorldEditAdapter().fillRegion(cuboidRegion, blocks));
     }
 
+    public void fillAir() {
+        CuboidRegion miningRegion = getMiningRegion();
+        CuboidRegion fullRegion = getRegion();
+        Task task = Task.asyncDelayed(() -> {
+            privateMines.getWorldEditAdapter().fillRegion(miningRegion, Material.AIR);
+            privateMines.getWorldEditAdapter().fillRegion(fullRegion, Material.AIR);
+        });
+    }
+
     public void reset() {
         if (!mineData.getMaterials().isEmpty()) {
             emptyMine();
@@ -228,8 +237,8 @@ public class Mine {
         PrivateMineDeletionEvent privateMineDeletionEvent = new PrivateMineDeletionEvent(this);
         Bukkit.getPluginManager().callEvent(privateMineDeletionEvent);
         if (privateMineDeletionEvent.isCancelled()) return;
-
-        privateMines.getWorldEditAdapter().fillRegion(region, Material.AIR);
+        fillAir();
+        //privateMines.getWorldEditAdapter().fillRegion(region, Material.AIR);
 
         MineStorage mineStorage = privateMines.getMineStorage();
 
