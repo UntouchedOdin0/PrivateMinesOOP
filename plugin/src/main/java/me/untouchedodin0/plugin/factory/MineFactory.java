@@ -24,8 +24,6 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin.factory;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.config.Config;
 import me.untouchedodin0.plugin.events.PrivateMineCreationEvent;
@@ -50,7 +48,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 public class MineFactory {
-    private final Gson gson = new GsonBuilder().create();
+
     PrivateMines privateMines;
     Utils utils;
     MineStorage mineStorage;
@@ -65,6 +63,8 @@ public class MineFactory {
         this.mineStorage = privateMines.getMineStorage();
     }
 
+    @Deprecated
+    @SuppressWarnings("unused")
     private MineBlocks findMineBlocksLegacy(CuboidRegion mineRegion, Material spawnMaterial, Material cornerMaterial) {
         MineBlocks mineBlocks = new MineBlocks();
         mineBlocks.corners = new Location[2];
@@ -138,7 +138,6 @@ public class MineFactory {
         UUID uuid = player.getUniqueId();
         Material spawnMaterial = Config.spawnPoint;
         Material mineCornerMaterial = Config.mineCorner;
-        boolean useFAWE = Config.useFAWE;
 
         File schematicFile = new File("plugins/PrivateMines/schematics/" + mineType.getFile());
         Path path = schematicFile.toPath();
