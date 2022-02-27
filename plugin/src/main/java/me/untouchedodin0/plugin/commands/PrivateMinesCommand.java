@@ -287,8 +287,9 @@ public class PrivateMinesCommand {
     @CommandHook("settype")
     public void setType(CommandSender commandSender, Player target, String type) {
         String invalidMineType = Messages.msg("invalidMineType");
+
         if (!mineStorage.hasMine(target.getUniqueId())) {
-            utils.sendMessage(commandSender, Messages.msg("targetDoesNotOwnMine"));
+            utils.sendMessage(commandSender, Utils.sendColorMessage(invalidMineType));
             return;
         }
 
@@ -298,7 +299,7 @@ public class PrivateMinesCommand {
         MineType newType = privateMines.getMineTypeManager().getMineType(type);
 
         if (newType == null) {
-            commandSender.sendMessage(ChatColor.RED + "You've specified a invalid mine type!");
+            commandSender.sendMessage(Utils.colorStatic(invalidMineType));
             return;
         }
 
