@@ -199,21 +199,25 @@ public class Mine {
         return getRegion().contains(location);
     }
 
-    public void fill(Map<Material, Double> blocks) {
-        CuboidRegion cuboidRegion = getMiningRegion();
-
+    public void emptyMine() {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (isInside(player.getLocation())) {
                 teleport(player);
             }
         }
-        privateMines.getWorldEditAdapter().fillRegion(cuboidRegion, blocks);
+    }
+
+    public void fill(Map<Material, Double> blocks) {
+        CuboidRegion cuboidRegion = getMiningRegion();
+        Task task = Task.asyncDelayed(() -> privateMines.getWorldEditAdapter().fillRegion(cuboidRegion, blocks));
     }
 
     public void reset() {
         if (!mineData.getMaterials().isEmpty()) {
+            emptyMine();
             fill(mineData.getMaterials());
         } else {
+            emptyMine();
             fill(mineType.getMaterials());
         }
         PrivateMineResetEvent privateMineResetEvent = new PrivateMineResetEvent(this, privateMines);
