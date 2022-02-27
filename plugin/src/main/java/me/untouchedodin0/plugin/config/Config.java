@@ -10,8 +10,6 @@ import redempt.redlib.config.annotations.ConfigPostInit;
 @ConfigMappable
 public class Config {
 
-    public static String stuff = "abc.def";
-
     @Comment("The template material for the spawn point")
     public static Material spawnPoint = Material.SPONGE;
     @Comment("The template material for the corners (Needs 2 in a mine to create the cuboid)")
