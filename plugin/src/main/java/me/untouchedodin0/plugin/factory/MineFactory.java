@@ -39,7 +39,10 @@ import org.bukkit.entity.Player;
 import org.codemc.worldguardwrapper.region.IWrappedRegion;
 import org.jetbrains.annotations.NotNull;
 import redempt.redlib.commandmanager.Messages;
+import redempt.redlib.misc.LocationUtils;
+import redempt.redlib.misc.Task;
 import redempt.redlib.region.CuboidRegion;
+import redempt.redlib.region.Region;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -56,6 +59,7 @@ public class MineFactory {
     Location spawnLocation;
     Location corner1;
     Location corner2;
+    CuboidRegion region;
 
     public MineFactory(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -72,33 +76,37 @@ public class MineFactory {
         Instant forEachStart = Instant.now();
 
         mineRegion.forEachBlock(mineBlock -> {
-                Material bukkitMaterial = mineBlock.getType();
-                if (bukkitMaterial == spawnMaterial) {
-                    mineBlocks.spawnLocation = mineBlock.getLocation();
-                } else if (bukkitMaterial == (cornerMaterial)) {
-                    if (mineBlocks.corners[0] == null) {
-                        mineBlocks.corners[0] = mineBlock.getLocation();
-                    } else if (mineBlocks.corners[1] == null) {
-                        mineBlocks.corners[1] = mineBlock.getLocation();
-                    } else {
-                        throw new IllegalArgumentException("Too many corners in mine!");
-                    }
+            Material bukkitMaterial = mineBlock.getType();
+            if (bukkitMaterial == spawnMaterial) {
+                mineBlocks.spawnLocation = mineBlock.getLocation();
+            } else if (bukkitMaterial == (cornerMaterial)) {
+                if (mineBlocks.corners[0] == null) {
+                    mineBlocks.corners[0] = mineBlock.getLocation();
+                } else if (mineBlocks.corners[1] == null) {
+                    mineBlocks.corners[1] = mineBlock.getLocation();
+                } else {
+                    throw new IllegalArgumentException("Too many corners in mine!");
                 }
-            });
-
-            Instant forEachEnd = Instant.now();
-
-            Duration timeElapsedStream = Duration.between(forEachStart, forEachEnd);
-            privateMines.getLogger().info("forEach: " + timeElapsedStream.toMillis() + "ms");
-
-            if (mineBlocks.corners[0] == null || mineBlocks.corners[1] == null) {
-                throw new IllegalArgumentException("Mine does not have 2 corners set");
             }
-            if (mineBlocks.spawnLocation == null) {
-                throw new IllegalArgumentException("Mine does not have a spawn location set");
-            }
+        });
+
+        Instant forEachEnd = Instant.now();
+
+        Duration timeElapsedStream = Duration.between(forEachStart, forEachEnd);
+        privateMines.getLogger().info("forEach: " + timeElapsedStream.toMillis() + "ms");
+
+        if (mineBlocks.corners[0] == null || mineBlocks.corners[1] == null) {
+            throw new IllegalArgumentException("Mine does not have 2 corners set");
+        }
+        if (mineBlocks.spawnLocation == null) {
+            throw new IllegalArgumentException("Mine does not have a spawn location set");
+        }
         return mineBlocks;
     }
+
+    /*
+        Handle this method Async somehow
+     */
 
     private MineBlocks findMineBlocks(CuboidRegion mineRegion, Material spawnMaterial, Material cornerMaterial) {
         MineBlocks mineBlocks = new MineBlocks();
