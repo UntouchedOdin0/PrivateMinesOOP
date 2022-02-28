@@ -197,16 +197,17 @@ public class MineFactory {
         mine.startResetTask();
         if (replaceOld) {
             privateMines.getMineStorage().replaceMine(uuid, mine);
+            //mine.teleport(player);
         } else {
             privateMines.getMineStorage().addMine(uuid, mine);
             player.sendMessage(Messages.msg("recievedMine"));
+            //mine.teleport(player);
         }
         IWrappedRegion iWrappedMiningRegion = utils.createWorldGuardRegion(player, miningRegion);
         IWrappedRegion iWrappedFullRegion = utils.createFullWorldGuardRegion(player, fullRegion);
 
         mine.setIWrappedMiningRegion(iWrappedMiningRegion);
         mine.setIWrappedFullRegion(iWrappedFullRegion);
-
         //mine.setIWrappedFullRegion(iWrappedFullRegion);
         utils.setMineFlags(mine);
         //worldBorderApi.setBorder(player, 10, location);

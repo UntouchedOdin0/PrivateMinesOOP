@@ -134,9 +134,9 @@ public class PrivateMinesCommand {
         thread.start();
 
         Mine mine = mineStorage.getMine(target.getUniqueId());
-        mine.getSpawnLocation().getBlock().setType(Material.AIR);
         PrivateMineCreationEvent privateMineCreationEvent = new PrivateMineCreationEvent(mine);
         Bukkit.getPluginManager().callEvent(privateMineCreationEvent);
+        target.teleport(mine.getSpawnLocation());
 
 //        Thread thread = new Thread(() -> mineFactory.createMine(target, location, Objects.requireNonNullElse(mineType, defaultMineType), false));
 //        thread.start();
