@@ -153,14 +153,22 @@ public class MineFactory {
         Mine mine = new Mine(privateMines);
         MineData mineData = new MineData();
 
-        CuboidRegion region = privateMines.getWorldEditAdapter().pasteSchematic(location, path);
+//        CuboidRegion region = privateMines.getWorldEditAdapter().pasteSchematic(location, path);
+//        mineBlocks = findMineBlocks(region, spawnMaterial, mineCornerMaterial);
+//        spawnLocation = mineBlocks.spawnLocation;
+//        corner1 = mineBlocks.corners[0];
+//        corner2 = mineBlocks.corners[1];
+
+        region = privateMines.getWorldEditAdapter().pasteSchematic(location, path);
+
         mineBlocks = findMineBlocks(region, spawnMaterial, mineCornerMaterial);
         spawnLocation = mineBlocks.spawnLocation;
         corner1 = mineBlocks.corners[0];
         corner2 = mineBlocks.corners[1];
-        spawnLocation.getBlock().setType(Material.AIR, false);
 
-        player.teleport(spawnLocation);
+//        spawnLocation.getBlock().setType(Material.AIR, false);
+
+        //player.teleport(spawnLocation);
 
         final Location fullCorner1 = region.getStart();
         final Location fullCorner2 = region.getEnd();
@@ -188,12 +196,10 @@ public class MineFactory {
         mine.reset();
         mine.startResetTask();
         if (replaceOld) {
-            this.privateMines.getMineStorage().replaceMine(uuid, mine);
-            player.teleport(spawnLocation);
+            privateMines.getMineStorage().replaceMine(uuid, mine);
         } else {
-            this.privateMines.getMineStorage().addMine(uuid, mine);
+            privateMines.getMineStorage().addMine(uuid, mine);
             player.sendMessage(Messages.msg("recievedMine"));
-            player.teleport(spawnLocation);
         }
         IWrappedRegion iWrappedMiningRegion = utils.createWorldGuardRegion(player, miningRegion);
         IWrappedRegion iWrappedFullRegion = utils.createFullWorldGuardRegion(player, fullRegion);
@@ -203,8 +209,6 @@ public class MineFactory {
 
         //mine.setIWrappedFullRegion(iWrappedFullRegion);
         utils.setMineFlags(mine);
-        PrivateMineCreationEvent privateMineCreationEvent = new PrivateMineCreationEvent(mine);
-        Bukkit.getPluginManager().callEvent(privateMineCreationEvent);
         //worldBorderApi.setBorder(player, 10, location);
     }
 

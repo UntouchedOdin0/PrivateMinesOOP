@@ -25,6 +25,7 @@ SOFTWARE.
 package me.untouchedodin0.plugin.commands;
 
 import me.untouchedodin0.plugin.PrivateMines;
+import me.untouchedodin0.plugin.events.PrivateMineCreationEvent;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
@@ -124,10 +125,28 @@ public class PrivateMinesCommand {
         commandSender.sendMessage(ChatColor.GREEN + "Giving " + target.getName() + " a private mine!");
         Location location = mineWorldManager.getNextFreeLocation();
         final MineType defaultMineType = privateMines.getMineTypeManager().getDefaultMineType();
-        mineFactory.createMine(target, location, Objects.requireNonNullElse(mineType, defaultMineType), false);
+
+        //mineFactory.createMine(target, location, Objects.requireNonNullElse(mineType, defaultMineType), false);
+
+        Thread thread = new Thread(() -> {
+            mineFactory.createMine(target, location, Objects.requireNonNullElse(mineType, defaultMineType), false);
+        });
+        thread.start();
+
         Mine mine = mineStorage.getMine(target.getUniqueId());
-        mine.getSpawnLocation().getBlock().setType(Material.AIR, false);
-        mine.teleport(target);
+        mine.getSpawnLocation().getBlock().setType(Material.AIR);
+        PrivateMineCreationEvent privateMineCreationEvent = new PrivateMineCreationEvent(mine);
+        Bukkit.getPluginManager().callEvent(privateMineCreationEvent);
+
+//        Thread thread = new Thread(() -> mineFactory.createMine(target, location, Objects.requireNonNullElse(mineType, defaultMineType), false));
+//        thread.start();
+//        privateMines.getLogger().info("giving a mine on the thread #" + thread.getId());
+//        thread.interrupt();
+//        Mine mine = privateMines.getMineStorage().getMine(target.getUniqueId());
+//        mine.getSpawnLocation().getBlock().setType(Material.AIR, false);
+
+//        PrivateMineCreationEvent privateMineCreationEvent = new PrivateMineCreationEvent(mine);
+//        Bukkit.getPluginManager().callEvent(privateMineCreationEvent);
     }
 
     @CommandHook("delete")
