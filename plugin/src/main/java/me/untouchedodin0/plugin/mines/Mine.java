@@ -27,7 +27,6 @@ package me.untouchedodin0.plugin.mines;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.untouchedodin0.plugin.PrivateMines;
-import me.untouchedodin0.plugin.events.PrivateMineCreationEvent;
 import me.untouchedodin0.plugin.events.PrivateMineDeletionEvent;
 import me.untouchedodin0.plugin.events.PrivateMineResetEvent;
 import me.untouchedodin0.plugin.mines.data.MineData;
