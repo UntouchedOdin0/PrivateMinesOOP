@@ -24,8 +24,6 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin;
 
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
 import com.google.gson.Gson;
 import me.untouchedodin0.plugin.commands.PrivateMinesCommand;
 import me.untouchedodin0.plugin.config.Config;
@@ -97,7 +95,6 @@ public class PrivateMines extends JavaPlugin {
     private Utils utils;
     private ConfigManager configManager;
     private ConfigManager mineConfig;
-    private ProtocolManager protocolManager;
 
     private Gson gson;
     private WorldEditAdapter worldEditAdapter;
@@ -118,14 +115,6 @@ public class PrivateMines extends JavaPlugin {
 
     public static PrivateMinesAPI getAPI() {
         return privateMinesAPI;
-    }
-
-    @Override
-    public void onLoad() {
-        System.out.println("onLoad is loading!");
-        if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null) {
-            protocolManager = ProtocolLibrary.getProtocolManager();
-        }
     }
 
     @Override
@@ -393,9 +382,5 @@ public class PrivateMines extends JavaPlugin {
 
     public ConfigManager getConfigManager() {
         return configManager;
-    }
-
-    public ProtocolManager getProtocolManager() {
-        return protocolManager;
     }
 }

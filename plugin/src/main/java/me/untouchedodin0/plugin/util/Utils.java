@@ -24,9 +24,6 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin.util;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.PacketContainer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.untouchedodin0.plugin.PrivateMines;
@@ -289,14 +286,6 @@ public class Utils {
     }
 
     public void sendBorder(Player player, Location location) {
-        ProtocolManager protocolManager = privateMines.getProtocolManager();
-        PacketContainer test = new PacketContainer(PacketType.Play.Client.ARM_ANIMATION);
-        final PacketType TYPE = PacketType.Play.Client.ARM_ANIMATION;
-
-        try {
-            protocolManager.sendServerPacket(player, protocolManager.createPacket(TYPE));
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
+        
     }
 }
