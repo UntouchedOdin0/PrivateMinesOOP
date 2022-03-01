@@ -503,7 +503,6 @@ public class PrivateMinesCommand {
         target.sendMessage(replacedYouHaveUnbannedPlayer);
     }
 
-
     @CommandHook("coowner")
     public void coOwner(Player player, Player target) {
         Mine mine;

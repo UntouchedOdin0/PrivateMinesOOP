@@ -56,7 +56,6 @@ public class MineFactory {
     Location spawnLocation;
     Location corner1;
     Location corner2;
-    CuboidRegion region;
 
     public MineFactory(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -156,10 +155,6 @@ public class MineFactory {
         corner1 = mineBlocks.corners[0];
         corner2 = mineBlocks.corners[1];
 
-//        spawnLocation.getBlock().setType(Material.AIR, false);
-
-        //player.teleport(spawnLocation);
-
         final Location fullCorner1 = region.getStart();
         final Location fullCorner2 = region.getEnd();
 
@@ -191,14 +186,6 @@ public class MineFactory {
             player.sendMessage(Messages.msg("recievedMine"));
             String commandToSuggest = "/privatemines teleport %name%".replace("%name%", player.getName());
 
-            /**
-             * Sends a clickable message to a player that runs a command when clicked.
-             * Credits to HexedHero
-             * @param message The clickable message!
-             * @param command The command without the slash to make the user perform.
-             * @param player player to send to.
-             */
-
             // Make a new component using the Bungee API.
             TextComponent textComponent = new TextComponent("Click me to go to your mine lol");
             textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, commandToSuggest));
@@ -208,14 +195,6 @@ public class MineFactory {
             player.sendMessage(Messages.msg("recievedMine"));
 
             String commandToSuggest = "/privatemines teleport";
-
-            /**
-             * Sends a clickable message to a player that runs a command when clicked.
-             * Credits to HexedHero
-             * @param message The clickable message!
-             * @param command The command without the slash to make the user perform.
-             * @param player player to send to.
-             */
 
             // Make a new component using the Bungee API.
             TextComponent textComponent = new TextComponent("Click me to go to your mine lol");
