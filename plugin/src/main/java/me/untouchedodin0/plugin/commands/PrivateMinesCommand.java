@@ -137,16 +137,6 @@ public class PrivateMinesCommand {
         Mine mine = mineStorage.getMine(target.getUniqueId());
         PrivateMineCreationEvent privateMineCreationEvent = new PrivateMineCreationEvent(mine);
         Bukkit.getPluginManager().callEvent(privateMineCreationEvent);
-
-//        Thread thread = new Thread(() -> mineFactory.createMine(target, location, Objects.requireNonNullElse(mineType, defaultMineType), false));
-//        thread.start();
-//        privateMines.getLogger().info("giving a mine on the thread #" + thread.getId());
-//        thread.interrupt();
-//        Mine mine = privateMines.getMineStorage().getMine(target.getUniqueId());
-//        mine.getSpawnLocation().getBlock().setType(Material.AIR, false);
-
-//        PrivateMineCreationEvent privateMineCreationEvent = new PrivateMineCreationEvent(mine);
-//        Bukkit.getPluginManager().callEvent(privateMineCreationEvent);
     }
 
     @CommandHook("delete")
@@ -235,13 +225,15 @@ public class PrivateMinesCommand {
 
         Mine mine = mineStorage.getMine(uuid);
         MineData mineData = mine.getMineData();
-
-        UUID coowner = mineData.getCoOwner();
-        boolean isCoOwner = coowner.equals(player.getUniqueId());
-
         boolean isOpen = mineData.isOpen();
 
-        mine.teleport(player, isOpen, isCoOwner);
+        if (mineData.getCoOwner() == null) {
+            mine.teleport(player, isOpen);
+        } else {
+            UUID coowner = mineData.getCoOwner();
+            boolean isCoOwner = coowner.equals(player.getUniqueId());
+            mine.teleport(player, isOpen, isCoOwner);
+        }
     }
 
     @CommandHook("upgrade")

@@ -185,6 +185,19 @@ public class Mine {
         }
     }
 
+    public void teleport(Player player, boolean whitelisted) {
+        MineData mineData = getMineData();
+        UUID uuid = player.getUniqueId();
+        List<UUID> whiteListedUsers = mineData.getWhitelistedPlayers();
+
+        if (!whitelisted) { // If mine isn't whitelisted
+            teleport(player);
+        } else { // If mine is whitelisted
+            if (!whiteListedUsers.contains(uuid)) return;
+            teleport(player);
+        }
+    }
+
     public Map<Material, Double> getMaterials() {
         if (!mineData.getMaterials().isEmpty()) return mineData.getMaterials();
         return getMineType().getMaterials();

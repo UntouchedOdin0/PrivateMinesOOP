@@ -33,6 +33,7 @@ import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -197,7 +198,7 @@ public class MineFactory {
             String commandToSuggest = "/privatemines teleport";
 
             // Make a new component using the Bungee API.
-            TextComponent textComponent = new TextComponent("Click me to go to your mine lol");
+            TextComponent textComponent = new TextComponent(ChatColor.GREEN + "Click me to go to your mine!");
             textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, commandToSuggest));
             player.spigot().sendMessage(textComponent);
         }
