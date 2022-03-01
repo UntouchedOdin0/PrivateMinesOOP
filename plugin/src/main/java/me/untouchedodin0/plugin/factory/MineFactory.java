@@ -187,7 +187,7 @@ public class MineFactory {
             String commandToSuggest = "/privatemines teleport %name%".replace("%name%", player.getName());
 
             // Make a new component using the Bungee API.
-            TextComponent textComponent = new TextComponent("Click me to go to your mine lol");
+            TextComponent textComponent = new TextComponent("Click me to go to your mine!");
             textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, commandToSuggest));
             player.spigot().sendMessage(textComponent);
         } else {
@@ -206,13 +206,8 @@ public class MineFactory {
 
         mine.setIWrappedMiningRegion(iWrappedMiningRegion);
         mine.setIWrappedFullRegion(iWrappedFullRegion);
-        //mine.setIWrappedFullRegion(iWrappedFullRegion);
         utils.setMineFlags(mine);
         //worldBorderApi.setBorder(player, 10, location);
-    }
-
-    public void removeBlocks() {
-        mineBlocks.spawnLocation.getBlock().setType(Material.AIR);
     }
 
     private static class MineBlocks {
