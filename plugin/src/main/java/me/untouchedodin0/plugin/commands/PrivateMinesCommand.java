@@ -134,6 +134,7 @@ public class PrivateMinesCommand {
         thread.start();
 
         Mine mine = mineStorage.getMine(target.getUniqueId());
+
         PrivateMineCreationEvent privateMineCreationEvent = new PrivateMineCreationEvent(mine);
         Bukkit.getPluginManager().callEvent(privateMineCreationEvent);
 

@@ -36,6 +36,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.codemc.worldguardwrapper.region.IWrappedRegion;
 import org.jetbrains.annotations.NotNull;
 import redempt.redlib.commandmanager.Messages;
@@ -153,14 +154,7 @@ public class MineFactory {
         Mine mine = new Mine(privateMines);
         MineData mineData = new MineData();
 
-//        CuboidRegion region = privateMines.getWorldEditAdapter().pasteSchematic(location, path);
-//        mineBlocks = findMineBlocks(region, spawnMaterial, mineCornerMaterial);
-//        spawnLocation = mineBlocks.spawnLocation;
-//        corner1 = mineBlocks.corners[0];
-//        corner2 = mineBlocks.corners[1];
-
-        region = privateMines.getWorldEditAdapter().pasteSchematic(location, path);
-
+        CuboidRegion region = privateMines.getWorldEditAdapter().pasteSchematic(location, path);
         mineBlocks = findMineBlocks(region, spawnMaterial, mineCornerMaterial);
         spawnLocation = mineBlocks.spawnLocation;
         corner1 = mineBlocks.corners[0];
