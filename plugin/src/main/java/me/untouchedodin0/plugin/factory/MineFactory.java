@@ -30,6 +30,7 @@ import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
+import me.untouchedodin0.plugin.storage.TimeStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -53,6 +54,7 @@ public class MineFactory {
     PrivateMines privateMines;
     Utils utils;
     MineStorage mineStorage;
+    TimeStorage timeStorage;
     MineBlocks mineBlocks;
     Location spawnLocation;
     Location corner1;
@@ -62,6 +64,7 @@ public class MineFactory {
         this.privateMines = privateMines;
         this.utils = privateMines.getUtils();
         this.mineStorage = privateMines.getMineStorage();
+        this.timeStorage = privateMines.getTimeStorage();
     }
 
     @Deprecated
@@ -88,9 +91,7 @@ public class MineFactory {
         });
 
         Instant forEachEnd = Instant.now();
-
         Duration timeElapsedStream = Duration.between(forEachStart, forEachEnd);
-        privateMines.getLogger().info("forEach: " + timeElapsedStream.toMillis() + "ms");
 
         if (mineBlocks.corners[0] == null || mineBlocks.corners[1] == null) {
             throw new IllegalArgumentException("Mine does not have 2 corners set");
@@ -129,6 +130,7 @@ public class MineFactory {
 
         Duration timeElapsedStream = Duration.between(start, end);
         privateMines.getLogger().info("Time elapsed: " + timeElapsedStream.toMillis() + "ms");
+        timeStorage.addTime(timeElapsedStream.toMillis());
 
         if (mineBlocks.corners[0] == null || mineBlocks.corners[1] == null) {
             throw new IllegalArgumentException("Mine does not have 2 corners set");

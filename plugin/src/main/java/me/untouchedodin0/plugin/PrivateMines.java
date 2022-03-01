@@ -38,6 +38,7 @@ import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.MineTypeManager;
 import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
+import me.untouchedodin0.plugin.storage.TimeStorage;
 import me.untouchedodin0.plugin.storage.TransformationStorageWE6;
 import me.untouchedodin0.plugin.storage.TransformationStorageWE7;
 import me.untouchedodin0.plugin.util.Exceptions;
@@ -91,6 +92,7 @@ public class PrivateMines extends JavaPlugin {
     private MineTypeManager mineTypeManager;
     private MineFactory mineFactory;
     private MineWorldManager mineWorldManager;
+    private TimeStorage timeStorage;
     private MineStorage mineStorage;
     private Utils utils;
     private ConfigManager configManager;
@@ -150,6 +152,7 @@ public class PrivateMines extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
+        timeStorage = new TimeStorage();
         mineStorage = new MineStorage();
         mineFactory = new MineFactory(this);
         mineTypeManager = new MineTypeManager(this);
@@ -356,6 +359,13 @@ public class PrivateMines extends JavaPlugin {
         return mineStorage;
     }
 
+    /*
+        Gets the time storage
+     */
+
+    public TimeStorage getTimeStorage() {
+        return timeStorage;
+    }
 
     public int getMineDistance() {
         return 150; // need to get from new config (somehow)

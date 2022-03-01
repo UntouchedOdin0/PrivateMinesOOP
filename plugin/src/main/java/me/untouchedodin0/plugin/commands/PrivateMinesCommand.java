@@ -31,13 +31,11 @@ import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
+import me.untouchedodin0.plugin.storage.TimeStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.util.exceptions.MineAlreadyMaxedException;
 import me.untouchedodin0.plugin.world.MineWorldManager;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import redempt.redlib.commandmanager.CommandHook;
@@ -58,6 +56,7 @@ public class PrivateMinesCommand {
 
     private final MineFactory mineFactory;
     private final MineStorage mineStorage;
+    private final TimeStorage timeStorage;
     private final MineWorldManager mineWorldManager;
     private final PrivateMines privateMines;
 
@@ -67,6 +66,7 @@ public class PrivateMinesCommand {
         this.privateMines = privateMine;
         this.mineFactory = privateMine.getMineFactory();
         this.mineStorage = privateMine.getMineStorage();
+        this.timeStorage = privateMine.getTimeStorage();
         this.mineWorldManager = privateMine.getMineWorldManager();
         this.utils = privateMine.getUtils();
     }
@@ -594,11 +594,28 @@ public class PrivateMinesCommand {
 
     @CommandHook("debug")
     public void debug(Player player) {
-        Mine mine;
-        if (mineStorage.hasMine(player.getUniqueId())) {
-            mine = mineStorage.getMine(player.getUniqueId());
-            mine.sendBarrier(player, player.getLocation());
-        }
+
+        /*
+            total mines
+            total mine types
+            average mine creation time
+            world edit version
+            world guard wrapper version
+            compiled red lib version
+            percentage of all players owning a mine
+         */
+
+
+        Collection<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers();
+        OfflinePlayer[] offlinePlayers = Bukkit.getOfflinePlayers();
+
+        int totalMines = mineStorage.getMinesCount();
+        int totalMineTypes = privateMines.getMineTypeManager().getTotalMineTypes();
+
+        int onlinePlayersCount = onlinePlayers.size();
+        int offlinePlayersCount = offlinePlayers.length;
+
+        List<Long> times = timeStorage.getTimes();
     }
 
     @CommandHook("reload")
