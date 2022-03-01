@@ -167,7 +167,10 @@ public class Mine {
         int spawnY = mineData.getSpawnY();
         int spawnZ = mineData.getSpawnZ();
         Location location = new Location(world, spawnX + 0.5, spawnY, spawnZ + 0.5);
-        player.teleport(location);
+        if (!location.getBlock().isEmpty()) {
+            location.getBlock().setType(Material.AIR);
+        }
+        Task.syncDelayed(() -> player.teleport(location), 10L);
     }
 
     public void teleport(Player player, boolean whitelisted, boolean coowner) {

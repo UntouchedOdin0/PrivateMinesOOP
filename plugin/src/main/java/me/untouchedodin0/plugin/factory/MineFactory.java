@@ -197,11 +197,10 @@ public class MineFactory {
         mine.startResetTask();
         if (replaceOld) {
             privateMines.getMineStorage().replaceMine(uuid, mine);
-            //mine.teleport(player);
+            player.sendMessage(Messages.msg("recievedMine"));
         } else {
             privateMines.getMineStorage().addMine(uuid, mine);
             player.sendMessage(Messages.msg("recievedMine"));
-            //mine.teleport(player);
         }
         IWrappedRegion iWrappedMiningRegion = utils.createWorldGuardRegion(player, miningRegion);
         IWrappedRegion iWrappedFullRegion = utils.createFullWorldGuardRegion(player, fullRegion);
@@ -211,6 +210,10 @@ public class MineFactory {
         //mine.setIWrappedFullRegion(iWrappedFullRegion);
         utils.setMineFlags(mine);
         //worldBorderApi.setBorder(player, 10, location);
+    }
+
+    public void removeBlocks() {
+        mineBlocks.spawnLocation.getBlock().setType(Material.AIR);
     }
 
     private static class MineBlocks {
