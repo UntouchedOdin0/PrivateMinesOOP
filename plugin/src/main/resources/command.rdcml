@@ -116,4 +116,10 @@ privatemine,privatemines,pmine,pmines {
         help Gets the information of the current mine you're in
         permission privatemines.info
     }
+
+    debug {
+        hook debug
+        help Debug command to test functions of pmines
+        permission privatemines.debug
+    }
 }

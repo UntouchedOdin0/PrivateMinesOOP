@@ -24,6 +24,9 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin.util;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.PacketContainer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.untouchedodin0.plugin.PrivateMines;
@@ -31,6 +34,7 @@ import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.data.MineData;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.codemc.worldguardwrapper.WorldGuardWrapper;
@@ -41,6 +45,7 @@ import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.region.CuboidRegion;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -281,5 +286,17 @@ public class Utils {
     //accept a param to determine the numbers of decimal digits
     public static String toPercentage(Double n, int digits){
         return String.format("%."+digits+"f",n*100)+"%";
+    }
+
+    public void sendBorder(Player player, Location location) {
+        ProtocolManager protocolManager = privateMines.getProtocolManager();
+        PacketContainer test = new PacketContainer(PacketType.Play.Client.ARM_ANIMATION);
+        final PacketType TYPE = PacketType.Play.Client.ARM_ANIMATION;
+
+        try {
+            protocolManager.sendServerPacket(player, protocolManager.createPacket(TYPE));
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -403,4 +403,8 @@ public class Mine {
     public void setTax(double tax) {
         this.tax = tax;
     }
+
+    public void sendBarrier(Player player, Location location) {
+        utils.sendBorder(player, location);
+    }
 }

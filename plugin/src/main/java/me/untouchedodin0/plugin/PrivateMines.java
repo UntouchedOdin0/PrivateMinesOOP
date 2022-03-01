@@ -24,6 +24,8 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import com.google.gson.Gson;
 import me.untouchedodin0.plugin.commands.PrivateMinesCommand;
 import me.untouchedodin0.plugin.config.Config;
@@ -93,6 +95,7 @@ public class PrivateMines extends JavaPlugin {
     private Utils utils;
     private ConfigManager configManager;
     private ConfigManager mineConfig;
+    private ProtocolManager protocolManager;
 
     private Gson gson;
     private WorldEditAdapter worldEditAdapter;
@@ -113,6 +116,14 @@ public class PrivateMines extends JavaPlugin {
 
     public static PrivateMinesAPI getAPI() {
         return privateMinesAPI;
+    }
+
+    @Override
+    public void onLoad() {
+        System.out.println("onLoad is loading!");
+        if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null) {
+            protocolManager = ProtocolLibrary.getProtocolManager();
+        }
     }
 
     @Override
@@ -142,6 +153,7 @@ public class PrivateMines extends JavaPlugin {
         mineStorage = new MineStorage();
         mineFactory = new MineFactory(this);
         mineTypeManager = new MineTypeManager(this);
+
 
         //configManager = new ConfigManager(this).register(this, Mine.class).load();
         //configManager = ConfigManager.create(this).target(MineConfig.class).saveDefaults().load();
@@ -178,7 +190,6 @@ public class PrivateMines extends JavaPlugin {
             me.untouchedodin0.privatemines.we_7.worldedit.Utils utils = new me.untouchedodin0.privatemines.we_7.worldedit.Utils();
             TransformationStorageWE7 transformationStorageWE7 = new TransformationStorageWE7();
             me.untouchedodin0.privatemines.we_7.worldedit.Utils we7Utils = new me.untouchedodin0.privatemines.we_7.worldedit.Utils();
-
 //            mineTypeManager.getMineTypes().forEach((s, mineType) -> {
 //                File file = new File("plugins/PrivateMines/schematics/" + mineType.getFile());
 //                World world = mineWorldManager.getMinesWorld();
@@ -260,7 +271,6 @@ public class PrivateMines extends JavaPlugin {
                                             "impossible.");
         }
         getServer().getPluginManager().registerEvents(new MineCreationTest(), this);
-
 //        if (notifyForUpdates) {
 //            UpdateChecker.init(this, SPIGOT_PLUGIN_ID).checkEveryXHours(1).setDownloadLink(SPIGOT_PLUGIN_ID).checkNow();
 //        }
@@ -373,5 +383,9 @@ public class PrivateMines extends JavaPlugin {
 
     public ConfigManager getConfigManager() {
         return configManager;
+    }
+
+    public ProtocolManager getProtocolManager() {
+        return protocolManager;
     }
 }

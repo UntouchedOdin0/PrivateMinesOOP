@@ -26,24 +26,20 @@ package me.untouchedodin0.plugin.factory;
 
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.config.Config;
-import me.untouchedodin0.plugin.events.PrivateMineCreationEvent;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
-import org.bukkit.Bukkit;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.codemc.worldguardwrapper.region.IWrappedRegion;
 import org.jetbrains.annotations.NotNull;
 import redempt.redlib.commandmanager.Messages;
-import redempt.redlib.misc.LocationUtils;
-import redempt.redlib.misc.Task;
 import redempt.redlib.region.CuboidRegion;
-import redempt.redlib.region.Region;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -189,12 +185,42 @@ public class MineFactory {
 
         mine.reset();
         mine.startResetTask();
+
         if (replaceOld) {
             privateMines.getMineStorage().replaceMine(uuid, mine);
             player.sendMessage(Messages.msg("recievedMine"));
+            String commandToSuggest = "/privatemines teleport %name%".replace("%name%", player.getName());
+
+            /**
+             * Sends a clickable message to a player that runs a command when clicked.
+             * Credits to HexedHero
+             * @param message The clickable message!
+             * @param command The command without the slash to make the user perform.
+             * @param player player to send to.
+             */
+
+            // Make a new component using the Bungee API.
+            TextComponent textComponent = new TextComponent("Click me to go to your mine lol");
+            textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, commandToSuggest));
+            player.spigot().sendMessage(textComponent);
         } else {
             privateMines.getMineStorage().addMine(uuid, mine);
             player.sendMessage(Messages.msg("recievedMine"));
+
+            String commandToSuggest = "/privatemines teleport";
+
+            /**
+             * Sends a clickable message to a player that runs a command when clicked.
+             * Credits to HexedHero
+             * @param message The clickable message!
+             * @param command The command without the slash to make the user perform.
+             * @param player player to send to.
+             */
+
+            // Make a new component using the Bungee API.
+            TextComponent textComponent = new TextComponent("Click me to go to your mine lol");
+            textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, commandToSuggest));
+            player.spigot().sendMessage(textComponent);
         }
         IWrappedRegion iWrappedMiningRegion = utils.createWorldGuardRegion(player, miningRegion);
         IWrappedRegion iWrappedFullRegion = utils.createFullWorldGuardRegion(player, fullRegion);

@@ -71,6 +71,7 @@ public class PrivateMinesCommand {
         this.utils = privateMine.getUtils();
     }
 
+
     @CommandHook("main")
     public void mainHook(Player player) {
 //        Map<String, MenuConfig> menuConfig = privateMines.getInventory();
@@ -134,7 +135,6 @@ public class PrivateMinesCommand {
         thread.start();
 
         Mine mine = mineStorage.getMine(target.getUniqueId());
-
         PrivateMineCreationEvent privateMineCreationEvent = new PrivateMineCreationEvent(mine);
         Bukkit.getPluginManager().callEvent(privateMineCreationEvent);
 
@@ -599,6 +599,15 @@ public class PrivateMinesCommand {
                 player.sendMessage(needToBeInAMine);
             }
         });
+    }
+
+    @CommandHook("debug")
+    public void debug(Player player) {
+        Mine mine;
+        if (mineStorage.hasMine(player.getUniqueId())) {
+            mine = mineStorage.getMine(player.getUniqueId());
+            mine.sendBarrier(player, player.getLocation());
+        }
     }
 
     @CommandHook("reload")
