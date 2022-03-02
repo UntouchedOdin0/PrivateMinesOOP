@@ -160,33 +160,8 @@ public class PrivateMines extends JavaPlugin {
             saveResource("schematics/mine.schem", false);
         }
 
-        MineConfig.mineTypes.forEach((s, mineType) -> {
-            mineTypeManager.registerMineType(mineType);
-        });
+        MineConfig.mineTypes.forEach((s, mineType) -> mineTypeManager.registerMineType(mineType));
         getLogger().info("Loaded " + mineTypeManager.getTotalMineTypes() + " mine types!");
-
-        /*
-        if (RedLib.MID_VERSION < 13) {
-            WE6Adapter we6Adapter = new WE6Adapter();
-            TransformationStorageWE6 transformationStorageWE6 = new TransformationStorageWE6();
-            getLogger().info("using adapter: " + we6Adapter);
-            getLogger().info("using storage: " + transformationStorageWE6);
-            mineTypeManager.getMineTypes().forEach((s, mineType) -> {
-
-            });
-        } else {
-            WE7Adapter we7Adapter = new WE7Adapter();
-            me.untouchedodin0.privatemines.we_7.worldedit.Utils utils = new me.untouchedodin0.privatemines.we_7.worldedit.Utils();
-            TransformationStorageWE7 transformationStorageWE7 = new TransformationStorageWE7();
-            me.untouchedodin0.privatemines.we_7.worldedit.Utils we7Utils = new me.untouchedodin0.privatemines.we_7.worldedit.Utils();
-//            mineTypeManager.getMineTypes().forEach((s, mineType) -> {
-//                File file = new File("plugins/PrivateMines/schematics/" + mineType.getFile());
-//                World world = mineWorldManager.getMinesWorld();
-//                utils.loadFile(mineType.getName(), file, world);
-//            });
-            //we7Utils.loadAndIterateFiles(Config.spawnPoint, Config.mineCorner);
-        }
-         */
 
         try {
             final List<Path> files = Files.list(getDataFolder().toPath())
