@@ -18,7 +18,6 @@ autoUpgrade:
 mineTypes:
   Test:
     file: "debugschem.schem"
-    priority: 1
     resetTime: 5
     resetPercentage: 50.0
     materials:
@@ -26,7 +25,6 @@ mineTypes:
       COBBLESTONE: 0.1
   Test2:
     file: "debugschem.schem"
-    priority: 2
     resetTime: 5
     resetPercentage: 50.0
     materials:
@@ -34,7 +32,6 @@ mineTypes:
       COBBLESTONE: 0.1
   Test3:
     file: "debugschem.schem"
-    priority: 2
     resetTime: 5
     resetPercentage: 50.0
     materials:

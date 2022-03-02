@@ -12,7 +12,6 @@ public class MineType {
     @ConfigPath
     private String name;
     private String file;
-    private int priority;
     private int resetTime;
     private double resetPercentage;
     private Map<Material, Double> materials;
@@ -23,10 +22,6 @@ public class MineType {
 
     public String getFile() {
         return file;
-    }
-
-    public int getPriority() {
-        return priority;
     }
 
     public int getResetTime() {
