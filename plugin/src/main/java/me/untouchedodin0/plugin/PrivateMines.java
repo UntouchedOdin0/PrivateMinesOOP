@@ -28,6 +28,7 @@ import com.google.gson.Gson;
 import de.jeff_media.updatechecker.UpdateChecker;
 import me.untouchedodin0.plugin.commands.PrivateMinesCommand;
 import me.untouchedodin0.plugin.config.Config;
+import me.untouchedodin0.plugin.config.MenuConfig;
 import me.untouchedodin0.plugin.config.MineConfig;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.listener.AutoSellListener;
@@ -93,6 +94,7 @@ public class PrivateMines extends JavaPlugin {
     private MineStorage mineStorage;
     private Utils utils;
     private ConfigManager configManager;
+    private ConfigManager menuConfigManager;
 
     private Gson gson;
     private WorldEditAdapter worldEditAdapter;
@@ -143,8 +145,10 @@ public class PrivateMines extends JavaPlugin {
         mineFactory = new MineFactory(this);
         mineTypeManager = new MineTypeManager(this);
 
-
         configManager = ConfigManager.create(this).target(Config.class).saveDefaults().load();
+        menuConfigManager = ConfigManager.create(this).target(MenuConfig.class).saveDefaults().load();
+        getLogger().info("menuConfigManager: " + menuConfigManager);
+
         @SuppressWarnings("unused")
         ConfigManager mineConfig = ConfigManager.create(this)
                 .addConverter(Material.class, Material::valueOf, Material::toString)
@@ -342,6 +346,10 @@ public class PrivateMines extends JavaPlugin {
 
     public ConfigManager getConfigManager() {
         return configManager;
+    }
+
+    public ConfigManager getMenuConfigManager() {
+        return menuConfigManager;
     }
 
     private void setupEconomy() {
