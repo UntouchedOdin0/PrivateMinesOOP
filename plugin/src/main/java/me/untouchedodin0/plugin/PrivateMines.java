@@ -155,9 +155,8 @@ public class PrivateMines extends JavaPlugin {
         mineTypeManager = new MineTypeManager(this);
 
 
-        //configManager = new ConfigManager(this).register(this, Mine.class).load();
-        //configManager = ConfigManager.create(this).target(MineConfig.class).saveDefaults().load();
         configManager = ConfigManager.create(this).target(Config.class).saveDefaults().load();
+        @SuppressWarnings("unused")
         ConfigManager mineConfig = ConfigManager.create(this)
                 .addConverter(Material.class, Material::valueOf, Material::toString)
                 .target(MineConfig.class)
@@ -177,6 +176,7 @@ public class PrivateMines extends JavaPlugin {
         });
         getLogger().info("Loaded " + mineTypeManager.getTotalMineTypes() + " mine types!");
 
+        /*
         if (RedLib.MID_VERSION < 13) {
             WE6Adapter we6Adapter = new WE6Adapter();
             TransformationStorageWE6 transformationStorageWE6 = new TransformationStorageWE6();
@@ -197,13 +197,7 @@ public class PrivateMines extends JavaPlugin {
 //            });
             //we7Utils.loadAndIterateFiles(Config.spawnPoint, Config.mineCorner);
         }
-
-
-        Material spawnPoint = Config.getSpawnPoint();
-        Material mineCorner = Config.getMineCorner();
-        Material upgradeMaterial = Config.getUpgradeMaterial();
-
-        ArgType<MineType> mineTypes = new ArgType<>("mineType", mineTypeManager::getMineType);
+         */
 
         try {
             final List<Path> files = Files.list(getDataFolder().toPath())
