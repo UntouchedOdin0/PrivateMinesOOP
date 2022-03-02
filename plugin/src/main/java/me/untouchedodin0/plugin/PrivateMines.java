@@ -280,6 +280,7 @@ public class PrivateMines extends JavaPlugin {
 
         getLogger().info(() -> "Loaded " + loadedMineCount.get() + " mines");
 
+        @SuppressWarnings("unused")
         Metrics metrics = new Metrics(this, PLUGIN_ID);
         //metrics.addCustomChart(new SingleLineChart("mines", loadedMineCount::get));
     }
@@ -317,10 +318,6 @@ public class PrivateMines extends JavaPlugin {
 
     public TimeStorage getTimeStorage() {
         return timeStorage;
-    }
-
-    public int getMineDistance() {
-        return 150; // need to get from new config (somehow)
     }
 
     public MineWorldManager getMineWorldManager() {
