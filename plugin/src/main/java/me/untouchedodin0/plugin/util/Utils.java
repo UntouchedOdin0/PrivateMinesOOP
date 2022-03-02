@@ -42,7 +42,6 @@ import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.region.CuboidRegion;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
