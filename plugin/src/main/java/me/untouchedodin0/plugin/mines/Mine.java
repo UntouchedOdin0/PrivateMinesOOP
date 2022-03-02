@@ -74,7 +74,6 @@ public class Mine {
     private MineData mineData;
     private Task task;
     private double tax = 5;
-    private Map<Material, Double> materials = new EnumMap<>(Material.class);
 
     public Mine(PrivateMines privateMines) {
         this.privateMines = privateMines;
@@ -203,10 +202,6 @@ public class Mine {
         return getMineType().getMaterials();
     }
 
-    public void setMaterials(Map<Material, Double> materials) {
-        this.materials = materials;
-    }
-
     public boolean isInside(Location location) {
         return getMiningRegion().contains(location);
     }
@@ -226,6 +221,7 @@ public class Mine {
     public void fill(Map<Material, Double> blocks) {
         CuboidRegion cuboidRegion = getMiningRegion();
         Task task = Task.asyncDelayed(() -> privateMines.getWorldEditAdapter().fillRegion(cuboidRegion, blocks));
+        task.cancel();
     }
 
     public void fillAir() {
@@ -235,6 +231,7 @@ public class Mine {
             privateMines.getWorldEditAdapter().fillRegion(miningRegion, Material.AIR);
             privateMines.getWorldEditAdapter().fillRegion(fullRegion, Material.AIR);
         });
+        task.cancel();
     }
 
     public void reset() {
@@ -245,8 +242,6 @@ public class Mine {
             emptyMine();
             fill(mineType.getMaterials());
         }
-//        PrivateMineResetEvent privateMineResetEvent = new PrivateMineResetEvent(this, privateMines);
-//        Bukkit.getPluginManager().callEvent(privateMineResetEvent);
 
         Task task = Task.syncDelayed(() -> {
             PrivateMineResetEvent privateMineResetEvent = new PrivateMineResetEvent(this, privateMines);
@@ -260,10 +255,7 @@ public class Mine {
         Bukkit.getPluginManager().callEvent(privateMineDeletionEvent);
         if (privateMineDeletionEvent.isCancelled()) return;
         fillAir();
-        //privateMines.getWorldEditAdapter().fillRegion(region, Material.AIR);
-
         MineStorage mineStorage = privateMines.getMineStorage();
-
         mineStorage.removeMine(getMineOwner());
     }
 
@@ -274,19 +266,11 @@ public class Mine {
         Objects.requireNonNull(mineType, "Invalid Mine type " + mineTypeName);
 
         if (mineTypeManager.isLastMineType(mineType)) {
-            privateMines.getLogger().info("Mine was already maxed!");
-            //TODO This should probably be an exception
             throw new MineAlreadyMaxedException("Mine was already maxed!");
         }
         final MineType next = mineTypeManager.getNextMineType(mineType);
         mineData.setMineType(next.getName());
         mineData.setMaterials(next.getMaterials());
-//        Player owner = Bukkit.getPlayer(getMineOwner());
-//        if (owner != null) {
-//            // TODO why is this necessary? does the player really need to be online to upgrade?
-//            this.expand(0);
-//            this.expand(1);
-//        }
         utils.saveMineData(getMineOwner(), mineData);
         setMineData(mineData);
         reset();
