@@ -48,10 +48,12 @@ import me.untouchedodin0.privatemines.compat.WorldEditAdapter;
 import me.untouchedodin0.privatemines.compat.WorldEditCompatibility;
 import me.untouchedodin0.privatemines.we_6.worldedit.WE6Adapter;
 import me.untouchedodin0.privatemines.we_7.worldedit.WE7Adapter;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.codemc.worldguardwrapper.WorldGuardWrapper;
 import org.codemc.worldguardwrapper.region.IWrappedRegion;
@@ -81,6 +83,7 @@ public class PrivateMines extends JavaPlugin {
     private static final int SPIGOT_PLUGIN_ID = 90890;
     private static PrivateMines privateMines;
     private static PrivateMinesAPI privateMinesAPI;
+    private Economy economy;
 
     private final Path minesDirectory = getDataFolder().toPath().resolve("mines");
     private final Path schematicsDirectory = getDataFolder().toPath().resolve("schematics");
@@ -117,6 +120,10 @@ public class PrivateMines extends JavaPlugin {
         return privateMinesAPI;
     }
 
+    public static Economy getEconomy() {
+        return privateMines.economy;
+    }
+
     @Override
     public void onEnable() {
         privateMines = this;
@@ -124,6 +131,7 @@ public class PrivateMines extends JavaPlugin {
         gson = new Gson();
 
         saveDefaultConfig();
+        setupEconomy();
 
         try {
             Files.createDirectories(minesDirectory);
@@ -381,5 +389,17 @@ public class PrivateMines extends JavaPlugin {
 
     public ConfigManager getConfigManager() {
         return configManager;
+    }
+
+    private void setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) return;
+        RegisteredServiceProvider<Economy> registeredServiceProvider =
+                getServer().getServicesManager().getRegistration(Economy.class);
+        if (registeredServiceProvider == null) {
+            privateMines.getLogger().info("Failed to find a economy provider!");
+            return;
+        }
+        economy = registeredServiceProvider.getProvider();
+        privateMines.getLogger().info("Successfully setup economy!");
     }
 }

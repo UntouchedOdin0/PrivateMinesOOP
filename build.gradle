@@ -52,6 +52,7 @@ subprojects {
         compileOnly 'org.projectlombok:lombok:1.18.22'
         compileOnly 'me.clip:placeholderapi:2.10.9'
         compileOnly 'com.google.code.gson:gson:2.8.5'
+        compileOnly 'com.github.MilkBowl:VaultAPI:1.7.1'
 
         implementation 'org.codemc.worldguardwrapper:worldguardwrapper:1.2.0-SNAPSHOT'
         implementation 'com.github.cryptomorin:XSeries:8.6.1'
