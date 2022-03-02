@@ -25,6 +25,7 @@ SOFTWARE.
 package me.untouchedodin0.plugin;
 
 import com.google.gson.Gson;
+import de.jeff_media.updatechecker.UpdateChecker;
 import me.untouchedodin0.plugin.commands.PrivateMinesCommand;
 import me.untouchedodin0.plugin.config.Config;
 import me.untouchedodin0.plugin.config.MineConfig;
@@ -32,13 +33,10 @@ import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.listener.AutoSellListener;
 import me.untouchedodin0.plugin.listener.MineCreationTest;
 import me.untouchedodin0.plugin.mines.Mine;
-import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.MineTypeManager;
 import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.storage.TimeStorage;
-import me.untouchedodin0.plugin.storage.TransformationStorageWE6;
-import me.untouchedodin0.plugin.storage.TransformationStorageWE7;
 import me.untouchedodin0.plugin.util.Exceptions;
 import me.untouchedodin0.plugin.util.Metrics;
 import me.untouchedodin0.plugin.util.Utils;
@@ -46,8 +44,6 @@ import me.untouchedodin0.plugin.util.placeholderapi.PrivateMinesExpansion;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditAdapter;
 import me.untouchedodin0.privatemines.compat.WorldEditCompatibility;
-import me.untouchedodin0.privatemines.we_6.worldedit.WE6Adapter;
-import me.untouchedodin0.privatemines.we_7.worldedit.WE7Adapter;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -265,9 +261,7 @@ public class PrivateMines extends JavaPlugin {
                                             "impossible.");
         }
         getServer().getPluginManager().registerEvents(new MineCreationTest(), this);
-//        if (notifyForUpdates) {
-//            UpdateChecker.init(this, SPIGOT_PLUGIN_ID).checkEveryXHours(1).setDownloadLink(SPIGOT_PLUGIN_ID).checkNow();
-//        }
+        UpdateChecker.init(this, SPIGOT_PLUGIN_ID).checkEveryXHours(6).setDownloadLink(SPIGOT_PLUGIN_ID).checkNow();
     }
 
     private void loadMines() throws IOException {
