@@ -25,6 +25,7 @@ SOFTWARE.
 package me.untouchedodin0.plugin.commands;
 
 import me.untouchedodin0.plugin.PrivateMines;
+import me.untouchedodin0.plugin.config.Config;
 import me.untouchedodin0.plugin.events.PrivateMineCreationEvent;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.mines.Mine;
@@ -75,16 +76,34 @@ public class PrivateMinesCommand {
     @CommandHook("main")
     public void mainHook(Player player) {
 //        Map<String, MenuConfig> menuConfig = privateMines.getInventory();
-//        String inventoryTitle = privateMines.getMainMenuTitle();
-        //String inventoryTitleColored = utils.color(inventoryTitle);
+        String inventoryTitle = Config.getMainMenuTitle();
+        String inventoryTitleColored = utils.color(inventoryTitle);
 
-        //InventoryGUI gui = new InventoryGUI(Bukkit.createInventory(null, 27, inventoryTitleColored));
+        player.sendMessage("inventoryTitle: " + inventoryTitle);
+        player.sendMessage("inventoryTitleColored: " + inventoryTitleColored);
+
+        InventoryGUI initialMenu = new InventoryGUI(9, inventoryTitleColored);
+        //InventoryGUI yourMine = new InventoryGUI(Bukkit.createInventory(null, 27, inventoryTitleColored));
 
         Mine mine = mineStorage.getMine(player.getUniqueId());
         if (mine == null) {
             player.sendMessage(Messages.msg("doNotOwnMine"));
             return;
         }
+
+        List<String> publicMinesLore = new ArrayList<>();
+        publicMinesLore.add("Click to open");
+        publicMinesLore.add("The public mines menu");
+
+        ItemBuilder publicMinesBuilder = new ItemBuilder(Material.MINECART).setName(ChatColor.GREEN + "Public Mines").addLore(publicMinesLore);
+        ItemButton publicMinesButton = ItemButton.create(publicMinesBuilder, inventoryClickEvent -> {
+            initialMenu.destroy();
+            player.closeInventory();
+            player.sendMessage("I shall now open the public mines gui! =)");
+        });
+
+        initialMenu.addButton(publicMinesButton, 0);
+        initialMenu.open(player);
 
         /*
         menuConfig.forEach((s, c) -> {

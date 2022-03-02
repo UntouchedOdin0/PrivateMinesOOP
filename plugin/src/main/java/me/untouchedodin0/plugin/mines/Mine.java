@@ -221,7 +221,6 @@ public class Mine {
     public void fill(Map<Material, Double> blocks) {
         CuboidRegion cuboidRegion = getMiningRegion();
         Task task = Task.asyncDelayed(() -> privateMines.getWorldEditAdapter().fillRegion(cuboidRegion, blocks));
-        task.cancel();
     }
 
     public void fillAir() {
@@ -231,7 +230,6 @@ public class Mine {
             privateMines.getWorldEditAdapter().fillRegion(miningRegion, Material.AIR);
             privateMines.getWorldEditAdapter().fillRegion(fullRegion, Material.AIR);
         });
-        task.cancel();
     }
 
     public void reset() {
