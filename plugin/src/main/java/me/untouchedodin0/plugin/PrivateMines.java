@@ -93,7 +93,6 @@ public class PrivateMines extends JavaPlugin {
     private MineStorage mineStorage;
     private Utils utils;
     private ConfigManager configManager;
-    private ConfigManager mineConfig;
 
     private Gson gson;
     private WorldEditAdapter worldEditAdapter;
@@ -101,12 +100,6 @@ public class PrivateMines extends JavaPlugin {
     public WorldEditAdapter getWorldEditAdapter() {
         return worldEditAdapter;
     }
-
-//    @ConfigValue
-//    private Map<String, MineConfig> mineTypes = ConfigManager.map(MineConfig.class);
-//
-//    @ConfigValue
-//    private Map<String, MenuConfig> inventory = ConfigManager.map(MenuConfig.class);
 
     public static PrivateMines getPrivateMines() {
         return privateMines;
