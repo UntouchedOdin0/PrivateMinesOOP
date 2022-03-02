@@ -390,12 +390,14 @@ public class Mine {
     }
 
     public void startResetTask() {
+        int resetTime = mineType.getResetTime();
+
         this.task = Task.syncRepeating(() -> {
             double percentage = getPercentage();
             if (percentage <= getResetPercentage()) {
                 reset();
             }
-        }, 0L, 20L);
+        }, 0L, resetTime * 20L);
     }
 
     public void cancelResetTask() {
