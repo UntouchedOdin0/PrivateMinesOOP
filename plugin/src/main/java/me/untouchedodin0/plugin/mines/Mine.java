@@ -315,7 +315,6 @@ public class Mine {
         }
 
         boolean canExpand = canExpand(amount);
-        MineStorage mineStorage = privateMines.getMineStorage();
         Path minesDirectory = privateMines.getMinesDirectory();
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();
@@ -351,8 +350,6 @@ public class Mine {
                 e.printStackTrace();
             }
 
-            Optional<IWrappedRegion> iWrappedRegion =
-                    WorldGuardWrapper.getInstance().getRegion(world, regionName);
             WorldGuardWrapper.getInstance().removeRegion(world, regionName);
 
             Player player = Bukkit.getOfflinePlayer(getMineOwner()).getPlayer();
