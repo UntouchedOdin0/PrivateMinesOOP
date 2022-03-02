@@ -15,6 +15,7 @@ import redempt.redlib.commandmanager.Messages;
 import java.util.Map;
 import java.util.UUID;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class AutoSellListener implements Listener {
 
     private final PrivateMines privateMines;
