@@ -26,6 +26,7 @@ package me.untouchedodin0.plugin.commands;
 
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.config.Config;
+import me.untouchedodin0.plugin.config.MenuConfig;
 import me.untouchedodin0.plugin.events.PrivateMineCreationEvent;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.mines.Mine;
@@ -45,7 +46,6 @@ import redempt.redlib.config.ConfigManager;
 import redempt.redlib.inventorygui.InventoryGUI;
 import redempt.redlib.inventorygui.ItemButton;
 import redempt.redlib.itemutils.ItemBuilder;
-import redempt.redlib.itemutils.LoreStats;
 import redempt.redlib.misc.Task;
 
 import java.io.IOException;
@@ -110,7 +110,12 @@ public class PrivateMinesCommand {
 
            InventoryGUI yourMineGui = new InventoryGUI(9, yourMineColoured);
 
+            MenuConfig.menuItemTypeMap.forEach((s, menuItemType) -> {
+                Material material = menuItemType.getType();
+                String name = menuItemType.getName();
 
+                ItemBuilder itemBuilder = new ItemBuilder(material).setName(name);
+            });
            yourMineGui.open(player);
         });
 

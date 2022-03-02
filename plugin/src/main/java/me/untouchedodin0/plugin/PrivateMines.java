@@ -28,7 +28,7 @@ import com.google.gson.Gson;
 import de.jeff_media.updatechecker.UpdateChecker;
 import me.untouchedodin0.plugin.commands.PrivateMinesCommand;
 import me.untouchedodin0.plugin.config.Config;
-import me.untouchedodin0.plugin.config.MenuConfig;
+import me.untouchedodin0.plugin.config.menu.MenuItemType;
 import me.untouchedodin0.plugin.config.MineConfig;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.listener.AutoSellListener;
@@ -146,7 +146,7 @@ public class PrivateMines extends JavaPlugin {
         mineTypeManager = new MineTypeManager(this);
 
         configManager = ConfigManager.create(this).target(Config.class).saveDefaults().load();
-        menuConfigManager = ConfigManager.create(this).target(MenuConfig.class).saveDefaults().load();
+        menuConfigManager = ConfigManager.create(this).target(MenuItemType.class).saveDefaults().load();
         getLogger().info("menuConfigManager: " + menuConfigManager);
 
         @SuppressWarnings("unused")
