@@ -22,7 +22,8 @@ public class Config {
     public static Material upgradeMaterial = Material.OBSIDIAN;
     @Comment("The title name for the /pmine menu")
     public static String mainMenuTitle = "Private Mines";
-
+    @Comment("The title for the menu when you click Your Mine in /pmine")
+    public static String yourMine = "Your Mine";
     @Comment("Toggle for debug mode. (Causes more spam).")
     public static boolean debugMode = false;
     @Comment("Check for any spigot updates")
@@ -55,6 +56,10 @@ public class Config {
 
     public static String getMainMenuTitle() {
         return mainMenuTitle;
+    }
+
+    public static String getYourMineTitle() {
+        return yourMine;
     }
 
     @ConfigPostInit

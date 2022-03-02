@@ -45,6 +45,7 @@ import redempt.redlib.config.ConfigManager;
 import redempt.redlib.inventorygui.InventoryGUI;
 import redempt.redlib.inventorygui.ItemButton;
 import redempt.redlib.itemutils.ItemBuilder;
+import redempt.redlib.itemutils.LoreStats;
 import redempt.redlib.misc.Task;
 
 import java.io.IOException;
@@ -62,6 +63,7 @@ public class PrivateMinesCommand {
     private final PrivateMines privateMines;
 
     Utils utils;
+    AtomicInteger totalPublicMines;
 
     public PrivateMinesCommand(PrivateMines privateMine) {
         this.privateMines = privateMine;
@@ -75,34 +77,73 @@ public class PrivateMinesCommand {
 
     @CommandHook("main")
     public void mainHook(Player player) {
-//        Map<String, MenuConfig> menuConfig = privateMines.getInventory();
+        //Map<String, MenuConfig> menuConfig = privateMines.getInventory();
         String inventoryTitle = Config.getMainMenuTitle();
+        String yourMineTitle = Config.getYourMineTitle();
+
         String inventoryTitleColored = utils.color(inventoryTitle);
+        String yourMineColoured = utils.color(yourMineTitle);
 
         player.sendMessage("inventoryTitle: " + inventoryTitle);
         player.sendMessage("inventoryTitleColored: " + inventoryTitleColored);
 
         InventoryGUI initialMenu = new InventoryGUI(9, inventoryTitleColored);
-        //InventoryGUI yourMine = new InventoryGUI(Bukkit.createInventory(null, 27, inventoryTitleColored));
+        InventoryGUI yourMine = new InventoryGUI(Bukkit.createInventory(null, 27, yourMineTitle));
 
         Mine mine = mineStorage.getMine(player.getUniqueId());
+
         if (mine == null) {
             player.sendMessage(Messages.msg("doNotOwnMine"));
             return;
         }
 
+        List<String> yourMineLore = new ArrayList<>();
         List<String> publicMinesLore = new ArrayList<>();
-        publicMinesLore.add("Click to open");
-        publicMinesLore.add("The public mines menu");
+        List<Mine> openMines = new ArrayList<>();
+        AtomicInteger slot = new AtomicInteger();
 
+        yourMineLore.add(ChatColor.GRAY + "Your mine :)");
+
+        ItemBuilder yourMineBuilder = new ItemBuilder(Material.MINECART).setName(ChatColor.GREEN + "Your Mine").addLore(yourMineLore);
+        ItemButton yourMineButton = ItemButton.create(yourMineBuilder, inventoryClickEvent -> {
+           initialMenu.destroy();
+
+           InventoryGUI yourMineGui = new InventoryGUI(9, yourMineColoured);
+
+
+           yourMineGui.open(player);
+        });
+
+        publicMinesLore.add(ChatColor.GRAY + "Click to open");
+        publicMinesLore.add(ChatColor.GRAY + "The public mines menu");
         ItemBuilder publicMinesBuilder = new ItemBuilder(Material.MINECART).setName(ChatColor.GREEN + "Public Mines").addLore(publicMinesLore);
         ItemButton publicMinesButton = ItemButton.create(publicMinesBuilder, inventoryClickEvent -> {
             initialMenu.destroy();
             player.closeInventory();
-            player.sendMessage("I shall now open the public mines gui! =)");
+            mineStorage.getMines().forEach((uuid, mine1) -> {
+                MineData mineData = mine1.getMineData();
+                if (mineData.isOpen()) {
+                    totalPublicMines.incrementAndGet();
+                }
+            });
+            InventoryGUI publicMines = new InventoryGUI(totalPublicMines.get(), inventoryTitleColored);
+
+            openMines.forEach(mine1 -> {
+                List<String> lore = new ArrayList<>();
+                if (!mine1.getMaterials().isEmpty()) {
+                    mine1.getMaterials().forEach((material, aDouble) -> {
+                        lore.add(material.name() + " " + aDouble);
+                    });
+                }
+
+                ItemBuilder mineItemBuilder = new ItemBuilder(Material.EMERALD_BLOCK).setName(mine1.getMineOwner().toString()).addLore(lore);
+                ItemButton itemButton = ItemButton.create(mineItemBuilder, inventoryClickEvent1 -> {
+                });
+                publicMines.addButton(slot.getAndIncrement(), itemButton);
+            });
         });
 
-        initialMenu.addButton(publicMinesButton, 0);
+        initialMenu.addButton(0, yourMineButton);
         initialMenu.open(player);
 
         /*
