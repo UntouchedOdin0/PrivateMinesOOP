@@ -399,6 +399,7 @@ public class Mine {
         this.tax = tax;
     }
 
+    @SuppressWarnings("unused")
     public void sendBarrier(Player player, Location location) {
         utils.sendBorder(player, location);
     }

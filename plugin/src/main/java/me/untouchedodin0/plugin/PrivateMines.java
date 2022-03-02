@@ -306,7 +306,6 @@ public class PrivateMines extends JavaPlugin {
                     mine.setRegion(mineData.getFullRegion());
                     mine.setMiningRegion(cuboidRegion);
                     mine.setMineData(mineData);
-                    mine.setMaterials(mineData.getMaterials());
                     mine.setMineType(mineTypeManager.getMineType(mineData.getMineType()));
                     mine.setMineOwner(mineData.getMineOwner());
                     mine.startResetTask();

@@ -168,7 +168,6 @@ public class MineFactory {
         mine.setFullRegion(fullRegion);
         mine.setRegion(region);
         mine.setSpawnLocation(spawnLocation);
-        mine.setMaterials(mineType.getMaterials());
         mine.setMineType(mineType);
         mine.setMineOwner(player.getUniqueId());
         mineData.setMineOwner(uuid);
