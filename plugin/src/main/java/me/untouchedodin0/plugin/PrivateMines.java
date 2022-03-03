@@ -24,8 +24,10 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin;
 
+import com.github.retrooper.packetevents.PacketEvents;
 import com.google.gson.Gson;
 import de.jeff_media.updatechecker.UpdateChecker;
+import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import me.untouchedodin0.plugin.commands.PrivateMinesCommand;
 import me.untouchedodin0.plugin.config.Config;
 import me.untouchedodin0.plugin.config.menu.MenuItemType;
@@ -39,13 +41,13 @@ import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.storage.TimeStorage;
 import me.untouchedodin0.plugin.util.Exceptions;
-import me.untouchedodin0.plugin.util.Metrics;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.util.placeholderapi.PrivateMinesExpansion;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditAdapter;
 import me.untouchedodin0.privatemines.compat.WorldEditCompatibility;
 import net.milkbowl.vault.economy.Economy;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -116,6 +118,12 @@ public class PrivateMines extends JavaPlugin {
     }
 
     @Override
+    public void onLoad() {
+        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
+        PacketEvents.getAPI().load();
+    }
+
+    @Override
     public void onEnable() {
         privateMines = this;
         privateMinesAPI = new PrivateMinesAPI(privateMines);
@@ -147,7 +155,6 @@ public class PrivateMines extends JavaPlugin {
 
         configManager = ConfigManager.create(this).target(Config.class).saveDefaults().load();
         menuConfigManager = ConfigManager.create(this).target(MenuItemType.class).saveDefaults().load();
-        getLogger().info("menuConfigManager: " + menuConfigManager);
 
         @SuppressWarnings("unused")
         ConfigManager mineConfig = ConfigManager.create(this)
@@ -233,7 +240,18 @@ public class PrivateMines extends JavaPlugin {
                                             "impossible.");
         }
         getServer().getPluginManager().registerEvents(new MineCreationTest(), this);
+
+        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
+        PacketEvents.getAPI().getSettings().bStats(true).checkForUpdates(false).debug(true);
+        PacketEvents.getAPI().init();
+
+        privateMines.getLogger().info("PacketEventsAPI: " + PacketEvents.getAPI());
+
         UpdateChecker.init(this, SPIGOT_PLUGIN_ID).checkEveryXHours(6).setDownloadLink(SPIGOT_PLUGIN_ID).checkNow();
+
+        //Metrics metrics = new Metrics(this, PLUGIN_ID);
+        Metrics metrics1 = new Metrics(this, PLUGIN_ID);
+        //metrics.addCustomChart(new SingleLineChart("mines", loadedMineCount::get));
     }
 
     private void loadMines() throws IOException {
@@ -283,10 +301,6 @@ public class PrivateMines extends JavaPlugin {
                 });
 
         getLogger().info(() -> "Loaded " + loadedMineCount.get() + " mines");
-
-        @SuppressWarnings("unused")
-        Metrics metrics = new Metrics(this, PLUGIN_ID);
-        //metrics.addCustomChart(new SingleLineChart("mines", loadedMineCount::get));
     }
 
     @Override

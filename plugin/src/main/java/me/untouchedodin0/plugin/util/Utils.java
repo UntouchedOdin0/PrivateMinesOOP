@@ -289,10 +289,6 @@ public class Utils {
         return String.format("%."+digits+"f",n*100)+"%";
     }
 
-    public void sendBorder(Player player, Location location) {
-        
-    }
-
     public int getInventorySize(int amount) {
         if (amount <= 0) return 9; // if equals or less than 0 return 9. (Minimum Size)
         int quotient = (int) Math.ceil(amount / 9.0);

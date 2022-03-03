@@ -36,6 +36,7 @@ import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.storage.TimeStorage;
 import me.untouchedodin0.plugin.util.Utils;
+import me.untouchedodin0.plugin.util.border.PlayerBorder;
 import me.untouchedodin0.plugin.util.exceptions.MineAlreadyMaxedException;
 import me.untouchedodin0.plugin.util.inventory.PublicMinesGUI;
 import me.untouchedodin0.plugin.world.MineWorldManager;
@@ -737,6 +738,9 @@ public class PrivateMinesCommand {
         int offlinePlayersCount = offlinePlayers.length;
 
         List<Long> times = timeStorage.getTimes();
+
+        PlayerBorder playerBorder = new PlayerBorder();
+        playerBorder.sendBorder(player, player.getLocation());
     }
 
     @CommandHook("reload")

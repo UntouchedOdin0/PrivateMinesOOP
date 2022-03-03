@@ -32,6 +32,7 @@ import me.untouchedodin0.plugin.events.PrivateMineResetEvent;
 import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
+import me.untouchedodin0.plugin.util.border.PlayerBorder;
 import me.untouchedodin0.plugin.util.exceptions.MineAlreadyMaxedException;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import org.bukkit.Bukkit;
@@ -399,6 +400,7 @@ public class Mine {
 
     @SuppressWarnings("unused")
     public void sendBarrier(Player player, Location location) {
-        utils.sendBorder(player, location);
+        PlayerBorder playerBorder = new PlayerBorder();
+        playerBorder.sendBorder(player, location);
     }
 }
