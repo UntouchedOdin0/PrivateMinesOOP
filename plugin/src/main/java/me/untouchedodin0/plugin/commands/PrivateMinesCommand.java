@@ -37,6 +37,7 @@ import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.storage.TimeStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.util.exceptions.MineAlreadyMaxedException;
+import me.untouchedodin0.plugin.util.inventory.PublicMinesGUI;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
@@ -91,6 +92,7 @@ public class PrivateMinesCommand {
         InventoryGUI yourMine = new InventoryGUI(Bukkit.createInventory(null, 27, yourMineTitle));
 
         Mine mine = mineStorage.getMine(player.getUniqueId());
+        PublicMinesGUI publicMinesGUI = new PublicMinesGUI(mineStorage);
 
         if (mine == null) {
             player.sendMessage(Messages.msg("doNotOwnMine"));
@@ -165,8 +167,8 @@ public class PrivateMinesCommand {
                     ItemButton itemButton = ItemButton.create(
                             new ItemBuilder(Material.EMERALD_BLOCK)
                                     .setName(ChatColor.GREEN + playerName + "'s mine")
-                                    .addLore(lore)
-                            , clickEvent -> {
+                                    .addLore(lore),
+                            clickEvent -> {
                                 player.sendMessage(ChatColor.GREEN + "Teleporting you to the mine");
                                 mine1.teleport(player);
                     });
@@ -190,7 +192,8 @@ public class PrivateMinesCommand {
 //                publicMines.addButton(slot.getAndIncrement(), itemButton);
 //            });
             initialMenu.destroy();
-            publicMines.open(player);
+            publicMinesGUI.open(player, inventorySize, "Public Mines");
+            //publicMines.open(player);
         });
 
         initialMenu.addButton(3, yourMineButton);
