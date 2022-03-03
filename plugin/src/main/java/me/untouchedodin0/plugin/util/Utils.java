@@ -252,6 +252,11 @@ public class Utils {
 
     // Credits to Brister Mitten#9960 for this
 
+    /*
+        Prettifies item names
+        Credits to Brister Mitten#9960 for this
+     */
+
     public static String prettify(String s) {
         return Arrays.stream(s.split("_"))
                 .map(String::toLowerCase)
@@ -286,5 +291,11 @@ public class Utils {
 
     public void sendBorder(Player player, Location location) {
         
+    }
+
+    public int getInventorySize(int amount) {
+        if (amount <= 0) return 9; // if equals or less than 0 return 9. (Minimum Size)
+        int quotient = (int) Math.ceil(amount / 9.0);
+        return quotient > 5 ? 54: quotient * 9;
     }
 }

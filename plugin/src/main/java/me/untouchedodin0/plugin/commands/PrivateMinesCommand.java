@@ -24,6 +24,7 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin.commands;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.config.Config;
 import me.untouchedodin0.plugin.config.MenuConfig;
@@ -63,7 +64,6 @@ public class PrivateMinesCommand {
     private final PrivateMines privateMines;
 
     Utils utils;
-    AtomicInteger totalPublicMines;
 
     public PrivateMinesCommand(PrivateMines privateMine) {
         this.privateMines = privateMine;
@@ -101,6 +101,10 @@ public class PrivateMinesCommand {
         List<String> publicMinesLore = new ArrayList<>();
         List<Mine> openMines = new ArrayList<>();
         AtomicInteger slot = new AtomicInteger();
+        AtomicInteger totalPublicMines = new AtomicInteger();
+
+        ItemBuilder filler = new ItemBuilder(Objects.requireNonNull(XMaterial.BLACK_STAINED_GLASS_PANE.parseMaterial())).setName(" ");
+        ItemButton fillerButton = ItemButton.create(filler, e -> e.setCancelled(true));
 
         yourMineLore.add(ChatColor.GRAY + "Your mine :)");
 
@@ -131,24 +135,73 @@ public class PrivateMinesCommand {
                     totalPublicMines.incrementAndGet();
                 }
             });
-            InventoryGUI publicMines = new InventoryGUI(totalPublicMines.get(), inventoryTitleColored);
+            int inventorySize = utils.getInventorySize(totalPublicMines.get());
 
-            openMines.forEach(mine1 -> {
+            //todo maybe move this to it's own utils method somewhere?
+
+            privateMines.getLogger().info("Inventory Size: " + inventorySize);
+            InventoryGUI publicMines = new InventoryGUI(inventorySize, "Public Mines");
+
+            mineStorage.getMines().forEach((uuid, mine1) -> {
+                Player owner = Bukkit.getOfflinePlayer(uuid).getPlayer();
+                String playerName = owner.getName();
+                MineData mineData = mine1.getMineData();
+                MineType mineType = mine1.getMineType();
+
                 List<String> lore = new ArrayList<>();
-                if (!mine1.getMaterials().isEmpty()) {
-                    mine1.getMaterials().forEach((material, aDouble) -> {
-                        lore.add(material.name() + " " + aDouble);
-                    });
-                }
+                if (mineData.isOpen()) {
+                    lore.add(ChatColor.WHITE + "Left Click to " + ChatColor.GREEN + "Teleport");
+                    lore.add(ChatColor.WHITE + "Blocks: ");
+                    if (!mineData.getMaterials().isEmpty()) {
+                        mineData.getMaterials().forEach((material, aDouble) -> {
+                            lore.add(material.name() + ": " + aDouble * 100 + "%");
+                        });
+                    } else {
+                        mineType.getMaterials().forEach((material, aDouble) -> {
+                            lore.add(Utils.prettify(material.name()) + ": " + aDouble * 100 + "%");
+                        });
+                    }
 
-                ItemBuilder mineItemBuilder = new ItemBuilder(Material.EMERALD_BLOCK).setName(mine1.getMineOwner().toString()).addLore(lore);
-                ItemButton itemButton = ItemButton.create(mineItemBuilder, inventoryClickEvent1 -> {
-                });
-                publicMines.addButton(slot.getAndIncrement(), itemButton);
+                    ItemButton itemButton = ItemButton.create(
+                            new ItemBuilder(Material.EMERALD_BLOCK)
+                                    .setName(ChatColor.GREEN + playerName + "'s mine")
+                                    .addLore(lore)
+                            , clickEvent -> {
+                                player.sendMessage(ChatColor.GREEN + "Teleporting you to the mine");
+                                mine1.teleport(player);
+                    });
+
+                    player.sendMessage("lore: " + lore);
+                    publicMines.addButton(slot.getAndIncrement(), itemButton);
+                }
             });
+//            openMines.forEach(mine1 -> {
+//                List<String> lore = new ArrayList<>();
+//                if (!mine1.getMaterials().isEmpty()) {
+//                    mine1.getMaterials().forEach((material, aDouble) -> {
+//                        lore.add(material.name() + " " + aDouble);
+//                    });
+//                }
+//
+//                ItemBuilder mineItemBuilder = new ItemBuilder(Material.EMERALD_BLOCK).setName("TEST!").addLore(lore);
+//                ItemButton itemButton = ItemButton.create(mineItemBuilder, inventoryClickEvent1 -> {
+//                });
+//                privateMines.getLogger().info(String.valueOf(slot.getAndIncrement()));
+//                publicMines.addButton(slot.getAndIncrement(), itemButton);
+//            });
+            initialMenu.destroy();
+            publicMines.open(player);
         });
 
-        initialMenu.addButton(0, yourMineButton);
+        initialMenu.addButton(3, yourMineButton);
+        initialMenu.addButton(5, publicMinesButton);
+        initialMenu.addButton(0, fillerButton);
+        initialMenu.addButton(1, fillerButton);
+        initialMenu.addButton(2, fillerButton);
+        initialMenu.addButton(4, fillerButton);
+        initialMenu.addButton(6, fillerButton);
+        initialMenu.addButton(7, fillerButton);
+        initialMenu.addButton(8, fillerButton);
         initialMenu.open(player);
 
         /*
