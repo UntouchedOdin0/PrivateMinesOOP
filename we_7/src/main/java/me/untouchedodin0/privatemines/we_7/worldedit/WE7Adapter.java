@@ -28,6 +28,8 @@ import redempt.redlib.region.CuboidRegion;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -187,24 +189,37 @@ public class WE7Adapter implements WorldEditAdapter {
                 BlockPoints blockPoints = new BlockPoints();
                 List<BlockVector3> corners = new ArrayList<>();
 
-                for (int x = clipboard.getMinimumPoint().getX(); x <= clipboard.getMaximumPoint().getX(); x++) {
-                    for (int y = clipboard.getMinimumPoint().getY(); y <= clipboard.getMaximumPoint().getY(); y++) {
-                        for (int z = clipboard.getMinimumPoint().getZ(); z <= clipboard.getMaximumPoint().getZ(); z++) {
-                            BlockVector3 blockVector3 = BlockVector3.at(x, y, z);
-                            Material material = BukkitAdapter.adapt(clipboard.getBlock(blockVector3)).getMaterial();
-                            if (material.equals(Material.AIR)) continue;
-                            Bukkit.getLogger().info("blockVector3: " + blockVector3);
-                            Bukkit.getLogger().info("material: " + material);
-                            if (material.equals(Material.SPONGE)) {
-                                blockPoints.spawn = blockVector3;
-                            } else if (material.equals(Material.POWERED_RAIL)) {
-                                corners.add(blockVector3);
-                                blockPoints.setCorners(corners);
+                Instant start = Instant.now();
+
+                Thread thread = new Thread(() -> {
+                    for (int x = clipboard.getMinimumPoint().getX(); x <= clipboard.getMaximumPoint().getX(); x++) {
+                        for (int y = clipboard.getMinimumPoint().getY(); y <= clipboard.getMaximumPoint().getY(); y++) {
+                            for (int z = clipboard.getMinimumPoint().getZ(); z <= clipboard.getMaximumPoint().getZ(); z++) {
+                                BlockVector3 blockVector3 = BlockVector3.at(x, y, z);
+                                Material material = BukkitAdapter.adapt(clipboard.getBlock(blockVector3)).getMaterial();
+                                if (material.equals(Material.AIR)) continue;
+//                                Bukkit.getLogger().info("blockVector3: " + blockVector3);
+//                                Bukkit.getLogger().info("material: " + material);
+                                if (material.equals(Material.SPONGE)) {
+                                    blockPoints.spawn = blockVector3;
+                                } else if (material.equals(Material.POWERED_RAIL)) {
+                                    corners.add(blockVector3);
+                                    blockPoints.setCorners(corners);
+                                }
                             }
                         }
                     }
+                });
+                thread.start();
+                try {
+                    thread.join();
+                    System.out.println("Thread has finished");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-
+                Instant end = Instant.now();
+                Duration duration = Duration.between(start, end);
+                Bukkit.getLogger().info("duration: " + duration.toMillis() + " ms");
                 Bukkit.getLogger().info("searchFile file: " + file);
                 Bukkit.getLogger().info("searchFile clipboardFormat: " + clipboardFormat);
                 Bukkit.getLogger().info("searchFile clipboardReader: " + clipboardReader);
