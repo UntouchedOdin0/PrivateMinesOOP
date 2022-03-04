@@ -97,7 +97,7 @@ public class PrivateMines extends JavaPlugin {
     private MineWorldManager mineWorldManager;
     private TimeStorage timeStorage;
     private MineStorage mineStorage;
-    private BlockPoints7Storage blockPoints7Storage = new BlockPoints7Storage();
+    private BlockPoints7Storage blockPoints7Storage;
     private Utils utils;
     private ConfigManager configManager;
     private ConfigManager menuConfigManager;
@@ -186,11 +186,10 @@ public class PrivateMines extends JavaPlugin {
                 mineTypeManager.registerMineType(mineType);
                 File file = new File("plugins/PrivateMines/schematics/" + mineType.getFile());
                 we7Adapter.searchFile(file);
-                privateMines.getLogger().info("blockPoints7Storage:  " + we7Adapter.getBlockPoints7Storage());
-                privateMines.getLogger().info("blockPoints7Storage map:  " + we7Adapter.getBlockPoints7Storage().getBlockPoints7Map());
             });
         }
         getLogger().info("Loaded " + mineTypeManager.getTotalMineTypes() + " mine types!");
+        blockPoints7Storage = we7Adapter.getBlockPoints7Storage();
 
         try {
             final List<Path> files = Files.list(getDataFolder().toPath())
@@ -261,8 +260,6 @@ public class PrivateMines extends JavaPlugin {
         PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
         PacketEvents.getAPI().getSettings().bStats(true).checkForUpdates(false).debug(true);
         PacketEvents.getAPI().init();
-
-        privateMines.getLogger().info("PacketEventsAPI: " + PacketEvents.getAPI());
 
         UpdateChecker.init(this, SPIGOT_PLUGIN_ID).checkEveryXHours(6).setDownloadLink(SPIGOT_PLUGIN_ID).checkNow();
 

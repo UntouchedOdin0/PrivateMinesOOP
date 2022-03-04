@@ -1,7 +1,7 @@
 package me.untouchedodin0.privatemines.we_7.worldedit;
 
 import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldedit.world.World;
+import org.bukkit.World;
 
 import java.util.List;
 
@@ -12,14 +12,6 @@ public class BlockPoints7 {
     List<BlockVector3> corners;
     BlockVector3 corner1;
     BlockVector3 corner2;
-
-    public World getWorld() {
-        return world;
-    }
-
-    public void setWorld(World world) {
-        this.world = world;
-    }
 
     public BlockVector3 getSpawn() {
         return spawn;

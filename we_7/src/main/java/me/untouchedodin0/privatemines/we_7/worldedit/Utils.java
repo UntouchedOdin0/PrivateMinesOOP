@@ -55,7 +55,6 @@ public class Utils {
                 com.sk89q.worldedit.world.World WEWorld = BukkitAdapter.adapt(world);
                 Bukkit.getLogger().info("WEWorld: " + WEWorld);
                 BlockPoints7 relativePointsWE7 = new BlockPoints7();
-                relativePointsWE7.setWorld(WEWorld);
                 clipboard.getRegion().forEach(blockVector3 -> {
                     BlockState blockState = clipboard.getBlock(blockVector3);
 
@@ -115,7 +114,6 @@ public class Utils {
             BlockVector blockVector = new BlockVector(blockVector3.getBlockX(),
                                                       blockVector3.getBlockY(),
                                                       blockVector3.getBlockZ());
-            relativePointsWE7.setWorld(region.getWorld());
 //            if (material.equals(spawnMaterial)) {
 //                relativePointsWE7.setSpawn(blockVector);
 //            } else if (material.equals(cornerMaterial) && relativePointsWE7.corner1 == null) {
