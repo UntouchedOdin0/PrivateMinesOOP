@@ -25,7 +25,7 @@ import java.util.Map;
 public class Utils {
 
     public Map<String, File> fileMap = new HashMap<>();
-    public Map<File, BlockPoints> relativePointsWE7Map = new HashMap<>();
+    public Map<File, BlockPoints7> relativePointsWE7Map = new HashMap<>();
 
     BlockVector3 spawnPoint; // = we7Adapter.findRelativeSpawnPoint(region, spawnMaterial);
     BlockVector3 corner1;
@@ -53,7 +53,7 @@ public class Utils {
                 Bukkit.getLogger().info("region: " + region);
                 com.sk89q.worldedit.world.World WEWorld = BukkitAdapter.adapt(world);
                 Bukkit.getLogger().info("WEWorld: " + WEWorld);
-                BlockPoints relativePointsWE7 = new BlockPoints();
+                BlockPoints7 relativePointsWE7 = new BlockPoints7();
                 relativePointsWE7.setWorld(WEWorld);
                 clipboard.getRegion().forEach(blockVector3 -> {
                     BlockState blockState = clipboard.getBlock(blockVector3);
@@ -104,10 +104,10 @@ public class Utils {
         return clipboard;
     }
 
-    public BlockPoints findRelativePoints(Region region, Material spawnMaterial, Material cornerMaterial) {
+    public BlockPoints7 findRelativePoints(Region region, Material spawnMaterial, Material cornerMaterial) {
         Utils utils = new Utils();
         World world = BukkitAdapter.adapt(region.getWorld());
-        BlockPoints relativePointsWE7 = new BlockPoints();
+        BlockPoints7 relativePointsWE7 = new BlockPoints7();
 
         region.iterator().forEachRemaining(blockVector3 -> {
             Material material = world.getBlockAt(blockVector3.getBlockX(), blockVector3.getBlockY(), blockVector3.getBlockZ()).getType(); //utils.getType(world, blockVector3);
@@ -126,13 +126,13 @@ public class Utils {
         return relativePointsWE7;
     }
 
-    public void putPoints(File file, BlockPoints relativePointsWE7) {
+    public void putPoints(File file, BlockPoints7 relativePointsWE7) {
         relativePointsWE7Map.put(file, relativePointsWE7);
     }
 
     public void loadAndIterateFiles(Material spawnMaterial, Material cornerMaterial) {
         Bukkit.getLogger().info("file map size: " + fileMap.size());
-        BlockPoints relativePointsWE7 = new BlockPoints();
+        BlockPoints7 relativePointsWE7 = new BlockPoints7();
 
         fileMap.forEach((name, file) -> {
             Bukkit.getLogger().info("Loading file " + file);

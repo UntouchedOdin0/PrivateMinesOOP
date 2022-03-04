@@ -186,7 +186,7 @@ public class WE7Adapter implements WorldEditAdapter {
         if (clipboardFormat != null) {
             try (ClipboardReader clipboardReader = clipboardFormat.getReader(new FileInputStream(file))) {
                 Clipboard clipboard = clipboardReader.read();
-                BlockPoints blockPoints = new BlockPoints();
+                BlockPoints7 blockPoints = new BlockPoints7();
                 List<BlockVector3> corners = new ArrayList<>();
 
                 Instant start = Instant.now();
@@ -198,8 +198,6 @@ public class WE7Adapter implements WorldEditAdapter {
                                 BlockVector3 blockVector3 = BlockVector3.at(x, y, z);
                                 Material material = BukkitAdapter.adapt(clipboard.getBlock(blockVector3)).getMaterial();
                                 if (material.equals(Material.AIR)) continue;
-//                                Bukkit.getLogger().info("blockVector3: " + blockVector3);
-//                                Bukkit.getLogger().info("material: " + material);
                                 if (material.equals(Material.SPONGE)) {
                                     blockPoints.spawn = blockVector3;
                                 } else if (material.equals(Material.POWERED_RAIL)) {
