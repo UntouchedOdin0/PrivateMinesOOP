@@ -25,8 +25,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import redempt.redlib.region.CuboidRegion;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -177,5 +176,31 @@ public class WE7Adapter implements WorldEditAdapter {
 
                 // Project to the X-Z plane
                 new com.sk89q.worldedit.regions.CuboidRegion(pos1.withY(min.getY()), pos2.withY(min.getY())));
+    }
+
+    public void searchFile(File file) {
+        ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(file);
+
+        if (clipboardFormat != null) {
+            try (ClipboardReader clipboardReader = clipboardFormat.getReader(new FileInputStream(file))) {
+                Clipboard clipboard = clipboardReader.read();
+
+                Bukkit.getLogger().info("searchFile file: " + file);
+                Bukkit.getLogger().info("searchFile clipboardFormat: " + clipboardFormat);
+                Bukkit.getLogger().info("searchFile clipboardReader: " + clipboardReader);
+                Bukkit.getLogger().info("searchFile clipboard: " + clipboard);
+
+                for (int x = clipboard.getMinimumPoint().getX(); x <= clipboard.getMaximumPoint().getX(); x++) {
+                    for (int y = clipboard.getMinimumPoint().getY(); y <= clipboard.getMaximumPoint().getY(); y++) {
+                        for (int z = clipboard.getMinimumPoint().getZ(); z <= clipboard.getMaximumPoint().getZ(); z++) {
+                            BlockVector3 blockVector3 = BlockVector3.at(x, y, z);
+                            Bukkit.getLogger().info("blockVector3: " + blockVector3);
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

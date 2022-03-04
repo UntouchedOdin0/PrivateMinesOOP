@@ -46,6 +46,7 @@ import me.untouchedodin0.plugin.util.placeholderapi.PrivateMinesExpansion;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditAdapter;
 import me.untouchedodin0.privatemines.compat.WorldEditCompatibility;
+import me.untouchedodin0.privatemines.we_7.worldedit.WE7Adapter;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -171,7 +172,13 @@ public class PrivateMines extends JavaPlugin {
             saveResource("schematics/mine.schem", false);
         }
 
-        MineConfig.mineTypes.forEach((s, mineType) -> mineTypeManager.registerMineType(mineType));
+        MineConfig.mineTypes.forEach((s, mineType) -> {
+            mineTypeManager.registerMineType(mineType);
+            File file = new File("plugins/PrivateMines/schematics/" + mineType.getFile());
+            WE7Adapter we7Adapter = new WE7Adapter();
+            we7Adapter.searchFile(file);
+        });
+//        MineConfig.mineTypes.forEach((s, mineType) -> mineTypeManager.registerMineType(mineType));
         getLogger().info("Loaded " + mineTypeManager.getTotalMineTypes() + " mine types!");
 
         try {
