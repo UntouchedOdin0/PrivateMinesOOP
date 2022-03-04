@@ -216,25 +216,17 @@ public class WE7Adapter implements WorldEditAdapter {
                 thread.start();
                 try {
                     thread.join();
-                    System.out.println("Thread has finished");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 Instant end = Instant.now();
                 Duration duration = Duration.between(start, end);
-                Bukkit.getLogger().info("duration: " + duration.toMillis() + " ms");
-                Bukkit.getLogger().info("searchFile file: " + file);
-                Bukkit.getLogger().info("searchFile clipboardFormat: " + clipboardFormat);
-                Bukkit.getLogger().info("searchFile clipboardReader: " + clipboardReader);
-                Bukkit.getLogger().info("searchFile clipboard: " + clipboard);
-                Bukkit.getLogger().info("searchFile blockPoints: " + blockPoints);
-                Bukkit.getLogger().info("blockPoints spawn: " + blockPoints.getSpawn());
-                Bukkit.getLogger().info("blockPoints corners: " + blockPoints.getCorners());
+                Bukkit.getLogger().info("Successfully iterated file " + file.getName() + " (Took " + duration.toMillis() + "ms)");
+                blockPoints7Storage.addBlockPoints(file, blockPoints);
                 thread.interrupt();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        blockPoints7Storage.addBlockPoints(file, blockPoints);
     }
 }

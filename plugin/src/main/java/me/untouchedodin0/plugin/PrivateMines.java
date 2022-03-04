@@ -101,6 +101,7 @@ public class PrivateMines extends JavaPlugin {
     private Utils utils;
     private ConfigManager configManager;
     private ConfigManager menuConfigManager;
+    private WE7Adapter we7Adapter; // = new WE7Adapter();
 
     private Gson gson;
     private WorldEditAdapter worldEditAdapter;
@@ -179,21 +180,16 @@ public class PrivateMines extends JavaPlugin {
             saveResource("schematics/mine.schem", false);
             me.untouchedodin0.privatemines.we_7.worldedit.Utils we7Utils = new me.untouchedodin0.privatemines.we_7.worldedit.Utils();
             BlockPoints7Storage blockPoints7Storage = we7Utils.getBlockPoints7Storage();
+            we7Adapter = new WE7Adapter();
 
             MineConfig.mineTypes.forEach((s, mineType) -> {
                 mineTypeManager.registerMineType(mineType);
                 File file = new File("plugins/PrivateMines/schematics/" + mineType.getFile());
-                WE7Adapter we7Adapter = new WE7Adapter();
                 we7Adapter.searchFile(file);
+                privateMines.getLogger().info("blockPoints7Storage:  " + we7Adapter.getBlockPoints7Storage());
+                privateMines.getLogger().info("blockPoints7Storage map:  " + we7Adapter.getBlockPoints7Storage().getBlockPoints7Map());
             });
         }
-
-//        MineConfig.mineTypes.forEach((s, mineType) -> {
-//            mineTypeManager.registerMineType(mineType);
-//            File file = new File("plugins/PrivateMines/schematics/" + mineType.getFile());
-//            WE7Adapter we7Adapter = new WE7Adapter();
-//            we7Adapter.searchFile(file);
-//        });
         getLogger().info("Loaded " + mineTypeManager.getTotalMineTypes() + " mine types!");
 
         try {
@@ -225,7 +221,6 @@ public class PrivateMines extends JavaPlugin {
                         new PrivateMinesCommand(this));
 
         Messages.load(this);
-
 
         //metrics.addCustomChart(new Metrics.("mines", mineStorage::getLoadedMinesSize));
 
@@ -360,6 +355,9 @@ public class PrivateMines extends JavaPlugin {
         return timeStorage;
     }
 
+    public BlockPoints7Storage getBlockPoints7Storage() {
+        return blockPoints7Storage;
+    }
 
     public MineWorldManager getMineWorldManager() {
         return mineWorldManager;
