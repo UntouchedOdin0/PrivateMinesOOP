@@ -46,6 +46,8 @@ import me.untouchedodin0.plugin.util.placeholderapi.PrivateMinesExpansion;
 import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditAdapter;
 import me.untouchedodin0.privatemines.compat.WorldEditCompatibility;
+import me.untouchedodin0.privatemines.we_6.worldedit.BlockPoints6;
+import me.untouchedodin0.privatemines.we_7.worldedit.BlockPoints7;
 import me.untouchedodin0.privatemines.we_7.worldedit.WE7Adapter;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
@@ -95,6 +97,8 @@ public class PrivateMines extends JavaPlugin {
     private MineWorldManager mineWorldManager;
     private TimeStorage timeStorage;
     private MineStorage mineStorage;
+    private BlockPoints6 blockPoints6;
+    private BlockPoints7 blockPoints7;
     private Utils utils;
     private ConfigManager configManager;
     private ConfigManager menuConfigManager;
@@ -151,6 +155,8 @@ public class PrivateMines extends JavaPlugin {
         }
         timeStorage = new TimeStorage();
         mineStorage = new MineStorage();
+        blockPoints6 = new BlockPoints6();
+        blockPoints7 = new BlockPoints7();
         mineFactory = new MineFactory(this);
         mineTypeManager = new MineTypeManager(this);
 
