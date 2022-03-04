@@ -5,7 +5,7 @@ import com.sk89q.worldedit.world.World;
 
 import java.util.List;
 
-public class RelativePointsWE7 {
+public class BlockPoints {
 
     World world;
     BlockVector3 spawn;

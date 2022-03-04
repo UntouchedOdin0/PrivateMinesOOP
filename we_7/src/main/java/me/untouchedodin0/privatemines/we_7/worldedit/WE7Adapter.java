@@ -184,11 +184,8 @@ public class WE7Adapter implements WorldEditAdapter {
         if (clipboardFormat != null) {
             try (ClipboardReader clipboardReader = clipboardFormat.getReader(new FileInputStream(file))) {
                 Clipboard clipboard = clipboardReader.read();
-
-                Bukkit.getLogger().info("searchFile file: " + file);
-                Bukkit.getLogger().info("searchFile clipboardFormat: " + clipboardFormat);
-                Bukkit.getLogger().info("searchFile clipboardReader: " + clipboardReader);
-                Bukkit.getLogger().info("searchFile clipboard: " + clipboard);
+                BlockPoints blockPoints = new BlockPoints();
+                List<BlockVector3> corners = new ArrayList<>();
 
                 for (int x = clipboard.getMinimumPoint().getX(); x <= clipboard.getMaximumPoint().getX(); x++) {
                     for (int y = clipboard.getMinimumPoint().getY(); y <= clipboard.getMaximumPoint().getY(); y++) {
@@ -198,9 +195,23 @@ public class WE7Adapter implements WorldEditAdapter {
                             if (material.equals(Material.AIR)) continue;
                             Bukkit.getLogger().info("blockVector3: " + blockVector3);
                             Bukkit.getLogger().info("material: " + material);
+                            if (material.equals(Material.SPONGE)) {
+                                blockPoints.spawn = blockVector3;
+                            } else if (material.equals(Material.POWERED_RAIL)) {
+                                corners.add(blockVector3);
+                                blockPoints.setCorners(corners);
+                            }
                         }
                     }
                 }
+
+                Bukkit.getLogger().info("searchFile file: " + file);
+                Bukkit.getLogger().info("searchFile clipboardFormat: " + clipboardFormat);
+                Bukkit.getLogger().info("searchFile clipboardReader: " + clipboardReader);
+                Bukkit.getLogger().info("searchFile clipboard: " + clipboard);
+                Bukkit.getLogger().info("searchFile blockPoints: " + blockPoints);
+                Bukkit.getLogger().info("blockPoints spawn: " + blockPoints.getSpawn());
+                Bukkit.getLogger().info("blockPoints corners: " + blockPoints.getCorners());
             } catch (IOException e) {
                 e.printStackTrace();
             }
