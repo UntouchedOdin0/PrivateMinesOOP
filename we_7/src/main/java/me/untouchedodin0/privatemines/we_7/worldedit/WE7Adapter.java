@@ -227,6 +227,7 @@ public class WE7Adapter implements WorldEditAdapter {
                 Bukkit.getLogger().info("searchFile blockPoints: " + blockPoints);
                 Bukkit.getLogger().info("blockPoints spawn: " + blockPoints.getSpawn());
                 Bukkit.getLogger().info("blockPoints corners: " + blockPoints.getCorners());
+                thread.interrupt();
             } catch (IOException e) {
                 e.printStackTrace();
             }
