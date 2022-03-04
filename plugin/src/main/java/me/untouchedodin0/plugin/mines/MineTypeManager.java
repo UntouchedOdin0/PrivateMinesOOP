@@ -30,7 +30,7 @@ public class MineTypeManager {
 
     public MineType getDefaultMineType() {
         if (mineTypes.isEmpty()) {
-            privateMines.getLogger().info("No default world edit mine type was found!\n" +
+            privateMines.getLogger().info("No default mine type was found!\n" +
                                           "Create a mine type in the mineTypes section of the config.yml" +
                                           "Please ask in the discord server if you need help");
             throw new RuntimeException();
