@@ -39,6 +39,7 @@ public class WE7Adapter implements WorldEditAdapter {
 
     BlockVector3 spawnPoint;
     List<BlockVector3> corners = new ArrayList<>(2);
+    BlockPoints7Storage blockPoints7Storage = new BlockPoints7Storage();
 
     @Override
     public CuboidRegion pasteSchematic(Location location, Path file) {
@@ -180,13 +181,17 @@ public class WE7Adapter implements WorldEditAdapter {
                 new com.sk89q.worldedit.regions.CuboidRegion(pos1.withY(min.getY()), pos2.withY(min.getY())));
     }
 
+    public BlockPoints7Storage getBlockPoints7Storage() {
+        return blockPoints7Storage;
+    }
+
     public void searchFile(File file) {
         ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(file);
+        BlockPoints7 blockPoints = new BlockPoints7();
 
         if (clipboardFormat != null) {
             try (ClipboardReader clipboardReader = clipboardFormat.getReader(new FileInputStream(file))) {
                 Clipboard clipboard = clipboardReader.read();
-                BlockPoints7 blockPoints = new BlockPoints7();
                 List<BlockVector3> corners = new ArrayList<>();
 
                 Instant start = Instant.now();
@@ -230,5 +235,6 @@ public class WE7Adapter implements WorldEditAdapter {
                 e.printStackTrace();
             }
         }
+        blockPoints7Storage.addBlockPoints(file, blockPoints);
     }
 }

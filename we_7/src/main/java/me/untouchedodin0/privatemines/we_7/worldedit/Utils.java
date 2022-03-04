@@ -26,6 +26,7 @@ public class Utils {
 
     public Map<String, File> fileMap = new HashMap<>();
     public Map<File, BlockPoints7> relativePointsWE7Map = new HashMap<>();
+    public BlockPoints7Storage blockPoints7Storage = new BlockPoints7Storage();
 
     BlockVector3 spawnPoint; // = we7Adapter.findRelativeSpawnPoint(region, spawnMaterial);
     BlockVector3 corner1;
@@ -154,5 +155,9 @@ public class Utils {
     private static class MineBlocks {
         BlockVector3 spawnLocation;
         BlockVector3[] corners;
+    }
+
+    public BlockPoints7Storage getBlockPoints7Storage() {
+        return blockPoints7Storage;
     }
 }

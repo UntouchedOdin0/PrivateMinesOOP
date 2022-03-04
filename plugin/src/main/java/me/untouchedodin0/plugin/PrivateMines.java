@@ -30,8 +30,8 @@ import de.jeff_media.updatechecker.UpdateChecker;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import me.untouchedodin0.plugin.commands.PrivateMinesCommand;
 import me.untouchedodin0.plugin.config.Config;
-import me.untouchedodin0.plugin.config.menu.MenuItemType;
 import me.untouchedodin0.plugin.config.MineConfig;
+import me.untouchedodin0.plugin.config.menu.MenuItemType;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.listener.AutoSellListener;
 import me.untouchedodin0.plugin.listener.MineCreationTest;
@@ -47,7 +47,7 @@ import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditAdapter;
 import me.untouchedodin0.privatemines.compat.WorldEditCompatibility;
 import me.untouchedodin0.privatemines.we_6.worldedit.BlockPoints6;
-import me.untouchedodin0.privatemines.we_7.worldedit.BlockPoints7;
+import me.untouchedodin0.privatemines.we_7.worldedit.BlockPoints7Storage;
 import me.untouchedodin0.privatemines.we_7.worldedit.WE7Adapter;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
@@ -97,8 +97,7 @@ public class PrivateMines extends JavaPlugin {
     private MineWorldManager mineWorldManager;
     private TimeStorage timeStorage;
     private MineStorage mineStorage;
-    private BlockPoints6 blockPoints6;
-    private BlockPoints7 blockPoints7;
+    private BlockPoints7Storage blockPoints7Storage = new BlockPoints7Storage();
     private Utils utils;
     private ConfigManager configManager;
     private ConfigManager menuConfigManager;
@@ -155,8 +154,7 @@ public class PrivateMines extends JavaPlugin {
         }
         timeStorage = new TimeStorage();
         mineStorage = new MineStorage();
-        blockPoints6 = new BlockPoints6();
-        blockPoints7 = new BlockPoints7();
+
         mineFactory = new MineFactory(this);
         mineTypeManager = new MineTypeManager(this);
 
@@ -173,18 +171,29 @@ public class PrivateMines extends JavaPlugin {
         if (RedLib.MID_VERSION < 13) {
             // Save the schematic file, this format is used pre-1.13
             saveResource("schematics/mine.schematic", false);
+
+            BlockPoints6 blockPoints6 = new BlockPoints6();
+            privateMines.getLogger().info("blockPoints6: " + blockPoints6);
         } else {
             // Save the schem file this format is used in 1.13 and beyond.
             saveResource("schematics/mine.schem", false);
+            me.untouchedodin0.privatemines.we_7.worldedit.Utils we7Utils = new me.untouchedodin0.privatemines.we_7.worldedit.Utils();
+            BlockPoints7Storage blockPoints7Storage = we7Utils.getBlockPoints7Storage();
+
+            MineConfig.mineTypes.forEach((s, mineType) -> {
+                mineTypeManager.registerMineType(mineType);
+                File file = new File("plugins/PrivateMines/schematics/" + mineType.getFile());
+                WE7Adapter we7Adapter = new WE7Adapter();
+                we7Adapter.searchFile(file);
+            });
         }
 
-        MineConfig.mineTypes.forEach((s, mineType) -> {
-            mineTypeManager.registerMineType(mineType);
-            File file = new File("plugins/PrivateMines/schematics/" + mineType.getFile());
-            WE7Adapter we7Adapter = new WE7Adapter();
-            we7Adapter.searchFile(file);
-        });
-//        MineConfig.mineTypes.forEach((s, mineType) -> mineTypeManager.registerMineType(mineType));
+//        MineConfig.mineTypes.forEach((s, mineType) -> {
+//            mineTypeManager.registerMineType(mineType);
+//            File file = new File("plugins/PrivateMines/schematics/" + mineType.getFile());
+//            WE7Adapter we7Adapter = new WE7Adapter();
+//            we7Adapter.searchFile(file);
+//        });
         getLogger().info("Loaded " + mineTypeManager.getTotalMineTypes() + " mine types!");
 
         try {
@@ -350,6 +359,7 @@ public class PrivateMines extends JavaPlugin {
     public TimeStorage getTimeStorage() {
         return timeStorage;
     }
+
 
     public MineWorldManager getMineWorldManager() {
         return mineWorldManager;
