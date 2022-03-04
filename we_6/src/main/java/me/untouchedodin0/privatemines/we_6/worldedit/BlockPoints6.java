@@ -2,7 +2,7 @@ package me.untouchedodin0.privatemines.we_6.worldedit;
 
 import org.bukkit.util.BlockVector;
 
-public class RelativePointsWE6 {
+public class BlockPoints6 {
 
     BlockVector spawn;
     BlockVector corner1;
