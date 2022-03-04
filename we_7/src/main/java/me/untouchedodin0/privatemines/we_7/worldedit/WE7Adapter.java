@@ -194,7 +194,10 @@ public class WE7Adapter implements WorldEditAdapter {
                     for (int y = clipboard.getMinimumPoint().getY(); y <= clipboard.getMaximumPoint().getY(); y++) {
                         for (int z = clipboard.getMinimumPoint().getZ(); z <= clipboard.getMaximumPoint().getZ(); z++) {
                             BlockVector3 blockVector3 = BlockVector3.at(x, y, z);
+                            Material material = BukkitAdapter.adapt(clipboard.getBlock(blockVector3)).getMaterial();
+                            if (material.equals(Material.AIR)) continue;
                             Bukkit.getLogger().info("blockVector3: " + blockVector3);
+                            Bukkit.getLogger().info("material: " + material);
                         }
                     }
                 }
