@@ -12,6 +12,7 @@ repositories {
 
 dependencies {
     compileOnly(project(':compat'))
+    compileOnly project(':StorageWE7')
 
     compileOnly 'com.fastasyncworldedit:FastAsyncWorldEdit-Core:2.0.1'
     compileOnly 'com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit:2.0.1'

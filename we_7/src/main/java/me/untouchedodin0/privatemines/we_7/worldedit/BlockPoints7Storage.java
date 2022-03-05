@@ -17,4 +17,8 @@ public class BlockPoints7Storage {
     public Map<File, BlockPoints7> getBlockPoints7Map() {
         return blockPoints7Map;
     }
+
+    public BlockPoints7 get(File file) {
+        return blockPoints7Map.get(file);
+    }
 }

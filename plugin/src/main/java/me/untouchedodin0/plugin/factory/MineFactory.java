@@ -156,6 +156,7 @@ public class MineFactory {
         MineData mineData = new MineData();
 
         CuboidRegion region = privateMines.getWorldEditAdapter().pasteSchematic(location, path);
+
         mineBlocks = findMineBlocks(region, spawnMaterial, mineCornerMaterial);
         spawnLocation = mineBlocks.spawnLocation;
         corner1 = mineBlocks.corners[0];
@@ -207,10 +208,10 @@ public class MineFactory {
             player.spigot().sendMessage(textComponent);
         }
         IWrappedRegion iWrappedMiningRegion = utils.createWorldGuardRegion(player, miningRegion);
-        IWrappedRegion iWrappedFullRegion = utils.createFullWorldGuardRegion(player, fullRegion);
+        //IWrappedRegion iWrappedFullRegion = utils.createFullWorldGuardRegion(player, fullRegion);
 
         mine.setIWrappedMiningRegion(iWrappedMiningRegion);
-        mine.setIWrappedFullRegion(iWrappedFullRegion);
+       // mine.setIWrappedFullRegion(iWrappedFullRegion);
         utils.setMineFlags(mine);
         //worldBorderApi.setBorder(player, 10, location);
     }

@@ -14,5 +14,7 @@ include 'plugin'
 include 'we_6'
 include 'we_7'
 include 'API'
-
+include 'Storage'
+include 'StorageWE6'
+include 'StorageWE7'
 

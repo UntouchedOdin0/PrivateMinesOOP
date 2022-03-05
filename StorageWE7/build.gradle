@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+}
+
+group 'me.untouchedodin0.privatemines'
+version '3.1.7-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven {
+        url = "https://maven.enginehub.org/repo/"
+    }
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
+    compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.2.8-SNAPSHOT'
+}
+
+test {
+    useJUnitPlatform()
+}

@@ -40,6 +40,79 @@ public class WE7Adapter implements WorldEditAdapter {
     BlockVector3 spawnPoint;
     List<BlockVector3> corners = new ArrayList<>(2);
     BlockPoints7Storage blockPoints7Storage = new BlockPoints7Storage();
+    Utils utils = new Utils();
+
+    public static Region walls(com.sk89q.worldedit.regions.CuboidRegion region) {
+        BlockVector3 pos1 = region.getPos1();
+        BlockVector3 pos2 = region.getPos2();
+
+        BlockVector3 min = region.getMinimumPoint();
+        BlockVector3 max = region.getMaximumPoint();
+
+        return new RegionIntersection(
+                // Project to Z-Y plane
+                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withX(min.getX()), pos2.withX(min.getX())),
+                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withX(max.getX()), pos2.withX(max.getX())),
+
+                // Project to X-Y plane
+                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withZ(min.getZ()), pos2.withZ(min.getZ())),
+                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withZ(max.getZ()), pos2.withZ(max.getZ())),
+
+                // Project to the X-Z plane
+                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withY(min.getY()), pos2.withY(min.getY())));
+    }
+
+    public static Region walls(CuboidRegion region) {
+        BlockVector3 pos1 = BlockVector3.at(region.getStart().getBlockX(), region.getStart().getBlockY(), region.getStart().getBlockZ());
+        BlockVector3 pos2 = BlockVector3.at(region.getEnd().getBlockX(), region.getEnd().getBlockY(), region.getEnd().getBlockZ());
+
+        BlockVector3 min = BlockVector3.at(region.getStart().getBlockX(), region.getStart().getBlockY(), region.getStart().getBlockZ());
+        BlockVector3 max = BlockVector3.at(region.getEnd().getBlockX(), region.getEnd().getBlockY(), region.getEnd().getBlockZ());
+
+        return new RegionIntersection(
+                // Project to Z-Y plane
+                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withX(min.getX()), pos2.withX(min.getX())),
+                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withX(max.getX()), pos2.withX(max.getX())),
+
+                // Project to X-Y plane
+                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withZ(min.getZ()), pos2.withZ(min.getZ())),
+                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withZ(max.getZ()), pos2.withZ(max.getZ())),
+
+                // Project to the X-Z plane
+                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withY(min.getY()), pos2.withY(min.getY())));
+    }
+
+    public static Region testPaste(Location location, Path file) {
+        ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(file.toFile());
+        World world = BukkitAdapter.adapt(location.getWorld());
+
+        if (clipboardFormat == null) {
+            throw new IllegalArgumentException("File is not a valid schematic");
+        }
+
+        try (InputStream inputStream = Files.newInputStream(file);
+             ClipboardReader clipboardReader = clipboardFormat.getReader(inputStream)) {
+            Clipboard clipboard = clipboardReader.read();
+            if (clipboard == null) throw new IllegalArgumentException("Clipboard is null");
+
+            try (EditSession editSession = WorldEdit.getInstance().newEditSessionBuilder().world(world).build()) {
+                BlockVector3 centerVector = BlockVector3.at(location.getX(), location.getY(), location.getZ());
+                // If the clipboard isn't null prepare to create a paste operation, complete it and set the region stuff.
+                Operation operation = new ClipboardHolder(clipboard)
+                        .createPaste(editSession)
+                        .to(centerVector)
+                        .ignoreAirBlocks(true)
+                        .build();
+                Operations.complete(operation);
+                Region region = clipboard.getRegion();
+                region.shift(centerVector.subtract(clipboard.getOrigin()));
+                return region;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     @Override
     public CuboidRegion pasteSchematic(Location location, Path file) {
@@ -95,6 +168,7 @@ public class WE7Adapter implements WorldEditAdapter {
     @Override
     public void fillRegion(CuboidRegion region, Map<Material, Double> materials) {
         World world = new BukkitWorld(region.getWorld());
+        Utils utils = new Utils();
 
         try (final EditSession editSession =
                      WorldEdit.getInstance().newEditSessionBuilder().world(world).build()) {
@@ -141,52 +215,16 @@ public class WE7Adapter implements WorldEditAdapter {
         return corners;
     }
 
-    public static Region walls(com.sk89q.worldedit.regions.CuboidRegion region) {
-        BlockVector3 pos1 = region.getPos1();
-        BlockVector3 pos2 = region.getPos2();
-
-        BlockVector3 min = region.getMinimumPoint();
-        BlockVector3 max = region.getMaximumPoint();
-
-        return new RegionIntersection(
-                // Project to Z-Y plane
-                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withX(min.getX()), pos2.withX(min.getX())),
-                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withX(max.getX()), pos2.withX(max.getX())),
-
-                // Project to X-Y plane
-                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withZ(min.getZ()), pos2.withZ(min.getZ())),
-                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withZ(max.getZ()), pos2.withZ(max.getZ())),
-
-                // Project to the X-Z plane
-                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withY(min.getY()), pos2.withY(min.getY())));
-    }
-
-    public static Region walls(CuboidRegion region) {
-        BlockVector3 pos1 = BlockVector3.at(region.getStart().getBlockX(), region.getStart().getBlockY(), region.getStart().getBlockZ());
-        BlockVector3 pos2 = BlockVector3.at(region.getEnd().getBlockX(), region.getEnd().getBlockY(), region.getEnd().getBlockZ());
-
-        BlockVector3 min = BlockVector3.at(region.getStart().getBlockX(), region.getStart().getBlockY(), region.getStart().getBlockZ());
-        BlockVector3 max = BlockVector3.at(region.getEnd().getBlockX(), region.getEnd().getBlockY(), region.getEnd().getBlockZ());
-
-        return new RegionIntersection(
-                // Project to Z-Y plane
-                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withX(min.getX()), pos2.withX(min.getX())),
-                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withX(max.getX()), pos2.withX(max.getX())),
-
-                // Project to X-Y plane
-                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withZ(min.getZ()), pos2.withZ(min.getZ())),
-                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withZ(max.getZ()), pos2.withZ(max.getZ())),
-
-                // Project to the X-Z plane
-                new com.sk89q.worldedit.regions.CuboidRegion(pos1.withY(min.getY()), pos2.withY(min.getY())));
-    }
-
     public BlockPoints7Storage getBlockPoints7Storage() {
         return blockPoints7Storage;
     }
 
     public void setBlockPoints7Storage(BlockPoints7Storage blockPoints7Storage) {
         this.blockPoints7Storage = blockPoints7Storage;
+    }
+
+    public Utils getUtils() {
+        return utils;
     }
 
     public void searchFile(File file) {

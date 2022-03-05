@@ -98,6 +98,7 @@ public class PrivateMines extends JavaPlugin {
     private MineWorldManager mineWorldManager;
     private TimeStorage timeStorage;
     private MineStorage mineStorage;
+
     private BlockPointsStorage blockPointsStorage;
     private BlockPoints7Storage blockPoints7Storage;
     private Utils utils;
@@ -181,10 +182,8 @@ public class PrivateMines extends JavaPlugin {
             // Save the schem file this format is used in 1.13 and beyond.
             saveResource("schematics/mine.schem", false);
             me.untouchedodin0.privatemines.we_7.worldedit.Utils we7Utils = new me.untouchedodin0.privatemines.we_7.worldedit.Utils();
-            blockPoints7Storage = we7Utils.getBlockPoints7Storage();
             we7Adapter = new WE7Adapter();
 
-            privateMines.getLogger().info("blockPoints7Storage: " + blockPoints7Storage);
             privateMines.getLogger().info("we7Adapter: " + we7Adapter);
 
             MineConfig.mineTypes.forEach((s, mineType) -> {
@@ -197,7 +196,7 @@ public class PrivateMines extends JavaPlugin {
             we7Adapter.getBlockPoints7Storage().getBlockPoints7Map().forEach((file, blockPoints7) -> {
                 privateMines.getLogger().info("Block Points:");
                 privateMines.getLogger().info("File: "+ file);
-                privateMines.getLogger().info("BlockPoints7: "+ blockPoints7);
+                privateMines.getLogger().info("BlockPoints7: " + blockPoints7);
             });
         }
         getLogger().info("Loaded " + mineTypeManager.getTotalMineTypes() + " mine types!");

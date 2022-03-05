@@ -9,6 +9,7 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.world.block.BlockState;
 import com.sk89q.worldedit.world.block.BlockTypes;
+import me.untouchedodin0.storage.StorageWE7;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -27,6 +28,7 @@ public class Utils {
     public Map<String, File> fileMap = new HashMap<>();
     public Map<File, BlockPoints7> relativePointsWE7Map = new HashMap<>();
     public BlockPoints7Storage blockPoints7Storage = new BlockPoints7Storage();
+    public StorageWE7 storageWE7 = new StorageWE7();
 
     BlockVector3 spawnPoint; // = we7Adapter.findRelativeSpawnPoint(region, spawnMaterial);
     BlockVector3 corner1;
@@ -157,5 +159,9 @@ public class Utils {
 
     public BlockPoints7Storage getBlockPoints7Storage() {
         return blockPoints7Storage;
+    }
+
+    public StorageWE7 getStorageWE7() {
+        return storageWE7;
     }
 }
