@@ -185,6 +185,10 @@ public class WE7Adapter implements WorldEditAdapter {
         return blockPoints7Storage;
     }
 
+    public void setBlockPoints7Storage(BlockPoints7Storage blockPoints7Storage) {
+        this.blockPoints7Storage = blockPoints7Storage;
+    }
+
     public void searchFile(File file) {
         ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(file);
         BlockPoints7 blockPoints = new BlockPoints7();
@@ -222,7 +226,11 @@ public class WE7Adapter implements WorldEditAdapter {
                 Instant end = Instant.now();
                 Duration duration = Duration.between(start, end);
                 Bukkit.getLogger().info("Successfully iterated file " + file.getName() + " (Took " + duration.toMillis() + "ms)");
+                Bukkit.getLogger().info("spawn: " + blockPoints.getSpawn());
+                Bukkit.getLogger().info("corners: " + blockPoints.getCorners());
+
                 blockPoints7Storage.addBlockPoints(file, blockPoints);
+                Bukkit.getLogger().info("blockPoints7Storage map (we7): " + blockPoints7Storage.blockPoints7Map);
                 thread.interrupt();
             } catch (IOException e) {
                 e.printStackTrace();

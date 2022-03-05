@@ -40,6 +40,7 @@ import me.untouchedodin0.plugin.mines.MineTypeManager;
 import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.storage.TimeStorage;
+import me.untouchedodin0.plugin.storage.points.BlockPointsStorage;
 import me.untouchedodin0.plugin.util.Exceptions;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.util.placeholderapi.PrivateMinesExpansion;
@@ -97,6 +98,7 @@ public class PrivateMines extends JavaPlugin {
     private MineWorldManager mineWorldManager;
     private TimeStorage timeStorage;
     private MineStorage mineStorage;
+    private BlockPointsStorage blockPointsStorage;
     private BlockPoints7Storage blockPoints7Storage;
     private Utils utils;
     private ConfigManager configManager;
@@ -179,18 +181,26 @@ public class PrivateMines extends JavaPlugin {
             // Save the schem file this format is used in 1.13 and beyond.
             saveResource("schematics/mine.schem", false);
             me.untouchedodin0.privatemines.we_7.worldedit.Utils we7Utils = new me.untouchedodin0.privatemines.we_7.worldedit.Utils();
-            BlockPoints7Storage blockPoints7Storage = we7Utils.getBlockPoints7Storage();
+            blockPoints7Storage = we7Utils.getBlockPoints7Storage();
             we7Adapter = new WE7Adapter();
+
+            privateMines.getLogger().info("blockPoints7Storage: " + blockPoints7Storage);
+            privateMines.getLogger().info("we7Adapter: " + we7Adapter);
 
             MineConfig.mineTypes.forEach((s, mineType) -> {
                 mineTypeManager.registerMineType(mineType);
                 File file = new File("plugins/PrivateMines/schematics/" + mineType.getFile());
                 we7Adapter.searchFile(file);
             });
+
+            privateMines.getLogger().info("blockPoints7Storage map: " + we7Adapter.getBlockPoints7Storage().getBlockPoints7Map());
+            we7Adapter.getBlockPoints7Storage().getBlockPoints7Map().forEach((file, blockPoints7) -> {
+                privateMines.getLogger().info("Block Points:");
+                privateMines.getLogger().info("File: "+ file);
+                privateMines.getLogger().info("BlockPoints7: "+ blockPoints7);
+            });
         }
         getLogger().info("Loaded " + mineTypeManager.getTotalMineTypes() + " mine types!");
-        blockPoints7Storage = we7Adapter.getBlockPoints7Storage();
-
         try {
             final List<Path> files = Files.list(getDataFolder().toPath())
                     .collect(Collectors.toList());
@@ -352,8 +362,8 @@ public class PrivateMines extends JavaPlugin {
         return timeStorage;
     }
 
-    public BlockPoints7Storage getBlockPoints7Storage() {
-        return blockPoints7Storage;
+    public BlockPointsStorage getBlockPointsStorage() {
+        return blockPointsStorage;
     }
 
     public MineWorldManager getMineWorldManager() {
