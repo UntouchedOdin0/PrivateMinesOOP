@@ -39,7 +39,6 @@ public class WE7Adapter implements WorldEditAdapter {
 
     BlockVector3 spawnPoint;
     List<BlockVector3> corners = new ArrayList<>(2);
-    BlockPoints7Storage blockPoints7Storage = new BlockPoints7Storage();
     Utils utils = new Utils();
 
     public static Region walls(com.sk89q.worldedit.regions.CuboidRegion region) {
@@ -215,14 +214,6 @@ public class WE7Adapter implements WorldEditAdapter {
         return corners;
     }
 
-    public BlockPoints7Storage getBlockPoints7Storage() {
-        return blockPoints7Storage;
-    }
-
-    public void setBlockPoints7Storage(BlockPoints7Storage blockPoints7Storage) {
-        this.blockPoints7Storage = blockPoints7Storage;
-    }
-
     public Utils getUtils() {
         return utils;
     }
@@ -264,11 +255,6 @@ public class WE7Adapter implements WorldEditAdapter {
                 Instant end = Instant.now();
                 Duration duration = Duration.between(start, end);
                 Bukkit.getLogger().info("Successfully iterated file " + file.getName() + " (Took " + duration.toMillis() + "ms)");
-                Bukkit.getLogger().info("spawn: " + blockPoints.getSpawn());
-                Bukkit.getLogger().info("corners: " + blockPoints.getCorners());
-
-                blockPoints7Storage.addBlockPoints(file, blockPoints);
-                Bukkit.getLogger().info("blockPoints7Storage map (we7): " + blockPoints7Storage.blockPoints7Map);
                 thread.interrupt();
             } catch (IOException e) {
                 e.printStackTrace();

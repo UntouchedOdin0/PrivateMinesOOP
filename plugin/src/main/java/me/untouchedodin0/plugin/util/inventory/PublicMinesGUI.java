@@ -62,7 +62,6 @@ public class PublicMinesGUI {
         });
 
         if (slot.get() == 0) {
-            player.sendMessage("No Mines Open GUI!");
             InventoryGUI noMinesOpen = new InventoryGUI(9, "No mines are open");
             ItemButton itemButton = ItemButton.create(
                     new ItemBuilder(Material.BARRIER)

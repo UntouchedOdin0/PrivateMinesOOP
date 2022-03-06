@@ -67,7 +67,6 @@ public class MineFactory {
         this.utils = privateMines.getUtils();
         this.mineStorage = privateMines.getMineStorage();
         this.timeStorage = privateMines.getTimeStorage();
-        this.blockPointsStorage = privateMines.getBlockPointsStorage();
     }
 
     @Deprecated

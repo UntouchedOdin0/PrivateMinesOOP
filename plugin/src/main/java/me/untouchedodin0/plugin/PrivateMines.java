@@ -24,10 +24,8 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin;
 
-import com.github.retrooper.packetevents.PacketEvents;
 import com.google.gson.Gson;
 import de.jeff_media.updatechecker.UpdateChecker;
-import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import me.untouchedodin0.plugin.commands.PrivateMinesCommand;
 import me.untouchedodin0.plugin.config.Config;
 import me.untouchedodin0.plugin.config.MineConfig;
@@ -40,7 +38,6 @@ import me.untouchedodin0.plugin.mines.MineTypeManager;
 import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.storage.TimeStorage;
-import me.untouchedodin0.plugin.storage.points.BlockPointsStorage;
 import me.untouchedodin0.plugin.util.Exceptions;
 import me.untouchedodin0.plugin.util.Utils;
 import me.untouchedodin0.plugin.util.placeholderapi.PrivateMinesExpansion;
@@ -48,7 +45,6 @@ import me.untouchedodin0.plugin.world.MineWorldManager;
 import me.untouchedodin0.privatemines.compat.WorldEditAdapter;
 import me.untouchedodin0.privatemines.compat.WorldEditCompatibility;
 import me.untouchedodin0.privatemines.we_6.worldedit.BlockPoints6;
-import me.untouchedodin0.privatemines.we_7.worldedit.BlockPoints7Storage;
 import me.untouchedodin0.privatemines.we_7.worldedit.WE7Adapter;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
@@ -99,12 +95,11 @@ public class PrivateMines extends JavaPlugin {
     private TimeStorage timeStorage;
     private MineStorage mineStorage;
 
-    private BlockPointsStorage blockPointsStorage;
-    private BlockPoints7Storage blockPoints7Storage;
+
     private Utils utils;
     private ConfigManager configManager;
     private ConfigManager menuConfigManager;
-    private WE7Adapter we7Adapter; // = new WE7Adapter();
+    private WE7Adapter we7Adapter = new WE7Adapter();
 
     private Gson gson;
     private WorldEditAdapter worldEditAdapter;
@@ -123,12 +118,6 @@ public class PrivateMines extends JavaPlugin {
 
     public static Economy getEconomy() {
         return privateMines.economy;
-    }
-
-    @Override
-    public void onLoad() {
-        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
-        PacketEvents.getAPI().load();
     }
 
     @Override
@@ -191,15 +180,9 @@ public class PrivateMines extends JavaPlugin {
                 File file = new File("plugins/PrivateMines/schematics/" + mineType.getFile());
                 we7Adapter.searchFile(file);
             });
-
-            privateMines.getLogger().info("blockPoints7Storage map: " + we7Adapter.getBlockPoints7Storage().getBlockPoints7Map());
-            we7Adapter.getBlockPoints7Storage().getBlockPoints7Map().forEach((file, blockPoints7) -> {
-                privateMines.getLogger().info("Block Points:");
-                privateMines.getLogger().info("File: "+ file);
-                privateMines.getLogger().info("BlockPoints7: " + blockPoints7);
-            });
         }
         getLogger().info("Loaded " + mineTypeManager.getTotalMineTypes() + " mine types!");
+
         try {
             final List<Path> files = Files.list(getDataFolder().toPath())
                     .collect(Collectors.toList());
@@ -266,9 +249,9 @@ public class PrivateMines extends JavaPlugin {
         }
         getServer().getPluginManager().registerEvents(new MineCreationTest(), this);
 
-        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
-        PacketEvents.getAPI().getSettings().bStats(true).checkForUpdates(false).debug(true);
-        PacketEvents.getAPI().init();
+//        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
+//        PacketEvents.getAPI().getSettings().bStats(true).checkForUpdates(false).debug(true);
+//        PacketEvents.getAPI().init();
 
         UpdateChecker.init(this, SPIGOT_PLUGIN_ID).checkEveryXHours(6).setDownloadLink(SPIGOT_PLUGIN_ID).checkNow();
 
@@ -359,10 +342,6 @@ public class PrivateMines extends JavaPlugin {
 
     public TimeStorage getTimeStorage() {
         return timeStorage;
-    }
-
-    public BlockPointsStorage getBlockPointsStorage() {
-        return blockPointsStorage;
     }
 
     public MineWorldManager getMineWorldManager() {

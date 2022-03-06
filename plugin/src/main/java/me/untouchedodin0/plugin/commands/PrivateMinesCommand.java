@@ -86,19 +86,12 @@ public class PrivateMinesCommand {
         String inventoryTitleColored = utils.color(inventoryTitle);
         String yourMineColoured = utils.color(yourMineTitle);
 
-        player.sendMessage("inventoryTitle: " + inventoryTitle);
-        player.sendMessage("inventoryTitleColored: " + inventoryTitleColored);
-
         InventoryGUI initialMenu = new InventoryGUI(9, inventoryTitleColored);
         InventoryGUI yourMine = new InventoryGUI(Bukkit.createInventory(null, 27, yourMineTitle));
 
         Mine mine = mineStorage.getMine(player.getUniqueId());
         PublicMinesGUI publicMinesGUI = new PublicMinesGUI(mineStorage);
 
-        if (mine == null) {
-            player.sendMessage(Messages.msg("doNotOwnMine"));
-            return;
-        }
 
         List<String> yourMineLore = new ArrayList<>();
         List<String> publicMinesLore = new ArrayList<>();
@@ -113,17 +106,51 @@ public class PrivateMinesCommand {
 
         ItemBuilder yourMineBuilder = new ItemBuilder(Material.MINECART).setName(ChatColor.GREEN + "Your Mine").addLore(yourMineLore);
         ItemButton yourMineButton = ItemButton.create(yourMineBuilder, inventoryClickEvent -> {
-           initialMenu.destroy();
+            initialMenu.destroy();
+            Mine mine1 = mineStorage.getMine(player.getUniqueId());
 
-           InventoryGUI yourMineGui = new InventoryGUI(9, yourMineColoured);
+            InventoryGUI yourMineGui = new InventoryGUI(9, yourMineColoured);
 
-            MenuConfig.menuItemTypeMap.forEach((s, menuItemType) -> {
-                Material material = menuItemType.getType();
-                String name = menuItemType.getName();
+            ItemButton teleport = ItemButton.create(
+                    new ItemBuilder(Material.DIAMOND_BOOTS)
+                            .setName(ChatColor.GREEN + "Click to teleport")
+                            .addLore(ChatColor.GRAY + "to your mine"),
+                    clickEvent -> {
+                        player.sendMessage(ChatColor.GREEN + "Teleporting you to the mine");
+                        mine1.teleport(player);
+                    });
+            ItemButton reset = ItemButton.create(
+                    new ItemBuilder(Material.STONE_BUTTON)
+                            .setName(ChatColor.GREEN + "Click to reset")
+                            .addLore(ChatColor.GRAY + "your mine"),
+                    clickEvent -> {
+                        player.sendMessage(ChatColor.GREEN + "Resetting your mine");
+                        mine1.reset();
+                    });
 
-                ItemBuilder itemBuilder = new ItemBuilder(material).setName(name);
-            });
-           yourMineGui.open(player);
+            initialMenu.addButton(0, fillerButton);
+            initialMenu.addButton(1, fillerButton);
+            initialMenu.addButton(2, fillerButton);
+            initialMenu.addButton(4, fillerButton);
+            initialMenu.addButton(6, fillerButton);
+            initialMenu.addButton(7, fillerButton);
+            initialMenu.addButton(8, fillerButton);
+
+            if (!mineStorage.hasMine(player.getUniqueId())) {
+                player.sendMessage(ChatColor.RED + "You don't own a mine");
+                player.closeInventory();
+            } else {
+                yourMineGui.addButton(0, fillerButton);
+                yourMineGui.addButton(1, fillerButton);
+                yourMineGui.addButton(2, fillerButton);
+                yourMineGui.addButton(3, teleport);
+                yourMineGui.addButton(4, fillerButton);
+                yourMineGui.addButton(5, reset);
+                yourMineGui.addButton(6, fillerButton);
+                yourMineGui.addButton(7, fillerButton);
+                yourMineGui.addButton(8, fillerButton);
+                yourMineGui.open(player);
+            }
         });
 
         publicMinesLore.add(ChatColor.GRAY + "Click to open");
@@ -172,9 +199,7 @@ public class PrivateMinesCommand {
                             clickEvent -> {
                                 player.sendMessage(ChatColor.GREEN + "Teleporting you to the mine");
                                 mine1.teleport(player);
-                    });
-
-                    player.sendMessage("lore: " + lore);
+                            });
                     publicMines.addButton(slot.getAndIncrement(), itemButton);
                 }
             });
@@ -193,7 +218,11 @@ public class PrivateMinesCommand {
 //                publicMines.addButton(slot.getAndIncrement(), itemButton);
 //            });
             initialMenu.destroy();
-            publicMinesGUI.open(player, inventorySize, "Public Mines");
+
+            if (mine == null) {
+                publicMinesGUI.open(player, inventorySize, "Public Mines");
+            }
+
             //publicMines.open(player);
         });
 
