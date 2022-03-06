@@ -16,4 +16,6 @@
 build
 
 /gradle.properties
-/libs/
+
+# We no share the jar files for the libs we use.
+/plugin/libs/

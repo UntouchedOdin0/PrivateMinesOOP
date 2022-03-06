@@ -67,6 +67,7 @@ subprojects {
         implementation "net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT"
 
         compileOnly files('libs/AutoSellAPI.jar')
+        compileOnly files('libs/UltraPrisonCore.jar')
     }
 
     shadowJar {
