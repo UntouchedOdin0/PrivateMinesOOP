@@ -24,8 +24,10 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin;
 
+import com.github.retrooper.packetevents.PacketEvents;
 import com.google.gson.Gson;
 import de.jeff_media.updatechecker.UpdateChecker;
+import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import me.untouchedodin0.plugin.commands.PrivateMinesCommand;
 import me.untouchedodin0.plugin.config.Config;
 import me.untouchedodin0.plugin.config.MineConfig;
@@ -95,7 +97,6 @@ public class PrivateMines extends JavaPlugin {
     private TimeStorage timeStorage;
     private MineStorage mineStorage;
 
-
     private Utils utils;
     private ConfigManager configManager;
     private ConfigManager menuConfigManager;
@@ -118,6 +119,12 @@ public class PrivateMines extends JavaPlugin {
 
     public static Economy getEconomy() {
         return privateMines.economy;
+    }
+
+    @Override
+    public void onLoad() {
+        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
+        PacketEvents.getAPI().load();
     }
 
     @Override
@@ -246,7 +253,9 @@ public class PrivateMines extends JavaPlugin {
         }
         getServer().getPluginManager().registerEvents(new MineCreationTest(), this);
 
-//        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
+        PacketEvents.getAPI().getSettings().debug(false).bStats(true);
+        PacketEvents.getAPI().init();
+
 //        PacketEvents.getAPI().getSettings().bStats(true).checkForUpdates(false).debug(true);
 //        PacketEvents.getAPI().init();
 
