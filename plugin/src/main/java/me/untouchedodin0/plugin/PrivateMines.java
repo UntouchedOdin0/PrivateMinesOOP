@@ -99,7 +99,7 @@ public class PrivateMines extends JavaPlugin {
     private Utils utils;
     private ConfigManager configManager;
     private ConfigManager menuConfigManager;
-    private WE7Adapter we7Adapter = new WE7Adapter();
+    private WE7Adapter we7Adapter; // = new WE7Adapter();
 
     private Gson gson;
     private WorldEditAdapter worldEditAdapter;
@@ -166,19 +166,16 @@ public class PrivateMines extends JavaPlugin {
             saveResource("schematics/mine.schematic", false);
 
             BlockPoints6 blockPoints6 = new BlockPoints6();
-            privateMines.getLogger().info("blockPoints6: " + blockPoints6);
         } else {
             // Save the schem file this format is used in 1.13 and beyond.
             saveResource("schematics/mine.schem", false);
             me.untouchedodin0.privatemines.we_7.worldedit.Utils we7Utils = new me.untouchedodin0.privatemines.we_7.worldedit.Utils();
             we7Adapter = new WE7Adapter();
 
-            privateMines.getLogger().info("we7Adapter: " + we7Adapter);
-
             MineConfig.mineTypes.forEach((s, mineType) -> {
                 mineTypeManager.registerMineType(mineType);
-                File file = new File("plugins/PrivateMines/schematics/" + mineType.getFile());
-                we7Adapter.searchFile(file);
+//                File file = new File("plugins/PrivateMines/schematics/" + mineType.getFile());
+//                we7Adapter.searchFile(file);
             });
         }
         getLogger().info("Loaded " + mineTypeManager.getTotalMineTypes() + " mine types!");
