@@ -242,6 +242,16 @@ public class PrivateMines extends JavaPlugin {
             getServer().getPluginManager().registerEvents(new AutoSellListener(this), this);
         }
 
+        if (Bukkit.getPluginManager().getPlugin("UltraPrisonCore") != null) {
+            // UltraPrisonCore was enabled, lets set up the hook!
+            getLogger().info("Found UltraPrisonCore, registering a hook!");
+            //todo Drawethree please api?
+        }
+
+        if (Bukkit.getPluginManager().getPlugin("Citizens") != null) {
+            // Citizens was found,
+        }
+
         World world = getMineWorldManager().getMinesWorld();
         final Optional<IWrappedRegion> global = WorldGuardWrapper.getInstance().getRegion(world, "__global__");
         if (global.isPresent()) {
