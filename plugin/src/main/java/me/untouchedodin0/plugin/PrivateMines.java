@@ -240,12 +240,13 @@ public class PrivateMines extends JavaPlugin {
             // AutoSell was enabled, lets set up the hook!
             getLogger().info("Found AutoSell, registering a hook!");
             getServer().getPluginManager().registerEvents(new AutoSellListener(this), this);
-        }
-
-        if (Bukkit.getPluginManager().getPlugin("UltraPrisonCore") != null) {
+        } else if (Bukkit.getPluginManager().getPlugin("UltraPrisonCore") != null) {
             // UltraPrisonCore was enabled, lets set up the hook!
             getLogger().info("Found UltraPrisonCore, registering a hook!");
             //todo Drawethree please api?
+        } else if (Bukkit.getPluginManager().getPlugin("RevAutoSell") != null) {
+            // RevAutoSell was enabled, lets set up the hook!
+            getLogger().info("Found RevAutoSell, registering a hook!");
         }
 
         if (Bukkit.getPluginManager().getPlugin("Citizens") != null) {

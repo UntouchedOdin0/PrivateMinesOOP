@@ -8,5 +8,7 @@ depend:
 softdepend:
   - WorldBorderAPI
   - AutoSell
+  - UltraPrisonCore
   - Vault
+  - Citizens
 

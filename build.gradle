@@ -70,6 +70,7 @@ subprojects {
 
         compileOnly files('libs/AutoSellAPI.jar')
         compileOnly files('libs/UltraPrisonCore.jar')
+        compileOnly files('libs/RevAutoSell.jar')
     }
 
     shadowJar {
