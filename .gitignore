@@ -4,7 +4,6 @@
 /build/classes/
 /build/generated/
 /build/libs/
-/build/libs/PrivateMinesOOP-1.0-SNAPSHOT-all.jar
 /build/resources/
 /build/tmp/
 /server/
@@ -17,3 +16,4 @@
 build
 
 /gradle.properties
+/libs/

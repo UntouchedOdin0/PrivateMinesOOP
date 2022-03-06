@@ -145,7 +145,6 @@ task copyTo_DevServer(type: Copy) {
     into "E:/Coding/Spigot Projects/PrivateMinesOOP/server/plugins"
 }
 
-
 task updateJars {
     if (!new File("E:/Coding").exists()) {
         return
