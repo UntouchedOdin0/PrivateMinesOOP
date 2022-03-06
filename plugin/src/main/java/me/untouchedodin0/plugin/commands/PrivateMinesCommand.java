@@ -106,6 +106,7 @@ public class PrivateMinesCommand {
 
         ItemBuilder yourMineBuilder = new ItemBuilder(Material.MINECART).setName(ChatColor.GREEN + "Your Mine").addLore(yourMineLore);
         ItemButton yourMineButton = ItemButton.create(yourMineBuilder, inventoryClickEvent -> {
+            inventoryClickEvent.setCancelled(true);
             initialMenu.destroy();
             Mine mine1 = mineStorage.getMine(player.getUniqueId());
 
@@ -116,6 +117,7 @@ public class PrivateMinesCommand {
                             .setName(ChatColor.GREEN + "Click to teleport")
                             .addLore(ChatColor.GRAY + "to your mine"),
                     clickEvent -> {
+                        clickEvent.setCancelled(true);
                         player.sendMessage(ChatColor.GREEN + "Teleporting you to the mine");
                         mine1.teleport(player);
                     });
@@ -124,6 +126,7 @@ public class PrivateMinesCommand {
                             .setName(ChatColor.GREEN + "Click to reset")
                             .addLore(ChatColor.GRAY + "your mine"),
                     clickEvent -> {
+                        clickEvent.setCancelled(true);
                         player.sendMessage(ChatColor.GREEN + "Resetting your mine");
                         mine1.reset();
                     });
