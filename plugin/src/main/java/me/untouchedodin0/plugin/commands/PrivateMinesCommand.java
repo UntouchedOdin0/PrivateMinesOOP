@@ -169,7 +169,6 @@ public class PrivateMinesCommand {
 
             //todo maybe move this to it's own utils method somewhere?
 
-            privateMines.getLogger().info("Inventory Size: " + inventorySize);
             InventoryGUI publicMines = new InventoryGUI(inventorySize, "Public Mines");
 
             mineStorage.getMines().forEach((uuid, mine1) -> {
