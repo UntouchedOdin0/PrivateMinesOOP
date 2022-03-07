@@ -35,6 +35,7 @@ import me.untouchedodin0.plugin.config.menu.MenuItemType;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.listener.AutoSellListener;
 import me.untouchedodin0.plugin.listener.MineCreationTest;
+import me.untouchedodin0.plugin.listener.RevAutoSellListener;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.MineTypeManager;
@@ -244,6 +245,7 @@ public class PrivateMines extends JavaPlugin {
         } else if (Bukkit.getPluginManager().getPlugin("RevAutoSell") != null) {
             // RevAutoSell was enabled, lets set up the hook!
             getLogger().info("Found RevAutoSell, registering a hook!");
+            getServer().getPluginManager().registerEvents(new RevAutoSellListener(this), this);
         }
 
         if (Bukkit.getPluginManager().getPlugin("Citizens") != null) {
