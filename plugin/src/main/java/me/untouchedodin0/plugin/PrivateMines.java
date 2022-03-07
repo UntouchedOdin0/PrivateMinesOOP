@@ -36,6 +36,7 @@ import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.listener.AutoSellListener;
 import me.untouchedodin0.plugin.listener.MineCreationTest;
 import me.untouchedodin0.plugin.mines.Mine;
+import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.MineTypeManager;
 import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
@@ -63,6 +64,7 @@ import redempt.redlib.commandmanager.ArgType;
 import redempt.redlib.commandmanager.CommandParser;
 import redempt.redlib.commandmanager.Messages;
 import redempt.redlib.config.ConfigManager;
+import redempt.redlib.misc.LocationUtils;
 import redempt.redlib.region.CuboidRegion;
 
 import java.io.File;
@@ -74,6 +76,8 @@ import java.nio.file.PathMatcher;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -197,6 +201,7 @@ public class PrivateMines extends JavaPlugin {
 
         try {
             loadMines();
+            loadMinesThreaded();
         } catch (IOException e) {
             throw new RuntimeException("Failed to load mines!", e);
         }
@@ -250,7 +255,7 @@ public class PrivateMines extends JavaPlugin {
         }
 
         if (Bukkit.getPluginManager().getPlugin("Citizens") != null) {
-            // Citizens was found,
+            // Citizens was found, lets set up the hook!
         }
 
         World world = getMineWorldManager().getMinesWorld();
@@ -324,6 +329,90 @@ public class PrivateMines extends JavaPlugin {
                 });
 
         getLogger().info(() -> "Loaded " + loadedMineCount.get() + " mines");
+    }
+
+    private void loadMinesThreaded() throws IOException {
+        final PathMatcher jsonMatcher = FileSystems.getDefault().getPathMatcher("glob:**/*.json");
+        AtomicInteger loadedMinesCount = new AtomicInteger();
+        String worldName = mineWorldManager.getMinesWorld().getName();
+        final World world = Bukkit.getWorld(worldName);
+
+        Runnable runnable = () -> {
+            privateMines.getLogger().info("Loading mines on thread: " + Thread.currentThread().getName());
+            privateMines.getLogger().info("Loading mines on thread #" + Thread.currentThread().getId());
+
+            try {
+                Files.list(minesDirectory)
+                        .filter(jsonMatcher::matches)
+                        .map(Exceptions.throwing(Files::readAllLines))
+                        .map(lines -> String.join("\n", lines))
+                        .forEach(file -> {
+                            Mine mine = new Mine(this);
+                            MineData mineData = gson.fromJson(file, MineData.class);
+                            MineType mineType = mineTypeManager.getMineType(mineData.getMineType());
+                            UUID owner = mineData.getMineOwner();
+
+                            privateMines.getLogger().info("mine: " + mine);
+                            privateMines.getLogger().info("mine data: " + mineData);
+                            privateMines.getLogger().info("mine type: " + mineType);
+                            privateMines.getLogger().info("mine owner: " + owner);
+
+                            int minX = mineData.getMinX();
+                            int minY = mineData.getMinY();
+                            int minZ = mineData.getMinZ();
+                            int maxX = mineData.getMaxX();
+                            int maxY = mineData.getMaxY();
+                            int maxZ = mineData.getMaxZ();
+
+                            int spawnX = mineData.getSpawnX();
+                            int spawnY = mineData.getSpawnY();
+                            int spawnZ = mineData.getSpawnZ();
+
+                            privateMines.getLogger().info("mine data minX: " + minX);
+                            privateMines.getLogger().info("mine data minY: " + minY);
+                            privateMines.getLogger().info("mine data minZ: " + minZ);
+
+                            privateMines.getLogger().info("mine data maxX: " + maxX);
+                            privateMines.getLogger().info("mine data maxY: " + maxY);
+                            privateMines.getLogger().info("mine data maxZ: " + maxZ);
+
+                            privateMines.getLogger().info("world: " + world);
+                            privateMines.getLogger().info("world name: " + worldName);
+
+                            if (world == null) {
+                                throw new IllegalStateException("World " + worldName + " does not exist!");
+                            }
+                            Location spawn = new Location(world, spawnX, spawnY, spawnZ);
+                            Location minimumLocation = new Location(world, minX, minY, minZ);
+                            Location maximumLocation = new Location(world, maxX, maxY, maxZ);
+                            CuboidRegion miningRegion = new CuboidRegion(minimumLocation, maximumLocation);
+
+                            privateMines.getLogger().info("spawn: " + LocationUtils.toString(spawn));
+                            privateMines.getLogger().info("minimumLocation : " + LocationUtils.toString(minimumLocation));
+                            privateMines.getLogger().info("maximumLocation: " + LocationUtils.toString(maximumLocation));
+                            privateMines.getLogger().info("miningRegion: " + miningRegion);
+
+                            mine.setSpawnLocation(spawn);
+                            mine.setRegion(mineData.getFullRegion());
+                            mine.setMiningRegion(miningRegion);
+                            mine.setMineData(mineData);
+                            mine.setMineType(mineType);
+                            mine.setMineOwner(owner);
+                            mine.startResetTask();
+                            mineStorage.addMine(owner, mine);
+                            mineWorldManager.getNextFreeLocation();
+                            loadedMinesCount.incrementAndGet();
+                        });
+                if (loadedMinesCount.get() == 1) {
+                    getLogger().info("Loaded " + loadedMinesCount.get() + " mine!");
+                } else {
+                    getLogger().info("Loaded " + loadedMinesCount.get() + " mines!");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        };
+        CompletableFuture<Void> completableFuture = CompletableFuture.runAsync(runnable);
     }
 
     @Override
