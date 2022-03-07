@@ -31,7 +31,6 @@ import me.untouchedodin0.plugin.mines.MineType;
 import me.untouchedodin0.plugin.mines.data.MineData;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.storage.TimeStorage;
-import me.untouchedodin0.plugin.storage.points.BlockPointsStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -56,7 +55,6 @@ public class MineFactory {
     Utils utils;
     MineStorage mineStorage;
     TimeStorage timeStorage;
-    BlockPointsStorage blockPointsStorage;
     MineBlocks mineBlocks;
     Location spawnLocation;
     Location corner1;
