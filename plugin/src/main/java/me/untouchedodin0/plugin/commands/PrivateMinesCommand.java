@@ -24,10 +24,10 @@ SOFTWARE.
 
 package me.untouchedodin0.plugin.commands;
 
-import com.cryptomorin.xseries.XMaterial;
+//import com.cryptomorin.xseries.XBiome;
+//import com.cryptomorin.xseries.XMaterial;
 import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.config.Config;
-import me.untouchedodin0.plugin.config.MenuConfig;
 import me.untouchedodin0.plugin.events.PrivateMineCreationEvent;
 import me.untouchedodin0.plugin.factory.MineFactory;
 import me.untouchedodin0.plugin.mines.Mine;
@@ -92,14 +92,14 @@ public class PrivateMinesCommand {
         Mine mine = mineStorage.getMine(player.getUniqueId());
         PublicMinesGUI publicMinesGUI = new PublicMinesGUI(mineStorage);
 
-
         List<String> yourMineLore = new ArrayList<>();
         List<String> publicMinesLore = new ArrayList<>();
         List<Mine> openMines = new ArrayList<>();
         AtomicInteger slot = new AtomicInteger();
         AtomicInteger totalPublicMines = new AtomicInteger();
 
-        ItemBuilder filler = new ItemBuilder(Objects.requireNonNull(XMaterial.BLACK_STAINED_GLASS_PANE.parseMaterial())).setName(" ");
+        ItemBuilder filler = new ItemBuilder(Material.STAINED_GLASS_PANE).setName(" ");
+//        ItemBuilder filler = new ItemBuilder(Objects.requireNonNull(XMaterial.BLACK_STAINED_GLASS_PANE.parseMaterial())).setName(" ");
         ItemButton fillerButton = ItemButton.create(filler, e -> e.setCancelled(true));
 
         yourMineLore.add(ChatColor.GRAY + "Your mine :)");
