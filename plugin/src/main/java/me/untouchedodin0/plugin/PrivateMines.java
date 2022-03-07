@@ -199,12 +199,7 @@ public class PrivateMines extends JavaPlugin {
             e.printStackTrace();
         }
 
-        try {
-            loadMines();
-            loadMinesThreaded();
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load mines!", e);
-        }
+        loadMines();
 
         /*
             Does these things in order
@@ -282,7 +277,14 @@ public class PrivateMines extends JavaPlugin {
         //metrics.addCustomChart(new SingleLineChart("mines", loadedMineCount::get));
     }
 
-    private void loadMines() throws IOException {
+    /**
+     *
+     * @deprecated
+     * This is the old system for loading the mines, it was non-async, so it wasn't thread friendly.
+     * We're using {@link PrivateMines#loadMines()} instead now as it's Async and threaded correctly.
+     */
+
+    private void loadMinesOld() throws IOException {
         final PathMatcher jsonMatcher = FileSystems.getDefault().getPathMatcher("glob:**/*.json");
         AtomicInteger loadedMineCount = new AtomicInteger();
         String worldName = mineWorldManager.getMinesWorld().getName();
@@ -331,16 +333,13 @@ public class PrivateMines extends JavaPlugin {
         getLogger().info(() -> "Loaded " + loadedMineCount.get() + " mines");
     }
 
-    private void loadMinesThreaded() throws IOException {
+    private void loadMines() {
         final PathMatcher jsonMatcher = FileSystems.getDefault().getPathMatcher("glob:**/*.json");
         AtomicInteger loadedMinesCount = new AtomicInteger();
         String worldName = mineWorldManager.getMinesWorld().getName();
         final World world = Bukkit.getWorld(worldName);
 
         Runnable runnable = () -> {
-            privateMines.getLogger().info("Loading mines on thread: " + Thread.currentThread().getName());
-            privateMines.getLogger().info("Loading mines on thread #" + Thread.currentThread().getId());
-
             try {
                 Files.list(minesDirectory)
                         .filter(jsonMatcher::matches)
@@ -351,11 +350,6 @@ public class PrivateMines extends JavaPlugin {
                             MineData mineData = gson.fromJson(file, MineData.class);
                             MineType mineType = mineTypeManager.getMineType(mineData.getMineType());
                             UUID owner = mineData.getMineOwner();
-
-                            privateMines.getLogger().info("mine: " + mine);
-                            privateMines.getLogger().info("mine data: " + mineData);
-                            privateMines.getLogger().info("mine type: " + mineType);
-                            privateMines.getLogger().info("mine owner: " + owner);
 
                             int minX = mineData.getMinX();
                             int minY = mineData.getMinY();
@@ -368,17 +362,6 @@ public class PrivateMines extends JavaPlugin {
                             int spawnY = mineData.getSpawnY();
                             int spawnZ = mineData.getSpawnZ();
 
-                            privateMines.getLogger().info("mine data minX: " + minX);
-                            privateMines.getLogger().info("mine data minY: " + minY);
-                            privateMines.getLogger().info("mine data minZ: " + minZ);
-
-                            privateMines.getLogger().info("mine data maxX: " + maxX);
-                            privateMines.getLogger().info("mine data maxY: " + maxY);
-                            privateMines.getLogger().info("mine data maxZ: " + maxZ);
-
-                            privateMines.getLogger().info("world: " + world);
-                            privateMines.getLogger().info("world name: " + worldName);
-
                             if (world == null) {
                                 throw new IllegalStateException("World " + worldName + " does not exist!");
                             }
@@ -386,11 +369,6 @@ public class PrivateMines extends JavaPlugin {
                             Location minimumLocation = new Location(world, minX, minY, minZ);
                             Location maximumLocation = new Location(world, maxX, maxY, maxZ);
                             CuboidRegion miningRegion = new CuboidRegion(minimumLocation, maximumLocation);
-
-                            privateMines.getLogger().info("spawn: " + LocationUtils.toString(spawn));
-                            privateMines.getLogger().info("minimumLocation : " + LocationUtils.toString(minimumLocation));
-                            privateMines.getLogger().info("maximumLocation: " + LocationUtils.toString(maximumLocation));
-                            privateMines.getLogger().info("miningRegion: " + miningRegion);
 
                             mine.setSpawnLocation(spawn);
                             mine.setRegion(mineData.getFullRegion());
