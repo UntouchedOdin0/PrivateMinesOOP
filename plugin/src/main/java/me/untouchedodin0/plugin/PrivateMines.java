@@ -241,6 +241,10 @@ public class PrivateMines extends JavaPlugin {
         } else if (Bukkit.getPluginManager().getPlugin("UltraPrisonCore") != null) {
             // UltraPrisonCore was enabled, lets set up the hook!
             getLogger().info("Found UltraPrisonCore, registering a hook!");
+            getLogger().info("Due to drawethree not giving a maven repo we can't do this yet");
+            getLogger().info("please ask him in his discord to add a maven repo then I can");
+            getLogger().info("add this, It's out of my control at this point, sorry!");
+            getLogger().info("~ UntouchedOdin0");
             //todo Drawethree please api?
         } else if (Bukkit.getPluginManager().getPlugin("RevAutoSell") != null) {
             // RevAutoSell was enabled, lets set up the hook!
