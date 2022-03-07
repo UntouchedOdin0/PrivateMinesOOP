@@ -278,7 +278,6 @@ public class PrivateMines extends JavaPlugin {
      * We're using {@link PrivateMines#loadMines()} instead now as it's Async and threaded correctly.
      */
 
-    @SuppressWarnings("unused")
     private void loadMinesOld() throws IOException {
         final PathMatcher jsonMatcher = FileSystems.getDefault().getPathMatcher("glob:**/*.json");
         AtomicInteger loadedMineCount = new AtomicInteger();
