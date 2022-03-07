@@ -7,6 +7,7 @@ import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -56,6 +57,9 @@ public class RevAutoSellListener implements Listener {
                 player.sendMessage(Utils.sendColorMessage(taxTakenMessage
                                                                   .replace("%amount%", String.valueOf(tax))
                                                                   .replace("%tax%", String.valueOf(mine.getTax()))));
+                if (!Bukkit.getOfflinePlayer(mine.getMineOwner()).isOnline()) return;
+                Player ownerPlayer = Bukkit.getPlayer(mine.getMineOwner());
+                ownerPlayer.sendMessage(ChatColor.GREEN + "You've received $" + tax + " in taxes from " + player.getDisplayName() + ChatColor.GREEN + "!");
             }
         });
     }
