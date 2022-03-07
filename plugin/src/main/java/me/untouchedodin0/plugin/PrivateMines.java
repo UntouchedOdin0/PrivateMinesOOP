@@ -50,6 +50,7 @@ import me.untouchedodin0.privatemines.we_6.worldedit.BlockPoints6;
 import me.untouchedodin0.privatemines.we_7.worldedit.WE7Adapter;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SingleLineChart;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -75,6 +76,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
@@ -264,15 +266,9 @@ public class PrivateMines extends JavaPlugin {
         }
         getServer().getPluginManager().registerEvents(new MineCreationTest(), this);
 
-//        PacketEvents.getAPI().getSettings().debug(false).bStats(true);
-//        PacketEvents.getAPI().init();
-
-//        PacketEvents.getAPI().getSettings().bStats(true).checkForUpdates(false).debug(true);
-//        PacketEvents.getAPI().init();
-
         UpdateChecker.init(this, SPIGOT_PLUGIN_ID).checkEveryXHours(6).setDownloadLink(SPIGOT_PLUGIN_ID).checkNow();
         Metrics metrics1 = new Metrics(this, PLUGIN_ID);
-        //metrics.addCustomChart(new SingleLineChart("mines", loadedMineCount::get));
+        metrics1.addCustomChart(new SingleLineChart("mines", () -> mineStorage.getLoadedMinesSize()));
     }
 
     /**
