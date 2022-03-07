@@ -271,8 +271,6 @@ public class PrivateMines extends JavaPlugin {
 //        PacketEvents.getAPI().init();
 
         UpdateChecker.init(this, SPIGOT_PLUGIN_ID).checkEveryXHours(6).setDownloadLink(SPIGOT_PLUGIN_ID).checkNow();
-
-        //Metrics metrics = new Metrics(this, PLUGIN_ID);
         Metrics metrics1 = new Metrics(this, PLUGIN_ID);
         //metrics.addCustomChart(new SingleLineChart("mines", loadedMineCount::get));
     }
