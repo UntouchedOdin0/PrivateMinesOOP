@@ -6,6 +6,8 @@ import me.untouchedodin0.plugin.PrivateMines;
 import me.untouchedodin0.plugin.mines.Mine;
 import me.untouchedodin0.plugin.storage.MineStorage;
 import me.untouchedodin0.plugin.util.Utils;
+import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,13 +17,14 @@ import redempt.redlib.commandmanager.Messages;
 import java.util.Map;
 import java.util.UUID;
 
-@SuppressWarnings("ClassCanBeRecord")
 public class AutoSellListener implements Listener {
 
     private final PrivateMines privateMines;
+    private final Economy economy;
 
     public AutoSellListener(PrivateMines privateMines) {
         this.privateMines = privateMines;
+        this.economy = privateMines.getEconomy();
     }
 
     @EventHandler
@@ -48,6 +51,7 @@ public class AutoSellListener implements Listener {
                 String afterTaxAmount = String.valueOf(afterTax);
 
                 sellAllEvent.setTotalCost(afterTax);
+                economy.depositPlayer(Bukkit.getOfflinePlayer(mine.getMineOwner()), tax);
                 // BristerMitten code credit ends
                 player.sendMessage(Utils.sendColorMessage(afterTaxMessage.replace("%amount%", afterTaxAmount)));
                 player.sendMessage(Utils.sendColorMessage(taxTakenMessage

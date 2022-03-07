@@ -121,9 +121,6 @@ public class PrivateMines extends JavaPlugin {
         return privateMinesAPI;
     }
 
-    public static Economy getEconomy() {
-        return privateMines.economy;
-    }
 
     @Override
     public void onLoad() {
@@ -454,6 +451,10 @@ public class PrivateMines extends JavaPlugin {
 
     public ConfigManager getMenuConfigManager() {
         return menuConfigManager;
+    }
+
+    public Economy getEconomy() {
+        return economy;
     }
 
     private void setupEconomy() {
