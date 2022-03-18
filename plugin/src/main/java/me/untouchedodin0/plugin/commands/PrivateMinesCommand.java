@@ -99,7 +99,7 @@ public class PrivateMinesCommand {
         AtomicInteger slot = new AtomicInteger();
         AtomicInteger totalPublicMines = new AtomicInteger();
 
-        ItemBuilder filler = new ItemBuilder(Material.STAINED_GLASS_PANE).setName(" ");
+        ItemBuilder filler = new ItemBuilder(Material.WHITE_STAINED_GLASS_PANE).setName(" ");
 //        ItemBuilder filler = new ItemBuilder(Objects.requireNonNull(XMaterial.BLACK_STAINED_GLASS_PANE.parseMaterial())).setName(" ");
         ItemButton fillerButton = ItemButton.create(filler, e -> e.setCancelled(true));
 
